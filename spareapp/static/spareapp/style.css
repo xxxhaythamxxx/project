@@ -1,0 +1,140 @@
+.color-soft {
+    background: rgb(216, 114, 114);
+}
+.color {
+    background: rgb(136,12,12);
+    background: linear-gradient(0deg, rgba(136,12,12,1) 0%, rgba(196,18,18,1) 83%);
+}
+.card-head {
+    background: rgb(216, 114, 114);
+}
+.card-head a:hover {
+    color:white;
+}
+.card-head:hover {
+    background: rgb(136,12,12);
+    background: linear-gradient(0deg, rgba(136,12,12,1) 0%, rgba(196,18,18,1) 83%);
+    color:white;
+}
+.card-head-a {
+    color:rgb(136,12,12);
+}
+.card-head-a a {
+    color:white;
+}
+.card-head-a a:hover {
+    color:white;
+}
+
+.dropdown-menu {
+    background: rgb(216, 114, 114);
+}
+
+.navbarcontainer {
+    box-shadow: 0px 2px 5px #000;
+    /* opacity: .9; */
+}
+
+.fondo-plata {
+    background-color: silver;
+}
+.list-category {
+    list-style: none;
+}
+.list-category li {
+    list-style: none;
+}
+.list-category li a {
+    text-decoration: none;
+    color: whitesmoke;
+}
+.invoice td a {
+    text-decoration: none;
+    color:black;
+}
+
+.category-content a,.conteni a {
+    text-decoration: none;
+    color: rgb(15, 1, 1);
+}
+.conteni li {
+    list-style: none;
+}
+.color-hard {
+    color: rgb(15, 1, 1);
+}
+/* Para darle padding a las cabeceras de la tabla */
+.trsup {
+    border-radius: 3px;
+    padding: 10px;
+}
+.invoice {
+    width: 100%;
+    text-align: center;
+}
+.photo {
+    background-size: 80px 80px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 80px;
+    height: 80px;
+    margin: auto;
+}
+.mimage {
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 300px;
+    height: 300px;
+}
+.radius {
+    border-radius: 3px;
+}
+.card-body a:hover {
+    text-decoration: none;
+}
+.hover a:hover {
+    text-decoration: none;
+    color: rgb(99, 5, 5);
+}
+.blue-soft a {
+    color: rgb(42, 42, 214);
+    text-decoration: none;
+}
+.blue-soft a:hover {
+    color: rgb(24, 24, 214);
+    text-decoration: none;
+}
+.title-size a {
+    font-size: x-large;
+}
+/* Table sorteable */
+.table-sortable th {
+    cursor: pointer;
+  }
+  
+  .table-sortable .th-sort-asc::after {
+    content: "\25b4";
+  }
+  
+  .table-sortable .th-sort-desc::after {
+    content: "\25be";
+  }
+  
+  .table-sortable .th-sort-asc::after,
+  .table-sortable .th-sort-desc::after {
+    margin-left: 5px;
+  }
+  
+  .table-sortable .th-sort-asc,
+  .table-sortable .th-sort-desc {
+    background: rgba(0, 0, 0, 0.1);
+  }
+/* Fin de Table sorteable   */
+
+th {
+    cursor: pointer;
+}
+.expand-off:hover {
+    background: rgb(216, 114, 114);
+}

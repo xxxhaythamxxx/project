@@ -1,0 +1,24 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Manufacturer {% endblock %}
+
+{% block content %}
+<div class="resultadoBusqueda">
+<div class="migajas color-soft color-hard p-2">Car manufacturer: {{mig}} </div>
+<div class="options">
+</div>
+<div class="conteni p-2 my-2">
+<li class="hover"><a href="{% url 'allmanu' mig %}">All spares for {{mig}}</a></li>
+{% for t in tr %}
+<div class="color p-2 text-white my-2">{{t|stringformat:"s"|truncatewords:1}}</div>
+    
+    {% for br in car %}
+        {% if t|stringformat:"s"|truncatewords:1 == br.car_model|stringformat:"s"|truncatewords:1 %}
+            <li class="hover" style="margin-left: 10px;"><a href="{% url 'model' br.car_model %}">{{br.car_model}}</a></li>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+</div>
+</div>
+{% endblock %}
+

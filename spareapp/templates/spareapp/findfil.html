@@ -1,0 +1,113 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Kmotorshop.com{% endblock %}
+
+{% block content %}
+
+<div class="resultadoBusqueda">
+<div class="migajas color-soft color-hard p-2">Manufacturer: {{carManu}} - Car model: {{carModel}} - Engine: {{mig}}</div>
+
+
+{% include "spareapp/superior.html" %}
+<form class="" method="POST" action="">
+    {% include "spareapp/add.html" %}
+    {% csrf_token %}
+<table id="invoice" class="invoice table-striped table-sortable">
+    <thead class="">
+        <tr class="color text-white">
+            <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
+            <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
+            <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th>
+            <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
+            <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
+            <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
+            <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Reference Code</th>
+            <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+            <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        {% for br in spare %}
+        <tr class="">
+            {% if br.spare_photo %}
+            <td><a href="{% url 'sparedetails' br.spare_code %}"><div style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.spare_code %}
+            <td><a href="{% url 'sparedetails' br.spare_code %}">{{br.spare_code}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.spare_brand %}
+            <td><a href="{% url 'brand' br.spare_brand %}">{{br.spare_brand}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.spare_name %}
+            <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.shape %}
+            <td style="display: none;"><a href="">{{br.shape}}</a></td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+            {% if br.long or br.wide or br.high or br.diameter or br.radio %}
+            <td style="display: none;">
+                {% if br.long %}
+                    <div><a href="#">Long: {{br.long}}</a></div>
+                {% endif %}
+                {% if br.wide %}
+                    <div><a href="#">Wide: {{br.wide}}</a></div>
+                {% endif %}
+                {% if br.high %}
+                    <div><a href="#">High: {{br.high}}</a></div>
+                {% endif %}
+                {% if br.diameter %}
+                    <div><a href="#">Diameter: {{br.diameter}}</a></div>
+                {% endif %}
+                {% if br.radio %}
+                    <div><a href="#">Radio: {{br.radio}}</a></div>
+                {% endif %}
+            </td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_reference.all %}
+            <td style="display: none;">
+                    {% for car in onlyManufCars %}
+                        {% for sp in br.spare_reference.all %}
+                            {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
+                            <div><a href="{% url 'sparedetails' br.spare_code %}">{{sp.reference_code}}</a></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                {% else %}
+                <td style="display: none;"><a href="#"></a></td>
+                {% endif %}
+
+            <!-- {% if br.shape %}
+            <td style="display: none;"><a href="">ABCDRRR</a></td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %} -->
+
+            {% if br.car_info.all %}
+            <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            <td><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</form>
+</div>
+{% endblock %}
+
+

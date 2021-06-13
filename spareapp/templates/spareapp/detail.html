@@ -1,0 +1,152 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Kmotorshop {% endblock %}
+
+{% block content %}
+<link href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<div class="resultadoBusqueda">
+
+    
+    <div class="options my-2">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <input class="filter form-control p-1" type="text" id="myInput" placeholder="Filter">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mt-1">
+                <div id="default" class="btn btn-success">Default</div>
+                <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
+                    <ul id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
+                        <li style="margin:auto;text-align:center;" class=""><label class="">ID<input name="detail-id" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Code<input name="code" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
+                    </ul>
+            </div>
+            <div class="col-lg-6 col-md-5 col-sm-6 col-xs-6 mt-1">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success ml-2" onClick="viewPDF()">View</button>
+                    <button class="btn btn-success ml-2" onClick="generatePDF()">PDF</button>
+                    <button class="btn btn-success ml-2" id="downloadexcel">Excel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <form method="POST" action="">
+        {% include "spareapp/delete.html" %}
+        {% csrf_token %}
+    <table id="invoice" class="invoice table-striped">
+        <thead>
+            <tr class="trsup color text-white">
+                <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
+                <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
+                <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
+                <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th>
+                <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
+                <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
+                <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
+                <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Reference Code</th>
+                <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+                <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+        {% for car in carrito.cart %}
+        {% for br in spare %}
+        {% if car|add:"0" == br.id|add:"0" %}
+        <tr>
+            <td><a href=""></a></div></td>
+            {% if br.spare_photo %}
+            <td><a href="{% url 'sparedetails' br.spare_code %}"><div style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.spare_code %}
+            <td><a href="{% url 'sparedetails' br.spare_code %}">{{br.spare_code}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.spare_brand %}
+            <td><a href="{% url 'brand' br.spare_brand %}">{{br.spare_brand}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.spare_name %}
+            <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            {% if br.shape %}
+            <td style="display: none;"><a href="">{{br.shape}}</a></td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+            {% if br.long or br.wide or br.high or br.diameter or br.radio %}
+            <td style="display: none;">
+                {% if br.long %}
+                    <div><a href="#">Long: {{br.long}}</a></div>
+                {% endif %}
+                {% if br.wide %}
+                    <div><a href="#">Wide: {{br.wide}}</a></div>
+                {% endif %}
+                {% if br.high %}
+                    <div><a href="#">High: {{br.high}}</a></div>
+                {% endif %}
+                {% if br.diameter %}
+                    <div><a href="#">Diameter: {{br.diameter}}</a></div>
+                {% endif %}
+                {% if br.radio %}
+                    <div><a href="#">Radio: {{br.radio}}</a></div>
+                {% endif %}
+            </td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_reference.all %}
+            <td style="display: none;">
+                {% for car in onlyManufCars %}
+                    {% for sp in br.spare_reference.all %}
+                        {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
+                        <div><a href="{% url 'sparedetails' br.spare_code %}">{{sp.reference_code}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.car_info.all %}
+            <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            <td><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
+</div>
+<script>
+$('tbody').sortable();
+
+</script>
+{% load static %}
+{% endblock %}
+
+
+
+
+

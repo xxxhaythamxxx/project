@@ -1,0 +1,210 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Kmotorshop.com{% endblock %}
+
+{% block content %}
+
+
+<div id="invoice" class="resultadoBusqueda">
+    <div class="row">
+        <div class="col-12 color p-2 text-white d-flex justify-content-center">
+            {{spare.0.spare_name}} - {{spare.0.spare_brand}}
+        </div>
+        <div class="imagecont col-6 mt-2 d-flex justify-content-center">
+            <div style="background-image: url('/media/{{spare.0.spare_photo}}');"" class="mimage"></div>
+        </div>
+        <div class="conteni col-6">
+            <!-- Especificaciones -->
+            <div class="color p-1 text-white mt-2 radius mb-2" for="">Especification</div>
+            <div class="row">
+                <div class="col-4">
+                    {% if spare.0.spare_code %}
+                    <div>Code</div>
+                    {% endif %}
+                    {% if spare.0.spare_brand %}
+                    <div>Brand</div>
+                    {% endif %}
+                    {% if spare.0.spare_name %}
+                    <div>Type</div>
+                    {% endif %}
+                    {% if spare.0.shape %}
+                    <div>Shape</div>
+                    {% endif %}
+                    {% if spare.0.long %}
+                    <div>Length</div>
+                    {% endif %}
+                    {% if spare.0.wide %}
+                    <div>Width</div>
+                    {% endif %}
+                    {% if spare.0.high %}
+                    <div>Height</div>
+                    {% endif %}
+                    {% if spare.0.diameter %}
+                    <div>Diameter</div>
+                    {% endif %}
+                    {% if spare.0.radio %}
+                    <div>Radio</div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    {% if spare.0.spare_code %}
+                    <div class="hover"><a href="">{{spare.0.spare_code}}</a></div>
+                    {% endif %}
+                    {% if spare.0.spare_brand %}
+                    <div class="hover"><a href="{% url 'brand' spare.0.spare_brand %}">{{spare.0.spare_brand}}</a></div>
+                    {% endif %}
+                    {% if spare.0.spare_name %}
+                    <div class="hover"><a href="{% url 'name' spare.0.spare_name %}">{{spare.0.spare_name}}</a></div>
+                    {% endif %}
+                    {% if spare.0.shape %}
+                    <div class="hover"><a href="{% url 'shape' spare.0.shape %}">{{spare.0.shape}}</a></div>
+                    {% endif %}
+                    {% if spare.0.long %}
+                    <div class="hover"><a href="{% url 'longi' spare.0.long %}">{{spare.0.long}}</a></div>
+                    {% endif %}
+                    {% if spare.0.wide %}
+                    <div class="hover"><a href="{% url 'widei' spare.0.wide %}">{{spare.0.wide}}</a></div>
+                    {% endif %}
+                    {% if spare.0.high %}
+                    <div class="hover"><a href="{% url 'highi' spare.0.high %}">{{spare.0.high}}</a></div>
+                    {% endif %}
+                    {% if spare.0.diameter %}
+                    <div class="hover"><a href="{% url 'diameteri' spare.0.diameter %}">{{spare.0.diameter}}</a></div>
+                    {% endif %}
+                    {% if spare.0.radio %}
+                    <div class="hover"><a href="{% url 'radioi' spare.0.radio %}">{{spare.0.radio}}</a></div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Codigos opcionales -->
+            {% if spare.0.spare_reference.all %}
+                <div class="color p-1 text-white mt-2 radius mb-2" for="">Reference codes</div>
+                <div class="row">
+                    {% for car in onlyManufCars %}
+                    {% for sp in spare.0.spare_reference.all %}
+                    <!-- Si el codigo opcional tiene carro asignado -->
+                        {% if sp.reference_car.car_manufacturer %}
+                            {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-4">
+                                        {{sp.reference_car.car_manufacturer}}
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="hover"><a href="#">{{sp.reference_code}}</a></div>
+                                    </div>                       
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    {% for sp in spare.0.spare_reference.all %}
+                    <!-- Si el codigo opcional no tiene carro asignado -->
+                        {% if not sp.reference_car.car_manufacturer %}
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="hover"><a href="#">{{sp.reference_code}}</a></div>
+                                </div>                       
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Si el repuesto le sirve a otros repuestos -->
+            {% if spare.0.spare_spare.all %}
+            <div class="color p-1 text-white mt-2 radius mb-2" for="">Spare targets</div>
+                <div class="row">
+                    {% for sp in spare.0.spare_spare.all %}
+                        <div class="hover"><a href="{% url 'sparedetails' sp.spare_code %}">{{sp.spare_code}} - {{sp.spare_name}}</a></div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-12">
+        
+        <div class="col-12">
+            <div class="row mt-2">
+                <div class="col-2 color text-white p-2" class="col">Year</div>
+                <div class="col-2 color text-white p-2" class="col">Eng No</div>
+                <div class="col-2 color text-white p-2" class="col">Cylinder</div>
+                <div class="col-2 color text-white p-2" class="col">Pistons</div>
+                <div class="col-2 color text-white p-2" class="col">Power</div>
+                <div class="col-2 color text-white p-2" class="col">Trans</div>
+            </div>
+        </div>
+
+            {% for sp in spare.0.car_info.all %}
+
+            <div id="accordion">
+                <div class="card mt-2">
+                    <div class="p-2 card-head card-head-a">
+                        <a class="card-link text-white" data-toggle="collapse" data-parent="#accordion" href="#collapse{{sp.id}}">
+                            {{sp.car_manufacturer}} > {{sp.car_model}}
+                        </a>
+                    </div>
+                    {% for ob in spare %}
+                    <div id="collapse{{sp.id}}" class="collapse">
+                        <div class="card-body">
+                            {% if sp in ob.car_info.all %}
+                            <div class="row mt-2">
+                                <div class="col-2">{{sp.car_from.year}} / {{sp.car_to.year}}</div>
+                                    <div class="col-2">
+                                        <div class="row">
+                                            {% for en in spare.0.engine_info.all %}
+                                            {% if sp in en.car_engine_info.all %}
+                                            <div class="col-12 hover">
+                                                <a style="color: black;" class="hover" href="{% url 'engine' en.engine_ide %}">{{en.engine_ide}}</a>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                <div class="col-2">
+                                    {% for en in spare.0.engine_info.all %}
+                                        {% if sp in en.car_engine_info.all %}
+                                        <div class="col-12">
+                                            {{en.engine_cylinder}}
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="col-2">
+                                    {% for en in spare.0.engine_info.all %}
+                                        {% if sp in en.car_engine_info.all %}
+                                        <div class="col-12">
+                                            {{en.engine_pistons}}
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="col-2">
+                                    {% for en in spare.0.engine_info.all %}
+                                        {% if sp in en.car_engine_info.all %}
+                                        <div class="col-12">
+                                            {{en.engine_power_kw}} Kw / {{en.engine_power_hp}} hp
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="col-2">{{sp.transmission}}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
