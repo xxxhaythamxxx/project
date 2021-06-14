@@ -308,7 +308,6 @@ $List.change(function(){
         $("table td:nth-child("+(ecodei + 1)+")").hide();
     }
 });
-
 // Tabla sorteable ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
 $('th').not("#check").click(function(){
@@ -317,6 +316,18 @@ $('th').not("#check").click(function(){
     this.asc = !this.asc
     if (!this.asc){rows = rows.reverse()}
     for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+
+    var i = 1;
+    $("tbody tr").each(function(){
+        $(this).find("td").each(function(){
+            if($(this).index()==$("#detail-id").index()){
+                $(this).text(i);
+                i=i+1;
+            }
+            
+        })
+    });
+
 })
 function comparer(index) {
     return function(a, b) {
@@ -329,11 +340,7 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 // Enumerar tabla de carrito --------------------------------------------------------------------------------------
 
 var i = 1;
-// var j = 1;
 $("tbody tr").each(function(){
-    
-    // $(this).attr("id",j);
-    // j=j+1;
     $(this).find("td").each(function(){
         if($(this).index()==$("#detail-id").index()){
             $(this).text(i);

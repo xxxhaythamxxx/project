@@ -140,7 +140,20 @@
 </form>
 </div>
 <script>
-$('tbody').sortable();
+$('tbody').sortable({
+    stop:function(){
+        var i = 1;
+        $("tbody tr").each(function(){
+            $(this).find("td").each(function(){
+                if($(this).index()==$("#detail-id").index()){
+                    $(this).text(i);
+                    i=i+1;
+                }
+                
+            })
+        });
+    }
+});
 
 </script>
 {% load static %}
