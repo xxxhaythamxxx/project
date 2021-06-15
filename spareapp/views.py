@@ -72,9 +72,10 @@ def selectf(request):
                             put = g.translate(str.maketrans('', '', '.''-'))
                             if valor.upper() in put.upper():
                                 b.append(t)
-                    out = s.translate(str.maketrans('', '', '.''-'))
-                    if valor.upper() in out.upper():
-                        b.append(t)
+                    if s:
+                        out = s.translate(str.maketrans('', '', '.''-'))
+                        if valor.upper() in out.upper():
+                            b.append(t)
                 b = (set(b))
                 dic.update({"spare":b,"mig":valor,"parameter":"Spare code"})
                 return render(request,"spareapp/find.html",dic)
