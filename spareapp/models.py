@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from smart_selects.db_fields import ChainedManyToManyField
+import os
 
 # Create your models here.
 class car(models.Model):
@@ -59,6 +60,12 @@ class spare(models.Model):
     high=models.FloatField(verbose_name="High",blank=True,null=True)
     diameter=models.FloatField(verbose_name="Diameter",blank=True,null=True)
     radio=models.FloatField(verbose_name="Radio",blank=True,null=True)
+
+    # def delete(self,*args,**kwargs):
+    #     if os.path.isfile(self.spare_photo.path):
+    #         self.spare_photo.file.close()
+    #         os.remove(self.spare_photo.path)
+    #     super(spare, self).delete(*args,**kwargs)
 
     def __str__(self):
         return '%s %s %s' %(self.spare_code, self.spare_brand, self.spare_name)
