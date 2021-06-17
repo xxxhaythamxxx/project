@@ -7,12 +7,12 @@ import os
 class car(models.Model):
     car_manufacturer=models.CharField(max_length=20, verbose_name="Manufacturer", blank=True,null=True)    #Ejemplo: Audi
     car_model=models.CharField(max_length=100, verbose_name="Model", unique=True, blank=True,null=True)           #Ejemplo: 100 C1 Coupe (817)
-    car_from=models.DateField(verbose_name="From", blank=True,null=True)      #Ejemplo: 11/2015
-    car_to=models.DateField(verbose_name="To", blank=True,null=True)          #Ejemplo: 11/2018
+    carfrom=models.IntegerField(verbose_name="From", blank=True,null=True)      #Ejemplo: 11/2015
+    carto=models.IntegerField(verbose_name="To", blank=True,null=True)          #Ejemplo: 11/2018
     transmission=models.CharField(max_length=10, blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
 
     def __str__(self):
-        return '%s %s, (%s / %s)' %(self.car_manufacturer, self.car_model, self.car_from.year, self.car_to.year)
+        return '%s %s' %(self.car_manufacturer, self.car_model)
 
 class engine(models.Model):
     car_engine_info=models.ManyToManyField(car,blank=True,null=True)
