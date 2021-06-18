@@ -107,14 +107,6 @@ function measureFilter(){
 
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
 function measureReset(){
-    // var Diametermin = $("#DiameterMin").val();                                            //Tomo el valor del minimo
-    // var Diametermax = $("#DiameterMax").val();                                            //Tomo el valor del maximo
-    // var Longmin = $("#LongMin").val();                                            
-    // var Longmax = $("#LongMax").val();
-    // var Highmin = $("#HighMin").val();                                            
-    // var Highmax = $("#HighMax").val();
-    // var Widemin = $("#WideMin").val();                                            
-    // var Widemax = $("#WideMax").val();
 
     $("#DiameterMin").val(null);                                            //Tomo el valor del minimo
     $("#DiameterMax").val(null);                                            //Tomo el valor del maximo
