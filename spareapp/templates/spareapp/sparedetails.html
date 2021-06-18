@@ -152,7 +152,7 @@
                         <div class="card-body">
                             {% if sp in ob.car_info.all %}
                             <div class="row mt-2">
-                                <div class="col-2">{{sp.car_from.year}} / {{sp.car_to.year}}</div>
+                                <div class="col-2">{{sp.carfrom}} / {{sp.carto}}</div>
                                     <div class="col-2">
                                         <div class="row">
                                             {% for en in spare.0.engine_info.all %}

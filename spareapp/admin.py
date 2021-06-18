@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import *
 
 class carAdmin(admin.ModelAdmin):
-    list_display=("car_manufacturer","car_model","transmission")
+    list_display=("car_manufacturer","car_model","transmission","carfrom","carto")
     search_fields=("car_manufacturer","car_model")
     list_filter=("car_manufacturer",)
     ordering = ('car_manufacturer', 'car_model')

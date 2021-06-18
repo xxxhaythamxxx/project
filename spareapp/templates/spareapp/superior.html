@@ -9,22 +9,36 @@
                 <input class="filter form-control p-1" type="text" id="myInput" placeholder="Filter">
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-6 mt-1">
-                <div id="default" class="btn btn-success">Default</div>
-                <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
-                <ul id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Code<input name="code" class="ml-2" type="checkbox"></label></li>
-                    {% if parameter == 'Engine code' %}
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Engine code<input name="ecode" class="ml-2" type="checkbox"></label></li>
-                    {% endif %}
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
-                    <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
-                </ul>
+                <div style="display: inline-block;" class="">
+                    <div id="default" class="btn btn-success">Default</div>
+                </div>
+                <div style="display: inline-block;" class="">
+                    <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
+                    <ul id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Code<input name="code" class="ml-2" type="checkbox"></label></li>
+                        {% if parameter == 'Engine code' %}
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Engine code<input name="ecode" class="ml-2" type="checkbox"></label></li>
+                        {% endif %}
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
+                    </ul>
+                </div>
+                <div style="display: inline-block;" class="">
+                    <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Filters</a>
+                    <ul id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Diameter<input name="checkDiameter" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Length<input name="checkLong" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Height<input name="checkHigh" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Width<input name="checkWide" class="ml-2" type="checkbox"></label></li>
+                    </ul>
+                </div>
+                
             </div>
             
             <div class="col-lg-6 col-md-5 col-sm-6 col-6 mt-1">
@@ -32,6 +46,36 @@
                     <button class="btn btn-success ml-2" onClick="viewPDF()">View</button>
                     <button class="btn btn-success ml-2" onClick="generatePDF()">PDF</button>
                     <button class="btn btn-success ml-2" id="downloadexcel">Excel</button>
+                </div>
+            </div>
+            <div style="display: none;" id="DiameterFilter" class="row">
+                <div class="col-lg-6 mt-2">
+                    <input class="col-lg-3" type="number" placeholder="Min diameter" id="DiameterMin">
+                    <input class="col-lg-3" type="number" placeholder="Max diameter" id="DiameterMax">
+                </div>
+            </div>
+            <div style="display: none;" id="LongFilter" class="row">
+                <div class="col-lg-6 mt-2">
+                    <input class="col-lg-3" type="number" placeholder="Min lenght" id="LongMin">
+                    <input class="col-lg-3" type="number" placeholder="Max lenght" id="LongMax">
+                </div>
+            </div>
+            <div style="display: none;" id="HighFilter" class="row">
+                <div class="col-lg-6 mt-2">
+                    <input class="col-lg-3" type="number" placeholder="Min height" id="HighMin">
+                    <input class="col-lg-3" type="number" placeholder="Max height" id="HighMax">
+                </div>
+            </div>
+            <div style="display: none;" id="WideFilter" class="row">
+                <div class="col-lg-6 mt-2">
+                    <input class="col-lg-3" type="number" placeholder="Min width" id="WideMin">
+                    <input class="col-lg-3" type="number" placeholder="Max width" id="WideMax">
+                </div>
+            </div>
+            <div style="display: none;" id="ButtonFilter" class="row">
+                <div class="col mt-2">
+                    <button class="btn btn-success" onClick="measureFilter()" id="measureFilter">Filter</button>
+                    <button class="btn btn-danger" onClick="measureReset()" id="measureReset">Reset</button>
                 </div>
             </div>
         </div>

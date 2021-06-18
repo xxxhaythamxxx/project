@@ -64,16 +64,16 @@
             {% if br.long or br.wide or br.high or br.diameter or br.radio %}
             <td style="display: none;">
                 {% if br.long %}
-                    <div><a href="{% url 'longi' br.long %}">Long: {{br.long}}</a></div>
+                    <div><a id="longValue" href="{% url 'longi' br.long %}">Long: {{br.long}}</a></div>
                 {% endif %}
                 {% if br.wide %}
-                    <div><a href="{% url 'widei' br.wide %}">Wide: {{br.wide}}</a></div>
+                    <div><a id="wideValue" href="{% url 'widei' br.wide %}">Wide: {{br.wide}}</a></div>
                 {% endif %}
                 {% if br.high %}
-                    <div><a href="{% url 'highi' br.high %}">High: {{br.high}}</a></div>
+                    <div><a id="highValue" href="{% url 'highi' br.high %}">High: {{br.high}}</a></div>
                 {% endif %}
                 {% if br.diameter %}
-                    <div><a href="{% url 'diameteri' br.diameter %}">Diameter: {{br.diameter}}</a></div>
+                    <div><a id="diameterValue" href="{% url 'diameteri' br.diameter %}">Diameter: {{br.diameter}}</a></div>
                 {% endif %}
                 {% if br.radio %}
                     <div><a href="{% url 'radioi' br.radio %}">Radio: {{br.radio}}</a></div>

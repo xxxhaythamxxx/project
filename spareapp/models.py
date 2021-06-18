@@ -12,7 +12,7 @@ class car(models.Model):
     transmission=models.CharField(max_length=10, blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
 
     def __str__(self):
-        return '%s %s' %(self.car_manufacturer, self.car_model)
+        return '%s %s,(%s / %s)' %(self.car_manufacturer, self.car_model, self.carfrom, self.carto)
 
 class engine(models.Model):
     car_engine_info=models.ManyToManyField(car,blank=True,null=True)

@@ -33,6 +33,102 @@ $(document).ready(function(){
     })
 });
 
+// Funcion para filtrar por medidas -------------------------------------------------------------------
+function measureFilter(){
+
+    $("#myTable tr").each(function(){
+        $(this).hide();
+    })
+
+    var indexDiameter;
+    var Diametermin = $("#DiameterMin").val();                                            //Tomo el valor del minimo
+    var Diametermax = $("#DiameterMax").val();                                            //Tomo el valor del maximo
+    var indexLong;
+    var Longmin = $("#LongMin").val();                                            
+    var Longmax = $("#LongMax").val();
+    var indexHigh;
+    var Highmin = $("#HighMin").val();                                            
+    var Highmax = $("#HighMax").val();
+    var indexWide;
+    var Widemin = $("#WideMin").val();                                            
+    var Widemax = $("#WideMax").val();
+    var listado = []
+
+    $('#myTable tr a').each(function(){
+        if($(this).attr("id")==="diameterValue"){
+            var text = $(this).text();
+            var varSplit = text.split("Diameter: ")
+            var DiameterFloat = parseFloat(varSplit[1])
+            if(Diametermin<=DiameterFloat & Diametermax>=DiameterFloat){
+                indexDiameter=$(this).text()
+                listado.push(indexDiameter)
+            }
+        }
+        if($(this).attr("id")==="longValue"){
+            var text = $(this).text();
+            var varSplit = text.split("Long: ")
+            var LongFloat = parseFloat(varSplit[1])
+            if(Longmin<=LongFloat & Longmax>=LongFloat){
+                indexLong=$(this).text()
+                listado.push(indexLong)
+            }
+        }
+        if($(this).attr("id")==="highValue"){
+            var text = $(this).text();
+            var varSplit = text.split("High: ")
+            var HighFloat = parseFloat(varSplit[1])
+            if(Highmin<=HighFloat & Highmax>=HighFloat){
+                indexHigh=$(this).text()
+                listado.push(indexHigh)
+            }
+        }
+        if($(this).attr("id")==="wideValue"){
+            var text = $(this).text();
+            var varSplit = text.split("Wide: ")
+            var WideFloat = parseFloat(varSplit[1])
+            if(Widemin<=WideFloat & Widemax>=WideFloat){
+                indexWide=$(this).text()
+                listado.push(indexWide)
+            }
+        }
+    });
+    
+    for(var i=0; i<listado.length; i++){
+        $("#myTable tr").each(function(){
+            $(this).find("a").each(function(){
+                if($(this).text()===listado[i]){
+                    $(this).parent().parent().parent().show();
+                }
+            })
+        })
+    }
+    
+}
+
+// Funcion resetear valores del filtro de medidas ---------------------------------------------------
+function measureReset(){
+    // var Diametermin = $("#DiameterMin").val();                                            //Tomo el valor del minimo
+    // var Diametermax = $("#DiameterMax").val();                                            //Tomo el valor del maximo
+    // var Longmin = $("#LongMin").val();                                            
+    // var Longmax = $("#LongMax").val();
+    // var Highmin = $("#HighMin").val();                                            
+    // var Highmax = $("#HighMax").val();
+    // var Widemin = $("#WideMin").val();                                            
+    // var Widemax = $("#WideMax").val();
+
+    $("#DiameterMin").val(null);                                            //Tomo el valor del minimo
+    $("#DiameterMax").val(null);                                            //Tomo el valor del maximo
+    $("#LongMin").val(null);                                            
+    $("#LongMax").val(null);
+    $("#HighMin").val(null);                                            
+    $("#HighMax").val(null);
+    $("#WideMin").val(null);                                            
+    $("#WideMax").val(null);
+
+    $("#myTable tr").each(function(){
+        $(this).show();
+    })
+}
 
 // Generar PDF desde HTML ----------------------------------------------------------------------------------------
 function generatePDF(){
@@ -130,6 +226,10 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",false);
     $("input:checkbox[name=ecode]").prop("checked",true);
+    $("input:checkbox[name=checkDiameter]").prop("checked",false);
+    $("input:checkbox[name=checkLong]").prop("checked",false);
+    $("input:checkbox[name=checkHigh]").prop("checked",false);
+    $("input:checkbox[name=checkWide]").prop("checked",false);
 
     $("#photo").show();
     $("table td:nth-child("+($("#photo").index() + 1)+")").show();
@@ -151,6 +251,15 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
     $("#ecode").show();
     $("table td:nth-child("+($("#ecode").index() + 1)+")").show();
+    $("#DiameterFilter").hide();
+    $("#LongFilter").hide();
+    $("#HighFilter").hide();
+    $("#WideFilter").hide();
+    $("#ButtonFilter").hide();
+
+    $("#myTable tr").each(function(){
+        $(this).show();
+    })
 })
 
 // boton para exportar a Excel -------------------------------------------------------------------------------------
@@ -308,6 +417,43 @@ $List.change(function(){
         $("table td:nth-child("+(ecodei + 1)+")").hide();
     }
 });
+
+// Menu de filtrar por medidas ---------------------------------------------------------------------------
+const $List2 = $("#headerList2");
+$("input:checkbox[name=checkDiameter]").prop("checked",false);
+$("input:checkbox[name=checkLong]").prop("checked",false);
+$("input:checkbox[name=checkHigh]").prop("checked",false);
+$("input:checkbox[name=checkWide]").prop("checked",false);
+
+$List2.change(function(){
+    
+    if ($("input:checkbox[name=checkDiameter]:checked").val()){
+        $("#DiameterFilter").show();
+    }else{
+        $("#DiameterFilter").hide();
+    }
+    if ($("input:checkbox[name=checkLong]:checked").val()){
+        $("#LongFilter").show();
+    }else{
+        $("#LongFilter").hide();
+    }
+    if ($("input:checkbox[name=checkHigh]:checked").val()){
+        $("#HighFilter").show();
+    }else{
+        $("#HighFilter").hide();
+    }
+    if ($("input:checkbox[name=checkWide]:checked").val()){
+        $("#WideFilter").show();
+    }else{
+        $("#WideFilter").hide();
+    }
+    if ($("input:checkbox[name=checkDiameter]:checked").val() || $("input:checkbox[name=checkLong]:checked").val() || $("input:checkbox[name=checkHigh]:checked").val() || $("input:checkbox[name=checkWide]:checked").val()){
+        $("#ButtonFilter").show();
+    }else{
+        $("#ButtonFilter").hide();
+    }
+})
+
 // Tabla sorteable ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
 $('th').not("#check").click(function(){
