@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-from smart_selects.db_fields import ChainedManyToManyField
+from smart_selects.db_fields import ChainedManyToManyField, ChainedForeignKey
 import os
 
 # Create your models here.
@@ -42,6 +42,9 @@ class reference(models.Model):
         return '%s - %s' %(self.reference_code, self.reference_car)
 
 class spare(models.Model):
+    spare_code=models.CharField(max_length=15, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
+    spare_brand=models.CharField(max_length=20, verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
+    spare_name=models.CharField(max_length=80, verbose_name="Name",blank=True,null=True)          #Ejemplo: Oil filter
     car_info=models.ManyToManyField(car,blank=True,null=True)
     engine_info=ChainedManyToManyField(
         engine,
@@ -51,21 +54,18 @@ class spare(models.Model):
     spare_spare = models.ManyToManyField("self",verbose_name="Spare target",blank=True,null=True)
     spare_reference=models.ManyToManyField(reference,verbose_name="Reference code",blank=True,null=True)
     spare_photo=models.ImageField(upload_to="spares", verbose_name="Photo",blank=True,null=True)                           #Será ImageField()
-    spare_code=models.CharField(max_length=15, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
-    spare_brand=models.CharField(max_length=20, verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
-    spare_name=models.CharField(max_length=80, verbose_name="Name",blank=True,null=True)          #Ejemplo: Oil filter
     shape=models.CharField(max_length=20, verbose_name="Shape",blank=True,null=True)             #Ejemplo: Rectangular
-    long=models.FloatField(verbose_name="Long",blank=True,null=True)
-    wide=models.FloatField(verbose_name="Wide",blank=True,null=True)
-    high=models.FloatField(verbose_name="High",blank=True,null=True)
-    diameter=models.FloatField(verbose_name="Diameter",blank=True,null=True)
-    radio=models.FloatField(verbose_name="Radio",blank=True,null=True)
-
-    # def delete(self,*args,**kwargs):
-    #     if os.path.isfile(self.spare_photo.path):
-    #         self.spare_photo.file.close()
-    #         os.remove(self.spare_photo.path)
-    #     super(spare, self).delete(*args,**kwargs)
 
     def __str__(self):
         return '%s %s %s' %(self.spare_code, self.spare_brand, self.spare_name)
+
+class dimension(models.Model):
+    dimensionCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+
+    dimensionSpare = ChainedForeignKey(
+        spare,
+        chained_field="dimensionCategory",
+        chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")
+
+    atributeName=models.CharField(max_length=20, verbose_name="Name", blank=True,null=True)
+    atributeVal=models.FloatField(verbose_name="Atribute",blank=True,null=True)

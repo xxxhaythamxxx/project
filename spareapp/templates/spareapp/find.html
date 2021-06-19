@@ -3,7 +3,6 @@
 {% block title %} Kmotorshop.com{% endblock %}
 
 {% block content %}
-
 <div class="resultadoBusqueda">
 <div class="migajas color-soft color-hard p-2">{{parameter}}: {{mig}} </div>
 
@@ -41,7 +40,6 @@
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
-
             {% if parameter == 'Engine code' %}
             <td><a href="#">{{mig}}</a></td>
             {% endif %}
@@ -61,41 +59,33 @@
             {% else %}
             <td style="display: none;"><a href="#"></a></td>
             {% endif %}
-            {% if br.long or br.wide or br.high or br.diameter or br.radio %}
+
+            {% if allDimensions %}
+                <td style="display: none;">
+                    {% for dim in allDimensions %}
+                        {% if br.spare_code == dim.dimensionSpare.spare_code %}
+                        <div><a id="{{dim.atributeName}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            
+            {% if br.spare_reference.all %}
             <td style="display: none;">
-                {% if br.long %}
-                    <div><a id="longValue" href="{% url 'longi' br.long %}">Long: {{br.long}}</a></div>
-                {% endif %}
-                {% if br.wide %}
-                    <div><a id="wideValue" href="{% url 'widei' br.wide %}">Wide: {{br.wide}}</a></div>
-                {% endif %}
-                {% if br.high %}
-                    <div><a id="highValue" href="{% url 'highi' br.high %}">High: {{br.high}}</a></div>
-                {% endif %}
-                {% if br.diameter %}
-                    <div><a id="diameterValue" href="{% url 'diameteri' br.diameter %}">Diameter: {{br.diameter}}</a></div>
-                {% endif %}
-                {% if br.radio %}
-                    <div><a href="{% url 'radioi' br.radio %}">Radio: {{br.radio}}</a></div>
-                {% endif %}
+                {% for car in onlyManufCars %}
+                    {% for sp in br.spare_reference.all %}
+                        {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
+                        <div><a href="{% url 'sparedetails' br.spare_code %}">{{sp.reference_code}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
             </td>
             {% else %}
             <td style="display: none;"><a href="#"></a></td>
             {% endif %}
-
-            {% if br.spare_reference.all %}
-            <td style="display: none;">
-                    {% for car in onlyManufCars %}
-                        {% for sp in br.spare_reference.all %}
-                            {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
-                            <div><a href="{% url 'sparedetails' br.spare_code %}">{{sp.reference_code}}</a></div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </td>
-                {% else %}
-                <td style="display: none;"><a href="#"></a></td>
-                {% endif %}
 
             {% if br.car_info.all %}
             <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
