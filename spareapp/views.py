@@ -7,6 +7,10 @@ from .cart import *
 
 # Creo el diccionario para los formularios en común de todos los templates
 def same():
+    # Consigo todos los valores de nombre de las dimensiones
+    dim=dimension.objects.values("atributeName").distinct()
+    # Consigo todos los valores de las dimensiones
+    dim2=dimension.objects.all().distinct()
     # Consigo TODOS los spares
     allSparesall=spare.objects.all()
     # Consigo TODAS las categorias
@@ -19,7 +23,7 @@ def same():
     allCars=car.objects.all()
     # Conseguir TODOS los repuestos por nombre
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
-    dicc={"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dicc={"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
     return dicc
 
 dic=same().copy()
@@ -217,42 +221,14 @@ def shape(request,val):
     else:
         return selectf(request)
 
-def longi(request,val):
+def longi(request,val1,val2):
     if selectf(request)==False:
-        spares = spare.objects.all().filter(long=val).order_by("spare_code","spare_brand","spare_name")
-        dic.update({'spare':spares,'parameter':'Length','mig':val})
-        return render(request, 'spareapp/find.html',dic)
-    else:
-        return selectf(request)
-
-def widei(request,val):
-    if selectf(request)==False:
-        spares = spare.objects.all().filter(wide=val).order_by("spare_code","spare_brand","spare_name")
-        dic.update({'spare':spares,'parameter':'Width','mig':val})
-        return render(request, 'spareapp/find.html',dic)
-    else:
-        return selectf(request)
-
-def highi(request,val):
-    if selectf(request)==False:
-        spares = spare.objects.all().filter(high=val).order_by("spare_code","spare_brand","spare_name")
-        dic.update({'spare':spares,'parameter':'Height','mig':val})
-        return render(request, 'spareapp/find.html',dic)
-    else:
-        return selectf(request)
-
-def diameteri(request,val):
-    if selectf(request)==False:
-        spares = spare.objects.all().filter(diameter=val).order_by("spare_code","spare_brand","spare_name")
-        dic.update({'spare':spares,'parameter':'Diameter','mig':val})
-        return render(request, 'spareapp/find.html',dic)
-    else:
-        return selectf(request)
-
-def radioi(request,val):
-    if selectf(request)==False:
-        spares = spare.objects.all().filter(radio=val).order_by("spare_code","spare_brand","spare_name")
-        dic.update({'spare':spares,'parameter':'Radio','mig':val})
+        print("Valor 1: "+val1)
+        print("Valor 2: "+val2)
+        spares = spare.objects.all().filter(
+            spare_code__icontains=dimension.objects.values("dimensionSpare__spare_code").filter(atributeName=val1,atributeVal=val2)
+        ).order_by("spare_code","spare_brand","spare_name")
+        dic.update({'spare':spares,'parameter':val1,'mig':val2})
         return render(request, 'spareapp/find.html',dic)
     else:
         return selectf(request)
