@@ -36,63 +36,42 @@ $(document).ready(function(){
 // Funcion para filtrar por medidas -------------------------------------------------------------------
 function measureFilter(){
 
+    var listado = []
+
     $("#myTable tr").each(function(){
         $(this).hide();
     })
 
-    var indexDiameter;
-    var Diametermin = $("#DiameterMin").val();                                            //Tomo el valor del minimo
-    var Diametermax = $("#DiameterMax").val();                                            //Tomo el valor del maximo
-    var indexLong;
-    var Longmin = $("#LongMin").val();                                            
-    var Longmax = $("#LongMax").val();
-    var indexHigh;
-    var Highmin = $("#HighMin").val();                                            
-    var Highmax = $("#HighMax").val();
-    var indexWide;
-    var Widemin = $("#WideMin").val();                                            
-    var Widemax = $("#WideMax").val();
-    var listado = []
+    $(".filterDim").each(function(){
+        var indexVal = $(this).attr("id")                           // id = DiameterFilter
+        var atribute = indexVal.split("Filter")
+        var dimAtribute = atribute[0]                               // Diameter     -     Height
+        var AtributeMin
+        var AtributeMax
+        
+        $(this).find("input").each(function(){
+            var comp = $(this).val()                                // 1     -     5
+            var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter     -     Height
+            if(dimAtribute === innerAtribute){
+                AtributeMin = comp
+            }else{
+                AtributeMax = comp
+            }
+        })
 
-    $('#myTable tr a').each(function(){
-        if($(this).attr("id")==="diameterValue"){
-            var text = $(this).text();
-            var varSplit = text.split("Diameter: ")
-            var DiameterFloat = parseFloat(varSplit[1])
-            if(Diametermin<=DiameterFloat & Diametermax>=DiameterFloat){
-                indexDiameter=$(this).text()
-                listado.push(indexDiameter)
+        $('#myTable tr a').each(function(){
+            if($(this).attr("id")===(dimAtribute+"Value")){
+                var text = $(this).text();                          // 40.5
+                var varSplit = text.split(""+dimAtribute+": ")
+                var VarFloat = parseFloat(varSplit[1])
+                if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){
+                    indexDiameter=$(this).text()
+                    listado.push(indexDiameter)
+                }
             }
-        }
-        if($(this).attr("id")==="longValue"){
-            var text = $(this).text();
-            var varSplit = text.split("Long: ")
-            var LongFloat = parseFloat(varSplit[1])
-            if(Longmin<=LongFloat & Longmax>=LongFloat){
-                indexLong=$(this).text()
-                listado.push(indexLong)
-            }
-        }
-        if($(this).attr("id")==="highValue"){
-            var text = $(this).text();
-            var varSplit = text.split("High: ")
-            var HighFloat = parseFloat(varSplit[1])
-            if(Highmin<=HighFloat & Highmax>=HighFloat){
-                indexHigh=$(this).text()
-                listado.push(indexHigh)
-            }
-        }
-        if($(this).attr("id")==="wideValue"){
-            var text = $(this).text();
-            var varSplit = text.split("Wide: ")
-            var WideFloat = parseFloat(varSplit[1])
-            if(Widemin<=WideFloat & Widemax>=WideFloat){
-                indexWide=$(this).text()
-                listado.push(indexWide)
-            }
-        }
-    });
-    
+        })
+    })
+
     for(var i=0; i<listado.length; i++){
         $("#myTable tr").each(function(){
             $(this).find("a").each(function(){
@@ -102,20 +81,18 @@ function measureFilter(){
             })
         })
     }
-    
 }
 
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
 function measureReset(){
 
-    $("#DiameterMin").val(null);                                            //Tomo el valor del minimo
-    $("#DiameterMax").val(null);                                            //Tomo el valor del maximo
-    $("#LongMin").val(null);                                            
-    $("#LongMax").val(null);
-    $("#HighMin").val(null);                                            
-    $("#HighMax").val(null);
-    $("#WideMin").val(null);                                            
-    $("#WideMax").val(null);
+    $("#headerList2").each(function(){
+        $(this).find("input").each(function(){
+            var aux = $(this).attr("name").split("check")[1]
+            $("#"+aux+"Min").val(null);
+            $("#"+aux+"Max").val(null);
+        })
+    })
 
     $("#myTable tr").each(function(){
         $(this).show();
@@ -218,10 +195,12 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",false);
     $("input:checkbox[name=ecode]").prop("checked",true);
-    $("input:checkbox[name=checkDiameter]").prop("checked",false);
-    $("input:checkbox[name=checkLong]").prop("checked",false);
-    $("input:checkbox[name=checkHigh]").prop("checked",false);
-    $("input:checkbox[name=checkWide]").prop("checked",false);
+    $("#headerList2").each(function(){
+        $(this).find("input").each(function(){
+            var comp = $(this).attr("name")
+            $(this).prop("checked",false);
+        })
+    })
 
     $("#photo").show();
     $("table td:nth-child("+($("#photo").index() + 1)+")").show();
@@ -243,10 +222,13 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
     $("#ecode").show();
     $("table td:nth-child("+($("#ecode").index() + 1)+")").show();
-    $("#DiameterFilter").hide();
-    $("#LongFilter").hide();
-    $("#HighFilter").hide();
-    $("#WideFilter").hide();
+    $("#headerList2").each(function(){
+        $(this).find("input").each(function(){
+
+            var aux = $(this).attr("name").split("check")[1]
+            $("#"+aux+"Filter").hide();
+        })
+    })
     $("#ButtonFilter").hide();
 
     $("#myTable tr").each(function(){
@@ -412,38 +394,38 @@ $List.change(function(){
 
 // Menu de filtrar por medidas ---------------------------------------------------------------------------
 const $List2 = $("#headerList2");
-$("input:checkbox[name=checkDiameter]").prop("checked",false);
-$("input:checkbox[name=checkLong]").prop("checked",false);
-$("input:checkbox[name=checkHigh]").prop("checked",false);
-$("input:checkbox[name=checkWide]").prop("checked",false);
+$("#headerList2").each(function(){
+    $(this).find("input").each(function(){
+        var comp = $(this).attr("name")
+        $(this).prop("checked",false);
+    })
+})
 
 $List2.change(function(){
-    
-    if ($("input:checkbox[name=checkDiameter]:checked").val()){
-        $("#DiameterFilter").show();
-    }else{
-        $("#DiameterFilter").hide();
-    }
-    if ($("input:checkbox[name=checkLong]:checked").val()){
-        $("#LongFilter").show();
-    }else{
-        $("#LongFilter").hide();
-    }
-    if ($("input:checkbox[name=checkHigh]:checked").val()){
-        $("#HighFilter").show();
-    }else{
-        $("#HighFilter").hide();
-    }
-    if ($("input:checkbox[name=checkWide]:checked").val()){
-        $("#WideFilter").show();
-    }else{
-        $("#WideFilter").hide();
-    }
-    if ($("input:checkbox[name=checkDiameter]:checked").val() || $("input:checkbox[name=checkLong]:checked").val() || $("input:checkbox[name=checkHigh]:checked").val() || $("input:checkbox[name=checkWide]:checked").val()){
-        $("#ButtonFilter").show();
-    }else{
-        $("#ButtonFilter").hide();
-    }
+
+    var bo = false
+    // alert($(this).find("input").attr("name"))                    checkDiameter
+
+    $(this).find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            $("#"+aux+"Filter").show();
+        }else{
+            $("#"+aux+"Filter").hide();
+        }
+    })
+
+    $(this).find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
+        }
+        if (bo === true){
+            $("#ButtonFilter").show();
+        }else{
+            $("#ButtonFilter").hide();
+        }
+    })
 })
 
 // Tabla sorteable ----------------------------------------------------------------------------------
