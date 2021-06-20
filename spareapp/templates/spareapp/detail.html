@@ -31,8 +31,9 @@
                         <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Atributes<input name="atributes" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
-                        <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li> -->
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
                     </ul>
                 </div>
@@ -107,6 +108,7 @@
                 <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
                 <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
                 <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
+                <th id="atributes" class="trsup color" style="position: sticky;top: 70;display: none;">Atributes</th>
                 <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Reference Code</th>
                 <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
                 <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
@@ -119,7 +121,7 @@
         <tr>
             <td><a href=""></a></div></td>
             {% if br.spare_photo %}
-            <td><a href="{% url 'sparedetails' br.spare_code %}"><div style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            <td><a href="#"><div style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
@@ -149,6 +151,18 @@
                     {% for dim in allDimensions %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
                         <div><a id="{{dim.atributeName}}Value" href="">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if allAtributes %}
+                <td style="display: none;">
+                    {% for dim in allAtributes %}
+                        {% if br.spare_code == dim.atributeSpare.spare_code %}
+                        <div><a id="{{dim.atributeName}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -191,8 +205,10 @@ $('tbody').sortable({
         $("tbody tr").each(function(){
             $(this).find("td").each(function(){
                 if($(this).index()==$("#detail-id").index()){
-                    $(this).text(i);
-                    i=i+1;
+                    if($(this).parent().is(":visible")){
+                        $(this).text(i)
+                        i=i+1;
+                    }
                 }
                 
             })

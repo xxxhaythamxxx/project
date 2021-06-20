@@ -99,7 +99,7 @@ def selectf(request):
                             if(v.upper() in n.upper()):
                                 b.append(t)
                 b = (set(b))
-                dic.update({"spare":b,"mig":valor,"parameter":"Spare code"})
+                dic.update({"spare":b,"mig":valor,"parameter":"Parameters"})
                 return render(request,"spareapp/find.html",dic)
             else:
                 return False

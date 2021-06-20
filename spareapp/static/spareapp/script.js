@@ -33,7 +33,7 @@ $(document).ready(function(){
     })
 });
 
-// Funcion para filtrar por medidas -------------------------------------------------------------------
+// Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
 function measureFilter(){
 
     var listado = []
@@ -80,7 +80,6 @@ function measureFilter(){
             }
         })
     })
-
     for(var i=0; i<listado.length; i++){
         $("#myTable tr").each(function(){
             $(this).find("a").each(function(){
@@ -90,6 +89,21 @@ function measureFilter(){
             })
         })
     }
+
+    for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
+        $("#myTable tr").each(function(){
+            $(this).find("td").each(function(){
+                if($(this).index()===$("#detail-id").index()){
+                    if($(this).parent().is(":visible")){
+                        // alert($(this).text())
+                        $(this).text(""+(i+1)+"")
+                        i=i+1;
+                    }
+                }
+            })
+        })
+    }
+
 }
 
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
@@ -112,6 +126,18 @@ function measureReset(){
     $("#myTable tr").each(function(){
         $(this).show();
     })
+
+    // Arreglar numeros de ID
+    var i = 1;
+    $("tbody tr").each(function(){
+        $(this).find("td").each(function(){
+            if($(this).index()==$("#detail-id").index()){
+                $(this).text(i);
+                i=i+1;
+            }
+            
+        })
+    });
 }
 
 // Generar PDF desde HTML ----------------------------------------------------------------------------------------
@@ -323,7 +349,7 @@ $("input:checkbox[name=check]").prop("checked",true);
 $("input:checkbox[name=ecode]").prop("checked",true);
 
 $List.change(function(){
-    
+
     let detailidi = $("#detail-id").index();
     let photoi = $("#photo").index();
     let codei = $("#code").index();
@@ -434,7 +460,7 @@ $List.change(function(){
     }
 });
 
-// Menu de filtrar por medidas ---------------------------------------------------------------------------
+// Activar filtros de dimension y atributos ---------------------------------------------------------------------------
 const $List2 = $("#headerList2");
 $("#headerList2").each(function(){
     $(this).find("input").each(function(){
@@ -451,7 +477,7 @@ $("#headerList3").each(function(){
     })
 })
 
-$List2.change(function(){
+$List2.change(function(){           // Activar filtro de dimensiones
 
     var bo = false
     // alert($(this).find("input").attr("name"))                    checkDiameter
@@ -486,7 +512,7 @@ $List2.change(function(){
     }
 })
 
-$List3.change(function(){
+$List3.change(function(){           // Activar filtro de atributos
 
     var bo = false
     // alert($(this).find("input").attr("name"))                    checkDiameter
@@ -522,7 +548,7 @@ $List3.change(function(){
 })
 
 
-// Tabla sorteable ----------------------------------------------------------------------------------
+// Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
 $('th').not("#check").click(function(){
     var table = $(this).parents('table').eq(0)
@@ -535,8 +561,10 @@ $('th').not("#check").click(function(){
     $("tbody tr").each(function(){
         $(this).find("td").each(function(){
             if($(this).index()==$("#detail-id").index()){
-                $(this).text(i);
-                i=i+1;
+                if($(this).parent().is(":visible")){
+                    $(this).text(i)
+                    i=i+1;
+                }
             }
             
         })
@@ -563,3 +591,36 @@ $("tbody tr").each(function(){
         
     })
 });
+
+$(".photo").click(function(){
+
+    var bo = false;
+
+    var newCss = {
+        "background-size": "200px 200px",
+        "width": "200px",
+        "height": "200px"
+    }
+    var oldCss = {
+        "background-size": "80px 80px",
+        "width": "80px",
+        "height": "80px"
+    }
+
+    if($(this).css("width")==="200px"){
+        bo = true;
+        $(this).css(oldCss);
+    }
+
+    $("#myTable tr").each(function(){
+            $(this).find(".photo").each(function(){
+                $(this).css(oldCss);
+            })
+    })
+
+    if(bo === true){
+        $(this).css(oldCss);
+    }else{
+        $(this).css(newCss);
+    }
+})
