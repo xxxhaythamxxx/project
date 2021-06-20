@@ -14,7 +14,7 @@
             <div class="col-lg-3 col-md-3 col-sm-12 col-12">
                 <input class="filter form-control p-1" type="text" id="myInput" placeholder="Filter">
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-6 mt-1">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-6 mt-1">
                 <div style="display: inline-block;" class="">
                     <div id="default" class="btn btn-success">Default</div>
                 </div>
@@ -32,10 +32,11 @@
                         <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
+                        <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li> -->
                         <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
                     </ul>
                 </div>
+                <!-- Boton filter dimensiones -->
                 <div style="display: inline-block;" class="">
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Filters</a>
                     <ul id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
@@ -44,9 +45,18 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <!-- Boton filter atribute -->
+                <div style="display: inline-block;" class="">
+                    <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
+                    <ul id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
+                        {% for atr in atribute %}
+                            <li style="margin:auto;text-align:center;" class=""><label class="">{{atr.atributeName}}<input name="check{{atr.atributeName}}" class="ml-2" type="checkbox"></label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 
             </div>
-            <div class="col-lg-6 col-md-5 col-sm-6 col-6 mt-1">
+            <div class="col-lg-5 col-md-5 col-sm-6 col-6 mt-1">
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success ml-2" onClick="viewPDF()">View</button>
                     <button class="btn btn-success ml-2" onClick="generatePDF()">PDF</button>
@@ -64,6 +74,17 @@
             </div>
 
             {% endfor %}
+
+            {% for dim in atribute %}
+
+            <div style="display: none;" id="{{dim.atributeName}}Filter" class="row filterDim">
+                <div class="col-lg-6 mt-2">
+                    <input class="col-lg-3" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
+                </div>
+            </div>
+
+            {% endfor %}
+
             <div style="display: none;" id="ButtonFilter" class="row">
                 <div class="col mt-2">
                     <button class="btn btn-success" onClick="measureFilter()" id="measureFilter">Filter</button>

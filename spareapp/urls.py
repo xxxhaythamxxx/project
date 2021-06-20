@@ -19,11 +19,6 @@ urlpatterns = [
     path('detail',views.detail,name='detail'),
     path("shape/<str:val>",views.shape,name="shape"),
     path("longi/<str:val1>?<str:val2>",views.longi,name="longi"),
-    # path("widei/<str:val>",views.widei,name="widei"),
-    # path("highi/<str:val>",views.highi,name="highi"),
-    # path("diameteri/<str:val>",views.diameteri,name="diameteri"),
-    # path("radioi/<str:val>",views.radioi,name="radioi"),
-    # path("cilinder/<str:val>",views.cilinder,name="cilinder"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

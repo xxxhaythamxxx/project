@@ -11,6 +11,12 @@ def same():
     dim=dimension.objects.values("atributeName").distinct()
     # Consigo todos los valores de las dimensiones
     dim2=dimension.objects.all().distinct()
+
+    # Consigo todos los valores de nombre de las atribute
+    atr=atribute.objects.values("atributeName").distinct()
+    # Consigo todos los valores de las atribute
+    atr2=atribute.objects.all().distinct()
+    
     # Consigo TODOS los spares
     allSparesall=spare.objects.all()
     # Consigo TODAS las categorias
@@ -23,7 +29,7 @@ def same():
     allCars=car.objects.all()
     # Conseguir TODOS los repuestos por nombre
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
-    dicc={"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dicc={"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
     return dicc
 
 dic=same().copy()
@@ -66,20 +72,32 @@ def selectf(request):
             if valor:
                 # Compara el codigoRepuesto con valor
                 b=[]
-                comp=spare.objects.filter(spare_code__icontains=valor).order_by("spare_code","spare_brand","spare_name").distinct() 
+                vec = valor.split(" ")
+                comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
                 todos=spare.objects.all()
-                for t in todos:
-                    s=t.spare_code
-                    if t.spare_reference.all():
-                        for f in t.spare_reference.all():
-                            g=f.reference_code
-                            put = g.translate(str.maketrans('', '', '.''-'))
-                            if valor.upper() in put.upper():
+                for v in vec:
+                    for t in todos:
+                        s=t.spare_code
+                        br=t.spare_brand
+                        n=t.spare_name
+                        if t.spare_reference.all():
+                            for f in t.spare_reference.all():
+                                g=f.reference_code
+                                put = g.translate(str.maketrans('', '', '.''-'))
+                                if valor.upper() in put.upper():
+                                    b.append(t)
+                        if s:
+                            out = s.translate(str.maketrans('', '', '.''-'))
+                            if valor.upper() in out.upper():
                                 b.append(t)
-                    if s:
-                        out = s.translate(str.maketrans('', '', '.''-'))
-                        if valor.upper() in out.upper():
-                            b.append(t)
+                            if v.upper() in out.upper():
+                                b.append(t)
+                        if br:
+                            if(v.upper() in br.upper()):
+                                b.append(t)
+                        if n:
+                            if(v.upper() in n.upper()):
+                                b.append(t)
                 b = (set(b))
                 dic.update({"spare":b,"mig":valor,"parameter":"Spare code"})
                 return render(request,"spareapp/find.html",dic)

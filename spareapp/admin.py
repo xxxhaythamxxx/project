@@ -26,7 +26,7 @@ class spareAdmin(admin.ModelAdmin):
 
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
-    search_fields=("atributeName","atributeVal")
+    # search_fields=("atributeName","atributeVal")
     list_filter=("dimensionCategory","atributeName","dimensionSpare")
     ordering = ("dimensionSpare","atributeName","atributeVal")
 
@@ -54,6 +54,35 @@ class dimensionAdmin(admin.ModelAdmin):
         else:
             return HttpResponseRedirect(reverse("admin:spareapp_dimension_changelist"))
 
+class atributeAdmin(admin.ModelAdmin):
+    list_display=("atributeSpare","atributeName","atributeVal")
+    # search_fields=("atributeName","atributeVal")
+    list_filter=("atributeCategory","atributeName","atributeSpare")
+    ordering = ("atributeSpare","atributeName","atributeVal")
+
+    def response_add(self, request, obj, post_url_continue=None):
+            if '_addanother' in request.POST:
+                url = reverse("admin:spareapp_atribute_add")
+                atributeCategory = request.POST['atributeCategory']
+                qs = '?atributeCategory=%s' % atributeCategory
+
+                atributeSpare = request.POST['atributeSpare']
+                qs2 = '&atributeSpare=%s' % atributeSpare
+
+                return HttpResponseRedirect(''.join((url, qs, qs2)))
+            else:
+                return HttpResponseRedirect(reverse("admin:spareapp_atribute_changelist"))
+
+    def response_change(self, request, obj, post_url_continue=None):
+        if '_addanother' in request.POST:
+            url = reverse("admin:spareapp_atribute_add")
+            atributeCategory = request.POST['atributeCategory']
+            qs = '?atributeCategory=%s' % atributeCategory
+            atributeSpare = request.POST['atributeSpare']
+            qs2 = '&atributeSpare=%s' % atributeSpare
+            return HttpResponseRedirect(''.join((url, qs, qs2)))
+        else:
+            return HttpResponseRedirect(reverse("admin:spareapp_atribute_changelist"))
 
 admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
@@ -61,3 +90,4 @@ admin.site.register(spare,spareAdmin)
 admin.site.register(category)
 admin.site.register(reference)
 admin.site.register(dimension,dimensionAdmin)
+admin.site.register(atribute,atributeAdmin)

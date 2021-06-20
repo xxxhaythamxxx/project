@@ -22,8 +22,9 @@
             <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
             <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
             <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
+            <th id="atributes" class="trsup color" style="position: sticky;top: 70;display: none;">Atributes</th>
             <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Reference Code</th>
-            <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+            <!-- <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th> -->
             <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
         </tr>
     </thead>
@@ -40,7 +41,6 @@
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
-
             {% if parameter == 'Engine code' %}
             <td><a href="#">{{mig}}</a></td>
             {% endif %}
@@ -65,7 +65,7 @@
                 <td style="display: none;">
                     {% for dim in allDimensions %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
-                        <div><a id="{{dim.atributeName}}Value" href="">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        <div><a id="{{dim.atributeName}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -73,6 +73,17 @@
                 <td style="display: none;"><a href="#"></a></td>
             {% endif %}
 
+            {% if allAtributes %}
+                <td style="display: none;">
+                    {% for dim in allAtributes %}
+                        {% if br.spare_code == dim.atributeSpare.spare_code %}
+                        <div><a id="{{dim.atributeName}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
             
             {% if br.spare_reference.all %}
             <td style="display: none;">
@@ -88,11 +99,11 @@
             <td style="display: none;"><a href="#"></a></td>
             {% endif %}
 
-            {% if br.car_info.all %}
+            <!-- {% if br.car_info.all %}
             <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
             <td><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
         </tr>
         {% endfor %}

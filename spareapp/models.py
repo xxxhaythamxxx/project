@@ -69,3 +69,14 @@ class dimension(models.Model):
 
     atributeName=models.CharField(max_length=20, verbose_name="Name", blank=True,null=True)
     atributeVal=models.FloatField(verbose_name="Atribute",blank=True,null=True)
+
+class atribute(models.Model):
+    atributeCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+
+    atributeSpare = ChainedForeignKey(
+        spare,
+        chained_field="atributeCategory",
+        chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")
+
+    atributeName=models.CharField(max_length=20, verbose_name="Name", blank=True,null=True)
+    atributeVal=models.CharField(max_length=50, verbose_name="Atribute",blank=True,null=True)

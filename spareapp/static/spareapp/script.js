@@ -45,13 +45,17 @@ function measureFilter(){
     $(".filterDim").each(function(){
         var indexVal = $(this).attr("id")                           // id = DiameterFilter
         var atribute = indexVal.split("Filter")
-        var dimAtribute = atribute[0]                               // Diameter     -     Height
+        var dimAtribute = atribute[0]                               // Diameter - Height - Atr1
         var AtributeMin
         var AtributeMax
+        var AtributeString
         
         $(this).find("input").each(function(){
-            var comp = $(this).val()                                // 1     -     5
-            var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter     -     Height
+            var comp = $(this).val()                                // 1 - 5 - off - on
+            var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
+            if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
+                AtributeString = comp
+            }
             if(dimAtribute === innerAtribute){
                 AtributeMin = comp
             }else{
@@ -61,10 +65,15 @@ function measureFilter(){
 
         $('#myTable tr a').each(function(){
             if($(this).attr("id")===(dimAtribute+"Value")){
-                var text = $(this).text();                          // 40.5
+                var text = $(this).text();                          // Diameter: 40.5 - Atr1: off
                 var varSplit = text.split(""+dimAtribute+": ")
-                var VarFloat = parseFloat(varSplit[1])
+                var VarFloat = parseFloat(varSplit[1])              // 40.5 - off (Float)
+                var varString = varSplit[1]                         // 40.5 - off (String)
                 if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){
+                    indexDiameter=$(this).text()
+                    listado.push(indexDiameter)
+                }
+                if(varString===AtributeString){
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
@@ -91,6 +100,12 @@ function measureReset(){
             var aux = $(this).attr("name").split("check")[1]
             $("#"+aux+"Min").val(null);
             $("#"+aux+"Max").val(null);
+        })
+    })
+    $("#headerList3").each(function(){
+        $(this).find("input").each(function(){
+            var aux = $(this).attr("name").split("check")[1]
+            $("#"+aux).val(null);
         })
     })
 
@@ -191,11 +206,18 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=type]").prop("checked",true);
     $("input:checkbox[name=shape]").prop("checked",false);
     $("input:checkbox[name=dimensions]").prop("checked",false);
+    $("input:checkbox[name=atributes]").prop("checked",false);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",false);
     $("input:checkbox[name=ecode]").prop("checked",true);
     $("#headerList2").each(function(){
+        $(this).find("input").each(function(){
+            var comp = $(this).attr("name")
+            $(this).prop("checked",false);
+        })
+    })
+    $("#headerList3").each(function(){
         $(this).find("input").each(function(){
             var comp = $(this).attr("name")
             $(this).prop("checked",false);
@@ -218,6 +240,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#shape").index() + 1)+")").hide();
     $("#dimensions").hide();
     $("table td:nth-child("+($("#dimensions").index() + 1)+")").hide();
+    $("#atributes").hide();
+    $("table td:nth-child("+($("#atributes").index() + 1)+")").hide();
     $("#reference").hide();
     $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
     $("#ecode").show();
@@ -229,11 +253,19 @@ document.getElementById("default").addEventListener("click",function(){
             $("#"+aux+"Filter").hide();
         })
     })
+    $("#headerList3").each(function(){
+        $(this).find("input").each(function(){
+
+            var aux = $(this).attr("name").split("check")[1]
+            $("#"+aux+"Filter").hide();
+        })
+    })
     $("#ButtonFilter").hide();
 
     $("#myTable tr").each(function(){
         $(this).show();
     })
+    measureReset();
 })
 
 // boton para exportar a Excel -------------------------------------------------------------------------------------
@@ -284,6 +316,7 @@ $("input:checkbox[name=brand]").prop("checked",true);
 $("input:checkbox[name=type]").prop("checked",true);
 $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",false);
+$("input:checkbox[name=atributes]").prop("checked",false);
 $("input:checkbox[name=reference]").prop("checked",false);
 $("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=check]").prop("checked",true);
@@ -299,6 +332,7 @@ $List.change(function(){
     let cari = $("#car").index();
     let shapei = $("#shape").index();
     let dimensionsi = $("#dimensions").index();
+    let atributesi = $("#atributes").index();
     let referencei = $("#reference").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
@@ -367,6 +401,14 @@ $List.change(function(){
         $("table td:nth-child("+(dimensionsi + 1)+")").hide();
     }
 
+    if ($("input:checkbox[name=atributes]:checked").val()){
+        $("#atributes").show();
+        $("table td:nth-child("+(atributesi + 1)+")").show();
+    }else{
+        $("#atributes").hide();
+        $("table td:nth-child("+(atributesi + 1)+")").hide();
+    }
+
     if ($("input:checkbox[name=check]:checked").val()){
         $("#check").show();
         $("table td:nth-child("+(checki + 1)+")").show();
@@ -401,6 +443,14 @@ $("#headerList2").each(function(){
     })
 })
 
+const $List3 = $("#headerList3");
+$("#headerList3").each(function(){
+    $(this).find("input").each(function(){
+        var comp = $(this).attr("name")
+        $(this).prop("checked",false);
+    })
+})
+
 $List2.change(function(){
 
     var bo = false
@@ -420,13 +470,57 @@ $List2.change(function(){
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             bo = true
         }
-        if (bo === true){
-            $("#ButtonFilter").show();
-        }else{
-            $("#ButtonFilter").hide();
+    })
+
+    $List3.find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
         }
     })
+
+    if (bo === true){
+        $("#ButtonFilter").show();
+    }else{
+        $("#ButtonFilter").hide();
+    }
 })
+
+$List3.change(function(){
+
+    var bo = false
+    // alert($(this).find("input").attr("name"))                    checkDiameter
+
+    $(this).find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            $("#"+aux+"Filter").show();
+        }else{
+            $("#"+aux+"Filter").hide();
+        }
+    })
+
+    $(this).find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
+        }
+    })
+
+    $List2.find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
+        }
+    })
+
+    if (bo === true){
+        $("#ButtonFilter").show();
+    }else{
+        $("#ButtonFilter").hide();
+    }
+})
+
 
 // Tabla sorteable ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
