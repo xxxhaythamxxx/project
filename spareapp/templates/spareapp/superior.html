@@ -2,10 +2,8 @@
 <body>
     <div class="options my-2">
         <div id="filterContent" class="row align-items-center">
-            <div class="col-lg-3 col-md-3 col-sm-12 col-12">
-                <input class="filter form-control p-1" type="text" id="myInput" placeholder="Filter">
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-6 mt-1">
+            
+            <div class="col-lg-7 col-md-7 col-sm-12 col-12 mt-1">
                 <!-- Boton default -->
                 <div style="display: inline-block;" class="">
                     <div id="default" class="btn btn-success">Default</div>
@@ -14,26 +12,26 @@
                 <div style="display: inline-block;" class="">
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
                     <ul id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Atributes<input name="atributes" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Code<input name="code" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
                         {% if parameter == 'Engine code' %}
                         <li style="margin:auto;text-align:center;" class=""><label class="">Engine code<input name="ecode" class="ml-2" type="checkbox"></label></li>
                         {% endif %}
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Dimensions<input name="dimensions" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Atributes<input name="atributes" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
                     </ul>
                 </div>
                 <!-- Boton filter dimensiones -->
                 <div style="display: inline-block;" class="">
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Dimensions</a>
                     <ul id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
-                        {% for dim in dimension %}
+                        {% for dim in dimension|dictsort:"atributeName" %}
                             <li style="margin:auto;text-align:center;" class=""><label class="">{{dim.atributeName}}<input name="check{{dim.atributeName}}" class="ml-2" type="checkbox"></label></li>
                         {% endfor %}
                     </ul>
@@ -42,7 +40,7 @@
                 <div style="display: inline-block;" class="">
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
                     <ul id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
-                        {% for atr in atribute %}
+                        {% for atr in atribute|dictsort:"atributeName" %}
                             <li style="margin:auto;text-align:center;" class=""><label class="">{{atr.atributeName}}<input name="check{{atr.atributeName}}" class="ml-2" type="checkbox"></label></li>
                         {% endfor %}
                     </ul>

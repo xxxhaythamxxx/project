@@ -80,15 +80,15 @@ function measureFilter(){
             }
         })
     })
-    for(var i=0; i<listado.length; i++){
-        $("#myTable tr").each(function(){
-            $(this).find("a").each(function(){
-                if($(this).text()===listado[i]){
-                    $(this).parent().parent().parent().show();
-                }
-            })
-        })
-    }
+    // for(var i=0; i<listado.length; i++){
+    //     $("#myTable tr").each(function(){
+    //         $(this).find("a").each(function(){
+    //             if($(this).text()===listado[i]){
+    //                 $(this).parent().parent().parent().show();
+    //             }
+    //         })
+    //     })
+    // }
 
     for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
         $("#myTable tr").each(function(){
@@ -103,6 +103,107 @@ function measureFilter(){
             })
         })
     }
+
+    // Paginado
+        $(".pagination").html("")
+        var trnum = 0
+        // Guarda la cantidad de filas seleccionadas
+        var maxRows = parseInt($("#maxRows").val())
+        // alert("maxRows: "+maxRows)
+        var semiTotalRows = $(table+" tbody tr").length
+        totalRows = listado.length
+        // alert("totalRows: "+totalRows)
+
+        // for(var i=0; i<listado.length; i++){
+        //     $(table+' tr:gt(0)').each(function(){
+        //         trnum++
+        //         $(this).find("a").each(function(){
+        //             if($(this).text()===listado[i]){
+        //                 alert("Entra: "+$(this).text())
+        //                 alert("trnum: "+trnum+" maxRows: "+maxRows)
+        //                 if(trnum > maxRows){
+        //                     $(this).hide()
+        //                 }
+        //                 if(trnum <= maxRows){
+        //                     alert("trnum <= maxRows")
+        //                     alert($(this).text())
+        //                     $(this).show()
+        //                 }
+        //             }
+        //         })
+        //     })
+        // }
+
+        var rev = false
+        $(table+' tr:gt(0)').each(function(){
+            trnum++
+            // alert("trnum: "+trnum)
+            $(this).find("a").each(function(){
+                for(var i=0; i<listado.length; i++){
+
+                    if($(this).text()===listado[i]){
+                        rev = true
+                        // alert("Conseguido: "+trnum)
+                        if(trnum > maxRows){
+                            $(this).parent().parent().parent().hide()
+                        }
+                        if(trnum <= maxRows){
+                            $(this).parent().parent().parent().show()
+                        }
+                    }
+                }
+            })
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+            // alert("trnumFInal: "+trnum)
+        })
+
+
+
+
+        if(totalRows > maxRows){
+            // Guardo la cantidad de paginas que se necesitan
+            var pagenum = Math.ceil(totalRows/maxRows)
+            for(var i=1;i<=pagenum;){
+                $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+            }
+        }
+        $(".pagination li:first-child").addClass("active")
+        $(".pagination li").on("click",function(){
+            var pageNum = $(this).attr("data-page")
+            var trIndex = 0;
+            var rev = false
+            $(".pagination li").removeClass("active")
+            $(this).addClass("active")
+            // Recorre tolas las filas de la tabla
+            $(table+" tr:gt(0)").each(function(){
+                trIndex++
+                $(this).find("a").each(function(){
+                    for(var i=0; i<listado.length; i++){
+
+                        if($(this).text()===listado[i]){
+                            rev = true
+
+                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                                $(this).parent().parent().parent().hide()
+                            }else{
+                                $(this).parent().parent().parent().show()
+                            }
+                        }
+                    }
+                })
+                if(rev===false){
+                    trIndex--
+                }else{
+                    rev = false
+                }
+
+            })
+        })
+    // Fin paginado
 
 }
 
@@ -142,6 +243,16 @@ function measureReset(){
 
 // Generar PDF desde HTML ----------------------------------------------------------------------------------------
 function generatePDF(){
+    var oldCss = {
+        "background-size": "80px 80px",
+        "width": "80px",
+        "height": "80px"
+    }
+    $("#myTable tr").each(function(){
+        $(this).find(".photo").each(function(){
+            $(this).css(oldCss);
+        })
+    })
     $('#invoice tr:first th').each(function() {
         var value = $(this).css("position", "static");
       });
@@ -156,7 +267,7 @@ function generatePDF(){
         html2canvas:  { scale: 2 },
         enableLinks:  false,
         pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
       };
     html2pdf()
     .set(opt)
@@ -174,6 +285,16 @@ function generatePDF(){
 
 // Visualizar para imprimir --------------------------------------------------------------------------------------
 function viewPDF(){
+    var oldCss = {
+        "background-size": "80px 80px",
+        "width": "80px",
+        "height": "80px"
+    }
+    $("#myTable tr").each(function(){
+        $(this).find(".photo").each(function(){
+            $(this).css(oldCss);
+        })
+    })
     const element = document.getElementById("invoice");
     
     $("#check").hide();
@@ -188,7 +309,7 @@ function viewPDF(){
         html2canvas:  { scale: 2 },
         enableLinks:  true,
         pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
       };
     html2pdf()
     .set(opt)
@@ -592,7 +713,8 @@ $("tbody tr").each(function(){
     })
 });
 
-$(".photo").click(function(){
+// Agrandar la foto al clickearla ---------------------------------------------------------------
+$(".photo").click(function(a){
 
     var bo = false;
 
@@ -623,4 +745,68 @@ $(".photo").click(function(){
     }else{
         $(this).css(newCss);
     }
+    a.preventDefault()
 })
+
+// Paginacion -------------------------------------------------------------------------------------
+var table = "#invoice"
+$("#maxRows").on("change",function(){
+    // alert("Entra")
+    $(".pagination").html("")
+    var trnum = 0
+    // var totalRows = 0
+    // Guarda la cantidad de filas seleccionadas
+    var maxRows = parseInt($(this).val())
+    // $("#myTable tr").each(function(){
+    //     if($(this).is(":visible")){
+    //         totalRows++
+    //     }
+    // })
+    // alert(totalRows)
+    var totalRows = $(table+" tbody tr").length
+    $(table+' tr:gt(0)').each(function(){
+        trnum++
+        if(trnum > maxRows){
+            $(this).hide()
+        }
+        if(trnum <= maxRows){
+            $(this).show()
+        }
+        // if($(this).is(":visible")===false){
+        //     $(this).hide()
+        // }else{
+        //     $(this).show()
+        // }
+    })
+    if(totalRows > maxRows){
+        // Guardo la cantidad de paginas que se necesitan
+        var pagenum = Math.ceil(totalRows/maxRows)
+        for(var i=1;i<=pagenum;){
+            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+        }
+    }
+    $(".pagination li:first-child").addClass("active")
+    $(".pagination li").on("click",function(){
+        var pageNum = $(this).attr("data-page")
+        var trIndex = 0;
+        $(".pagination li").removeClass("active")
+        $(this).addClass("active")
+        // Recorre tolas las filas de la tabla
+        $(table+" tr:gt(0)").each(function(){
+            trIndex++
+            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                $(this).hide()
+            }else{
+                $(this).show()
+            }
+        })
+    })
+})
+// $(function(){
+//     $("table tr:eq(0)").prepend("<th>ID</th")
+//     var id = 0;
+//     $("table tr:gt(0)").each(function(){
+//         id++
+//         $(this).prepend("<td>"+id+"</td>")
+//     })
+// })

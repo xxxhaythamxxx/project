@@ -19,6 +19,9 @@ urlpatterns = [
     path('detail',views.detail,name='detail'),
     path("shape/<str:val>",views.shape,name="shape"),
     path("longi/<str:val1>?<str:val2>",views.longi,name="longi"),
+    path("carBrands",views.carBrands,name="carBrands"),
+
+    # path('getCar/$', views.getCar,name="getCar")
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

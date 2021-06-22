@@ -30,7 +30,7 @@
                     {% if spare.0.shape %}
                     <div>Shape</div>
                     {% endif %}
-                    {% if spare.0.long %}
+                    <!-- {% if spare.0.long %}
                     <div>Length</div>
                     {% endif %}
                     {% if spare.0.wide %}
@@ -44,7 +44,7 @@
                     {% endif %}
                     {% if spare.0.radio %}
                     <div>Radio</div>
-                    {% endif %}
+                    {% endif %} -->
                 </div>
                 <div class="col-6">
                     {% if spare.0.spare_code %}
@@ -76,43 +76,6 @@
                     {% endif %}
                 </div>
             </div>
-            <!-- Codigos opcionales -->
-            {% if spare.0.spare_reference.all %}
-                <div class="color p-1 text-white mt-2 radius mb-2" for="">Reference codes</div>
-                <div class="row">
-                    {% for car in onlyManufCars %}
-                    {% for sp in spare.0.spare_reference.all %}
-                    <!-- Si el codigo opcional tiene carro asignado -->
-                        {% if sp.reference_car.car_manufacturer %}
-                            {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-4">
-                                        {{sp.reference_car.car_manufacturer}}
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="hover"><a href="#">{{sp.reference_code}}</a></div>
-                                    </div>                       
-                                </div>
-                            </div>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    {% endfor %}
-                    {% for sp in spare.0.spare_reference.all %}
-                    <!-- Si el codigo opcional no tiene carro asignado -->
-                        {% if not sp.reference_car.car_manufacturer %}
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-10">
-                                    <div class="hover"><a href="#">{{sp.reference_code}}</a></div>
-                                </div>                       
-                            </div>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
 
             <!-- Si el repuesto le sirve a otros repuestos -->
             {% if spare.0.spare_spare.all %}

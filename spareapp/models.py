@@ -31,15 +31,17 @@ class engine(models.Model):
 class category(models.Model):
     category=models.CharField(max_length=40, verbose_name="Category",blank=True,null=True)     #Ejemplo: Filter
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __str__(self):
         return '%s' %(self.category)
 
 class reference(models.Model):
-    reference_code=models.CharField(max_length=80, verbose_name="Code",blank=True,null=True)     #Ejemplo: 45646546ad
-    reference_car = models.ForeignKey(car,on_delete=CASCADE,blank=True,null=True)               
+    referenceCode=models.CharField(max_length=50, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
 
     def __str__(self):
-        return '%s - %s' %(self.reference_code, self.reference_car)
+        return '%s' %(self.referenceCode)
 
 class spare(models.Model):
     spare_code=models.CharField(max_length=15, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
@@ -80,3 +82,35 @@ class atribute(models.Model):
 
     atributeName=models.CharField(max_length=20, verbose_name="Name", blank=True,null=True)
     atributeVal=models.CharField(max_length=50, verbose_name="Atribute",blank=True,null=True)
+
+def get_models():
+    choices = car.objects.all()
+    return choices
+
+# class reference(models.Model):
+#     referenceCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+
+#     referenceSpare = ChainedForeignKey(
+#         spare,
+#         chained_field="referenceCategory",
+#         chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")               
+    
+#     # referenceCar = ChainedForeignKey(
+#     #     car,
+#     #     chained_field="referenceSpare",
+#     #     chained_model_field="car_manufacturer",blank=True,null=True,verbose_name="Car")
+
+#     # referenceCar = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True, choices=list(get_models()))
+
+#     referenceCar = models.ForeignKey(
+#         car,
+#         # chained_field="referenceSpare",
+#         # chained_model_field="car_manufacturer",
+#         limit_choices_to={'spare__id': 1},
+#         blank=True,null=True,on_delete=CASCADE,verbose_name="Car"
+#     )
+
+#     referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
+
+    def __str__(self):
+        return '%s - %s' %(self.referenceCode, self.referenceCar)

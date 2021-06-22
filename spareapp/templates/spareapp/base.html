@@ -90,6 +90,7 @@
             
         <!-- Parte izquierda -->
         <div class="">
+            <!-- Filtro con Manufacturer, Models y Engines -->
             <div class="">
                 <form class="form-group p-3" action="" method="GET">
                     <label class="text-white mb-3" for="">Select vehicle:</label>
@@ -160,6 +161,13 @@
                         </div> 
                     </div>
             </div>
+
+            <!-- Boton para ir a Card Brands -->
+            <div class="container mt-2">
+                <div class="row bg-primary align-items-center justify-content-center">
+                    <a href="{% url 'carBrands' %}" class="btn btn-success" id="carBrands">Car Brands</a>
+                </div>
+            </div>
         </div>
         <!-- Fin parte izquierda -->
 
@@ -181,6 +189,12 @@
             
         </div>
     </div>
+
+    <!-- Linkear selects en el admin -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Para arrastrar por columnas -->
+    <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 
     <!-- Datatables -->
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>

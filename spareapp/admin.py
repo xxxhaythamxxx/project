@@ -91,3 +91,7 @@ admin.site.register(category)
 admin.site.register(reference)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)
+
+admin.site.site_header = "Kmotorshop administrator"
+admin.site.site_title = "UMSRA Admin Portal"
+admin.site.index_title = "Welcome to Kmotorshop administrator panel"
