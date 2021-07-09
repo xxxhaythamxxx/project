@@ -97,8 +97,8 @@
     </div>
     <form method="POST" action="">
         {% include "spareapp/delete.html" %}
+        
         {% csrf_token %}
-        {% include "spareapp/numPages.html" %}
     <table id="invoice" class="invoice table-striped draggable forget-ordering">
         <thead>
             <tr class="trsup color text-white">

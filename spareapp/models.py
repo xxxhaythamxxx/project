@@ -37,11 +37,11 @@ class category(models.Model):
     def __str__(self):
         return '%s' %(self.category)
 
-class reference(models.Model):
-    referenceCode=models.CharField(max_length=50, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
+# class reference(models.Model):
+#     referenceCode=models.CharField(max_length=50, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
 
-    def __str__(self):
-        return '%s' %(self.referenceCode)
+#     def __str__(self):
+#         return '%s' %(self.referenceCode)
 
 class spare(models.Model):
     spare_code=models.CharField(max_length=15, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
@@ -54,63 +54,75 @@ class spare(models.Model):
         chained_model_field="car_engine_info",blank=True,null=True)
     spare_category = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True)
     spare_spare = models.ManyToManyField("self",verbose_name="Spare target",blank=True,null=True)
-    spare_reference=models.ManyToManyField(reference,verbose_name="Reference code",blank=True,null=True)
+    # spare_reference=models.ManyToManyField(reference,verbose_name="Reference code",blank=True,null=True)
     spare_photo=models.ImageField(upload_to="spares", verbose_name="Photo",blank=True,null=True)                           #Será ImageField()
     shape=models.CharField(max_length=20, verbose_name="Shape",blank=True,null=True)             #Ejemplo: Rectangular
+    # filter_horizontal=("car_info",)
+    price_m=models.FloatField(verbose_name="Price M",blank=True,null=True)
+    price_d=models.FloatField(verbose_name="Price D",blank=True,null=True)
 
     def __str__(self):
         return '%s %s %s' %(self.spare_code, self.spare_brand, self.spare_name)
 
 class dimension(models.Model):
-    dimensionCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+    # dimensionCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
 
-    dimensionSpare = ChainedForeignKey(
-        spare,
-        chained_field="dimensionCategory",
-        chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")
+    # dimensionSpare = ChainedForeignKey(
+    #     spare,
+    #     chained_field="dimensionCategory",
+    #     chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")
+    
+    dimensionSpare = models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
+
 
     atributeName=models.CharField(max_length=20, verbose_name="Name", blank=True,null=True)
     atributeVal=models.FloatField(verbose_name="Atribute",blank=True,null=True)
 
 class atribute(models.Model):
-    atributeCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+    # atributeCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
 
-    atributeSpare = ChainedForeignKey(
-        spare,
-        chained_field="atributeCategory",
-        chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")
+    # atributeSpare = ChainedForeignKey(
+    #     spare,
+    #     chained_field="atributeCategory",
+    #     chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")
+    
+    atributeSpare = models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
+    
 
     atributeName=models.CharField(max_length=20, verbose_name="Name", blank=True,null=True)
     atributeVal=models.CharField(max_length=50, verbose_name="Atribute",blank=True,null=True)
 
-def get_models():
-    choices = car.objects.all()
-    return choices
+class reference(models.Model):
+    # referenceCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
 
-# class reference(models.Model):
-#     referenceCategory = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+    # referenceSpare = ChainedForeignKey(
+    #     spare,
+    #     chained_field="referenceCategory",
+    #     chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")               
 
-#     referenceSpare = ChainedForeignKey(
-#         spare,
-#         chained_field="referenceCategory",
-#         chained_model_field="spare_category",blank=True,null=True,verbose_name="Spare")               
+    referenceSpare = models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
     
-#     # referenceCar = ChainedForeignKey(
-#     #     car,
-#     #     chained_field="referenceSpare",
-#     #     chained_model_field="car_manufacturer",blank=True,null=True,verbose_name="Car")
+    # referenceCar = ChainedForeignKey(
+    #     car,
+    #     chained_field="referenceSpare",
+    #     chained_model_field="car_manufacturer",
+    #     limit_choices_to={'spare__id': 1},
+    #     blank=True,null=True,verbose_name="Car")
 
-#     # referenceCar = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True, choices=list(get_models()))
+    referenceCar = models.ForeignKey(car,on_delete=CASCADE,blank=True,null=True,verbose_name="Car")
+    
 
-#     referenceCar = models.ForeignKey(
-#         car,
-#         # chained_field="referenceSpare",
-#         # chained_model_field="car_manufacturer",
-#         limit_choices_to={'spare__id': 1},
-#         blank=True,null=True,on_delete=CASCADE,verbose_name="Car"
-#     )
+    # , choices=list(get_models()))
 
-#     referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
+    # referenceCar = models.ForeignKey(
+    #     car,
+    #     # chained_field="referenceSpare",
+    #     # chained_model_field="car_manufacturer",
+    #     limit_choices_to={'spare__id': 1},
+    #     blank=True,null=True,on_delete=CASCADE,verbose_name="Car"
+    # )
+
+    referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
 
     def __str__(self):
         return '%s - %s' %(self.referenceCode, self.referenceCar)

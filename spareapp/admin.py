@@ -17,78 +17,116 @@ class engineAdmin(admin.ModelAdmin):
     search_fields=("engine_ide","engine_l","engine_cylinder")
     list_filter=("engine_l",)
     ordering = ('engine_ide', 'engine_l')
+    filter_horizontal=["car_engine_info",]
 
 class spareAdmin(admin.ModelAdmin):
+    # raw_id_fields=("car_info","engine_info",)
     list_display=("spare_code","spare_brand","spare_name","spare_category")
     search_fields=("spare_code","spare_brand")
     list_filter=("spare_name",)
     ordering = ('spare_code', 'spare_brand',"spare_name")
+    filter_horizontal=["car_info","engine_info","spare_spare",]
+
 
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
     # search_fields=("atributeName","atributeVal")
-    list_filter=("dimensionCategory","atributeName","dimensionSpare")
+    list_filter=("atributeName","dimensionSpare")
     ordering = ("dimensionSpare","atributeName","atributeVal")
+    autocomplete_fields = ("dimensionSpare",)
 
     def response_add(self, request, obj, post_url_continue=None):
             if '_addanother' in request.POST:
                 url = reverse("admin:spareapp_dimension_add")
-                dimensionCategory = request.POST['dimensionCategory']
-                qs = '?dimensionCategory=%s' % dimensionCategory
+                # dimensionCategory = request.POST['dimensionCategory']
+                # qs = '?dimensionCategory=%s' % dimensionCategory
 
                 dimensionSpare = request.POST['dimensionSpare']
-                qs2 = '&dimensionSpare=%s' % dimensionSpare
+                qs2 = '?dimensionSpare=%s' % dimensionSpare
 
-                return HttpResponseRedirect(''.join((url, qs, qs2)))
+                return HttpResponseRedirect(''.join((url, qs2)))
             else:
                 return HttpResponseRedirect(reverse("admin:spareapp_dimension_changelist"))
 
     def response_change(self, request, obj, post_url_continue=None):
         if '_addanother' in request.POST:
             url = reverse("admin:spareapp_dimension_add")
-            dimensionCategory = request.POST['dimensionCategory']
-            qs = '?dimensionCategory=%s' % dimensionCategory
+            # dimensionCategory = request.POST['dimensionCategory']
+            # qs = '?dimensionCategory=%s' % dimensionCategory
             dimensionSpare = request.POST['dimensionSpare']
-            qs2 = '&dimensionSpare=%s' % dimensionSpare
-            return HttpResponseRedirect(''.join((url, qs, qs2)))
+            qs2 = '?dimensionSpare=%s' % dimensionSpare
+            return HttpResponseRedirect(''.join((url, qs2)))
         else:
             return HttpResponseRedirect(reverse("admin:spareapp_dimension_changelist"))
 
 class atributeAdmin(admin.ModelAdmin):
     list_display=("atributeSpare","atributeName","atributeVal")
     # search_fields=("atributeName","atributeVal")
-    list_filter=("atributeCategory","atributeName","atributeSpare")
+    list_filter=("atributeName","atributeSpare")
     ordering = ("atributeSpare","atributeName","atributeVal")
+    # raw_id_fields=("atributeSpare",)
+    # filter_horizontal=["atributeSpare",]
+    autocomplete_fields = ("atributeSpare",)
 
     def response_add(self, request, obj, post_url_continue=None):
             if '_addanother' in request.POST:
                 url = reverse("admin:spareapp_atribute_add")
-                atributeCategory = request.POST['atributeCategory']
-                qs = '?atributeCategory=%s' % atributeCategory
+                # atributeCategory = request.POST['atributeCategory']
+                # qs = '?atributeCategory=%s' % atributeCategory
 
                 atributeSpare = request.POST['atributeSpare']
-                qs2 = '&atributeSpare=%s' % atributeSpare
+                qs2 = '?atributeSpare=%s' % atributeSpare
 
-                return HttpResponseRedirect(''.join((url, qs, qs2)))
+                return HttpResponseRedirect(''.join((url, qs2)))
             else:
                 return HttpResponseRedirect(reverse("admin:spareapp_atribute_changelist"))
 
     def response_change(self, request, obj, post_url_continue=None):
         if '_addanother' in request.POST:
             url = reverse("admin:spareapp_atribute_add")
-            atributeCategory = request.POST['atributeCategory']
-            qs = '?atributeCategory=%s' % atributeCategory
+            # atributeCategory = request.POST['atributeCategory']
+            # qs = '?atributeCategory=%s' % atributeCategory
             atributeSpare = request.POST['atributeSpare']
-            qs2 = '&atributeSpare=%s' % atributeSpare
-            return HttpResponseRedirect(''.join((url, qs, qs2)))
+            qs2 = '?atributeSpare=%s' % atributeSpare
+            return HttpResponseRedirect(''.join((url, qs2)))
         else:
             return HttpResponseRedirect(reverse("admin:spareapp_atribute_changelist"))
+
+class referenceAdmin(admin.ModelAdmin):
+    list_display=("referenceSpare","referenceCar","referenceCode")
+    # search_fields=("atributeName","atributeVal")
+    list_filter=("referenceCar","referenceCode")
+    ordering = ("referenceSpare","referenceCar","referenceCode")
+    # raw_id_fields=("referenceCar",)
+    # readonly_fields=["referenceCar",]
+    autocomplete_fields = ("referenceSpare",'referenceCar',)
+
+
+    def response_add(self, request, obj, post_url_continue=None):
+            if '_addanother' in request.POST:
+                url = reverse("admin:spareapp_reference_add")
+
+                referenceSpare = request.POST['referenceSpare']
+                qs2 = '?referenceSpare=%s' % referenceSpare
+
+                return HttpResponseRedirect(''.join((url, qs2)))
+            else:
+                return HttpResponseRedirect(reverse("admin:spareapp_reference_changelist"))
+
+    def response_change(self, request, obj, post_url_continue=None):
+        if '_addanother' in request.POST:
+            url = reverse("admin:spareapp_reference_add")
+            referenceSpare = request.POST['referenceSpare']
+            qs2 = '?referenceSpare=%s' % referenceSpare
+            return HttpResponseRedirect(''.join((url, qs2)))
+        else:
+            return HttpResponseRedirect(reverse("admin:spareapp_reference_changelist"))
 
 admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)
 admin.site.register(category)
-admin.site.register(reference)
+admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)
 

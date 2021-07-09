@@ -10,29 +10,29 @@
 <form class="" method="POST" action="">
     {% include "spareapp/add.html" %}
     {% csrf_token %}
-<table id="invoice" class="invoice table-striped table-sortable">
+<table id="invoice" class="invoice table-striped table-sortable draggable forget-ordering">
     <thead class="">
-        <tr class="color text-white">
+        <tr class="color text-white dnd-moved">
             <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
             <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
             {% if parameter == 'Engine code' %}
-            <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Engine code</th>
+            <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
             {% endif %}
             <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th>
             <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
             <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
             <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
             <th id="atributes" class="trsup color" style="position: sticky;top: 70;display: none;">Atributes</th>
-            <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Reference Code</th>
-            <!-- <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th> -->
+            <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Ref. Code</th>
+            <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
             <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
         </tr>
     </thead>
     <tbody id="myTable">
         {% for br in spare %}
-        <tr class="">
+        <tr class="dnd-moved">
             {% if br.spare_photo %}
-            <td><a href="{% url 'sparedetails' br.spare_code %}"><div style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            <td><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
@@ -99,18 +99,20 @@
             <td style="display: none;"><a href="#"></a></td>
             {% endif %}
 
-            <!-- {% if br.car_info.all %}
+            {% if br.car_info.all %}
             <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
-            {% endif %} -->
+            {% endif %}
             <td><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% include "spareapp/numPagesDown.html" %}
 </form>
 </div>
+
 {% endblock %}
 
 

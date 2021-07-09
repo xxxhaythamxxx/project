@@ -84,12 +84,12 @@ def selectf(request):
                             s=t.spare_code
                             br=t.spare_brand
                             n=t.spare_name
-                            if t.spare_reference.all():
-                                for f in t.spare_reference.all():
-                                    g=f.reference_code
-                                    put = g.translate(str.maketrans('', '', '.''-'))
-                                    if valor.upper() in put.upper():
-                                        b.append(t)
+                            # if t.spare_reference.all():
+                            #     for f in t.spare_reference.all():
+                            #         g=f.reference_code
+                            #         put = g.translate(str.maketrans('', '', '.''-'))
+                            #         if valor.upper() in put.upper():
+                            #             b.append(t)
                             if s:
                                 out = s.translate(str.maketrans('', '', '.''-'))
                                 if valor.upper() in out.upper():
