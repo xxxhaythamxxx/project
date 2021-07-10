@@ -11,7 +11,7 @@ def same():
     # Consigo todos los valores de nombre de las dimensiones
     dim=dimension.objects.values("atributeName").distinct()
     # Consigo todos los valores de las dimensiones
-    dim2=dimension.objects.all().distinct()
+    dim2=dimension.objects.all()
 
     # Consigo todos los valores de nombre de las atribute
     atr=atribute.objects.values("atributeName").distinct()

@@ -22,7 +22,7 @@
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
                     <ul id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
                         <li style="margin:auto;text-align:center;" class=""><label class="">Atributes<input name="atributes" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li>
+                        <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li> -->
                         <li style="margin:auto;text-align:center;" class=""><label class="">Car<input name="car" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Check<input name="check" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Code<input name="code" class="ml-2" type="checkbox"></label></li>
@@ -33,7 +33,7 @@
                         <li style="margin:auto;text-align:center;" class=""><label class="">ID<input name="detail-id" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li>
+                        <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
                         <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
                     </ul>
                 </div>
@@ -105,9 +105,9 @@
                 <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
                 <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
                 <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
-                <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th>
+                <!-- <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th> -->
                 <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
-                <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
+                <!-- <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th> -->
                 <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
                 <th id="atributes" class="trsup color" style="position: sticky;top: 70;display: none;">Atributes</th>
                 <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Ref. Code</th>
@@ -131,21 +131,21 @@
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
-            {% if br.spare_brand %}
+            <!-- {% if br.spare_brand %}
             <td><a href="{% url 'brand' br.spare_brand %}">{{br.spare_brand}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
             {% if br.spare_name %}
             <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
-            {% if br.shape %}
+            <!-- {% if br.shape %}
             <td style="display: none;"><a href="{% url 'shape' br.shape %}">{{br.shape}}</a></td>
             {% else %}
             <td style="display: none;"><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
             
             {% if allDimensions %}
                 <td style="display: none;">

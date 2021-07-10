@@ -26,6 +26,7 @@ class spareAdmin(admin.ModelAdmin):
     list_filter=("spare_name",)
     ordering = ('spare_code', 'spare_brand',"spare_name")
     filter_horizontal=["car_info","engine_info","spare_spare",]
+    exclude=("spare_brand","shape",)
 
 
 class dimensionAdmin(admin.ModelAdmin):

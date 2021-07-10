@@ -18,9 +18,9 @@
             {% if parameter == 'Engine code' %}
             <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
             {% endif %}
-            <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th>
+            <!-- <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th> -->
             <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
-            <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th>
+            <!-- <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th> -->
             <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
             <th id="atributes" class="trsup color" style="position: sticky;top: 70;display: none;">Atributes</th>
             <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Ref. Code</th>
@@ -45,21 +45,21 @@
             <td><a href="#">{{mig}}</a></td>
             {% endif %}
 
-            {% if br.spare_brand %}
+            <!-- {% if br.spare_brand %}
             <td><a href="{% url 'brand' br.spare_brand %}">{{br.spare_brand}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
             {% if br.spare_name %}
             <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
-            {% if br.shape %}
+            <!-- {% if br.shape %}
             <td style="display: none;"><a href="{% url 'shape' br.shape %}">{{br.shape}}</a></td>
             {% else %}
             <td style="display: none;"><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
 
             {% if allDimensions %}
                 <td style="display: none;">
