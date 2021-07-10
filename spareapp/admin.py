@@ -22,7 +22,7 @@ class engineAdmin(admin.ModelAdmin):
 class spareAdmin(admin.ModelAdmin):
     # raw_id_fields=("car_info","engine_info",)
     list_display=("spare_code","spare_brand","spare_name","spare_category")
-    search_fields=("spare_code","spare_brand")
+    search_fields=("spare_code","spare_brand","spare_name")
     list_filter=("spare_name",)
     ordering = ('spare_code', 'spare_brand',"spare_name")
     filter_horizontal=["car_info","engine_info","spare_spare",]
@@ -31,7 +31,7 @@ class spareAdmin(admin.ModelAdmin):
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
     # search_fields=("atributeName","atributeVal")
-    list_filter=("atributeName","dimensionSpare")
+    list_filter=("atributeName",)
     ordering = ("dimensionSpare","atributeName","atributeVal")
     autocomplete_fields = ("dimensionSpare",)
 
@@ -62,7 +62,7 @@ class dimensionAdmin(admin.ModelAdmin):
 class atributeAdmin(admin.ModelAdmin):
     list_display=("atributeSpare","atributeName","atributeVal")
     # search_fields=("atributeName","atributeVal")
-    list_filter=("atributeName","atributeSpare")
+    list_filter=("atributeName",)
     ordering = ("atributeSpare","atributeName","atributeVal")
     # raw_id_fields=("atributeSpare",)
     # filter_horizontal=["atributeSpare",]
@@ -93,13 +93,13 @@ class atributeAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(reverse("admin:spareapp_atribute_changelist"))
 
 class referenceAdmin(admin.ModelAdmin):
-    list_display=("referenceSpare","referenceCar","referenceCode")
+    list_display=("referenceSpare","referenceCode")
     # search_fields=("atributeName","atributeVal")
-    list_filter=("referenceCar","referenceCode")
-    ordering = ("referenceSpare","referenceCar","referenceCode")
+    # list_filter=("referenceSpare",)
+    ordering = ("referenceSpare","referenceCode")
     # raw_id_fields=("referenceCar",)
     # readonly_fields=["referenceCar",]
-    autocomplete_fields = ("referenceSpare",'referenceCar',)
+    autocomplete_fields = ("referenceSpare",)
 
 
     def response_add(self, request, obj, post_url_continue=None):

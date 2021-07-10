@@ -109,7 +109,7 @@ class reference(models.Model):
     #     limit_choices_to={'spare__id': 1},
     #     blank=True,null=True,verbose_name="Car")
 
-    referenceCar = models.ForeignKey(car,on_delete=CASCADE,blank=True,null=True,verbose_name="Car")
+    # referenceCar = models.ForeignKey(car,on_delete=CASCADE,blank=True,null=True,verbose_name="Car")
     
 
     # , choices=list(get_models()))
