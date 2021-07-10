@@ -16,7 +16,7 @@ def same():
     # Consigo todos los valores de nombre de las atribute
     atr=atribute.objects.values("atributeName").distinct()
     # Consigo todos los valores de las atribute
-    atr2=atribute.objects.all().distinct()
+    atr2=atribute.objects.all()
     
     # Consigo TODOS los spares
     allSparesall=spare.objects.all()
