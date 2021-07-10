@@ -524,8 +524,6 @@ $List.change(function(){
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
 
-    alert("Entra")
-    
     if ($("input:checkbox[name=detail-id]:checked").val()){
         $("#detail-id").show();
         $("table td:nth-child("+(detailidi + 1)+")").show();

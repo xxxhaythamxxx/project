@@ -72,6 +72,7 @@
     width: 100%;
     text-align: center;
 }
+/* Div que se transforma en la foto */
 .photo {
     background-size: 80px 80px;
     background-repeat: no-repeat;
@@ -80,6 +81,15 @@
     height: 80px;
     margin: auto;
 }
+.photo2 {
+    background-size: 200px 200px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+}
+
 .mimage {
     background-size: 300px 300px;
     background-repeat: no-repeat;

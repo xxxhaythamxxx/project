@@ -32,11 +32,13 @@ $(document).ready(function(){
         })
     })
 });
+var listado = []
+var table = "#invoice"
 
-// Funcion para filtrar por medidas -------------------------------------------------------------------
+// Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
 function measureFilter(){
 
-    var listado = []
+    // var listado = []
 
     $("#myTable tr").each(function(){
         $(this).hide();
@@ -45,13 +47,17 @@ function measureFilter(){
     $(".filterDim").each(function(){
         var indexVal = $(this).attr("id")                           // id = DiameterFilter
         var atribute = indexVal.split("Filter")
-        var dimAtribute = atribute[0]                               // Diameter     -     Height
+        var dimAtribute = atribute[0]                               // Diameter - Height - Atr1
         var AtributeMin
         var AtributeMax
+        var AtributeString
         
         $(this).find("input").each(function(){
-            var comp = $(this).val()                                // 1     -     5
-            var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter     -     Height
+            var comp = $(this).val()                                // 1 - 5 - off - on
+            var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
+            if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
+                AtributeString = comp
+            }
             if(dimAtribute === innerAtribute){
                 AtributeMin = comp
             }else{
@@ -61,26 +67,146 @@ function measureFilter(){
 
         $('#myTable tr a').each(function(){
             if($(this).attr("id")===(dimAtribute+"Value")){
-                var text = $(this).text();                          // 40.5
+                var text = $(this).text();                          // Diameter: 40.5 - Atr1: off
                 var varSplit = text.split(""+dimAtribute+": ")
-                var VarFloat = parseFloat(varSplit[1])
+                var VarFloat = parseFloat(varSplit[1])              // 40.5 - off (Float)
+                var varString = varSplit[1]                         // 40.5 - off (String)
                 if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){
+                    indexDiameter=$(this).text()
+                    listado.push(indexDiameter)
+                }
+                if(varString===AtributeString){
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
             }
         })
     })
+    // for(var i=0; i<listado.length; i++){
+    //     $("#myTable tr").each(function(){
+    //         $(this).find("a").each(function(){
+    //             if($(this).text()===listado[i]){
+    //                 $(this).parent().parent().parent().show();
+    //             }
+    //         })
+    //     })
+    // }
 
-    for(var i=0; i<listado.length; i++){
+    for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
         $("#myTable tr").each(function(){
-            $(this).find("a").each(function(){
-                if($(this).text()===listado[i]){
-                    $(this).parent().parent().parent().show();
+            $(this).find("td").each(function(){
+                if($(this).index()===$("#detail-id").index()){
+                    if($(this).parent().is(":visible")){
+                        // alert($(this).text())
+                        $(this).text(""+(i+1)+"")
+                        i=i+1;
+                    }
                 }
             })
         })
     }
+
+    // Paginado
+        $(".pagination").html("")
+        var trnum = 0
+        // Guarda la cantidad de filas seleccionadas
+        var maxRows = parseInt($("#maxRows").val())
+        // alert("maxRows: "+maxRows)
+        var semiTotalRows = $(table+" tbody tr").length
+        totalRows = listado.length
+        // alert("totalRows: "+totalRows)
+
+        // for(var i=0; i<listado.length; i++){
+        //     $(table+' tr:gt(0)').each(function(){
+        //         trnum++
+        //         $(this).find("a").each(function(){
+        //             if($(this).text()===listado[i]){
+        //                 alert("Entra: "+$(this).text())
+        //                 alert("trnum: "+trnum+" maxRows: "+maxRows)
+        //                 if(trnum > maxRows){
+        //                     $(this).hide()
+        //                 }
+        //                 if(trnum <= maxRows){
+        //                     alert("trnum <= maxRows")
+        //                     alert($(this).text())
+        //                     $(this).show()
+        //                 }
+        //             }
+        //         })
+        //     })
+        // }
+
+        var rev = false
+        $(table+' tr:gt(0)').each(function(){
+            trnum++
+            // alert("trnum: "+trnum)
+            $(this).find("a").each(function(){
+                for(var i=0; i<listado.length; i++){
+
+                    if($(this).text()===listado[i]){
+                        rev = true
+                        // alert("Conseguido: "+trnum)
+                        if(trnum > maxRows){
+                            $(this).parent().parent().parent().hide()
+                        }
+                        if(trnum <= maxRows){
+                            $(this).parent().parent().parent().show()
+                        }
+                    }
+                }
+            })
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+            // alert("trnumFInal: "+trnum)
+        })
+
+
+
+
+        if(totalRows > maxRows){
+            // Guardo la cantidad de paginas que se necesitan
+            var pagenum = Math.ceil(totalRows/maxRows)
+            for(var i=1;i<=pagenum;){
+                $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+            }
+        }
+        $(".pagination li:first-child").addClass("active")
+        $(".pagination li").on("click",function(){
+            var pageNum = $(this).attr("data-page")
+            var trIndex = 0;
+            var rev = false
+            $(".pagination li").removeClass("active")
+            $(this).addClass("active")
+            // Recorre tolas las filas de la tabla
+            $(table+" tr:gt(0)").each(function(){
+                trIndex++
+                $(this).find("a").each(function(){
+                    for(var i=0; i<listado.length; i++){
+
+                        if($(this).text()===listado[i]){
+                            rev = true
+
+                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                                $(this).parent().parent().parent().hide()
+                            }else{
+                                $(this).parent().parent().parent().show()
+                            }
+                        }
+                    }
+                })
+                if(rev===false){
+                    trIndex--
+                }else{
+                    rev = false
+                }
+
+            })
+        })
+    // Fin paginado
+
 }
 
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
@@ -93,14 +219,80 @@ function measureReset(){
             $("#"+aux+"Max").val(null);
         })
     })
+    $("#headerList3").each(function(){
+        $(this).find("input").each(function(){
+            var aux = $(this).attr("name").split("check")[1]
+            $("#"+aux).val(null);
+        })
+    })
 
     $("#myTable tr").each(function(){
         $(this).show();
     })
+
+    // Arreglar numeros de ID
+    var i = 1;
+    $("tbody tr").each(function(){
+        $(this).find("td").each(function(){
+            if($(this).index()==$("#detail-id").index()){
+                $(this).text(i);
+                i=i+1;
+            }
+            
+        })
+    });
+
+    listado = []
+    // Paginacion
+    $(".pagination").html("")
+    var trnum = 0
+    var maxRows = parseInt($("#maxRows").val())
+    var totalRows = $(table+" tbody tr").length
+    $(table+' tr:gt(0)').each(function(){
+        trnum++
+        if(trnum > maxRows){
+            $(this).hide()
+        }
+        if(trnum <= maxRows){
+            $(this).show()
+        }
+    })
+    if(totalRows > maxRows){
+        var pagenum = Math.ceil(totalRows/maxRows)
+        for(var i=1;i<=pagenum;){
+            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+        }
+    }
+    $(".pagination li:first-child").addClass("active")
+    $(".pagination li").on("click",function(){
+        var pageNum = $(this).attr("data-page")
+        var trIndex = 0;
+        $(".pagination li").removeClass("active")
+        $(this).addClass("active")
+        $(table+" tr:gt(0)").each(function(){
+            trIndex++
+            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                $(this).hide()
+            }else{
+                $(this).show()
+            }
+        })
+    })
+    // fin paginacion
 }
 
 // Generar PDF desde HTML ----------------------------------------------------------------------------------------
 function generatePDF(){
+    var oldCss = {
+        "background-size": "80px 80px",
+        "width": "80px",
+        "height": "80px"
+    }
+    $("#myTable tr").each(function(){
+        $(this).find(".photo").each(function(){
+            $(this).css(oldCss);
+        })
+    })
     $('#invoice tr:first th').each(function() {
         var value = $(this).css("position", "static");
       });
@@ -115,7 +307,7 @@ function generatePDF(){
         html2canvas:  { scale: 2 },
         enableLinks:  false,
         pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
       };
     html2pdf()
     .set(opt)
@@ -133,6 +325,16 @@ function generatePDF(){
 
 // Visualizar para imprimir --------------------------------------------------------------------------------------
 function viewPDF(){
+    var oldCss = {
+        "background-size": "80px 80px",
+        "width": "80px",
+        "height": "80px"
+    }
+    $("#myTable tr").each(function(){
+        $(this).find(".photo").each(function(){
+            $(this).css(oldCss);
+        })
+    })
     const element = document.getElementById("invoice");
     
     $("#check").hide();
@@ -147,7 +349,7 @@ function viewPDF(){
         html2canvas:  { scale: 2 },
         enableLinks:  true,
         pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
       };
     html2pdf()
     .set(opt)
@@ -191,11 +393,18 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=type]").prop("checked",true);
     $("input:checkbox[name=shape]").prop("checked",false);
     $("input:checkbox[name=dimensions]").prop("checked",false);
+    $("input:checkbox[name=atributes]").prop("checked",false);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",false);
     $("input:checkbox[name=ecode]").prop("checked",true);
     $("#headerList2").each(function(){
+        $(this).find("input").each(function(){
+            var comp = $(this).attr("name")
+            $(this).prop("checked",false);
+        })
+    })
+    $("#headerList3").each(function(){
         $(this).find("input").each(function(){
             var comp = $(this).attr("name")
             $(this).prop("checked",false);
@@ -218,6 +427,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#shape").index() + 1)+")").hide();
     $("#dimensions").hide();
     $("table td:nth-child("+($("#dimensions").index() + 1)+")").hide();
+    $("#atributes").hide();
+    $("table td:nth-child("+($("#atributes").index() + 1)+")").hide();
     $("#reference").hide();
     $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
     $("#ecode").show();
@@ -229,11 +440,19 @@ document.getElementById("default").addEventListener("click",function(){
             $("#"+aux+"Filter").hide();
         })
     })
+    $("#headerList3").each(function(){
+        $(this).find("input").each(function(){
+
+            var aux = $(this).attr("name").split("check")[1]
+            $("#"+aux+"Filter").hide();
+        })
+    })
     $("#ButtonFilter").hide();
 
     $("#myTable tr").each(function(){
         $(this).show();
     })
+    measureReset();
 })
 
 // boton para exportar a Excel -------------------------------------------------------------------------------------
@@ -284,13 +503,14 @@ $("input:checkbox[name=brand]").prop("checked",true);
 $("input:checkbox[name=type]").prop("checked",true);
 $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",false);
+$("input:checkbox[name=atributes]").prop("checked",false);
 $("input:checkbox[name=reference]").prop("checked",false);
 $("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=check]").prop("checked",true);
 $("input:checkbox[name=ecode]").prop("checked",true);
 
 $List.change(function(){
-    
+
     let detailidi = $("#detail-id").index();
     let photoi = $("#photo").index();
     let codei = $("#code").index();
@@ -299,9 +519,12 @@ $List.change(function(){
     let cari = $("#car").index();
     let shapei = $("#shape").index();
     let dimensionsi = $("#dimensions").index();
+    let atributesi = $("#atributes").index();
     let referencei = $("#reference").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
+
+    alert("Entra")
     
     if ($("input:checkbox[name=detail-id]:checked").val()){
         $("#detail-id").show();
@@ -367,6 +590,14 @@ $List.change(function(){
         $("table td:nth-child("+(dimensionsi + 1)+")").hide();
     }
 
+    if ($("input:checkbox[name=atributes]:checked").val()){
+        $("#atributes").show();
+        $("table td:nth-child("+(atributesi + 1)+")").show();
+    }else{
+        $("#atributes").hide();
+        $("table td:nth-child("+(atributesi + 1)+")").hide();
+    }
+
     if ($("input:checkbox[name=check]:checked").val()){
         $("#check").show();
         $("table td:nth-child("+(checki + 1)+")").show();
@@ -392,7 +623,7 @@ $List.change(function(){
     }
 });
 
-// Menu de filtrar por medidas ---------------------------------------------------------------------------
+// Activar filtros de dimension y atributos ---------------------------------------------------------------------------
 const $List2 = $("#headerList2");
 $("#headerList2").each(function(){
     $(this).find("input").each(function(){
@@ -401,7 +632,15 @@ $("#headerList2").each(function(){
     })
 })
 
-$List2.change(function(){
+const $List3 = $("#headerList3");
+$("#headerList3").each(function(){
+    $(this).find("input").each(function(){
+        var comp = $(this).attr("name")
+        $(this).prop("checked",false);
+    })
+})
+
+$List2.change(function(){           // Activar filtro de dimensiones
 
     var bo = false
     // alert($(this).find("input").attr("name"))                    checkDiameter
@@ -420,15 +659,59 @@ $List2.change(function(){
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             bo = true
         }
-        if (bo === true){
-            $("#ButtonFilter").show();
-        }else{
-            $("#ButtonFilter").hide();
+    })
+
+    $List3.find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
         }
     })
+
+    if (bo === true){
+        $("#ButtonFilter").show();
+    }else{
+        $("#ButtonFilter").hide();
+    }
 })
 
-// Tabla sorteable ----------------------------------------------------------------------------------
+$List3.change(function(){           // Activar filtro de atributos
+
+    var bo = false
+    // alert($(this).find("input").attr("name"))                    checkDiameter
+
+    $(this).find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            $("#"+aux+"Filter").show();
+        }else{
+            $("#"+aux+"Filter").hide();
+        }
+    })
+
+    $(this).find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
+        }
+    })
+
+    $List2.find("input").each(function(){
+        var aux = $(this).attr("name").split("check")[1]
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            bo = true
+        }
+    })
+
+    if (bo === true){
+        $("#ButtonFilter").show();
+    }else{
+        $("#ButtonFilter").hide();
+    }
+})
+
+
+// Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
 $('th').not("#check").click(function(){
     var table = $(this).parents('table').eq(0)
@@ -441,8 +724,10 @@ $('th').not("#check").click(function(){
     $("tbody tr").each(function(){
         $(this).find("td").each(function(){
             if($(this).index()==$("#detail-id").index()){
-                $(this).text(i);
-                i=i+1;
+                if($(this).parent().is(":visible")){
+                    $(this).text(i)
+                    i=i+1;
+                }
             }
             
         })
@@ -469,3 +754,162 @@ $("tbody tr").each(function(){
         
     })
 });
+
+// Agrandar la foto al clickearla ---------------------------------------------------------------
+$(".photo").click(function(a){
+
+    var bo = false;
+
+    var newCss = {
+        "background-size": "200px 200px",
+        "width": "200px",
+        "height": "200px"
+    }
+    var oldCss = {
+        "background-size": "80px 80px",
+        "width": "80px",
+        "height": "80px"
+    }
+
+    if($(this).css("width")==="200px"){
+        bo = true;
+        $(this).css(oldCss);
+    }
+
+    $("#myTable tr").each(function(){
+            $(this).find(".photo").each(function(){
+                $(this).css(oldCss);
+            })
+    })
+
+    if(bo === true){
+        $(this).css(oldCss);
+    }else{
+        $(this).css(newCss);
+    }
+    a.preventDefault()
+})
+
+// Paginacion -------------------------------------------------------------------------------------
+
+$("#maxRows").on("change",function(){
+    if (listado.length > 0){
+        $(".pagination").html("")
+        var trnum = 0
+        var maxRows = parseInt($("#maxRows").val())
+        var semiTotalRows = $(table+" tbody tr").length
+        totalRows = listado.length
+        var rev = false
+        $(table+' tr:gt(0)').each(function(){
+            trnum++
+            $(this).find("a").each(function(){
+                for(var i=0; i<listado.length; i++){
+
+                    if($(this).text()===listado[i]){
+                        rev = true
+                        if(trnum > maxRows){
+                            $(this).parent().parent().parent().hide()
+                        }
+                        if(trnum <= maxRows){
+                            $(this).parent().parent().parent().show()
+                        }
+                    }
+                }
+            })
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+        })
+
+        if(totalRows > maxRows){
+            var pagenum = Math.ceil(totalRows/maxRows)
+            for(var i=1;i<=pagenum;){
+                $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+            }
+        }
+        $(".pagination li:first-child").addClass("active")
+        $(".pagination li").on("click",function(){
+            var pageNum = $(this).attr("data-page")
+            var trIndex = 0;
+            var rev = false
+            $(".pagination li").removeClass("active")
+            $(this).addClass("active")
+            $(table+" tr:gt(0)").each(function(){
+                trIndex++
+                $(this).find("a").each(function(){
+                    for(var i=0; i<listado.length; i++){
+
+                        if($(this).text()===listado[i]){
+                            rev = true
+
+                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                                $(this).parent().parent().parent().hide()
+                            }else{
+                                $(this).parent().parent().parent().show()
+                            }
+                        }
+                    }
+                })
+                if(rev===false){
+                    trIndex--
+                }else{
+                    rev = false
+                }
+
+            })
+        })
+    }else{
+        // alert("Entra")
+        $(".pagination").html("")
+        var trnum = 0
+        // var totalRows = 0
+        // Guarda la cantidad de filas seleccionadas
+        var maxRows = parseInt($(this).val())
+        // $("#myTable tr").each(function(){
+        //     if($(this).is(":visible")){
+        //         totalRows++
+        //     }
+        // })
+        // alert(totalRows)
+        var totalRows = $(table+" tbody tr").length
+        $(table+' tr:gt(0)').each(function(){
+            trnum++
+            if(trnum > maxRows){
+                $(this).hide()
+            }
+            if(trnum <= maxRows){
+                $(this).show()
+            }
+            // if($(this).is(":visible")===false){
+            //     $(this).hide()
+            // }else{
+            //     $(this).show()
+            // }
+        })
+        if(totalRows > maxRows){
+            // Guardo la cantidad de paginas que se necesitan
+            var pagenum = Math.ceil(totalRows/maxRows)
+            for(var i=1;i<=pagenum;){
+                $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+            }
+        }
+        $(".pagination li:first-child").addClass("active")
+        $(".pagination li").on("click",function(){
+            var pageNum = $(this).attr("data-page")
+            var trIndex = 0;
+            $(".pagination li").removeClass("active")
+            $(this).addClass("active")
+            // Recorre tolas las filas de la tabla
+            $(table+" tr:gt(0)").each(function(){
+                trIndex++
+                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                    $(this).hide()
+                }else{
+                    $(this).show()
+                }
+            })
+        })
+    }
+})
