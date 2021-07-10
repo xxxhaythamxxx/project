@@ -523,6 +523,8 @@ $List.change(function(){
     let referencei = $("#reference").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
+
+    alert("Entra")
     
     if ($("input:checkbox[name=detail-id]:checked").val()){
         $("#detail-id").show();
