@@ -21,17 +21,21 @@ class engineAdmin(admin.ModelAdmin):
 
 class spareAdmin(admin.ModelAdmin):
     # raw_id_fields=("car_info","engine_info",)
-    list_display=("spare_code","spare_brand","spare_name","spare_category")
-    search_fields=("spare_code","spare_brand","spare_name")
-    list_filter=("spare_name",)
-    ordering = ('spare_code', 'spare_brand',"spare_name")
-    filter_horizontal=["car_info","engine_info","spare_spare",]
+    list_display=("spare_code","spare_name","spare_category")
+    search_fields=("spare_code","spare_name")
+    list_filter=("spare_category",)
+    ordering = ('spare_code',"spare_name")
+    filter_horizontal=["car_info","engine_info","spare_spare","spare_vendor"]
     exclude=("spare_brand","shape",)
 
+class vendorAdmin(admin.ModelAdmin):
+    list_display=("vendorName",)
+    search_fields=("vendorName",)
+    list_filter=("vendorName",)
+    ordering = ('vendorName',)
 
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
-    # search_fields=("atributeName","atributeVal")
     list_filter=("atributeName",)
     ordering = ("dimensionSpare","atributeName","atributeVal")
     autocomplete_fields = ("dimensionSpare",)
@@ -39,8 +43,6 @@ class dimensionAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
             if '_addanother' in request.POST:
                 url = reverse("admin:spareapp_dimension_add")
-                # dimensionCategory = request.POST['dimensionCategory']
-                # qs = '?dimensionCategory=%s' % dimensionCategory
 
                 dimensionSpare = request.POST['dimensionSpare']
                 qs2 = '?dimensionSpare=%s' % dimensionSpare
@@ -52,8 +54,6 @@ class dimensionAdmin(admin.ModelAdmin):
     def response_change(self, request, obj, post_url_continue=None):
         if '_addanother' in request.POST:
             url = reverse("admin:spareapp_dimension_add")
-            # dimensionCategory = request.POST['dimensionCategory']
-            # qs = '?dimensionCategory=%s' % dimensionCategory
             dimensionSpare = request.POST['dimensionSpare']
             qs2 = '?dimensionSpare=%s' % dimensionSpare
             return HttpResponseRedirect(''.join((url, qs2)))
@@ -127,6 +127,7 @@ admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)
 admin.site.register(category)
+admin.site.register(vendor,vendorAdmin)
 admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)

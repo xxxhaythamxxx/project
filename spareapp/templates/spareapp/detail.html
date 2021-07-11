@@ -34,7 +34,8 @@
                         <li style="margin:auto;text-align:center;" class=""><label class="">Photo<input name="photo" class="ml-2" type="checkbox"></label></li>
                         <li style="margin:auto;text-align:center;" class=""><label class="">Reference Code<input name="reference" class="ml-2" type="checkbox"></label></li>
                         <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
-                        <li style="margin:auto;text-align:center;" class=""><label class="">Type<input name="type" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Description<input name="type" class="ml-2" type="checkbox"></label></li>
+                        <li style="margin:auto;text-align:center;" class=""><label class="">Vendor<input name="vendor" class="ml-2" type="checkbox"></label></li>
                     </ul>
                 </div>
                 <!-- Boton filter dimensiones -->
@@ -103,15 +104,18 @@
         <thead>
             <tr class="trsup color text-white">
                 <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
-                <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
                 <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
-                <!-- <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th> -->
-                <th id="type" class="trsup color" style="position: sticky;top: 70;">Type</th>
-                <!-- <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th> -->
-                <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
-                <th id="atributes" class="trsup color" style="position: sticky;top: 70;display: none;">Atributes</th>
-                <th id="reference" class="trsup color" style="position: sticky;top: 70;display: none;">Ref. Code</th>
+                <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
                 <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+                <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
+                <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+                <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
+                <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
+                <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
+                {% if parameter == 'Engine code' %}
+                <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
+                {% endif %}
+                <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
                 <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
             </tr>
         </thead>
@@ -121,58 +125,15 @@
         {% if car|add:"0" == br.id|add:"0" %}
         <tr>
             <td><a href=""></a></div></td>
-            {% if br.spare_photo %}
-            <td><a href="#"><div style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
-            {% else %}
-            <td><a href="#"></a></td>
-            {% endif %}
+
             {% if br.spare_code %}
             <td><a href="{% url 'sparedetails' br.spare_code %}">{{br.spare_code}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
-            <!-- {% if br.spare_brand %}
-            <td><a href="{% url 'brand' br.spare_brand %}">{{br.spare_brand}}</a></td>
-            {% else %}
-            <td><a href="#"></a></td>
-            {% endif %} -->
-            {% if br.spare_name %}
-            <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
-            {% else %}
-            <td><a href="#"></a></td>
-            {% endif %}
-            <!-- {% if br.shape %}
-            <td style="display: none;"><a href="{% url 'shape' br.shape %}">{{br.shape}}</a></td>
-            {% else %}
-            <td style="display: none;"><a href="#"></a></td>
-            {% endif %} -->
-            
-            {% if allDimensions %}
-                <td style="display: none;">
-                    {% for dim in allDimensions %}
-                        {% if br.spare_code == dim.dimensionSpare.spare_code %}
-                        <div><a id="{{dim.atributeName}}Value" href="">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
-                        {% endif %}
-                    {% endfor %}
-                </td>
-            {% else %}
-                <td style="display: none;"><a href="#"></a></td>
-            {% endif %}
-
-            {% if allAtributes %}
-                <td style="display: none;">
-                    {% for dim in allAtributes %}
-                        {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <div><a id="{{dim.atributeName}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
-                        {% endif %}
-                    {% endfor %}
-                </td>
-            {% else %}
-                <td style="display: none;"><a href="#"></a></td>
-            {% endif %}
 
             {% if br.spare_reference.all %}
-            <td style="display: none;">
+            <td>
                 {% for car in onlyManufCars %}
                     {% for sp in br.spare_reference.all %}
                         {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
@@ -182,7 +143,7 @@
                 {% endfor %}
             </td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td><a href="#"></a></td>
             {% endif %}
 
             {% if br.car_info.all %}
@@ -190,6 +151,69 @@
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
+
+            {% if br.spare_category %}
+            <td><a href="#">{{br.spare_category}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_name %}
+            <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+
+            {% if allDimensions %}
+                <td>
+                    {% for dim in allDimensions %}
+                        {% if br.spare_code == dim.dimensionSpare.spare_code %}
+                        <div><a id="{{dim.atributeName}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}} mm</a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td><a href="#"></a></td>
+            {% endif %}
+
+            {% if allAtributes %}
+                <td>
+                    {% for dim in allAtributes %}
+                        {% if br.spare_code == dim.atributeSpare.spare_code %}
+                        <div><a id="{{dim.atributeName}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_photo %}
+            <td><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %}
+            
+            {% if parameter == 'Engine code' %}
+            <td><a href="#">{{mig}}</a></td>
+            {% endif %}
+
+            {% if br.spare_vendor.all %}
+            <td style="display: none;">
+                {% for dim in allVendors %}
+                    {% for sp in br.spare_vendor.all %}
+
+                        {% if sp.vendorName == dim.vendorName %}
+                            <div><a href="#">{{sp.vendorName}}</a></div>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
             <td><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>
         </tr>
         {% endif %}

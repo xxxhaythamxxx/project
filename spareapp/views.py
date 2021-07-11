@@ -7,36 +7,50 @@ import json
 # Create your views here.
 
 # Creo el diccionario para los formularios en común de todos los templates
-def same():
-    # Consigo todos los valores de nombre de las dimensiones
-    dim=dimension.objects.values("atributeName").distinct()
-    # Consigo todos los valores de las dimensiones
-    dim2=dimension.objects.all()
+# def same():
+#     # Consigo todos los valores de nombre de las dimensiones
+#     dim=dimension.objects.values("atributeName").distinct()
+#     # Consigo todos los valores de las dimensiones
+#     dim2=dimension.objects.all()
 
-    # Consigo todos los valores de nombre de las atribute
-    atr=atribute.objects.values("atributeName").distinct()
-    # Consigo todos los valores de las atribute
-    atr2=atribute.objects.all()
+#     # Consigo todos los valores de nombre de las atribute
+#     atr=atribute.objects.values("atributeName").distinct()
+#     # Consigo todos los valores de las atribute
+#     atr2=atribute.objects.all()
     
-    # Consigo TODOS los spares
-    allSparesall=spare.objects.all()
-    # Consigo TODAS las categorias
-    allCategories=category.objects.all()
-    # Consigo TODOS los motores
-    allEngines=engine.objects.all()
-    # Conseguir TODOS los carros por fabricante
-    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
-    # Conseguir TODOS los carros
-    allCars=car.objects.all()
-    # Conseguir TODOS los repuestos por nombre
-    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
-    dicc={"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
-    return dicc
+#     # Consigo TODOS los spares
+#     allSparesall=spare.objects.all()
+#     # Consigo TODAS las categorias
+#     allCategories=category.objects.all()
+#     # Consigo TODOS los motores
+#     allEngines=engine.objects.all()
+#     # Conseguir TODOS los carros por fabricante
+#     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+#     # Conseguir TODOS los carros
+#     allCars=car.objects.all()
+#     # Conseguir TODOS los repuestos por nombre
+#     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+#     dicc={"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+#     return dicc
 
-dic=same().copy()
+# dic=same().copy()
 
 # Código para saber si usa el input o el filtro
 def selectf(request):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all().order_by("spare_name","spare_code")
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
 
     if request.method=="POST":
         list = request.POST.getlist('toAdd')
@@ -77,19 +91,13 @@ def selectf(request):
                     # Compara el codigoRepuesto con valor
                     b=[]
                     vec = valor.split(" ")
-                    comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
+                    # comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
                     todos=spare.objects.all()
                     for v in vec:
                         for t in todos:
                             s=t.spare_code
                             br=t.spare_brand
                             n=t.spare_name
-                            # if t.spare_reference.all():
-                            #     for f in t.spare_reference.all():
-                            #         g=f.reference_code
-                            #         put = g.translate(str.maketrans('', '', '.''-'))
-                            #         if valor.upper() in put.upper():
-                            #             b.append(t)
                             if s:
                                 out = s.translate(str.maketrans('', '', '.''-'))
                                 if valor.upper() in out.upper():
@@ -111,6 +119,20 @@ def selectf(request):
 
 def home(request):
 
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+
     if request.method=="POST":
         list = request.POST.getlist('toAdd')
         delist = request.POST.getlist("toDel")
@@ -129,14 +151,15 @@ def home(request):
     if request.method=="GET":
 
         if selectf(request)==False:
-            b = []
-            a = car.objects.all().values("car_manufacturer").order_by("car_manufacturer")
-            for v in a:
-                v = v["car_manufacturer"]
-                b.append(v)
-            b = (set(b))
+            # b = []
+            # a = car.objects.all().values("car_manufacturer").order_by("car_manufacturer")
+            # for v in a:
+            #     v = v["car_manufacturer"]
+            #     b.append(v)
+            # b = (set(b))
             alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
-            dic.update({"manu":b,"spare":alls})
+            # dic.update({"manu":b,"spare":alls})
+            dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
             return selectf(request)
@@ -145,6 +168,20 @@ def find(request):
     return render(request,"spareapp/find.html")
 
 def sparedetails(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
@@ -162,6 +199,20 @@ def sparedetails(request,val):
     
 
 def brand(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
@@ -177,6 +228,20 @@ def brand(request,val):
         return selectf(request)
 
 def name(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
@@ -201,6 +266,20 @@ def trunc(val):
     return b
 
 def manuf(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
@@ -216,6 +295,20 @@ def manuf(request,val):
         return selectf(request)
 
 def allmodel(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
@@ -230,6 +323,20 @@ def allmodel(request,val):
         return selectf(request)
 
 def allmanu(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     
     if selectf(request)==False:
         valsearch=request.GET.get("search")
@@ -246,6 +353,19 @@ def allmanu(request,val):
 
 def model(request,val):
 
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
@@ -260,6 +380,19 @@ def model(request,val):
         return selectf(request)
 
 def enginel(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
@@ -276,6 +409,20 @@ def enginel(request,val):
 
 def detail(request):
 
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+
     if selectf(request)==False:
         spares = spare.objects.all().order_by("spare_code","spare_brand","spare_name")
         carrito = Cart(request)
@@ -285,6 +432,20 @@ def detail(request):
         return selectf(request)
 
 def shape(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
@@ -299,6 +460,20 @@ def shape(request,val):
         return selectf(request)
 
 def longi(request,val1,val2):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         spares = spare.objects.all().filter(
             spare_code__icontains=dimension.objects.values("dimensionSpare__spare_code").filter(atributeName=val1,atributeVal=val2)
@@ -309,6 +484,20 @@ def longi(request,val1,val2):
         return selectf(request)
 
 def carBrands(request):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
     if selectf(request)==False:
         return render(request,"spareapp/carBrands.html",dic)
     else:

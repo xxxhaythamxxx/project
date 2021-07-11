@@ -1,0 +1,21 @@
+<html>
+    <thead class="">
+        <tr class="color text-white dnd-moved">
+            <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
+            <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
+            <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+            <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
+            <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+            <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
+            <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
+            <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
+            {% if parameter == 'Engine code' %}
+            <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
+            {% endif %}
+            <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
+            <!-- <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th> -->
+            <!-- <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th> -->
+            <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
+        </tr>
+    </thead>
+</html>
