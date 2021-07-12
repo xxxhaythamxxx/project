@@ -674,7 +674,6 @@ $List2.change(function(){           // Activar filtro de dimensiones
 
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
-        alert($(this).attr("name"))
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             bo = true
         }
