@@ -685,7 +685,7 @@ $List2.change(function(){           // Activar filtro de dimensiones
             bo = true
         }
     })
-    alert("Entra")
+    alert(bo);
     if (bo == true){
         $("#ButtonFilter").show();
     }else{
