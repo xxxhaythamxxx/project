@@ -49,7 +49,8 @@ def selectf(request):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
     if request.method=="POST":
@@ -130,7 +131,8 @@ def home(request):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
     if request.method=="POST":
@@ -157,7 +159,7 @@ def home(request):
             #     v = v["car_manufacturer"]
             #     b.append(v)
             # b = (set(b))
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             # dic.update({"manu":b,"spare":alls})
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
@@ -180,17 +182,18 @@ def sparedetails(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
-            pr=spare.objects.filter(spare_code=val).order_by("spare_code","spare_brand","spare_name")
+            pr=spare.objects.filter(spare_code=val).order_by("spare_name","spare_code","spare_brand")
             ar=spare.objects.values("spare_code","car_info__car_manufacturer").filter(spare_code=val).distinct()
             dic.update({"spare":pr,"spareReference":ar})
             return render(request,"spareapp/sparedetails.html",dic)
@@ -211,17 +214,18 @@ def brand(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
             # pr=spare.objects.values("id","spare_photo","spare_code","spare_brand","spare_name","car_info__car_manufacturer").filter(spare_brand__icontains=val).distinct()
-            pr=spare.objects.filter(spare_brand__icontains=val).order_by("spare_code","spare_brand","spare_name").distinct()
+            pr=spare.objects.filter(spare_brand__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct()
             dic.update({"spare":pr,"mig":val,"parameter":"Spare brand"})
             return render(request,"spareapp/find.html",dic)
     else:
@@ -240,17 +244,18 @@ def name(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
             # pr=spare.objects.values("id","spare_photo","spare_code","spare_brand","spare_name","car_info__car_manufacturer").filter(spare_name__icontains=val).distinct()
-            pr=spare.objects.filter(spare_name__icontains=val).order_by("spare_code","spare_brand","spare_name").distinct()
+            pr=spare.objects.filter(spare_name__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct()
             dic.update({"spare":pr,"mig":val,"parameter":"Spare name"})
             return render(request,"spareapp/find.html",dic)
     else:
@@ -278,12 +283,13 @@ def manuf(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
@@ -307,16 +313,17 @@ def allmodel(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
-            rep = spare.objects.filter(car_info__car_model__icontains=val).order_by("spare_code","spare_brand","spare_name").distinct()
+            rep = spare.objects.filter(car_info__car_model__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct()
             dic.update({"spare":rep,"mig":val,"parameter":"Car model"})
             return render(request,"spareapp/find.html",dic)
     else:
@@ -335,17 +342,18 @@ def allmanu(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
-            rep = spare.objects.filter(car_info__car_manufacturer__icontains=val).order_by("spare_code","spare_brand","spare_name").distinct()
+            rep = spare.objects.filter(car_info__car_manufacturer__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct()
             dic.update({"spare":rep,"mig":val,"parameter":"Car manufacturer"})
             return render(request,"spareapp/find.html",dic)
     else:
@@ -364,12 +372,13 @@ def model(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
@@ -392,16 +401,17 @@ def enginel(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
-            pr=spare.objects.filter(engine_info__engine_ide__icontains=val).order_by("spare_code","spare_brand","spare_name")
+            pr=spare.objects.filter(engine_info__engine_ide__icontains=val).order_by("spare_name","spare_code","spare_brand")
             dic.update({"spare":pr,"parameter":"Engine code","mig":val})
             return render(request,"spareapp/find.html",dic)
     else:
@@ -420,11 +430,12 @@ def detail(request):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
     if selectf(request)==False:
-        spares = spare.objects.all().order_by("spare_code","spare_brand","spare_name")
+        spares = spare.objects.all().order_by("spare_name","spare_code","spare_brand")
         carrito = Cart(request)
         dic.update({'carrito': carrito,'spare':spares})
         return render(request, 'spareapp/detail.html', dic)
@@ -444,16 +455,17 @@ def shape(request,val):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         valsearch=request.GET.get("search")
         if valsearch=="":
-            alls = spare.objects.all().order_by("spare_code","spare_brand","spare_name").distinct() 
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
-            spares = spare.objects.all().filter(shape__icontains=val).order_by("spare_code","spare_brand","spare_name")
+            spares = spare.objects.all().filter(shape__icontains=val).order_by("spare_name","spare_code","spare_brand")
             dic.update({'spare':spares,'parameter':'Shape','mig':val})
             return render(request, 'spareapp/find.html',dic)
     else:
@@ -472,12 +484,13 @@ def longi(request,val1,val2):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         spares = spare.objects.all().filter(
             spare_code__icontains=dimension.objects.values("dimensionSpare__spare_code").filter(atributeName=val1,atributeVal=val2)
-        ).order_by("spare_code","spare_brand","spare_name")
+        ).order_by("spare_name","spare_code","spare_brand")
         dic.update({'spare':spares,'parameter':val1,'mig':val2})
         return render(request, 'spareapp/find.html',dic)
     else:
@@ -496,7 +509,8 @@ def carBrands(request):
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
-    dic={"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         return render(request,"spareapp/carBrands.html",dic)

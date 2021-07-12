@@ -131,4 +131,4 @@ class reference(models.Model):
     referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
 
     def __str__(self):
-        return '%s - %s' %(self.referenceCode, self.referenceCar)
+        return '%s - %s' %(self.referenceSpare, self.referenceCode)

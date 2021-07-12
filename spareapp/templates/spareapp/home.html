@@ -11,7 +11,8 @@
 <form class="" method="POST" action="">
     {% include "spareapp/add.html" %}
     {% csrf_token %}
-<table id="invoice" class="invoice table-striped table-sortable draggable forget-ordering">
+<table id="invoice" class="invoice table-striped table-sortable draggable">
+<!-- Si quiere que no se guarde la posicion de las columnas, incluir clase forget-ordering -->
     {% include "spareapp/tablesup.html" %}
     {% include "spareapp/tableinf.html" %}
 </table>

@@ -9,18 +9,16 @@
             <td><a href="#"></a></td>
             {% endif %}
 
-            {% if br.spare_reference.all %}
+            {% if reference %}
             <td>
-                {% for car in onlyManufCars %}
-                    {% for sp in br.spare_reference.all %}
-                        {% if sp.reference_car.car_manufacturer == car.car_manufacturer %}
-                        <div><a href="{% url 'sparedetails' br.spare_code %}">{{sp.reference_code}}</a></div>
-                        {% endif %}
-                    {% endfor %}
+                {% for dim in reference|slice:":5" %}
+                    {% if br.spare_code == dim.referenceSpare.spare_code %}
+                    <div><a href="{% url 'sparedetails' br.spare_code %}">{{dim.referenceCode}}</a></div>
+                    {% endif %}
                 {% endfor %}
             </td>
             {% else %}
-            <td><a href="#"></a></td>
+                <td><a href="#"></a></td>
             {% endif %}
 
             {% if br.car_info.all %}
