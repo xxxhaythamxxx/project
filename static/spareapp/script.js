@@ -392,11 +392,11 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=brand]").prop("checked",true);
     $("input:checkbox[name=type]").prop("checked",true);
     $("input:checkbox[name=shape]").prop("checked",false);
-    $("input:checkbox[name=dimensions]").prop("checked",false);
-    $("input:checkbox[name=atributes]").prop("checked",false);
+    $("input:checkbox[name=dimensions]").prop("checked",true);
+    $("input:checkbox[name=atributes]").prop("checked",true);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
-    $("input:checkbox[name=reference]").prop("checked",false);
+    $("input:checkbox[name=reference]").prop("checked",true);
     $("input:checkbox[name=ecode]").prop("checked",true);
     $("#headerList2").each(function(){
         $(this).find("input").each(function(){
@@ -425,12 +425,12 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#check").index() + 1)+")").show();
     $("#shape").hide();
     $("table td:nth-child("+($("#shape").index() + 1)+")").hide();
-    $("#dimensions").hide();
-    $("table td:nth-child("+($("#dimensions").index() + 1)+")").hide();
-    $("#atributes").hide();
-    $("table td:nth-child("+($("#atributes").index() + 1)+")").hide();
-    $("#reference").hide();
-    $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
+    $("#dimensions").show();
+    $("table td:nth-child("+($("#dimensions").index() + 1)+")").show();
+    $("#atributes").show();
+    $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
+    $("#reference").show();
+    $("table td:nth-child("+($("#reference").index() + 1)+")").show();
     $("#ecode").show();
     $("table td:nth-child("+($("#ecode").index() + 1)+")").show();
     $("#headerList2").each(function(){
@@ -502,12 +502,14 @@ $("input:checkbox[name=code]").prop("checked",true);
 $("input:checkbox[name=brand]").prop("checked",true);
 $("input:checkbox[name=type]").prop("checked",true);
 $("input:checkbox[name=shape]").prop("checked",false);
-$("input:checkbox[name=dimensions]").prop("checked",false);
-$("input:checkbox[name=atributes]").prop("checked",false);
-$("input:checkbox[name=reference]").prop("checked",false);
+$("input:checkbox[name=dimensions]").prop("checked",true);
+$("input:checkbox[name=atributes]").prop("checked",true);
+$("input:checkbox[name=reference]").prop("checked",true);
 $("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=check]").prop("checked",true);
 $("input:checkbox[name=ecode]").prop("checked",true);
+$("input:checkbox[name=category]").prop("checked",true);
+$("input:checkbox[name=vendor]").prop("checked",false);
 
 $List.change(function(){
 
@@ -523,6 +525,8 @@ $List.change(function(){
     let referencei = $("#reference").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
+    let categoryi = $("#category").index();
+    let vendori = $("#vendor").index();
 
     if ($("input:checkbox[name=detail-id]:checked").val()){
         $("#detail-id").show();
@@ -619,6 +623,22 @@ $List.change(function(){
         $("#ecode").hide();
         $("table td:nth-child("+(ecodei + 1)+")").hide();
     }
+
+    if ($("input:checkbox[name=category]:checked").val()){
+        $("#category").show();
+        $("table td:nth-child("+(categoryi + 1)+")").show();
+    }else{
+        $("#category").hide();
+        $("table td:nth-child("+(categoryi + 1)+")").hide();
+    }
+
+    if ($("input:checkbox[name=vendor]:checked").val()){
+        $("#vendor").show();
+        $("table td:nth-child("+(vendori + 1)+")").show();
+    }else{
+        $("#vendor").hide();
+        $("table td:nth-child("+(vendori + 1)+")").hide();
+    }
 });
 
 // Activar filtros de dimension y atributos ---------------------------------------------------------------------------
@@ -665,8 +685,8 @@ $List2.change(function(){           // Activar filtro de dimensiones
             bo = true
         }
     })
-
-    if (bo === true){
+    alert("Entra")
+    if (bo == true){
         $("#ButtonFilter").show();
     }else{
         $("#ButtonFilter").hide();
