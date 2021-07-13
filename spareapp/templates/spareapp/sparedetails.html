@@ -4,7 +4,6 @@
 
 {% block content %}
 
-
 <div id="invoice" class="resultadoBusqueda">
     <div class="row">
         <div class="col-12 color p-2 text-white d-flex justify-content-center">
@@ -52,24 +51,36 @@
                 </div>
             </div>
 
-            <!-- Si el repuesto le sirve a otros repuestos -->
-            {% if spare.0.spare_spare.all %}
-            <div class="color p-1 text-white mt-2 radius mb-2" for="">Spare targets</div>
-                <div class="row">
-                    {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
-                        <div class="hover"><a href="{% url 'sparedetails' sp.spare_code %}">{{sp.spare_code}} - {{sp.spare_name}}</a></div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+            {% for ref in refSpare %}
+                {% if ref.referenceSpare == spare.0.id %}
+                <div class="color p-1 text-white mt-2 radius mb-2" for="">Reference Codes</div>
+                    <div class="row">
+                        {% for rf in reference|dictsort:"referenceCode" %}
+                            {% if spare.0.spare_code == rf.referenceSpare.spare_code %}
+                                <div class="hover"><a href="#">{{rf.referenceCode}}</a></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
 
-            {% if reference %}
-            <div class="color p-1 text-white mt-2 radius mb-2" for="">Reference Codes</div>
-                <div class="row">
-                    {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
-                        <div class="hover"><a href="#">{{sp.spare_code}} - {{sp.spare_name}}</a></div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+             <!-- Si el repuesto le sirve a otros repuestos -->
+             {% if spare.0.spare_spare.all %}
+             <div class="color p-1 text-white mt-2 radius mb-2" for="">Spare targets</div>
+                 <div class="row">
+                    <div class="col-4">
+                            {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
+                            <div class="hover"><a href="{% url 'sparedetails' sp.spare_code %}">{{sp.spare_code}}</a></div>
+                            {% endfor %}
+                    </div>
+                    <div class="col-6">
+                        {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
+                        <div class="hover"><a href="{% url 'name' sp.spare_name %}">{{sp.spare_name}}</a></div>
+                        {% endfor %}
+                    </div>
+                     
+                 </div>
+             {% endif %}
         </div>
 
         <div class="col-12">
