@@ -33,12 +33,15 @@ $(document).ready(function(){
     })
 });
 var listado = []
+var listadoAll = 0
 var table = "#invoice"
 
 // Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
 function measureFilter(){
 
     // var listado = []
+    listado = []
+    listadoAll = 0
 
     $("#myTable tr").each(function(){
         $(this).hide();
@@ -53,10 +56,16 @@ function measureFilter(){
         var AtributeString
         
         $(this).find("input").each(function(){
-            var comp = $(this).val()                                // 1 - 5 - off - on
+            var comp = $(this).val().toLowerCase()                                // 1 - 5 - off - on
+            if(comp){
+                listadoAll++
+            }
             var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
             if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
                 AtributeString = comp
+                if(AtributeString!=""){
+                    listadoAll++
+                }
             }
             if(dimAtribute === innerAtribute){
                 AtributeMin = comp
@@ -71,26 +80,19 @@ function measureFilter(){
                 var varSplit = text.split(""+dimAtribute+": ")
                 var VarFloat = parseFloat(varSplit[1])              // 40.5 - off (Float)
                 var varString = varSplit[1]                         // 40.5 - off (String)
-                if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){
+                if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
-                if(varString===AtributeString){
+                if(varString===AtributeString){                     // Almaceno en listado los atributos que se encuentren en el input
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
             }
         })
     })
-    // for(var i=0; i<listado.length; i++){
-    //     $("#myTable tr").each(function(){
-    //         $(this).find("a").each(function(){
-    //             if($(this).text()===listado[i]){
-    //                 $(this).parent().parent().parent().show();
-    //             }
-    //         })
-    //     })
-    // }
+
+    listadoAll=listadoAll/2
 
     for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
         $("#myTable tr").each(function(){
@@ -116,53 +118,111 @@ function measureFilter(){
         totalRows = listado.length
         // alert("totalRows: "+totalRows)
 
-        // for(var i=0; i<listado.length; i++){
-        //     $(table+' tr:gt(0)').each(function(){
-        //         trnum++
-        //         $(this).find("a").each(function(){
+        // var rev = false
+        // $(table+' tr:gt(0)').each(function(){
+        //     trnum++
+        //     $(this).find("a").each(function(){  // Busca en los hyperlinks
+        //         for(var i=0; i<listado.length; i++){
         //             if($(this).text()===listado[i]){
-        //                 alert("Entra: "+$(this).text())
-        //                 alert("trnum: "+trnum+" maxRows: "+maxRows)
+        //                 rev = true
         //                 if(trnum > maxRows){
-        //                     $(this).hide()
+        //                     $(this).parent().parent().parent().hide()
         //                 }
         //                 if(trnum <= maxRows){
-        //                     alert("trnum <= maxRows")
-        //                     alert($(this).text())
-        //                     $(this).show()
+        //                     $(this).parent().parent().parent().show()
         //                 }
         //             }
-        //         })
+        //         }
         //     })
-        // }
-
+        //     if(rev===false){
+        //         trnum--
+        //     }else{
+        //         rev = false
+        //     }
+        // })
         var rev = false
-        $(table+' tr:gt(0)').each(function(){
+        var is = false
+        var listCont = 0
+        var aCont = 0
+        $("tbody tr").each(function(){
             trnum++
-            // alert("trnum: "+trnum)
-            $(this).find("a").each(function(){
-                for(var i=0; i<listado.length; i++){
-
-                    if($(this).text()===listado[i]){
-                        rev = true
-                        // alert("Conseguido: "+trnum)
-                        if(trnum > maxRows){
-                            $(this).parent().parent().parent().hide()
+            // alert("TRnum: "+trnum)
+            $(this).find("td").each(function(){
+                if($(this).index()==$("#dimensions").index() || $(this).index()==$("#atributes").index()){
+                    $(this).find("a").each(function(){
+                    aCont++
+                        for(var i=0; i<listado.length; i++){
+                            // alert("Comparo a: "+$(this).text()+" con listado: "+listado[i])
+                                if($(this).text()==listado[i]){
+                                    // alert("Entra")
+                                    listCont++
+                                }else{
+                                    is = false
+                                }
                         }
-                        if(trnum <= maxRows){
-                            $(this).parent().parent().parent().show()
-                        }
-                    }
+                    })
                 }
+                
             })
+            // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listado Lenght: "+listado.length)
+            if((listCont == listadoAll) && (listCont>0)){
+                is = true
+            }else{
+                is = false
+            }
+            // alert("This fila: "+$(this).text())
+            // alert("is: "+is)
+            if(is == true){
+                // alert("trnum: "+trnum+" maxRows: "+maxRows)
+                rev = true
+                if(trnum > maxRows){
+                    $(this).hide()
+                    // alert("Esconde")
+                }
+                if(trnum <= maxRows){
+                    // alert("Muestra")
+                    $(this).show()
+                }
+            }
             if(rev===false){
                 trnum--
             }else{
                 rev = false
             }
-            // alert("trnumFInal: "+trnum)
-        })
+            is = true
+            listCont = 0
+        });
 
+        // var rev = false
+        // var is = false
+        // $(table+' tr:gt(0)').each(function(){
+        //     trnum++
+        //     $(this).find("a").each(function(){  // Busca en los hyperlinks
+        //         for(var i=0; i<listado.length; i++){
+        //             if($(this).text()===listado[i]){
+        //                 alert("Entra")
+        //             }else{
+        //                 is = false
+        //             }
+        //             // alert("Is: "+is)
+        //         }
+        //     })
+            // if(is === true){
+            //     // alert("trnum: "+trnum+ "maxRows: "+maxRows)
+            //     rev = true
+            //     if(trnum > maxRows){
+            //         $(this).hide()
+            //     }
+            //     if(trnum <= maxRows){
+            //         $(this).show()
+            //     }
+            // }
+            // if(rev===false){
+            //     trnum--
+            // }else{
+            //     rev = false
+            // }
+        // })
 
 
 
@@ -394,6 +454,7 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=shape]").prop("checked",false);
     $("input:checkbox[name=dimensions]").prop("checked",true);
     $("input:checkbox[name=atributes]").prop("checked",true);
+    $("input:checkbox[name=category]").prop("checked",true);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",true);
@@ -431,6 +492,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
     $("#reference").show();
     $("table td:nth-child("+($("#reference").index() + 1)+")").show();
+    $("#category").show();
+    $("table td:nth-child("+($("#category").index() + 1)+")").show();
     $("#ecode").show();
     $("table td:nth-child("+($("#ecode").index() + 1)+")").show();
     $("#headerList2").each(function(){
