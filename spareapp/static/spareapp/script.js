@@ -91,6 +91,10 @@ function measureFilter(){
         })
     })
 
+    for(var i = listado.length -1; i >=0; i--){
+        if(listado.indexOf(listado[i]) !== i) listado.splice(i,1);
+    }
+
     listadoAll=listadoAll/2
 
     for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
@@ -112,7 +116,6 @@ function measureFilter(){
         var trnum = 0
         // Guarda la cantidad de filas seleccionadas
         var maxRows = parseInt($("#maxRows").val())
-        // alert("maxRows: "+maxRows)
         var semiTotalRows = $(table+" tbody tr").length
         totalRows = listado.length
         var rev = false
@@ -122,9 +125,9 @@ function measureFilter(){
         $("tbody tr").each(function(){
             trnum++
             $(this).find("td").each(function(){
-                if($(this).index()==$("#dimensions").index() || $(this).index()==$("#atributes").index()){
-                    $(this).find("a").each(function(){
-                    aCont++
+                $(this).find("a").each(function(){
+                    if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                        aCont++
                         for(var i=0; i<listado.length; i++){
                                 if($(this).text()==listado[i]){
                                     listCont++
@@ -132,9 +135,10 @@ function measureFilter(){
                                     is = false
                                 }
                         }
+
+                    }
+
                     })
-                }
-                
             })
             if((listCont == listadoAll) && (listCont>0)){
                 is = true
