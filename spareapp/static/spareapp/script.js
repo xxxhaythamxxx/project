@@ -39,7 +39,6 @@ var table = "#invoice"
 // Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
 function measureFilter(){
 
-    // var listado = []
     listado = []
     listadoAll = 0
 
@@ -116,45 +115,18 @@ function measureFilter(){
         // alert("maxRows: "+maxRows)
         var semiTotalRows = $(table+" tbody tr").length
         totalRows = listado.length
-        // alert("totalRows: "+totalRows)
-
-        // var rev = false
-        // $(table+' tr:gt(0)').each(function(){
-        //     trnum++
-        //     $(this).find("a").each(function(){  // Busca en los hyperlinks
-        //         for(var i=0; i<listado.length; i++){
-        //             if($(this).text()===listado[i]){
-        //                 rev = true
-        //                 if(trnum > maxRows){
-        //                     $(this).parent().parent().parent().hide()
-        //                 }
-        //                 if(trnum <= maxRows){
-        //                     $(this).parent().parent().parent().show()
-        //                 }
-        //             }
-        //         }
-        //     })
-        //     if(rev===false){
-        //         trnum--
-        //     }else{
-        //         rev = false
-        //     }
-        // })
         var rev = false
         var is = false
         var listCont = 0
         var aCont = 0
         $("tbody tr").each(function(){
             trnum++
-            // alert("TRnum: "+trnum)
             $(this).find("td").each(function(){
                 if($(this).index()==$("#dimensions").index() || $(this).index()==$("#atributes").index()){
                     $(this).find("a").each(function(){
                     aCont++
                         for(var i=0; i<listado.length; i++){
-                            // alert("Comparo a: "+$(this).text()+" con listado: "+listado[i])
                                 if($(this).text()==listado[i]){
-                                    // alert("Entra")
                                     listCont++
                                 }else{
                                     is = false
@@ -164,23 +136,17 @@ function measureFilter(){
                 }
                 
             })
-            // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listado Lenght: "+listado.length)
             if((listCont == listadoAll) && (listCont>0)){
                 is = true
             }else{
                 is = false
             }
-            // alert("This fila: "+$(this).text())
-            // alert("is: "+is)
             if(is == true){
-                // alert("trnum: "+trnum+" maxRows: "+maxRows)
                 rev = true
                 if(trnum > maxRows){
                     $(this).hide()
-                    // alert("Esconde")
                 }
                 if(trnum <= maxRows){
-                    // alert("Muestra")
                     $(this).show()
                 }
             }
@@ -192,39 +158,6 @@ function measureFilter(){
             is = true
             listCont = 0
         });
-
-        // var rev = false
-        // var is = false
-        // $(table+' tr:gt(0)').each(function(){
-        //     trnum++
-        //     $(this).find("a").each(function(){  // Busca en los hyperlinks
-        //         for(var i=0; i<listado.length; i++){
-        //             if($(this).text()===listado[i]){
-        //                 alert("Entra")
-        //             }else{
-        //                 is = false
-        //             }
-        //             // alert("Is: "+is)
-        //         }
-        //     })
-            // if(is === true){
-            //     // alert("trnum: "+trnum+ "maxRows: "+maxRows)
-            //     rev = true
-            //     if(trnum > maxRows){
-            //         $(this).hide()
-            //     }
-            //     if(trnum <= maxRows){
-            //         $(this).show()
-            //     }
-            // }
-            // if(rev===false){
-            //     trnum--
-            // }else{
-            //     rev = false
-            // }
-        // })
-
-
 
         if(totalRows > maxRows){
             // Guardo la cantidad de paginas que se necesitan
