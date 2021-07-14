@@ -97,7 +97,7 @@ def selectf(request):
                     for v in vec:
                         for t in todos:
                             s=t.spare_code
-                            br=t.spare_brand
+                            # br=t.spare_brand
                             n=t.spare_name
                             if s:
                                 out = s.translate(str.maketrans('', '', '.''-'))
@@ -105,9 +105,9 @@ def selectf(request):
                                     b.append(t)
                                 if v.upper() in out.upper():
                                     b.append(t)
-                            if br:
-                                if(v.upper() in br.upper()):
-                                    b.append(t)
+                            # if br:
+                            #     if(v.upper() in br.upper()):
+                            #         b.append(t)
                             if n:
                                 if(v.upper() in n.upper()):
                                     b.append(t)
@@ -507,11 +507,12 @@ def carBrands(request):
     allCategories=category.objects.all()
     allEngines=engine.objects.all()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
-    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if selectf(request)==False:
         return render(request,"spareapp/carBrands.html",dic)

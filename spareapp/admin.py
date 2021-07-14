@@ -13,11 +13,12 @@ class carAdmin(admin.ModelAdmin):
     ordering = ('car_manufacturer', 'car_model')
 
 class engineAdmin(admin.ModelAdmin):
-    list_display=("engine_ide","engine_l","engine_type","engine_cylinder","engine_pistons","engine_power_kw","engine_power_hp")
+    list_display=("engine_ide","engine_l","engine_type","engine_cylinder","engine_pistons")
     search_fields=("engine_ide","engine_l","engine_cylinder")
     list_filter=("engine_l",)
     ordering = ('engine_ide', 'engine_l')
     filter_horizontal=["car_engine_info",]
+    exclude=("engine_power_kw","engine_power_hp",)
 
 class spareAdmin(admin.ModelAdmin):
     # raw_id_fields=("car_info","engine_info",)

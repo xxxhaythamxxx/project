@@ -19,13 +19,13 @@ class engine(models.Model):
     engine_l=models.CharField(max_length=10, verbose_name="Litre",blank=True,null=True)             #Ejemplo: 1.8 D
     engine_ide=models.CharField(max_length=80, verbose_name="Code",blank=True,null=True)          #Ejemplo: 1GRFE
     engine_type=models.CharField(max_length=15, verbose_name="Type",blank=True,null=True)         #Ejemplo: Diesel, Petrol
-    engine_cylinder=models.IntegerField(verbose_name="Cylinder (ccm)",blank=True,null=True)               #Ejemplo: 1588 ccm
+    engine_cylinder=models.IntegerField(verbose_name="Valve",blank=True,null=True)               #Ejemplo: 1588 ccm
     engine_pistons=models.IntegerField(verbose_name="Pistons",blank=True,null=True)                #Ejemplo: 4 pistons
     engine_power_kw=models.IntegerField(verbose_name="Power (kW)",blank=True,null=True)               #Ejemplo: 63 kw
     engine_power_hp=models.IntegerField(verbose_name="Power (hp)",blank=True,null=True)               #Ejemplo: 85 hp
 
     def __str__(self):
-        return '%s %s %s %s ccm/%s pistons %s kW/%s hp' %(self.engine_ide, self.engine_l, self.engine_type, self.engine_cylinder, self.engine_pistons, self.engine_power_kw, self.engine_power_hp)
+        return '%s %s %s %s %s pistons' %(self.engine_ide, self.engine_l, self.engine_type, self.engine_cylinder, self.engine_pistons)
     
 
 class category(models.Model):

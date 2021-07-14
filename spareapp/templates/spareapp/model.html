@@ -17,9 +17,9 @@
             <th class="trsup color">Litres</th>
             <th class="trsup color">Engine model</th>
             <th class="trsup color">Type</th>
-            <th class="trsup color">Cylinder</th>
+            <th class="trsup color">Valve</th>
             <th class="trsup color">Pistons</th>
-            <th class="trsup color">Power</th>
+            <!-- <th class="trsup color">Power</th> -->
         </tr>
     </thead>
     <tbody id="myTable table-list">
@@ -28,9 +28,9 @@
             <td>{{br.engine_l}}</td>
             <td><a href="{% url 'engine' br.engine_ide %}">{{br.engine_ide}}</a></td>
             <td>{{br.engine_type}}</td>
-            <td>{{br.engine_cylinder}} ccm</td>
+            <td>{{br.engine_cylinder}}</td>
             <td>{{br.engine_pistons}}</td>
-            <td>{{br.engine_power_kw}}Kw / {{br.engine_power_hp}}hp</td>
+            <!-- <td>{{br.engine_power_kw}}Kw / {{br.engine_power_hp}}hp</td> -->
         </tr>
         {% endfor %}
     </tbody>

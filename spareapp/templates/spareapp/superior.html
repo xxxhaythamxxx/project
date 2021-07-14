@@ -34,7 +34,7 @@
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Dimensions</a>
                     <ul id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
                         {% for dim in dimension|dictsort:"atributeName" %}
-                            <li style="margin:auto;text-align:center;" class=""><label class="">{{dim.atributeName}}<input name="check{{dim.atributeName|cut:' '}}" class="ml-2" type="checkbox"></label></li>
+                            <li style="margin:auto;text-align:center;" class=""><input name="check{{dim.atributeName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{dim.atributeName}}</label></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -43,7 +43,7 @@
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
                     <ul id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
                         {% for atr in atribute|dictsort:"atributeName" %}
-                            <li style="margin:auto;text-align:center;" class=""><label class="">{{atr.atributeName}}<input name="check{{atr.atributeName}}" class="ml-2" type="checkbox"></label></li>
+                            <li style="margin:auto;text-align:center;" class=""><input name="check{{atr.atributeName}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -62,8 +62,8 @@
 
             <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
                 <div class="col-lg-6 mt-2">
-                    <input class="col-lg-3" type="number" placeholder="Min {{dim.atributeName}}" id="{{dim.atributeName|cut:' '}}Min">
-                    <input class="col-lg-3" type="number" placeholder="Max {{dim.atributeName}}" id="{{dim.atributeName|cut:' '}}Max">
+                    <input class="col-lg-3 dimMin" type="number" placeholder="Min {{dim.atributeName}}" id="{{dim.atributeName|cut:' '}}Min">
+                    <input class="col-lg-3 dimMax" type="number" placeholder="Max {{dim.atributeName}}" id="{{dim.atributeName|cut:' '}}Max">
                 </div>
             </div>
 
@@ -73,7 +73,7 @@
 
             <div style="display: none;" id="{{dim.atributeName}}Filter" class="row filterDim">
                 <div class="col-lg-6 mt-2">
-                    <input class="col-lg-3" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
+                    <input class="col-lg-3 atrUnique" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
                 </div>
             </div>
 

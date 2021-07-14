@@ -3,13 +3,12 @@
 {% block title %} Kmotorshop.com {% endblock %}
 
 {% block content %}
-    
 <div class="resultadoBusqueda">
     <div class="conten">
         <p class="text-white color p-2">Car brands</p>
         <div style="margin-left: 10px;" class="conteni color-hard">
         {% for car in manu %}
-            <li class="hover"><a href="{% url 'manuf' car %}">{{car}}</a></li>
+            <li class="hover"><a href="{% url 'manuf' car.car_manufacturer %}">{{car.car_manufacturer}}</a></li>
         {% endfor %}
         </div>
     </div>
