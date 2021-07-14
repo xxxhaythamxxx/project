@@ -56,12 +56,14 @@ function measureFilter(){
         
         $(this).find("input").each(function(){
             var comp = $(this).val().toLowerCase()                                // 1 - 5 - off - on
+            // alert("Comp: "+comp)
             if(comp){
                 listadoAll++
             }
             var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
             if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
                 AtributeString = comp
+                // alert("AtributeString: "+AtributeString)
                 if(AtributeString!=""){
                     listadoAll++
                 }
@@ -78,12 +80,14 @@ function measureFilter(){
                 var text = $(this).text();                          // Diameter: 40.5 - Atr1: off
                 var varSplit = text.split(""+dimAtribute+": ")
                 var VarFloat = parseFloat(varSplit[1])              // 40.5 - off (Float)
-                var varString = varSplit[1]                         // 40.5 - off (String)
+                var varString = varSplit[1].toLowerCase()                         // 40.5 - off (String)
+                // alert("varString: "+varString)
                 if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
                 if(varString===AtributeString){                     // Almaceno en listado los atributos que se encuentren en el input
+                    // alert("varString: "+varString)
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
@@ -126,20 +130,25 @@ function measureFilter(){
             trnum++
             $(this).find("td").each(function(){
                 $(this).find("a").each(function(){
+                    // alert("Cada a: "+$(this).text())
                     if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
                         aCont++
+                        // alert("Columna: "+$(this).text())
                         for(var i=0; i<listado.length; i++){
-                                if($(this).text()==listado[i]){
-                                    listCont++
-                                }else{
-                                    is = false
-                                }
+                            // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
+                            if($(this).text()==listado[i]){
+                                // alert("Cada a: "+$(this).text())
+                                listCont++
+                            }else{
+                                is = false
+                            }
                         }
 
                     }
 
                     })
             })
+            // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
             if((listCont == listadoAll) && (listCont>0)){
                 is = true
             }else{
