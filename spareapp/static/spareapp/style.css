@@ -1,6 +1,7 @@
 .color-soft {
     background: rgb(216, 114, 114);
 }
+
 .color {
     background: rgb(136,12,12);
     background: linear-gradient(0deg, rgba(136,12,12,1) 0%, rgba(196,18,18,1) 83%);
@@ -18,6 +19,10 @@
 }
 .card-head-a {
     color:rgb(136,12,12);
+}
+
+.card-head-a:hover {
+    color:white;
 }
 .card-head-a a {
     color:white;

@@ -67,6 +67,7 @@ class spare(models.Model):
     price_m=models.FloatField(verbose_name="Price M",blank=True,null=True)
     price_d=models.FloatField(verbose_name="Price D",blank=True,null=True)
     spare_spare = models.ManyToManyField("self",verbose_name="Spare target",blank=True,null=True)
+    note = models.TextField(max_length=100, verbose_name="Note",blank=True,null=True)
 
     def __str__(self):
         return '%s %s' %(self.spare_code, self.spare_name)
@@ -127,6 +128,8 @@ class reference(models.Model):
     #     limit_choices_to={'spare__id': 1},
     #     blank=True,null=True,on_delete=CASCADE,verbose_name="Car"
     # )
+
+    referenceNote = models.CharField(max_length=40, verbose_name="Note", blank=True,null=True)
 
     referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
 

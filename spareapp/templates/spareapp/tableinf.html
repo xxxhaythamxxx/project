@@ -28,7 +28,7 @@
             {% endif %}
 
             {% if br.spare_category %}
-            <td><a href="#">{{br.spare_category}}</a></td>
+            <td><a href="{% url 'categoryi' br.spare_category %}">{{br.spare_category}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}

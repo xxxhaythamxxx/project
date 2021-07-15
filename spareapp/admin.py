@@ -22,7 +22,7 @@ class engineAdmin(admin.ModelAdmin):
 
 class spareAdmin(admin.ModelAdmin):
     # raw_id_fields=("car_info","engine_info",)
-    list_display=("spare_code","spare_name","spare_category")
+    list_display=("spare_code","spare_name","spare_category","note")
     search_fields=("spare_code","spare_name")
     list_filter=("spare_category",)
     ordering = ('spare_code',"spare_name")
@@ -95,7 +95,7 @@ class atributeAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(reverse("admin:spareapp_atribute_changelist"))
 
 class referenceAdmin(admin.ModelAdmin):
-    list_display=("referenceSpare","referenceCode")
+    list_display=("referenceSpare","referenceNote","referenceCode")
     # search_fields=("atributeName","atributeVal")
     # list_filter=("referenceSpare",)
     ordering = ("referenceSpare","referenceCode")
@@ -133,6 +133,6 @@ admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)
 
-admin.site.site_header = "Kmotorshop administrator"
+admin.site.site_header = "Auto Repuestos Interamericana administrator"
 admin.site.site_title = "UMSRA Admin Portal"
-admin.site.index_title = "Welcome to Kmotorshop administrator panel"
+admin.site.index_title = "Welcome to Auto Repuestos Interamericana administrator panel"

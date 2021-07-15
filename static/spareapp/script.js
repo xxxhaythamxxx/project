@@ -50,6 +50,7 @@ function measureFilter(){
         var indexVal = $(this).attr("id")                           // id = DiameterFilter
         var atribute = indexVal.split("Filter")
         var dimAtribute = atribute[0]                               // Diameter - Height - Atr1
+        // alert("dimAtribute: "+dimAtribute)
         var AtributeMin
         var AtributeMax
         var AtributeString
@@ -61,6 +62,7 @@ function measureFilter(){
                 listadoAll++
             }
             var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
+            // alert("innerAtribute: "+innerAtribute)
             if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
                 AtributeString = comp
                 // alert("AtributeString: "+AtributeString)
@@ -69,6 +71,8 @@ function measureFilter(){
                 }
             }
             if(dimAtribute === innerAtribute){
+                // alert("dimAtribute: "+dimAtribute)
+                // alert("comp: "+comp)
                 AtributeMin = comp
             }else{
                 AtributeMax = comp
@@ -78,9 +82,13 @@ function measureFilter(){
         $('#myTable tr a').each(function(){
             if($(this).attr("id")===(dimAtribute+"Value")){
                 var text = $(this).text();                          // Diameter: 40.5 - Atr1: off
-                var varSplit = text.split(""+dimAtribute+": ")
-                var VarFloat = parseFloat(varSplit[1])              // 40.5 - off (Float)
-                var varString = varSplit[1].toLowerCase()                         // 40.5 - off (String)
+                // alert("text: "+text)
+                var varSplit = text.split(": ")[1]
+                // alert("split: "+varSplit)
+                var VarFloat = parseFloat(varSplit)              // 40.5 - off (Float)
+                // alert("VarFloat: "+VarFloat)
+                var varString = varSplit.toLowerCase()                         // 40.5 - off (String)
+                // alert("varString: "+varString)
                 // alert("varString: "+varString)
                 if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
                     indexDiameter=$(this).text()
@@ -214,6 +222,34 @@ function measureFilter(){
     // Fin paginado
 
 }
+
+// $(".dimMin").on('keyup', function (e) {
+//     alert("Entra")
+//     if (e.key === 'Enter' || e.keyCode === 13) {
+//         measureFilter()
+//     }
+// })
+
+$(function(){
+
+    $(".dimMin").keyup(function (e) {
+        if (e.keyCode === 13) {
+            measureFilter()
+        }
+     })
+
+     $(".dimMax").keyup(function (e) {
+        if (e.keyCode === 13) {
+            measureFilter()
+        }
+     })
+
+     $(".atrUnique").keyup(function (e) {
+        if (e.keyCode === 13) {
+            measureFilter()
+        }
+     })
+})
 
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
 function measureReset(){
@@ -674,10 +710,16 @@ $List2.change(function(){           // Activar filtro de dimensiones
 
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
+        // alert("Aux: "+aux)
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             $("#"+aux+"Filter").show();
+            // alert($("#"+aux+"Min").val())
+            $("#"+aux+"Min").val(1)
         }else{
             $("#"+aux+"Filter").hide();
+            // alert($("#"+aux+"Filter").text())
+            $("#"+aux+"Min").val(null)
+            $("#"+aux+"Max").val(null)
         }
     })
 
@@ -705,7 +747,6 @@ $List2.change(function(){           // Activar filtro de dimensiones
 $List3.change(function(){           // Activar filtro de atributos
 
     var bo = false
-    // alert($(this).find("input").attr("name"))                    checkDiameter
 
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
@@ -713,6 +754,7 @@ $List3.change(function(){           // Activar filtro de atributos
             $("#"+aux+"Filter").show();
         }else{
             $("#"+aux+"Filter").hide();
+            $("#"+aux).val(null)
         }
     })
 
@@ -940,3 +982,7 @@ $("#maxRows").on("change",function(){
         })
     }
 })
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover()
+ })

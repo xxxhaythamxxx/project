@@ -20,6 +20,9 @@ urlpatterns = [
     path("shape/<str:val>",views.shape,name="shape"),
     path("longi/<str:val1>?<str:val2>",views.longi,name="longi"),
     path("carBrands",views.carBrands,name="carBrands"),
+    # path("categoryi",views.categoryi,name="categoryi"),
+    path("categoryi/<str:val>",views.categoryi,name="categoryi"),
+    path("chasis/<str:val>",views.chasis,name="chasis"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

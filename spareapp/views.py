@@ -104,46 +104,49 @@ def selectf(request):
                         n=t.spare_name
                         ch=t.car_info
                         for v in vec:
-                            # ch=t.car_info.transmission
                             if s:
                                 out = s.translate(str.maketrans('', '', '.''-'))
                                 if valor.upper() in out.upper():
-                                    # b.append(t)
                                     bol = True
                                 if v.upper() in out.upper():
-                                    # b.append(t)
                                     bol = True
                             if n:
-                                if(v.upper() in n.upper()):
-                                    # b.append(t)
-                                    bol = True
+                                out = n.split(" ")
+                                for o in out:
+                                    if o.upper().startswith(v.upper()):
+                                        bol = True
                             for r in ref:
                                 sr=r.referenceCode
                                 if sr:
                                     out = sr.translate(str.maketrans('', '', '.''-'))
                                     if valor.upper() in out.upper():
                                         if s == r.referenceSpare.spare_code:
-                                            # b.append(t)
                                             bol = True
                                     if v.upper() in out.upper():
                                         if s == r.referenceSpare.spare_code:
-                                            # b.append(t)
                                             bol = True
                             for r in cars:
                                 sr=r.transmission
+                                man=r.car_manufacturer
                                 if sr:
                                     out = sr.translate(str.maketrans('', '', '.''-'))
                                     if valor.upper() in out.upper():
-                                        # if ch == r:
                                         for to in t.car_info.all():
                                             if to.transmission in r.transmission:
-                                                # b.append(t)
                                                 bol = True
                                     if v.upper() in out.upper():
-                                        # if ch == r:
                                         for to in t.car_info.all():
                                             if to.transmission in r.transmission:
-                                                # b.append(t)
+                                                bol = True
+                                if man:
+                                    out = man.translate(str.maketrans('', '', '.''-'))
+                                    if out.upper().startswith(valor.upper()):
+                                        for to in t.car_info.all():
+                                            if to.car_manufacturer in r.car_manufacturer:
+                                                bol = True
+                                    if out.upper().startswith(v.upper()):
+                                        for to in t.car_info.all():
+                                            if to.car_manufacturer in r.car_manufacturer:
                                                 bol = True
                             
                             if bol == True:
@@ -152,18 +155,6 @@ def selectf(request):
                         
                         if contVar == len(vec):
                             b.append(t)
-
-                        # print("Spare")
-                        # print(s)
-                        # print("setb")
-                        # print(len((set(b))))
-                        # print(b)
-                        # print("lenVec")
-                        # print(len(vec))
-                        # print(vec)
-                        # print("ContVar")
-                        # print(contVar)
-                        # print("----------------------------------------------")
                         contVar = 0
                             
                     b = (set(b))
@@ -574,6 +565,66 @@ def carBrands(request):
     else:
         return selectf(request)
 
+def categoryi(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    if selectf(request)==False:
+        valsearch=request.GET.get("search")
+        if valsearch=="":
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
+            dic.update({"spare":alls})
+            return render(request,"spareapp/home.html",dic)
+        else:
+            # pr=spare.objects.filter(spare_category__category__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct()
+            pr=spare.objects.filter(spare_category__category__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct() 
+            dic.update({"spare":pr,"mig":val,"parameter":"Category"})
+            return render(request,"spareapp/find.html",dic)
+    else:
+        return selectf(request)
+
+def chasis(request, val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    dic={"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    if selectf(request)==False:
+        valsearch=request.GET.get("search")
+        if valsearch=="":
+            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
+            dic.update({"spare":alls})
+            return render(request,"spareapp/home.html",dic)
+        else:
+            pr=spare.objects.filter(car_info__transmission__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct() 
+            dic.update({"spare":pr,"mig":val,"parameter":"Chasis"})
+            return render(request,"spareapp/find.html",dic)
+    else:
+        return selectf(request)
 
 # def getCar(request):
 #     id = request.GET.get('id', '')

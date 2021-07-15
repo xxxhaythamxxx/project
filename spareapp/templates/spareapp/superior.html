@@ -43,7 +43,7 @@
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
                     <ul id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
                         {% for atr in atribute|dictsort:"atributeName" %}
-                            <li style="margin:auto;text-align:center;" class=""><input name="check{{atr.atributeName}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li>
+                            <li style="margin:auto;text-align:center;" class=""><input name="check{{atr.atributeName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -52,9 +52,25 @@
             
             <div class="col-lg-5 col-md-5 col-sm-6 col-6 mt-1">
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-success ml-2" onClick="viewPDF()">View</button>
+                    <div style="display: inline-block;" class="">
+                        <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel4" data-toggle="dropdown" href="#">Options</a>
+                        <ul id="headerList4" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel4">            
+                            <!-- {% for atr in atribute|dictsort:"atributeName" %} -->
+                            <!-- <li style="margin:auto;text-align:center;" class=""><input name="check{{atr.atributeName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li> -->
+                            <!-- <li style="margin:auto;text-align:center;" class=""><button class="btn btn-success ml-2" onClick="generatePDF()">PDF</button></li> -->
+                            <!-- <li style="margin:auto;text-align:center;" class=""><button class="btn btn-success ml-2" id="downloadexcel">Excel</button></li> -->
+                            <!-- {% endfor %} -->
+                            <!-- <button class="btn btn-success ml-2 mr-2" onClick="viewPDF()">View</button>
+                            <button class="btn btn-success ml-2 mr-2" onClick="generatePDF()">PDF</button>
+                            <button class="btn btn-success ml-2 mr-2" id="downloadexcel">Excel</button> -->
+                            <li><a class="dropdown-item" href="#" onClick="viewPDF()">View</a></li>
+                            <li><a class="dropdown-item" href="#" onClick="generatePDF()">PDF</a></li>
+                            <li><a class="dropdown-item" href="#" id="downloadexcel">Excel</a></li>
+                        </ul>
+                    </div>
+                    <!-- <button class="btn btn-success ml-2" onClick="viewPDF()">View</button>
                     <button class="btn btn-success ml-2" onClick="generatePDF()">PDF</button>
-                    <button class="btn btn-success ml-2" id="downloadexcel">Excel</button>
+                    <button class="btn btn-success ml-2" id="downloadexcel">Excel</button> -->
                 </div>
             </div>
 
@@ -71,9 +87,10 @@
 
             {% for dim in atribute %}
 
-            <div style="display: none;" id="{{dim.atributeName}}Filter" class="row filterDim">
+            <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
                 <div class="col-lg-6 mt-2">
                     <input class="col-lg-3 atrUnique" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
+                    <button id="{{dim.atributeName}}Button" type="button" class="btn btn-sm btn-danger" data-bs-toggle="popover" data-bs-trigger="focus" data-toggle="popover" title="Valid values" data-bs-content="Valores permitidos">Values</button>
                 </div>
             </div>
 

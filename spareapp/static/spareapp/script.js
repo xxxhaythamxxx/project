@@ -710,10 +710,16 @@ $List2.change(function(){           // Activar filtro de dimensiones
 
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
+        // alert("Aux: "+aux)
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             $("#"+aux+"Filter").show();
+            // alert($("#"+aux+"Min").val())
+            $("#"+aux+"Min").val(1)
         }else{
             $("#"+aux+"Filter").hide();
+            // alert($("#"+aux+"Filter").text())
+            $("#"+aux+"Min").val(null)
+            $("#"+aux+"Max").val(null)
         }
     })
 
@@ -741,7 +747,6 @@ $List2.change(function(){           // Activar filtro de dimensiones
 $List3.change(function(){           // Activar filtro de atributos
 
     var bo = false
-    // alert($(this).find("input").attr("name"))                    checkDiameter
 
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
@@ -749,6 +754,7 @@ $List3.change(function(){           // Activar filtro de atributos
             $("#"+aux+"Filter").show();
         }else{
             $("#"+aux+"Filter").hide();
+            $("#"+aux).val(null)
         }
     })
 
@@ -976,3 +982,7 @@ $("#maxRows").on("change",function(){
         })
     }
 })
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover()
+ })

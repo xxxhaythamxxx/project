@@ -1,6 +1,6 @@
 {% extends "spareapp/base.html" %}
 
-{% block title %} Kmotorshop.com{% endblock %}
+{% block title %} Spare detail {% endblock %}
 
 {% block content %}
 
@@ -29,6 +29,9 @@
                     {% if spare.0.spare_name %}
                     <div>Description</div>
                     {% endif %}
+                    {% if spare.0.note %}
+                    <div>Note</div>
+                    {% endif %}
                     
                 </div>
                 <div class="col-6">
@@ -44,6 +47,10 @@
                     {% if spare.0.spare_name %}
                     <div class="hover"><a href="{% url 'name' spare.0.spare_name %}">{{spare.0.spare_name}}</a></div>
                     {% endif %}
+                    {% if spare.0.note %}
+                    <!-- <div class="hover"><a href="#">{{spare.0.note}}</a></div> -->
+                    <div class="hover">{{spare.0.note}}</div>
+                    {% endif %}
                     <!-- {% if spare.0.shape %}
                     <div class="hover"><a href="{% url 'shape' spare.0.shape %}">{{spare.0.shape}}</a></div>
                     {% endif %} -->
@@ -55,11 +62,27 @@
                 {% if ref.referenceSpare == spare.0.id %}
                 <div class="color p-1 text-white mt-2 radius mb-2" for="">Reference Codes</div>
                     <div class="row">
-                        {% for rf in reference|dictsort:"referenceCode" %}
-                            {% if spare.0.spare_code == rf.referenceSpare.spare_code %}
-                                <div class="hover"><a href="#">{{rf.referenceCode}}</a></div>
-                            {% endif %}
-                        {% endfor %}
+
+                        <div class="col-6">
+                            {% for rf in reference|dictsort:"referenceCode" %}
+                                {% if spare.0.spare_code == rf.referenceSpare.spare_code %}
+                                    <div class="hover"><a href="#">{{rf.referenceNote}}</a></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-4">
+                            {% for rf in reference|dictsort:"referenceCode" %}
+                                {% if spare.0.spare_code == rf.referenceSpare.spare_code %}
+                                    <div class="hover"><a href="#">{{rf.referenceCode}}</a></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        
+
+
+
                     </div>
                 {% endif %}
             {% endfor %}
@@ -88,10 +111,10 @@
         <div class="col-12">
             <div class="row mt-2">
                 <div class="col-2 color text-white p-2" class="col">Year</div>
-                <div class="col-2 color text-white p-2" class="col">Eng No</div>
-                <div class="col-2 color text-white p-2" class="col">Cylinder</div>
+                <div class="col-4 color text-white p-2" class="col">Eng No</div>
+                <div class="col-2 color text-white p-2" class="col">Valve</div>
                 <div class="col-2 color text-white p-2" class="col">Pistons</div>
-                <div class="col-2 color text-white p-2" class="col">Power</div>
+                <!-- <div class="col-2 color text-white p-2" class="col">Power</div> -->
                 <div class="col-2 color text-white p-2" class="col">Chasis</div>
             </div>
         </div>
@@ -111,17 +134,17 @@
                             {% if sp in ob.car_info.all %}
                             <div class="row mt-2">
                                 <div class="col-2">{{sp.carfrom}} - {{sp.carto}}</div>
-                                    <div class="col-2">
-                                        <div class="row">
-                                            {% for en in spare.0.engine_info.all %}
-                                            {% if sp in en.car_engine_info.all %}
-                                            <div class="col-12 hover">
-                                                <a style="color: black;" class="hover" href="{% url 'engine' en.engine_ide %}">{{en.engine_ide}}</a>
-                                            </div>
-                                            {% endif %}
-                                            {% endfor %}
+                                <div class="col-4">
+                                    <div class="row">
+                                        {% for en in spare.0.engine_info.all %}
+                                        {% if sp in en.car_engine_info.all %}
+                                        <div class="col-12 hover">
+                                            <a style="color: black;" class="hover" href="{% url 'engine' en.engine_ide %}">{{en.engine_ide}}</a>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
                                     </div>
+                                </div>
                                 <div class="col-2">
                                     {% for en in spare.0.engine_info.all %}
                                         {% if sp in en.car_engine_info.all %}
@@ -140,7 +163,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </div>
-                                <div class="col-2">
+                                <!-- <div class="col-2">
                                     {% for en in spare.0.engine_info.all %}
                                         {% if sp in en.car_engine_info.all %}
                                         <div class="col-12">
@@ -148,8 +171,9 @@
                                         </div>
                                         {% endif %}
                                     {% endfor %}
-                                </div>
-                                <div class="col-2">{{sp.transmission}}</div>
+                                </div> -->
+                                <!-- <div class="col-2">{{sp.transmission}}</div> -->
+                                <div class="col-2"><a style="color: black;" class="hover" href="{% url 'chasis' sp.transmission %}">{{sp.transmission}}</a></div>
                             </div>
                             {% endif %}
                         </div>

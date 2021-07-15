@@ -34,7 +34,7 @@
                 </div>
                 <!-- El nombre de la página -->
                 <div class="nav-item col-lg-6 col-md-8 col-sm-8 col-6 d-flex justify-content-center">
-                    <a class="navbar-brand text-white" href="/">Kmotorshop.com</a>
+                    <a class="navbar-brand text-white" href="/">Auto Repuestos Interamericana</a>
                 </div>
                 <div class="col-sm-2 col-3 d-block d-sm-none d-none d-sm-block d-md-none">
                     <a class="nav-link" aria-current="page" href="{% url 'detail' %}">
@@ -135,31 +135,16 @@
                     <label class="text-white" for="">Category:</label>
                         <div class="list-category mt-3">
 
-
-                            <div class="accordion" id="accordion">
-                                {% for category in allCategories %}
-                                    <div class="card">
-                                        <div class="card-header color p-2">
-                                            <a class="card-link text-white" data-toggle="collapse" data-parent="#accordion" href="#collapse{{category.id}}">
-                                                {{category.category}}
-                                            </a>
-                                        </div>
-                                    <div id="collapse{{category.id}}" class="collapse">
-                                    {% for sub in allSpares %}
-                                    {% if category.id == sub.spare_category %}
-                                        <div class="card-body blue-soft p-2">
-                                            <a class="" href="{% url 'name' sub.spare_name %}">{{sub.spare_name}}</a>
-                                        </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                    </div>
-                                
+                            {% for category in allCategories %}
+                                <div class="color pt-2 pl-3 pb-2 card-body">
+                                    <a href="{% url 'categoryi' category.category %}" style="color: white;" href="#" class="hover">
+                                        {{category.category}}
+                                    </a>
                                 </div>
-                                {% endfor %}
-                            </div>
+                            {% endfor %}
 
                         </div> 
-                    </div>
+                </div>
             </div>
 
             <!-- Boton para ir a Card Brands -->
