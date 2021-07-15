@@ -85,6 +85,7 @@ def selectf(request):
         # Si se usa el buscador por código de repuesto
         else:   
             valor=request.GET.get("search")
+            bol = False
             if valor:
                 if valor=="":
                     return render(request,"spareapp/home.html",dic)
@@ -94,23 +95,77 @@ def selectf(request):
                     vec = valor.split(" ")
                     # comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
                     todos=spare.objects.all()
-                    for v in vec:
-                        for t in todos:
-                            s=t.spare_code
-                            # br=t.spare_brand
-                            n=t.spare_name
+                    ref=reference.objects.all()
+                    cars=car.objects.all()
+                    contVar = 0
+                    for t in todos:
+                        s=t.spare_code
+                        # br=t.spare_brand
+                        n=t.spare_name
+                        ch=t.car_info
+                        for v in vec:
+                            # ch=t.car_info.transmission
                             if s:
                                 out = s.translate(str.maketrans('', '', '.''-'))
                                 if valor.upper() in out.upper():
-                                    b.append(t)
+                                    # b.append(t)
+                                    bol = True
                                 if v.upper() in out.upper():
-                                    b.append(t)
-                            # if br:
-                            #     if(v.upper() in br.upper()):
-                            #         b.append(t)
+                                    # b.append(t)
+                                    bol = True
                             if n:
                                 if(v.upper() in n.upper()):
-                                    b.append(t)
+                                    # b.append(t)
+                                    bol = True
+                            for r in ref:
+                                sr=r.referenceCode
+                                if sr:
+                                    out = sr.translate(str.maketrans('', '', '.''-'))
+                                    if valor.upper() in out.upper():
+                                        if s == r.referenceSpare.spare_code:
+                                            # b.append(t)
+                                            bol = True
+                                    if v.upper() in out.upper():
+                                        if s == r.referenceSpare.spare_code:
+                                            # b.append(t)
+                                            bol = True
+                            for r in cars:
+                                sr=r.transmission
+                                if sr:
+                                    out = sr.translate(str.maketrans('', '', '.''-'))
+                                    if valor.upper() in out.upper():
+                                        # if ch == r:
+                                        for to in t.car_info.all():
+                                            if to.transmission in r.transmission:
+                                                # b.append(t)
+                                                bol = True
+                                    if v.upper() in out.upper():
+                                        # if ch == r:
+                                        for to in t.car_info.all():
+                                            if to.transmission in r.transmission:
+                                                # b.append(t)
+                                                bol = True
+                            
+                            if bol == True:
+                                contVar=contVar+1
+                            bol = False
+                        
+                        if contVar == len(vec):
+                            b.append(t)
+
+                        # print("Spare")
+                        # print(s)
+                        # print("setb")
+                        # print(len((set(b))))
+                        # print(b)
+                        # print("lenVec")
+                        # print(len(vec))
+                        # print(vec)
+                        # print("ContVar")
+                        # print(contVar)
+                        # print("----------------------------------------------")
+                        contVar = 0
+                            
                     b = (set(b))
                     dic.update({"spare":b,"mig":valor,"parameter":"Parameters"})
                     return render(request,"spareapp/find.html",dic)
