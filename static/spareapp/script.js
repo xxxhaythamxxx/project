@@ -385,7 +385,7 @@ function viewPDF(){
         var value = $(this).css("position", "static");
       });
     var opt = {
-        margin:       1,
+        margin:       0.5,
         filename:     'report.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
@@ -437,6 +437,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=dimensions]").prop("checked",true);
     $("input:checkbox[name=atributes]").prop("checked",true);
     $("input:checkbox[name=category]").prop("checked",true);
+    $("input:checkbox[name=priceM]").prop("checked",false);
+    $("input:checkbox[name=priceD]").prop("checked",false);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",true);
@@ -456,6 +458,10 @@ document.getElementById("default").addEventListener("click",function(){
 
     $("#photo").show();
     $("table td:nth-child("+($("#photo").index() + 1)+")").show();
+    $("#priceM").hide();
+    $("table td:nth-child("+($("#priceM").index() + 1)+")").hide();
+    $("#priceD").hide();
+    $("table td:nth-child("+($("#priceD").index() + 1)+")").hide();
     $("#code").show();
     $("table td:nth-child("+($("#code").index() + 1)+")").show();
     $("#brand").show();
@@ -550,6 +556,8 @@ $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",true);
 $("input:checkbox[name=atributes]").prop("checked",true);
 $("input:checkbox[name=reference]").prop("checked",true);
+$("input:checkbox[name=priceM]").prop("checked",false);
+$("input:checkbox[name=priceD]").prop("checked",false);
 $("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=check]").prop("checked",true);
 $("input:checkbox[name=ecode]").prop("checked",true);
@@ -567,6 +575,8 @@ $List.change(function(){
     let shapei = $("#shape").index();
     let dimensionsi = $("#dimensions").index();
     let atributesi = $("#atributes").index();
+    let priceDi = $("#priceD").index();
+    let priceMi = $("#priceM").index();
     let referencei = $("#reference").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
@@ -579,6 +589,22 @@ $List.change(function(){
     }else{
         $("#detail-id").hide();
         $("table td:nth-child("+(detailidi + 1)+")").hide();
+    }
+
+    if ($("input:checkbox[name=priceM]:checked").val()){
+        $("#priceM").show();
+        $("table td:nth-child("+(priceMi + 1)+")").show();
+    }else{
+        $("#priceM").hide();
+        $("table td:nth-child("+(priceMi + 1)+")").hide();
+    }
+
+    if ($("input:checkbox[name=priceD]:checked").val()){
+        $("#priceD").show();
+        $("table td:nth-child("+(priceDi + 1)+")").show();
+    }else{
+        $("#priceD").hide();
+        $("table td:nth-child("+(priceDi + 1)+")").hide();
     }
 
     if ($("input:checkbox[name=photo]:checked").val()){
@@ -747,15 +773,86 @@ $List2.change(function(){           // Activar filtro de dimensiones
 $List3.change(function(){           // Activar filtro de atributos
 
     var bo = false
+    var atrName = []
+    var atrVal = []
+    var uniqName = []
+    var uniqVal = []
+    var atrContent = []
 
+    $("table tr").find("td").each(function(){
+
+        if($(this).index()==$("#atributes").index()){
+            $(this).find("a").each(function(){
+                atrContent.push($(this).text())
+                // atrAux = $(this).text().split(": ")
+                // atrName.push(atrAux[0])
+                // atrVal.push(atrAux[1])
+            })
+        }
+    })
+    // uniqName = Array.from(new Set(atrName))
+    // alert(uniqName)
+    // for (var i= 0; i<uniqName.length; i++){
+    //     for (var j= 0; j<atrName.length; i++){
+    //         if (uniqName[i] == atrName[j]){
+    //             uniqVal
+    //         }
+    //     }
+    // }
+    // alert("AttrContent: "+atrContent)
+    var atrValues = []
+    var spl
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
+        // alert("Aux: "+aux)
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             $("#"+aux+"Filter").show();
+            // alert(aux)
+            // for (var i=0; i<atrContent.length; i++){
+            //     spl = atrContent[i].split(": ")
+            //     if(aux.toLowerCase() == spl[0].toLowerCase()){     // Si los atributos se llaman igual
+            //         atrValues.push(spl[1])
+            //     }
+            // }
+            // alert("Final: "+atrValues)
+            // if($("button").attr("id",aux+"Button")){
+            //     $("button").attr("data-bs-content",atrValues)
+            // }
+            
+            // atrValues = []
+            // alert("Fin primero")
         }else{
             $("#"+aux+"Filter").hide();
             $("#"+aux).val(null)
         }
+        
+        for (var i=0; i<atrContent.length; i++){
+            spl = atrContent[i].split(": ")
+            if(aux.toLowerCase() == spl[0].toLowerCase()){     // Si los atributos se llaman igual
+                atrValues.push(spl[1])
+            }
+        }
+        // alert("atrValues: "+atrValues)
+
+        // alert("Aux: "+aux)
+        // alert($(this).val())
+
+        for(var i = atrValues.length -1; i >=0; i--){
+            if(atrValues.indexOf(atrValues[i]) !== i) atrValues.splice(i,1);
+        }
+
+        $("#"+aux+"Filter button").attr("data-bs-content",atrValues)
+
+        // if($("button").attr("id",aux+"Button")){
+        //     alert("This id: "+$(this).val())
+        //     if($(this).attr("id",aux) == $("button").attr("id",aux+"Button")){
+        //         alert("Agrego "+atrValues+" al boton con id: "+aux+"Button")
+        //         $("button").attr("data-bs-content",atrValues)
+        //     }
+        // }
+        // alert("Agrego al boton: "+aux+"Button")
+        atrValues = []
+        
     })
 
     $(this).find("input").each(function(){

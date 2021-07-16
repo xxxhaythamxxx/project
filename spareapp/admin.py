@@ -35,6 +35,12 @@ class vendorAdmin(admin.ModelAdmin):
     list_filter=("vendorName",)
     ordering = ('vendorName',)
 
+class categoryAdmin(admin.ModelAdmin):
+    list_display=("category",)
+    search_fields=("category",)
+    # list_filter=("category",)
+    ordering = ('category',)
+
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
     list_filter=("atributeName",)
@@ -127,7 +133,7 @@ class referenceAdmin(admin.ModelAdmin):
 admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)
-admin.site.register(category)
+admin.site.register(category,categoryAdmin)
 admin.site.register(vendor,vendorAdmin)
 admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)

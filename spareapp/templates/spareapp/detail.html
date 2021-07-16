@@ -27,6 +27,8 @@
                         <li style="margin:auto;text-align:center;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="code" class="ml-2" type="checkbox"><label class="ml-1">Code</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="ml-1">Dimensions</label></li>
+                        <li style="margin:auto;text-align:center;" class=""><input name="priceM" class="ml-2" type="checkbox"><label class="ml-1">Price Major</label></li>
+                        <li style="margin:auto;text-align:center;" class=""><input name="priceD" class="ml-2" type="checkbox"><label class="ml-1">Price Detail</label></li>
                         {% if parameter == 'Engine code' %}
                         <li style="margin:auto;text-align:center;" class=""><input name="ecode" class="ml-2" type="checkbox"><label class="ml-1">Engine code</label></li>
                         {% endif %}
@@ -60,9 +62,14 @@
             </div>
             <div class="col-lg-5 col-md-5 col-sm-6 col-6 mt-1">
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-success ml-2" onClick="viewPDF()">View</button>
-                    <button class="btn btn-success ml-2" onClick="generatePDF()">PDF</button>
-                    <button class="btn btn-success ml-2" id="downloadexcel">Excel</button>
+                    <div style="display: inline-block;" class="">
+                        <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel4" data-toggle="dropdown" href="#">Options</a>
+                        <ul id="headerList4" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel4">            
+                            <li><a class="dropdown-item" href="#" onClick="viewPDF()">View</a></li>
+                            <li><a class="dropdown-item" href="#" onClick="generatePDF()">PDF</a></li>
+                            <li><a class="dropdown-item" href="#" id="downloadexcel">Excel</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -106,11 +113,13 @@
                 <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
                 <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
                 <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
-                <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+                <!-- <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th> -->
                 <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
                 <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
                 <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
                 <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
+                <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;">Price Major</th>
+                <th id="priceD" class="trsup color" style="position: sticky;top: 70;display: none;">Price Det.</th>
                 <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
                 {% if parameter == 'Engine code' %}
                 <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
@@ -144,14 +153,14 @@
                 <td><a href="#"></a></td>
             {% endif %}
 
-            {% if br.car_info.all %}
+            <!-- {% if br.car_info.all %}
             <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
 
             {% if br.spare_category %}
-            <td><a href="#">{{br.spare_category}}</a></td>
+            <td><a href="{% url 'categoryi' br.spare_category %}">{{br.spare_category}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
@@ -166,7 +175,7 @@
                 <td>
                     {% for dim in allDimensions %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
-                        <div><a id="{{dim.atributeName}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}} mm</a></div>
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}} mm</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -178,12 +187,24 @@
                 <td>
                     {% for dim in allAtributes %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <div><a id="{{dim.atributeName}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
             {% else %}
                 <td><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.price_m %}
+            <td style="display: none;"><a href="#">{{br.price_m}}</a></td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.price_d %}
+            <td style="display: none;"><a href="#">{{br.price_d}}</a></td>
+            {% else %}
+            <td style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.spare_photo %}
