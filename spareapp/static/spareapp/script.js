@@ -784,58 +784,36 @@ $List3.change(function(){           // Activar filtro de atributos
         if($(this).index()==$("#atributes").index()){
             $(this).find("a").each(function(){
                 atrContent.push($(this).text())
-                // atrAux = $(this).text().split(": ")
-                // atrName.push(atrAux[0])
-                // atrVal.push(atrAux[1])
             })
         }
     })
-    // uniqName = Array.from(new Set(atrName))
-    // alert(uniqName)
-    // for (var i= 0; i<uniqName.length; i++){
-    //     for (var j= 0; j<atrName.length; i++){
-    //         if (uniqName[i] == atrName[j]){
-    //             uniqVal
-    //         }
-    //     }
-    // }
-    // alert("AttrContent: "+atrContent)
     var atrValues = []
     var spl
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
-        // alert("Aux: "+aux)
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             $("#"+aux+"Filter").show();
-            // alert(aux)
-            // for (var i=0; i<atrContent.length; i++){
-            //     spl = atrContent[i].split(": ")
-            //     if(aux.toLowerCase() == spl[0].toLowerCase()){     // Si los atributos se llaman igual
-            //         atrValues.push(spl[1])
-            //     }
-            // }
-            // alert("Final: "+atrValues)
-            // if($("button").attr("id",aux+"Button")){
-            //     $("button").attr("data-bs-content",atrValues)
-            // }
-            
-            // atrValues = []
-            // alert("Fin primero")
         }else{
             $("#"+aux+"Filter").hide();
             $("#"+aux).val(null)
         }
-        
+        // alert("Aux: "+aux.toLowerCase())
+        var spl1 = ""
         for (var i=0; i<atrContent.length; i++){
             spl = atrContent[i].split(": ")
-            if(aux.toLowerCase() == spl[0].toLowerCase()){     // Si los atributos se llaman igual
+            // alert(spl[0])
+            sep = spl[0].split(" ")
+            // alert("Sep: "+sep)
+            for(var j=0;j<sep.length;j++){
+                spl1=spl1+""+sep[j]
+            }
+            // alert("spl 0: "+spl1.toLowerCase())
+            // alert("spl1: "+spl1)
+            if(aux.toLowerCase() == spl1.toLowerCase()){     // Si los atributos se llaman igual
                 atrValues.push(spl[1])
             }
+            spl1=""
         }
-        // alert("atrValues: "+atrValues)
-
-        // alert("Aux: "+aux)
-        // alert($(this).val())
 
         for(var i = atrValues.length -1; i >=0; i--){
             if(atrValues.indexOf(atrValues[i]) !== i) atrValues.splice(i,1);
@@ -843,14 +821,6 @@ $List3.change(function(){           // Activar filtro de atributos
 
         $("#"+aux+"Filter button").attr("data-bs-content",atrValues)
 
-        // if($("button").attr("id",aux+"Button")){
-        //     alert("This id: "+$(this).val())
-        //     if($(this).attr("id",aux) == $("button").attr("id",aux+"Button")){
-        //         alert("Agrego "+atrValues+" al boton con id: "+aux+"Button")
-        //         $("button").attr("data-bs-content",atrValues)
-        //     }
-        // }
-        // alert("Agrego al boton: "+aux+"Button")
         atrValues = []
         
     })

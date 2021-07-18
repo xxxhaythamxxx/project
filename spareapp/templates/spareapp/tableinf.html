@@ -4,7 +4,7 @@
         <tr class="dnd-moved">
 
             {% if br.spare_code %}
-            <td><a href="{% url 'sparedetails' br.spare_code %}">{{br.spare_code}}</a></td>
+            <td><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
             {% else %}
             <td><a href="#"></a></td>
             {% endif %}
@@ -13,7 +13,7 @@
             <td>
                 {% for dim in reference|slice:":5" %}
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
-                    <div><a href="{% url 'sparedetails' br.spare_code %}">{{dim.referenceCode}}</a></div>
+                    <div><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
                     {% endif %}
                 {% endfor %}
             </td>
@@ -55,7 +55,7 @@
                 <td>
                     {% for dim in allAtributes %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="#">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>

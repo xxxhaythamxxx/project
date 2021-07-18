@@ -9,10 +9,25 @@
         <div class="col-12 color p-2 text-white d-flex justify-content-center">
             {{spare.0.spare_name}} - {{spare.0.spare_brand}}
         </div>
-        <div class="imagecont col-6 mt-2 d-flex justify-content-center">
-            <div style="background-image: url('/media/{{spare.0.spare_photo}}');"" class="mimage"></div>
+        <div class="col-lg-3 mt-2">
+            <div class="imagecont d-flex justify-content-center">
+                <div style="background-image: url('/media/{{spare.0.spare_photo}}');"" class="mimage"></div>
+            </div>
+            <div class="container">
+                <div class="row mt-2">
+                    <div class="col-lg-6 d-flex justify-content-lg-start">
+                        <!-- <button class="btn btn-primary pl-4 pr-4">Prev</button> -->
+                        <a href="{% url 'prev' spare.0.spare_code spareAux %}" class="btn btn-primary pl-4 pr-4">Prev</a>
+                    </div>
+                    <div class="col-lg-6 d-flex justify-content-lg-end">
+                        <!-- <button class="btn btn-primary pl-4 pr-4">Next</button> -->
+                        <a href="{% url 'next' spare.0.spare_code spareAux %}" class="btn btn-primary pl-4 pr-4">Next</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="conteni col-6">
+        
+        <div class="conteni col-9">
             <!-- Especificaciones -->
             <div class="color p-1 text-white mt-2 radius mb-2" for="">Especification</div>
             <div class="row">
@@ -93,7 +108,7 @@
                  <div class="row">
                     <div class="col-4">
                             {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
-                            <div class="hover"><a href="{% url 'sparedetails' sp.spare_code %}">{{sp.spare_code}}</a></div>
+                            <div class="hover"><a href="{% url 'sparedetails' sp.spare_code spare %}">{{sp.spare_code}}</a></div>
                             {% endfor %}
                     </div>
                     <div class="col-6">

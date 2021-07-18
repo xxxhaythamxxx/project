@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.home,name='home'),
     path('find', views.find,name='find'),
     path('chaining/', include('smart_selects.urls')),
-    path("sparedetails/<str:val>",views.sparedetails,name="sparedetails"),
+    path("sparedetails/<str:val>?<str:val2>",views.sparedetails,name="sparedetails"),
     path("brand/<str:val>",views.brand,name="brand"),
     path("name/<str:val>",views.name,name="name"),
     path("manuf/<str:val>",views.manuf,name="manuf"),
@@ -19,10 +19,13 @@ urlpatterns = [
     path('detail',views.detail,name='detail'),
     path("shape/<str:val>",views.shape,name="shape"),
     path("longi/<str:val1>?<str:val2>",views.longi,name="longi"),
+    path("atributes/<str:val1>?<str:val2>",views.atributes,name="atributes"),
     path("carBrands",views.carBrands,name="carBrands"),
     # path("categoryi",views.categoryi,name="categoryi"),
     path("categoryi/<str:val>",views.categoryi,name="categoryi"),
     path("chasis/<str:val>",views.chasis,name="chasis"),
+    path("prev/<str:val>?<str:val2>",views.prev,name="prev"),
+    path("next/<str:val>?<str:val2>",views.next,name="next"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]
