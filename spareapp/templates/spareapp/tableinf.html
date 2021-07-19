@@ -43,7 +43,7 @@
                 <td>
                     {% for dim in allDimensions %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
-                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}} mm</a></div>
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}} mm</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -55,7 +55,7 @@
                 <td>
                     {% for dim in allAtributes %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}}: {{dim.atributeVal}}</a></div>
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}}</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
