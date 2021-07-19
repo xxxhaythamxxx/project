@@ -57,7 +57,6 @@ function measureFilter(){
         
         $(this).find("input").each(function(){
             var comp = $(this).val().toLowerCase()                                // 1 - 5 - off - on
-            // alert("Comp: "+comp)
             if(comp){
                 listadoAll++
             }
@@ -81,28 +80,35 @@ function measureFilter(){
 
         $('#myTable tr a').each(function(){
             if($(this).attr("id")===(dimAtribute+"Value")){
-                var text = $(this).text();                          // Diameter: 40.5 - Atr1: off
-                // alert("text: "+text)
+                var text = $(this).text();                          // Diameter: 40.5 mm - Atr1: off
                 var varSplit = text.split(": ")[1]
-                // alert("split: "+varSplit)
-                var VarFloat = parseFloat(varSplit)              // 40.5 - off (Float)
-                // alert("VarFloat: "+VarFloat)
-                var varString = varSplit.toLowerCase()                         // 40.5 - off (String)
-                // alert("varString: "+varString)
-                // alert("varString: "+varString)
+                var auxS = text.split(" ")
+                if(auxS[auxS.length-1] == "mm"){ // si es una dimension
+                    var auxSS = text.split(auxS[auxS.length-2])
+                    var varSplit = text.split(auxSS[0])
+                    varSplit = varSplit[1].split(" ")
+                    var VarFloat = parseFloat(varSplit[0])              // 40.5 - off (Float)
+                }else{                              // si es un atributo
+                    var auxSS = text.split(auxS[auxS.length-1])
+                    var varSplit = text.split(auxSS[0])
+                    var varString = varSplit[1].toLowerCase()                         // 40.5 - off (String)
+                }
                 if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
                     indexDiameter=$(this).text()
                     listado.push(indexDiameter)
                 }
-                if(varString===AtributeString){                     // Almaceno en listado los atributos que se encuentren en el input
-                    // alert("varString: "+varString)
-                    indexDiameter=$(this).text()
-                    listado.push(indexDiameter)
+                
+                if(AtributeString){
+                    if(varString.indexOf(AtributeString) > -1){
+                        indexDiameter=$(this).text()
+                        listado.push(indexDiameter)
+                    }
                 }
             }
         })
     })
 
+    // alert(listado)
     for(var i = listado.length -1; i >=0; i--){
         if(listado.indexOf(listado[i]) !== i) listado.splice(i,1);
     }
@@ -784,58 +790,43 @@ $List3.change(function(){           // Activar filtro de atributos
         if($(this).index()==$("#atributes").index()){
             $(this).find("a").each(function(){
                 atrContent.push($(this).text())
-                // atrAux = $(this).text().split(": ")
-                // atrName.push(atrAux[0])
-                // atrVal.push(atrAux[1])
             })
         }
     })
-    // uniqName = Array.from(new Set(atrName))
-    // alert(uniqName)
-    // for (var i= 0; i<uniqName.length; i++){
-    //     for (var j= 0; j<atrName.length; i++){
-    //         if (uniqName[i] == atrName[j]){
-    //             uniqVal
-    //         }
-    //     }
-    // }
-    // alert("AttrContent: "+atrContent)
     var atrValues = []
     var spl
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
-        // alert("Aux: "+aux)
+        // alert("Aux: "+aux)      // Atr
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             $("#"+aux+"Filter").show();
-            // alert(aux)
-            // for (var i=0; i<atrContent.length; i++){
-            //     spl = atrContent[i].split(": ")
-            //     if(aux.toLowerCase() == spl[0].toLowerCase()){     // Si los atributos se llaman igual
-            //         atrValues.push(spl[1])
-            //     }
-            // }
-            // alert("Final: "+atrValues)
-            // if($("button").attr("id",aux+"Button")){
-            //     $("button").attr("data-bs-content",atrValues)
-            // }
-            
-            // atrValues = []
-            // alert("Fin primero")
         }else{
             $("#"+aux+"Filter").hide();
             $("#"+aux).val(null)
         }
-        
+        var spl1 = ""
+        // alert("Conteni: "+atrContent)   // Atr: on,material: FOAM,Atr: on
         for (var i=0; i<atrContent.length; i++){
             spl = atrContent[i].split(": ")
-            if(aux.toLowerCase() == spl[0].toLowerCase()){     // Si los atributos se llaman igual
+            auxFin = atrContent[i].split(" ")
+            // alert(auxFin[auxFin.length-1])       // on - down - FOAM
+            auxIni = atrContent[i].split(auxFin[auxFin.length-1])
+            // alert(auxIni)                           // Atr , - material , - El Atr ,
+            auxS = auxIni[0].split(" ")
+            // alert("Spl: "+spl)          // Atr,on - El Atr,down
+            // alert(spl[0])            // Atr - El Atr
+            sep = spl[0].split(" ")
+            // alert("Sep: "+sep)      // Atr - El,Atr
+            for(var j=0;j<sep.length;j++){
+                spl1=spl1+""+sep[j]
+            }
+            // alert("spl 0: "+spl1.toLowerCase())
+            if(aux.toLowerCase() == spl1.toLowerCase()){     // Si los atributos se llaman igual
+                // alert("Entra")
                 atrValues.push(spl[1])
             }
+            spl1=""
         }
-        // alert("atrValues: "+atrValues)
-
-        // alert("Aux: "+aux)
-        // alert($(this).val())
 
         for(var i = atrValues.length -1; i >=0; i--){
             if(atrValues.indexOf(atrValues[i]) !== i) atrValues.splice(i,1);
@@ -843,14 +834,6 @@ $List3.change(function(){           // Activar filtro de atributos
 
         $("#"+aux+"Filter button").attr("data-bs-content",atrValues)
 
-        // if($("button").attr("id",aux+"Button")){
-        //     alert("This id: "+$(this).val())
-        //     if($(this).attr("id",aux) == $("button").attr("id",aux+"Button")){
-        //         alert("Agrego "+atrValues+" al boton con id: "+aux+"Button")
-        //         $("button").attr("data-bs-content",atrValues)
-        //     }
-        // }
-        // alert("Agrego al boton: "+aux+"Button")
         atrValues = []
         
     })

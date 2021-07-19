@@ -97,6 +97,7 @@ def selectf(request):
                     todos=spare.objects.all()
                     ref=reference.objects.all()
                     cars=car.objects.all()
+                    engines=engine.objects.all()
                     contVar = 0
                     for t in todos:
                         s=t.spare_code
@@ -152,6 +153,40 @@ def selectf(request):
                             if bol == True:
                                 contVar=contVar+1
                             bol = False
+                            
+                            # -----------------------------------------------------
+
+                            for r in engines:
+                                # transmission
+                                sr=r.engine_ide
+                                # car_manufacturer
+                                # man=r.car_manufacturer
+                                if sr:
+                                    out = sr.translate(str.maketrans('', '', '.''-'))
+                                    if valor.upper() in out.upper():
+                                        for to in t.engine_info.all():
+                                            if to.engine_ide in r.engine_ide:
+                                                bol = True
+                                    if v.upper() in out.upper():
+                                        for to in t.engine_info.all():
+                                            if to.engine_ide in r.engine_ide:
+                                                bol = True
+                                # if man:
+                                #     out = man.translate(str.maketrans('', '', '.''-'))
+                                #     if out.upper().startswith(valor.upper()):
+                                #         for to in t.car_info.all():
+                                #             if to.car_manufacturer in r.car_manufacturer:
+                                #                 bol = True
+                                #     if out.upper().startswith(v.upper()):
+                                #         for to in t.car_info.all():
+                                #             if to.car_manufacturer in r.car_manufacturer:
+                                #                 bol = True
+                            
+                            if bol == True:
+                                contVar=contVar+1
+                            bol = False
+
+                            # --------------------------------------------------------------
                         
                         if contVar == len(vec):
                             b.append(t)

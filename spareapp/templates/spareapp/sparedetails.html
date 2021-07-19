@@ -7,7 +7,7 @@
 <div id="invoice" class="resultadoBusqueda">
     <div class="row">
         <div class="col-12 color p-2 text-white d-flex justify-content-center">
-            {{spare.0.spare_name}} - {{spare.0.spare_brand}}
+            {{spare.0.spare_code}} - {{spare.0.spare_name}}
         </div>
         <div class="col-lg-3 mt-2">
             <div class="imagecont d-flex justify-content-center">
@@ -31,7 +31,7 @@
             <!-- Especificaciones -->
             <div class="color p-1 text-white mt-2 radius mb-2" for="">Especification</div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-5">
                     {% if spare.0.spare_code %}
                     <div>Code</div>
                     {% endif %}
@@ -78,18 +78,20 @@
                 <div class="color p-1 text-white mt-2 radius mb-2" for="">Reference Codes</div>
                     <div class="row">
 
-                        <div class="col-6">
+                        
+
+                        <div class="col-5">
                             {% for rf in reference|dictsort:"referenceCode" %}
                                 {% if spare.0.spare_code == rf.referenceSpare.spare_code %}
-                                    <div class="hover"><a href="#">{{rf.referenceNote}}</a></div>
+                                    <div class="hover"><a href="#">{{rf.referenceCode}}</a></div>
                                 {% endif %}
                             {% endfor %}
                         </div>
 
-                        <div class="col-4">
+                        <div class="col-6">
                             {% for rf in reference|dictsort:"referenceCode" %}
                                 {% if spare.0.spare_code == rf.referenceSpare.spare_code %}
-                                    <div class="hover"><a href="#">{{rf.referenceCode}}</a></div>
+                                    <div class="hover"><a href="#">{{rf.referenceNote}}</a></div>
                                 {% endif %}
                             {% endfor %}
                         </div>
@@ -106,7 +108,7 @@
              {% if spare.0.spare_spare.all %}
              <div class="color p-1 text-white mt-2 radius mb-2" for="">Spare targets</div>
                  <div class="row">
-                    <div class="col-4">
+                    <div class="col-5">
                             {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
                             <div class="hover"><a href="{% url 'sparedetails' sp.spare_code spare %}">{{sp.spare_code}}</a></div>
                             {% endfor %}
