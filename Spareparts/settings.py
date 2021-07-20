@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-bf_=3uldbt4lpm8ack11r66ov-7wmcqxir8727h80ft++f1r8!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['52.53.153.148','13.52.254.176','localhost']
+ALLOWED_HOSTS = ['54.176.43.80','localhost']
 
 
 # Application definition
@@ -141,6 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CART_SESSION_ID = 'cart'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

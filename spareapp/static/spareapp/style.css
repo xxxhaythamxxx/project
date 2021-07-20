@@ -71,7 +71,7 @@
 /* Para darle padding a las cabeceras de la tabla */
 .trsup {
     border-radius: 3px;
-    padding: 10px;
+    padding: 10px 0px;
 }
 .invoice {
     width: 100%;

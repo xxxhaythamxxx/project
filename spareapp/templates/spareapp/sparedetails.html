@@ -129,7 +129,8 @@
             <div class="row mt-2">
                 <div class="col-2 color text-white p-2" class="col">Year</div>
                 <div class="col-2 color text-white p-2" class="col">Chasis</div>
-                <div class="col-4 color text-white p-2" class="col">Eng No</div>
+                <div class="col-2 color text-white p-2" class="col">Eng No</div>
+                <div class="col-2 color text-white p-2" class="col">Litres</div>
                 <div class="col-2 color text-white p-2" class="col">Pistons</div>
                 <div class="col-2 color text-white p-2" class="col">Valve</div>
                 <!-- <div class="col-2 color text-white p-2" class="col">Power</div> -->
@@ -152,7 +153,7 @@
                             <div class="row mt-2">
                                 <div class="col-2">{{sp.carfrom}} - {{sp.carto}}</div>
                                 <div class="col-2"><a style="color: black;" class="hover" href="{% url 'chasis' sp.transmission %}">{{sp.transmission}}</a></div>
-                                <div class="col-4">
+                                <div class="col-2">
                                     <div class="row">
                                         {% for en in spare.0.engine_info.all %}
                                         {% if sp in en.car_engine_info.all %}
@@ -163,6 +164,19 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+
+                                <div class="col-2">
+                                    <div class="row">
+                                        {% for en in spare.0.engine_info.all %}
+                                        {% if sp in en.car_engine_info.all %}
+                                        <div class="col-12 hover">
+                                            <a style="color: black;" class="hover" href="#">{{en.engine_l}}</a>
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
                                 <div class="col-2">
                                     {% for en in spare.0.engine_info.all %}
                                         {% if sp in en.car_engine_info.all %}

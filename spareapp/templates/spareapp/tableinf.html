@@ -1,16 +1,16 @@
 <html>
     <tbody id="myTable">
         {% for br in spare %}
-        <tr class="dnd-moved">
+        <tr class="dnd-moved text-left">
 
             {% if br.spare_code %}
-            <td><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
+            <td class="pl-3 pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if reference %}
-            <td>
+            <td class="pl-3 pr-0">
                 {% for dim in reference|slice:":5" %}
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
                     <div><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
@@ -18,7 +18,7 @@
                 {% endfor %}
             </td>
             {% else %}
-                <td><a href="#"></a></td>
+                <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             <!-- {% if br.car_info.all %}
@@ -28,19 +28,19 @@
             {% endif %} -->
 
             {% if br.spare_category %}
-            <td><a href="{% url 'categoryi' br.spare_category %}">{{br.spare_category}}</a></td>
+            <td class="pl-3 pr-0"><a href="{% url 'categoryi' br.spare_category %}">{{br.spare_category}}</a></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if br.spare_name %}
-            <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
+            <td class="pl-3 pr-0"><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if allDimensions %}
-                <td>
+                <td class="pl-3 pr-0">
                     {% for dim in allDimensions %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
                         <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}} mm</a></div>
@@ -48,11 +48,11 @@
                     {% endfor %}
                 </td>
             {% else %}
-                <td><a href="#"></a></td>
+                <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if allAtributes %}
-                <td>
+                <td class="pl-3 pr-0">
                     {% for dim in allAtributes %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
                         <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}}</a></div>
@@ -60,33 +60,33 @@
                     {% endfor %}
                 </td>
             {% else %}
-                <td><a href="#"></a></td>
+                <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_m %}
-            <td style="display: none;"><a href="#">{{br.price_m}}</a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#">{{br.price_m}}</a></td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_d %}
-            <td style="display: none;"><a href="#">{{br.price_d}}</a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#">{{br.price_d}}</a></td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.spare_photo %}
-            <td><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            <td class="pl-3 pr-0"><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
             
             {% if parameter == 'Engine code' %}
-            <td><a href="#">{{mig}}</a></td>
+            <td class="pl-3 pr-0"><a href="#">{{mig}}</a></td>
             {% endif %}
 
             {% if br.spare_vendor.all %}
-            <td style="display: none;">
+            <td class="pl-3 pr-0" style="display: none;">
                 {% for dim in allVendors %}
                     {% for sp in br.spare_vendor.all %}
 
@@ -98,7 +98,7 @@
                 {% endfor %}
             </td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
             
             <td><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
