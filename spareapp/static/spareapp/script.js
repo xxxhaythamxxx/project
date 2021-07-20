@@ -808,26 +808,32 @@ $List3.change(function(){           // Activar filtro de atributos
         // alert("Conteni: "+atrContent)   // Atr: on,material: FOAM,Atr: on
         for (var i=0; i<atrContent.length; i++){
             spl = atrContent[i].split(": ")
-            auxFin = atrContent[i].split(" ")
+            auxFin = atrContent[i].split(" ")       // Nuevo
             // alert(auxFin[auxFin.length-1])       // on - down - FOAM
-            auxIni = atrContent[i].split(auxFin[auxFin.length-1])
-            // alert(auxIni)                           // Atr , - material , - El Atr ,
-            auxS = auxIni[0].split(" ")
+            auxIni = atrContent[i].split(" "+auxFin[auxFin.length-1])   // Nuevo
+            // alert(auxIni)                           // Atr, - material, - El Atr,
+            // Eliminar a auxIni solamente el ultimo espacio en blanco
+            sep = auxIni[0].split(" ")     // Nuevo
+            // alert(auxS)             // Atr - material - El,Atr -
+
             // alert("Spl: "+spl)          // Atr,on - El Atr,down
             // alert(spl[0])            // Atr - El Atr
-            sep = spl[0].split(" ")
+            // sep = spl[0].split(" ")
             // alert("Sep: "+sep)      // Atr - El,Atr
             for(var j=0;j<sep.length;j++){
                 spl1=spl1+""+sep[j]
             }
+            // alert("Aux: "+aux)
+            // alert("spl1: "+spl1)
+            // alert("Valor viejo: "+spl[1]+" valor nuevo: "+auxFin[auxFin.length-1])
             // alert("spl 0: "+spl1.toLowerCase())
             if(aux.toLowerCase() == spl1.toLowerCase()){     // Si los atributos se llaman igual
                 // alert("Entra")
-                atrValues.push(spl[1])
+                atrValues.push(auxFin[auxFin.length-1])
             }
             spl1=""
         }
-
+        // alert(atrValues)
         for(var i = atrValues.length -1; i >=0; i--){
             if(atrValues.indexOf(atrValues[i]) !== i) atrValues.splice(i,1);
         }
