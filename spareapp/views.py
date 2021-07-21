@@ -93,6 +93,8 @@ def selectf(request):
                     # Compara el codigoRepuesto con valor
                     b=[]
                     vec = valor.split(" ")
+                    print("----------------------------------------------------")
+                    print(vec)
                     # comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
                     todos=spare.objects.all()
                     ref=reference.objects.all()
@@ -110,6 +112,8 @@ def selectf(request):
                                 if valor.upper() in out.upper():
                                     bol = True
                                 if v.upper() in out.upper():
+                                    bol = True
+                                if v.upper() in s.upper():
                                     bol = True
                             if n:
                                 out = n.split(" ")
@@ -278,7 +282,35 @@ def sparedetails(request,val,val2):
             pr=spare.objects.filter(spare_code=val).order_by("spare_name","spare_code","spare_brand")
             ar=spare.objects.values("spare_code","car_info__car_manufacturer").filter(spare_code=val).distinct()
             spareaux = val2
-            dic.update({"spareAux":spareaux,"spare":pr,"spareReference":ar})
+            valor=spareaux.lstrip("<QuerySet [spare:")
+
+            valor2=valor.rstrip("]>")
+            characters = "<>"
+            valor = ''.join( x for x in valor2 if x not in characters)
+
+            line= valor.replace(" spare: ", "")
+            line= line.replace("{spare: ", "")
+            line=line.rstrip("}")
+            
+            
+            vector=line.split(",")
+            i=0
+            
+            for v in vector:
+                if val == v.split(" ")[0]:
+                    valAux=(i)
+                i=i+1
+
+            i=0
+            for v in vector:
+                if i == valAux:
+                    codeAux=v.split(" ")[0]
+                i=i+1
+            
+            pr=spare.objects.filter(spare_code=codeAux).order_by("spare_name","spare_code","spare_brand")
+            dbTotal = len(vector)
+            dbActual = valAux+1
+            dic.update({"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
             return render(request,"spareapp/sparedetails.html",dic)
     else:
         return selectf(request)
@@ -744,8 +776,9 @@ def prev(request,val,val2):
                 i=i+1
             
             pr=spare.objects.filter(spare_code=codeAux).order_by("spare_name","spare_code","spare_brand")
-
-            dic.update({"spareAux":spareaux,"spare":pr,"spareReference":ar})
+            dbTotal = len(vector)
+            dbActual = valAux+1
+            dic.update({"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
             return render(request,"spareapp/sparedetails.html",dic)
     else:
         return selectf(request)
@@ -808,8 +841,9 @@ def next(request,val,val2):
                 i=i+1
             
             pr=spare.objects.filter(spare_code=codeAux).order_by("spare_name","spare_code","spare_brand")
-
-            dic.update({"spareAux":spareaux,"spare":pr,"spareReference":ar})
+            dbTotal = len(vector)
+            dbActual = valAux+1
+            dic.update({"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
             return render(request,"spareapp/sparedetails.html",dic)
     else:
         return selectf(request)

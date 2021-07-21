@@ -129,9 +129,9 @@ class reference(models.Model):
     #     blank=True,null=True,on_delete=CASCADE,verbose_name="Car"
     # )
 
-    referenceNote = models.CharField(max_length=40, verbose_name="Note", blank=True,null=True)
-
     referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
+    
+    referenceNote = models.CharField(max_length=40, verbose_name="Note", blank=True,null=True)
 
     def __str__(self):
         return '%s - %s' %(self.referenceSpare, self.referenceCode)

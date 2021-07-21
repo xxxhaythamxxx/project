@@ -6,8 +6,13 @@
 
 <div id="invoice" class="resultadoBusqueda">
     <div class="row">
-        <div class="col-12 color p-2 text-white d-flex justify-content-center">
+        <div class="col-lg-11 color p-2 text-white d-flex justify-content-center">
             {{spare.0.spare_code}} - {{spare.0.spare_name}}
+        </div>
+        <div class="col-lg-1 color-soft text-white d-flex justify-content-center">
+            <div class="p-2">
+                {{dbActual}} / {{dbTotal}} 
+            </div>
         </div>
         <div class="col-lg-3 mt-2">
             <div class="imagecont d-flex justify-content-center">

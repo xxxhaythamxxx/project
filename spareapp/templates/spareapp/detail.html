@@ -26,6 +26,7 @@
                         <li style="margin:auto;text-align:center;" class=""><input name="car" class="ml-2" type="checkbox"><label class="ml-1">Car</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="code" class="ml-2" type="checkbox"><label class="ml-1">Code</label></li>
+                        <li style="margin:auto;text-align:center;" class=""><input name="type" class="ml-2" type="checkbox"><label class="ml-1">Description</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="ml-1">Dimensions</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="priceM" class="ml-2" type="checkbox"><label class="ml-1">Price Major</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="priceD" class="ml-2" type="checkbox"><label class="ml-1">Price Detail</label></li>
@@ -36,7 +37,6 @@
                         <li style="margin:auto;text-align:center;" class=""><input name="photo" class="ml-2" type="checkbox"><label class="ml-1">Photo</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="reference" class="ml-2" type="checkbox"><label class="ml-1">Reference Code</label></li>
                         <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
-                        <li style="margin:auto;text-align:center;" class=""><input name="type" class="ml-2" type="checkbox"><label class="ml-1">Description</label></li>
                         <li style="margin:auto;text-align:center;" class=""><input name="vendor" class="ml-2" type="checkbox"><label class="ml-1">Vendor</label></li>
                     </ul>
                 </div>
@@ -45,7 +45,7 @@
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Filters</a>
                     <ul id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
                         {% for dim in dimension|dictsort:"atributeName" %}
-                            <li style="margin:auto;text-align:center;" class=""><input name="check{{dim.atributeName}}" class="ml-2" type="checkbox"><label class="ml-1">{{dim.atributeName}}</label></li>
+                            <li style="margin:auto;text-align:center;" class=""><input name="check{{dim.atributeName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{dim.atributeName}}</label></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -54,7 +54,7 @@
                     <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
                     <ul id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
                         {% for atr in atribute|dictsort:"atributeName" %}
-                            <li style="margin:auto;text-align:center;" class=""><input name="check{{atr.atributeName}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li>
+                            <li style="margin:auto;text-align:center;" class=""><input name="check{{atr.atributeName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -75,7 +75,7 @@
 
             {% for dim in dimension %}
 
-            <div style="display: none;" id="{{dim.atributeName}}Filter" class="row filterDim">
+            <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
                 <div class="col-lg-6 mt-2">
                     <input class="col-lg-3" type="number" placeholder="Min {{dim.atributeName}}" id="{{dim.atributeName}}Min">
                     <input class="col-lg-3" type="number" placeholder="Max {{dim.atributeName}}" id="{{dim.atributeName}}Max">
@@ -86,9 +86,10 @@
 
             {% for dim in atribute %}
 
-            <div style="display: none;" id="{{dim.atributeName}}Filter" class="row filterDim">
+            <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
                 <div class="col-lg-6 mt-2">
                     <input class="col-lg-3" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
+                    <button id="{{dim.atributeName}}Button" type="button" class="btn btn-sm btn-danger" data-bs-toggle="popover" data-bs-trigger="focus" data-toggle="popover" title="Valid values" data-bs-content="Valores permitidos">Values</button>
                 </div>
             </div>
 
@@ -132,17 +133,17 @@
         {% for car in carrito.cart %}
         {% for br in spare %}
         {% if car|add:"0" == br.id|add:"0" %}
-        <tr>
-            <td><a href=""></a></div></td>
+        <tr class="text-left">
+            <td class="pl-3 pr-0"><a href=""></a></div></td>
 
             {% if br.spare_code %}
-            <td><a href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
+            <td class="pl-3 pr-0"><a href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if reference %}
-            <td>
+            <td class="pl-3 pr-0">
                 {% for dim in reference|slice:":5" %}
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
                     <div><a href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
@@ -150,7 +151,7 @@
                 {% endfor %}
             </td>
             {% else %}
-                <td><a href="#"></a></td>
+                <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             <!-- {% if br.car_info.all %}
@@ -160,19 +161,19 @@
             {% endif %} -->
 
             {% if br.spare_category %}
-            <td><a href="{% url 'categoryi' br.spare_category %}">{{br.spare_category}}</a></td>
+            <td class="pl-3 pr-0"><a href="{% url 'categoryi' br.spare_category %}">{{br.spare_category}}</a></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if br.spare_name %}
-            <td><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
+            <td class="pl-3 pr-0"><a href="{% url 'name' br.spare_name %}">{{br.spare_name}}</a></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if allDimensions %}
-                <td>
+                <td class="pl-3 pr-0">
                     {% for dim in allDimensions %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
                         <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}} mm</a></div>
@@ -180,11 +181,11 @@
                     {% endfor %}
                 </td>
             {% else %}
-                <td><a href="#"></a></td>
+                <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if allAtributes %}
-                <td>
+                <td class="pl-3 pr-0">
                     {% for dim in allAtributes %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
                         <div><a id="{{dim.atributeName|cut:' '}}Value" href="#">{{dim.atributeName}} {{dim.atributeVal}}</a></div>
@@ -192,33 +193,33 @@
                     {% endfor %}
                 </td>
             {% else %}
-                <td><a href="#"></a></td>
+                <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_m %}
-            <td style="display: none;"><a href="#">{{br.price_m}}</a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#">$ {{br.price_m}}</a></td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_d %}
-            <td style="display: none;"><a href="#">{{br.price_d}}</a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#">$ {{br.price_d}}</a></td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.spare_photo %}
-            <td><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            <td class="pl-3 pr-0"><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
             {% else %}
-            <td><a href="#"></a></td>
+            <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
             
             {% if parameter == 'Engine code' %}
-            <td><a href="#">{{mig}}</a></td>
+            <td class="pl-3 pr-0"><a href="#">{{mig}}</a></td>
             {% endif %}
 
             {% if br.spare_vendor.all %}
-            <td style="display: none;">
+            <td class="pl-3 pr-0" style="display: none;">
                 {% for dim in allVendors %}
                     {% for sp in br.spare_vendor.all %}
 
@@ -230,10 +231,10 @@
                 {% endfor %}
             </td>
             {% else %}
-            <td style="display: none;"><a href="#"></a></td>
+            <td class="pl-3 pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
-            <td><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>
+            <td class="pl-3 pr-0"><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>
         </tr>
         {% endif %}
         {% endfor %}

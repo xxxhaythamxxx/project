@@ -28,6 +28,7 @@ class spareAdmin(admin.ModelAdmin):
     ordering = ('spare_code',"spare_name")
     filter_horizontal=["car_info","engine_info","spare_spare","spare_vendor"]
     exclude=("spare_brand","shape",)
+    autocomplete_fields = ("spare_category",)
 
 class vendorAdmin(admin.ModelAdmin):
     list_display=("vendorName",)
@@ -40,6 +41,9 @@ class categoryAdmin(admin.ModelAdmin):
     search_fields=("category",)
     # list_filter=("category",)
     ordering = ('category',)
+    # autocomplete_fields = ("category",)
+    # list_filter=("category",)
+
 
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
