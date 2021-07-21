@@ -1072,3 +1072,25 @@ $("#maxRows").on("change",function(){
 $(document).ready(function(){
     $('[data-toggle="popover"]').popover()
  })
+
+//  "#myTable tr"
+ $("table").find("tr").each(function(){
+cont = 0
+    $(this).find("td").each(function(){
+
+        // if($(this).attr("id")=="reference"){
+        if($(this).index()==$("#reference").index()){
+            $(this).find("div").each(function(){
+                // alert($(this).text())
+                // alert(cont)
+                if(cont<5){
+                    $(this).show()
+                }else{
+                    $(this).hide()
+                }
+                cont = cont +1
+            })
+        }
+    })
+     
+ })

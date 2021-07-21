@@ -11,8 +11,13 @@
 
             {% if reference %}
             <td class="pl-3 pr-0">
-                {% for dim in reference|slice:":5" %}
+                {% for dim in reference %}
+                <!-- {% with name=1 %}  -->
+                <!-- <div>{{name}}</div> -->
+                <!-- {% endwith %} -->
+                <!-- |slice:":5" -->
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
+                    <!-- <div>{{ var }}</div> -->
                     <div><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
                     {% endif %}
                 {% endfor %}
@@ -39,11 +44,11 @@
             <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
-            {% if allDimensions %}
+            {% if allAtributes %}
                 <td class="pl-3 pr-0">
-                    {% for dim in allDimensions %}
-                        {% if br.spare_code == dim.dimensionSpare.spare_code %}
-                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}} mm</a></div>
+                    {% for dim in allAtributes|dictsort:"atributeName" %}
+                        {% if br.spare_code == dim.atributeSpare.spare_code %}
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}}</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -51,11 +56,11 @@
                 <td class="pl-3 pr-0"><a href="#"></a></td>
             {% endif %}
 
-            {% if allAtributes %}
+            {% if allDimensions %}
                 <td class="pl-3 pr-0">
-                    {% for dim in allAtributes %}
-                        {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}}</a></div>
+                    {% for dim in allDimensions|dictsort:"atributeName" %}
+                        {% if br.spare_code == dim.dimensionSpare.spare_code %}
+                        <div><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}} mm</a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
