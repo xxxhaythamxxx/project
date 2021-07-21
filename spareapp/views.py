@@ -4,6 +4,7 @@ from .models import *
 from django.views import View
 from .cart import *
 import json
+
 # Create your views here.
 
 # Creo el diccionario para los formularios en común de todos los templates
@@ -93,8 +94,6 @@ def selectf(request):
                     # Compara el codigoRepuesto con valor
                     b=[]
                     vec = valor.split(" ")
-                    print("----------------------------------------------------")
-                    print(vec)
                     # comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
                     todos=spare.objects.all()
                     ref=reference.objects.all()
@@ -238,14 +237,11 @@ def home(request):
     if request.method=="GET":
 
         if selectf(request)==False:
-            # b = []
-            # a = car.objects.all().values("car_manufacturer").order_by("car_manufacturer")
-            # for v in a:
-            #     v = v["car_manufacturer"]
-            #     b.append(v)
-            # b = (set(b))
-            alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
-            # dic.update({"manu":b,"spare":alls})
+            # alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
+            # from typing import List
+            # alls = list(spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct())
+            alls = [x for x in spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct()]
+            # print(alls)
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
