@@ -292,7 +292,7 @@ def sparedetails(request,val,val2):
             line= line.replace("{spare: ", "")
             line=line.rstrip("}")
             
-            
+            valAux = 0
             vector=line.split(",")
             i=0
             
@@ -760,6 +760,7 @@ def prev(request,val,val2):
             
             vector=line.split(",")
             i=0
+            valAux = 0
             
             for v in vector:
                 if val == v.split(" ")[0]:
@@ -826,6 +827,8 @@ def next(request,val,val2):
             vector=line.split(",")
 
             i=0
+            valAux = 0
+
             for v in vector:
                 if val == v.split(" ")[0]:
                     if i<(len(vector)-1):
