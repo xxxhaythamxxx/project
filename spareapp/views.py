@@ -295,9 +295,6 @@ def sparedetails(request,val,val2):
             valAux = 0
             vector=line.split(",")
             i=0
-            print(".............................")            
-            print(val2)
-            print(vector)
             for v in vector:
                 if val == v.split(" ")[0]:
                     valAux=(i)
