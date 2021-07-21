@@ -295,7 +295,9 @@ def sparedetails(request,val,val2):
             valAux = 0
             vector=line.split(",")
             i=0
-            
+            print(".............................")            
+            print(val2)
+            print(vector)
             for v in vector:
                 if val == v.split(" ")[0]:
                     valAux=(i)
@@ -306,11 +308,10 @@ def sparedetails(request,val,val2):
                 if i == valAux:
                     codeAux=v.split(" ")[0]
                 i=i+1
-            
             pr=spare.objects.filter(spare_code=codeAux).order_by("spare_name","spare_code","spare_brand")
             dbTotal = len(vector)
             dbActual = valAux+1
-            dic.update({"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
+            dic.update({"vector":vector,"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
             return render(request,"spareapp/sparedetails.html",dic)
     else:
         return selectf(request)
