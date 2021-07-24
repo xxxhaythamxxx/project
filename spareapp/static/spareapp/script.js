@@ -48,7 +48,9 @@ function measureFilter(){
 
     $(".filterDim").each(function(){
         var indexVal = $(this).attr("id")                           // id = DiameterFilter
-        var atribute = indexVal.split("Filter")
+        // alert(indexVal)
+        var atribute = indexVal.split("Filter")                     // Dim8, - Dim2, - LaDimension,
+        // alert(atribute)
         var dimAtribute = atribute[0]                               // Diameter - Height - Atr1
         // alert("dimAtribute: "+dimAtribute)
         var AtributeMin
@@ -63,7 +65,7 @@ function measureFilter(){
             var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
             // alert("innerAtribute: "+innerAtribute)
             if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
-                AtributeString = comp
+                AtributeString = comp                       // on - off
                 // alert("AtributeString: "+AtributeString)
                 if(AtributeString!=""){
                     listadoAll++
@@ -78,40 +80,105 @@ function measureFilter(){
             }
         })
 
+        // $(this).find()
+
+        // $(".cantainer").each(function(){
+        //     alert($(this).text())
+        //     $(this).find("div").each(function(){
+        //         // alert($(this).text())
+        //     })
+        // })
+
         $('#myTable tr a').each(function(){
             if($(this).attr("id")===(dimAtribute+"Value")){
-                var text = $(this).text();                          // Diameter: 40.5 mm - Atr1: off
-                var varSplit = text.split(": ")[1]
-                var auxS = text.split(" ")
-                if(auxS[auxS.length-1] == "mm"){ // si es una dimension
-                    var auxSS = text.split(auxS[auxS.length-2])
-                    var varSplit = text.split(auxSS[0])
-                    varSplit = varSplit[1].split(" ")
-                    var VarFloat = parseFloat(varSplit[0])              // 40.5 - off (Float)
-                }else{                              // si es un atributo
-                    var auxSS = text.split(auxS[auxS.length-1])
-                    var varSplit = text.split(auxSS[0])
-                    var varString = varSplit[1].toLowerCase()                         // 40.5 - off (String)
-                }
-                if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
-                    indexDiameter=$(this).text()
-                    listado.push(indexDiameter)
-                }
-                
-                if(AtributeString){
-                    if(varString.indexOf(AtributeString) > -1){
+                $(this).find(".cantainer").each(function(){
+                    // alert($(this).text())
+                    // alert($(this).find("#AtrName").text())
+                    var varSplit = $(this).find("#AtrName").text()
+                    var valor = $(this).find("#AtrVal").text()      // 88.0 mm - on - FOAM
+                    // alert(valor)
+                    aux = valor.split(" mm")
+                    // alert(aux)
+                    // alert(aux.length)
+                    if(aux.length>1){
+                        var VarFloat = parseFloat(valor)
+                    }else{
+                        var varString = valor
+                    }
+                    // alert(VarFloat)
+                    // alert(varString)
+                    if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
+                        // alert(VarFloat)
                         indexDiameter=$(this).text()
                         listado.push(indexDiameter)
                     }
-                }
+
+                    if(AtributeString){
+                        // alert("Ingreso: "+AtributeString)
+                        // alert("Aparece: "+varString)
+                        if(varString.indexOf(AtributeString) > -1){
+                            indexDiameter=$(this).text()
+                            listado.push(indexDiameter)
+                        }
+                    }
+                })
             }
         })
+
+        // ----------------------------------------------------------
+        // $('#myTable tr a').each(function(){
+        //     if($(this).attr("id")===(dimAtribute+"Value")){
+        //         // alert($(this).attr("id"))
+        //         // alert("Nuevo: "+$(this).text())
+        //         var text = $(this).text();                          // Diameter 40.5 mm - Atr1 off
+        //         // alert($(this).text())         // Dim888.0 mm
+        //         $(this).find("#AtrName").each(function(){
+        //             alert($(this).text())
+        //         })
+        //         if($(this))
+        //         var varSplit = text.split(": ")[1]                  // Ya no sirve
+        //         // alert(varSplit)
+        //         var auxS = text.split(" ")                          // Dim8,88.0,mm - Uno,dos,3131.0,mm - material,FOAM
+        //         // alert(auxS)
+        //         if(auxS[auxS.length-1] == "mm"){ // si es una dimension
+        //             var auxSS = text.split(auxS[auxS.length-2])     // Dim8 , mm - Dim2 , mm
+        //             // alert(auxSS)
+        //             var varSplit = text.split(auxSS[0])             // ,88.0 mm - ,22.0 mm
+        //             // alert(varSplit)
+        //             varSplit = varSplit[1].split(" ")
+        //             var VarFloat = parseFloat(varSplit[0])              // 88 - 40 (Float)
+        //             // alert(VarFloat)
+        //         }else{                              // si es un atributo
+        //             var auxSS = text.split(auxS[auxS.length-1])        // material , - El Atr , - Atr ,
+        //             // alert(auxSS)
+        //             var varSplit = text.split(auxSS[0])             // ,FOAM - ,down - ,on
+        //             // alert(varSplit)
+        //             var varString = varSplit[1].toLowerCase()        // foam - down - on (String)
+        //             // alert(varString)
+        //         }
+                // if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
+                //     indexDiameter=$(this).text()
+                //     listado.push(indexDiameter)
+                // }
+                
+                // if(AtributeString){
+                //     if(varString.indexOf(AtributeString) > -1){
+                //         indexDiameter=$(this).text()
+                //         listado.push(indexDiameter)
+                //     }
+                // }
+        //     }
+        // })
+        // ----------------------------------------------------------
+
     })
 
     // alert(listado)
     for(var i = listado.length -1; i >=0; i--){
         if(listado.indexOf(listado[i]) !== i) listado.splice(i,1);
     }
+    // alert(listado)               // Guarda cuando consigue un atributo: Atron
+                                    // Si consigue 2: Atron,El Atrdown
 
     listadoAll=listadoAll/2
 
@@ -735,6 +802,14 @@ $("#headerList3").each(function(){
     })
 })
 
+const $List5 = $("#headerList5");
+$("#headerList5").each(function(){
+    $(this).find("input").each(function(){
+        var comp = $(this).attr("name")
+        $(this).prop("checked",false);
+    })
+})
+
 $List2.change(function(){           // Activar filtro de dimensiones
 
     var bo = false
@@ -784,65 +859,75 @@ $List3.change(function(){           // Activar filtro de atributos
     var uniqName = []
     var uniqVal = []
     var atrContent = []
+    var allVal = []
+    allAtr = []
+    var onlyAtr = []
 
     $("table tr").find("td").each(function(){
 
         if($(this).index()==$("#atributes").index()){
             $(this).find("a").each(function(){
+                // alert($(this).text())
+                $(this).find("#AtrVal").each(function(){
+                    // alert($(this).text())
+                    allVal.push($(this).text())         // on - FOAM - off
+                })
+
+                $(this).find("#AtrName").each(function(){
+                    // alert($(this).text())
+                    allAtr.push($(this).text().replace(' ',''))         // Atr1 - Uno Dos
+                    onlyAtr.push($(this).text().replace(' ',''))         // Atr1 - Uno Dos
+                })
+
                 atrContent.push($(this).text())
+                // alert(atrContent)        // Atron - Atr2off
             })
         }
     })
+    // alert(allAtr)
+    // alert(atrContent)
+    
+    // alert(allAtr)       // El Atr,Atr,material
+    // alert(allVal)    // on,off,FOAM
+    for(var i = onlyAtr.length -1; i >=0; i--){
+        if(onlyAtr.indexOf(onlyAtr[i]) !== i) onlyAtr.splice(i,1);
+    }
+    // alert(allAtr)
+    // alert(onlyAtr)
+    // .replace('remplazar','reemplazado')
     var atrValues = []
     var spl
     $(this).find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]
-        // alert("Aux: "+aux)      // Atr
+        var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
+        // alert("Aux: "+aux)      // Atr - Atr2
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             $("#"+aux+"Filter").show();
         }else{
             $("#"+aux+"Filter").hide();
             $("#"+aux).val(null)
         }
-        var spl1 = ""
-        // alert("Conteni: "+atrContent)   // Atr: on,material: FOAM,Atr: on
-        for (var i=0; i<atrContent.length; i++){
-            spl = atrContent[i].split(": ")
-            auxFin = atrContent[i].split(" ")       // Nuevo
-            // alert(auxFin[auxFin.length-1])       // on - down - FOAM
-            auxIni = atrContent[i].split(" "+auxFin[auxFin.length-1])   // Nuevo
-            // alert(auxIni)                           // Atr, - material, - El Atr,
-            // Eliminar a auxIni solamente el ultimo espacio en blanco
-            sep = auxIni[0].split(" ")     // Nuevo
-            // alert(auxS)             // Atr - material - El,Atr -
-
-            // alert("Spl: "+spl)          // Atr,on - El Atr,down
-            // alert(spl[0])            // Atr - El Atr
-            // sep = spl[0].split(" ")
-            // alert("Sep: "+sep)      // Atr - El,Atr
-            for(var j=0;j<sep.length;j++){
-                spl1=spl1+""+sep[j]
-            }
-            // alert("Aux: "+aux)
-            // alert("spl1: "+spl1)
-            // alert("Valor viejo: "+spl[1]+" valor nuevo: "+auxFin[auxFin.length-1])
-            // alert("spl 0: "+spl1.toLowerCase())
-            if(aux.toLowerCase() == spl1.toLowerCase()){     // Si los atributos se llaman igual
-                // alert("Entra")
-                atrValues.push(auxFin[auxFin.length-1])
-            }
-            spl1=""
-        }
-        // alert(atrValues)
-        for(var i = atrValues.length -1; i >=0; i--){
-            if(atrValues.indexOf(atrValues[i]) !== i) atrValues.splice(i,1);
-        }
-
-        $("#"+aux+"Filter button").attr("data-bs-content",atrValues)
-
-        atrValues = []
         
     })
+
+
+    for (var i=0; i<onlyAtr.length; i++){
+        // alert(onlyAtr[i])
+        for(var j=0;j<allAtr.length;j++){
+            // alert(allAtr[j])
+            if(onlyAtr[i].toLowerCase() == allAtr[j].toLowerCase()){     // Si los atributos se llaman igual
+                atrValues.push(allVal[j])
+            }
+            
+        }
+        // alert(atrValues)
+        // alert(atrValues.length)
+        for(var k = atrValues.length -1; k >=0; k--){
+            if(atrValues.indexOf(atrValues[k]) !== k)
+                atrValues.splice(k,1);
+        }
+        $("#"+onlyAtr[i]+"Filter button").attr("data-bs-content",atrValues)
+        atrValues = []
+    }
 
     $(this).find("input").each(function(){
         var aux = $(this).attr("name").split("check")[1]
@@ -865,6 +950,69 @@ $List3.change(function(){           // Activar filtro de atributos
     }
 })
 
+$List5.change(function(){           // Activar filtro de Categories
+    // alert("Entro en Categories")
+    var catVal = []
+
+    $("tbody tr").each(function(){
+        $(this).hide()
+    })
+
+    $("table td a").each(function(){
+        if ($(this).attr("id") == "categoryInfo"){
+            // alert($(this).text())
+            catVal.push($(this).text())
+        }
+    })
+    for(var i = catVal.length -1; i >=0; i--){
+        if(catVal.indexOf(catVal[i]) !== i) catVal.splice(i,1);
+    }
+    // alert(catVal)       // Filters,SENSOR VVT,Mantenimiento,     Todas las categorias
+    // var tamCat = []
+    var cont = 0
+    inputTotal = 0
+    $(this).find("input").each(function(){
+        inputTotal = inputTotal + 1
+        var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
+        // alert(aux)      // Filters - Pumps - Mantenimiento - SENSOR VVT
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            // alert($(this).attr("name"))                         // checkFilters - checkSENSORVVT
+            // alert($(this).attr("name").split("check")[1])       // Filters - SENSORVVT
+            // alert($(this).attr("name"))
+            comp = $(this).attr("name").split("check")[1]
+            // alert(comp)
+            $("table td a").each(function(){
+                if ($(this).attr("id") == "categoryInfo"){      // Para solo revisar la columna category
+                    // alert("comp: "+comp)
+                    // alert("This: "+$(this).text().replace(' ',''))
+                    if((comp.toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        // alert($(this).text())
+                        // alert($(this).parent().parent().text())
+                        $(this).parent().parent().show()
+                    }
+                    // else{
+                    //     $(this).parent().parent().hide()
+                    // }
+                }
+            })
+        }
+        else{
+            cont = cont +1
+        }
+    })
+    // alert("inputTotal: "+inputTotal)
+    // alert("Cont: "+cont)
+    // alert("catVal: "+catVal)
+    // alert("catValLeng: "+catVal.length)
+    if (inputTotal == cont){
+        // alert("Vacío")
+        $("tbody tr").each(function(){
+            $(this).show()
+        })
+    }
+    // alert(cont)
+    // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
+})
 
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
@@ -1073,6 +1221,7 @@ $(document).ready(function(){
     $('[data-toggle="popover"]').popover()
  })
 
+ // Para mostrar solo 5 codigos de referencia por Spare
 //  "#myTable tr"
  $("table").find("tr").each(function(){
 cont = 0
@@ -1094,3 +1243,36 @@ cont = 0
     })
      
  })
+
+ $("table").find("tr").each(function(){
+    cont = 0
+        $(this).find("td").each(function(){
+    
+            // if($(this).attr("id")=="reference"){
+            if($(this).index()==$("#atributes").index()){
+                // alert($(this).text())
+                $(this).find("a").each(function(){
+                    // alert($(this).text())
+                    var aux = $(this).text()
+                    var sp = aux.split(" ")
+                    var der = sp[sp.length-1]
+                    // alert(der)
+                    var iz = aux.split(" "+der)
+                    iz = iz[0]
+                    // alert(iz)
+                    // iz.attr("style",'background-color:gray')
+                    // iz.css({'background-color':'gray'})
+                    // $(this).text(iz+" Valor")
+                    // alert($(this).text())
+                    // alert(cont)
+                    // if(cont<5){
+                    //     $(this).show()
+                    // }else{
+                    //     $(this).hide()
+                    // }
+                    // cont = cont +1
+                })
+            }
+        })
+         
+     })

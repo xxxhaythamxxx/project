@@ -130,7 +130,47 @@
             </div>
 
             <!-- Barra de Categorias -->
-            <div class="">
+
+            <div class="accordion" id="accordionE">
+                <div class="accordion-item color-soft">
+                  <h2 class="accordion-header" id="headingO">
+                    <button class="accordion-button color text-white type="button" data-toggle="collapse" data-target="#collapseO" aria-expanded="true" aria-controls="collapseO">
+                      Categories
+                    </button>
+                  </h2>
+                  {% for category in allCategories %}
+                  <div id="collapseO" class="accordion-collapse collapse color-soft" aria-labelledby="headingO" data-parent="#accordionE" data-target="#collapseO">
+                    <div class="accordion-body p-2">
+                        <a href="{% url 'categoryi' category.category %}" style="color: white;text-decoration: none;" class="hover">
+                            {{category.category}}
+                        </a>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+            </div>
+
+            <!-- <div class="accordion">
+                <a class="btn text-white" data-toggle="collapse" data-parent="#accordion" href="#collapseCategory">
+                    Category
+                </a>
+                <div id="collapseCategory" class="collapse">
+                    <div class="row mt-2">
+                        <div>
+                            Category 1
+                        </div>
+                        <div>
+                            Category 2
+                        </div>
+                        <div>
+                            Category 3
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            
+            <!-- <div class="">
                 <div class="p-3 ">
                     <label class="text-white" for="">Category:</label>
                         <div class="list-category mt-3">
@@ -145,7 +185,7 @@
 
                         </div> 
                 </div>
-            </div>
+            </div> -->
 
             <!-- Boton para ir a Card Brands -->
             <div class="container mt-2">

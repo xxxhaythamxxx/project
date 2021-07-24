@@ -112,6 +112,7 @@
     text-decoration: none;
     color: rgb(99, 5, 5);
 }
+
 .blue-soft a {
     color: rgb(42, 42, 214);
     text-decoration: none;
@@ -153,3 +154,8 @@ th {
 .expand-off:hover {
     background: rgb(216, 114, 114);
 }
+
+table { 
+    border-spacing: 0;
+    border-collapse: collapse;
+    }

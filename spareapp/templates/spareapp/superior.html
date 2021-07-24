@@ -49,6 +49,15 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <!-- Boton Categories -->
+                <div style="display: inline-block;" class="">
+                    <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel5" data-toggle="dropdown" href="#">Categories</a>
+                    <ul id="headerList5" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel5">            
+                        {% for cat in allCategories %}
+                            <li style="margin:auto;" class=""><input name="check{{cat.category|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{cat.category}}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 
             </div>
             

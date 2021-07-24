@@ -15,7 +15,7 @@ class Cart:
         if str(spare.id) not in self.cart.keys():
             spare_id = str(spare.id)
             self.cart[spare_id] = {
-                "spare_photo": spare.spare_photo.url,
+                # "spare_photo": spare.spare_photo.url,
                 "spare_code": spare.spare_code,
                 "spare_brand": spare.spare_brand,
                 "spare_name": spare.spare_name,
