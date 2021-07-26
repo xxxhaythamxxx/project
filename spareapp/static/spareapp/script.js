@@ -204,101 +204,101 @@ function measureFilter(){
     }
 
     // Paginado
-        $(".pagination").html("")
-        var trnum = 0
-        // Guarda la cantidad de filas seleccionadas
-        var maxRows = parseInt($("#maxRows").val())
-        var semiTotalRows = $(table+" tbody tr").length
-        totalRows = listado.length
-        var rev = false
-        var is = false
-        var listCont = 0
-        var aCont = 0
-        $("tbody tr").each(function(){
-            trnum++
-            $(this).find("td").each(function(){
-                $(this).find("a").each(function(){
-                    // alert("Cada a: "+$(this).text())
-                    if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                        aCont++
-                        // alert("Columna: "+$(this).text())
-                        for(var i=0; i<listado.length; i++){
-                            // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
-                            if($(this).text()==listado[i]){
-                                // alert("Cada a: "+$(this).text())
-                                listCont++
-                            }else{
-                                is = false
-                            }
-                        }
-
-                    }
-
-                    })
-            })
-            // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
-            if((listCont == listadoAll) && (listCont>0)){
-                is = true
-            }else{
-                is = false
-            }
-            if(is == true){
-                rev = true
-                if(trnum > maxRows){
-                    $(this).hide()
-                }
-                if(trnum <= maxRows){
-                    $(this).show()
-                }
-            }
-            if(rev===false){
-                trnum--
-            }else{
-                rev = false
-            }
-            is = true
-            listCont = 0
-        });
-        // Antes de ésto es que debe filtrar las categorias checkeadas
-        if(totalRows > maxRows){
-            // Guardo la cantidad de paginas que se necesitan
-            var pagenum = Math.ceil(totalRows/maxRows)
-            for(var i=1;i<=pagenum;){
-                $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-            }
-        }
-        $(".pagination li:first-child").addClass("active")
-        $(".pagination li").on("click",function(){
-            var pageNum = $(this).attr("data-page")
-            var trIndex = 0;
-            var rev = false
-            $(".pagination li").removeClass("active")
-            $(this).addClass("active")
-            // Recorre tolas las filas de la tabla
-            $(table+" tr:gt(0)").each(function(){
-                trIndex++
-                $(this).find("a").each(function(){
+    $(".pagination").html("")
+    var trnum = 0
+    // Guarda la cantidad de filas seleccionadas
+    var maxRows = parseInt($("#maxRows").val())
+    var semiTotalRows = $(table+" tbody tr").length
+    totalRows = listado.length
+    var rev = false
+    var is = false
+    var listCont = 0
+    var aCont = 0
+    $("tbody tr").each(function(){
+        trnum++
+        $(this).find("td").each(function(){
+            $(this).find("a").each(function(){
+                // alert("Cada a: "+$(this).text())
+                if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                    aCont++
+                    // alert("Columna: "+$(this).text())
                     for(var i=0; i<listado.length; i++){
-
-                        if($(this).text()===listado[i]){
-                            rev = true
-
-                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                                $(this).parent().parent().parent().hide()
-                            }else{
-                                $(this).parent().parent().parent().show()
-                            }
+                        // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
+                        if($(this).text()==listado[i]){
+                            // alert("Cada a: "+$(this).text())
+                            listCont++
+                        }else{
+                            is = false
                         }
                     }
-                })
-                if(rev===false){
-                    trIndex--
-                }else{
-                    rev = false
+
                 }
 
             })
         })
+        // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
+        if((listCont == listadoAll) && (listCont>0)){
+            is = true
+        }else{
+            is = false
+        }
+        if(is == true){
+            rev = true
+            if(trnum > maxRows){
+                $(this).hide()
+            }
+            if(trnum <= maxRows){
+                $(this).show()
+            }
+        }
+        if(rev===false){
+            trnum--
+        }else{
+            rev = false
+        }
+        is = true
+        listCont = 0
+    });
+    // Antes de ésto es que debe filtrar las categorias checkeadas
+    if(totalRows > maxRows){
+        // Guardo la cantidad de paginas que se necesitan
+        var pagenum = Math.ceil(totalRows/maxRows)
+        for(var i=1;i<=pagenum;){
+            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+        }
+    }
+    $(".pagination li:first-child").addClass("active")
+    $(".pagination li").on("click",function(){
+        var pageNum = $(this).attr("data-page")
+        var trIndex = 0;
+        var rev = false
+        $(".pagination li").removeClass("active")
+        $(this).addClass("active")
+        // Recorre tolas las filas de la tabla
+        $(table+" tr:gt(0)").each(function(){
+            trIndex++
+            $(this).find("a").each(function(){
+                for(var i=0; i<listado.length; i++){
+
+                    if($(this).text()===listado[i]){
+                        rev = true
+
+                        if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                            $(this).parent().parent().parent().hide()
+                        }else{
+                            $(this).parent().parent().parent().show()
+                        }
+                    }
+                }
+            })
+            if(rev===false){
+                trIndex--
+            }else{
+                rev = false
+            }
+
+        })
+    })
     // Fin paginado
 // alert(listado)      // Atron,El Atrdown,materialFOAM,Dim222.0 mm
 // listadoPasar = listado.slice()
@@ -963,11 +963,22 @@ $List3.change(function(){           // Activar filtro de atributos
 })
 // compCategories = []                 // Lista de categorias seleccionadas
 $List5.change(function(){           // Activar filtro de Categories
+    // alert(listadoPasar)             // Lo que llega de Atributes y Dimensions
+    // alert(listadoAll)            // Cantidad de valores introducidos por filter dimensiones y atributes
     // alert("Entro en Categories")
     compCategories = []
     var catVal = []
     prueba = 5
+    // Paginado
+    var trnum = 0
+    // Guarda la cantidad de filas seleccionadas
+    // var maxRows = parseInt($("#maxRows").val())
+    // var semiTotalRows = $(table+" tbody tr").length
+    totalRows = listado.length
+    var rev = false
     var is = false
+    var listCont = 0
+    var aCont = 0
 
     $("tbody tr").each(function(){
         $(this).hide()
@@ -996,67 +1007,21 @@ $List5.change(function(){           // Activar filtro de Categories
             // alert($(this).attr("name"))
             comp = $(this).attr("name").split("check")[1]
             compCategories.push(comp)
-            // alert(compCategories)
-            // $("table td a").each(function(){
-
-            //     // // alert("Valor de a: "+$(this).text())
-            //     // if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-            //     //     // alert("Entra en Dimensiones o Atributos")
-            //     //     // aCont++
-            //     //     // alert("Columna: "+$(this).text())
-            //     //     for(var i=0; i<listadoPasar.length; i++){
-            //     //         // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
-            //     //         if($(this).text()==listadoPasar[i]){    // Muestro lo que le paso de Atributos y Dimensiones
-            //     //             // alert($(this).parent().parent().parent().text())
-            //     //             $(this).parent().parent().parent().show()
-            //     //             // alert("Cada a: "+$(this).text())
-            //     //             // listCont++
-            //     //         }else{
-            //     //             is = false
-            //     //         }
-            //     //     }
-
-            //     // }
-                
-
-            // })
-
-            // $("table td a").each(function(){
-            //     // alert("Comparamos con Categoria")yyy
-            //     alert($(this).text())
-            //     alert($(this).parent().text())
-            //     alert($(this).parent().parent().text())
-            //     if ($(this).attr("id") == "categoryInfo"){      // Para solo revisar la columna category
-            //         // alert("Entra en Categoria")
-            //         // alert("comp: "+comp)
-            //         // alert("This: "+$(this).text().replace(' ',''))
-            //         if((comp.toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-            //             // alert($(this).parent().parent().text())
-            //             $(this).parentz().parent().show()
-            //             listadoCategory.push($(this).parent().parent().text())
-            //         }
-            //         else{
-            //             $(this).parent().parent().hide()
-            //         }
-            //     }
-            // })
 
         }
         else{
             cont = cont +1
         }
     })
-    // for(var i = compCategories.length -1; i >=0; i--){
-    //     if(compCategories.indexOf(compCategories[i]) !== i) compCategories.splice(i,1);
-    // }
     // alert("listadoPasar")            // Atron,Atr2down
-    // alert(listadoPasar)             // Atributos y Dimensiones seleccionadas, palabras separadas
+    // alert(listadoPasar)             // Atributos y Dimensiones conseguidas, palabras separadas
     // alert("compCategories")          // Filters,SENSORVTV
     // alert(compCategories)           // Categorias seleccionadas, une las palabras
     var contAtrFind = 0
     $("tbody tr").each(function(){      // Recorro por filas
+        trnum++//paginado
         var bandShow = false
-        // alert("Fila: "+$(this).text())      // Muestro columna
+        alert("Fila: "+$(this).text())      // Muestro columna
         $(this).find("a").each(function(){      // Recorro por a
             // alert($(this).text())           // Muestro a
             if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
@@ -1073,9 +1038,11 @@ $List5.change(function(){           // Activar filtro de Categories
                     }
                 }
             }
-            
+
             if(listadoPasar.length>0){
+                // alert(listadoPasar)
                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                    aCont++ //paginado
                     // alert("listadoPasar")
                     // alert("Valor actual de tabla: "+$(this).text())
                     // alert(listadoPasar)
@@ -1083,12 +1050,16 @@ $List5.change(function(){           // Activar filtro de Categories
                     for(var i=0; i<listadoPasar.length; i++){
                         if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
                             if(bandShow == true){
+                                listCont++ //paginado
                                 // alert($(this).parent().parent().parent().text())
                                 // $(this).parent().parent().parent().show()
                                 listadoCategory.push($(this).parent().parent().text())
                                 // alert("Valor que entra: "+$(this).text())
                                 contAtrFind = contAtrFind + 1
                                 // alert(contAtrFind)
+                            }
+                            else{
+                                is = false //paginado
                             }
                         }
                         // else{
@@ -1098,87 +1069,53 @@ $List5.change(function(){           // Activar filtro de Categories
                     }
                 }
 
-                // if((listCont == listadoAll) && (listCont>0)){
-                //     is = true
-                // }else{
-                //     is = false
-                // }
-                // if(is == true){
-                //     rev = true
-                //     if(trnum > maxRows){
-                //         $(this).hide()
-                //     }
-                //     if(trnum <= maxRows){
-                //         $(this).show()
-                //     }
-                // }
-                // if(rev===false){
-                //     trnum--
-                // }else{
-                //     rev = false
-                // }
-                // is = true
-                // listCont = 0
-            }
-            else{
-                if(bandShow == true){
-                    $(this).parent().parent().show()
-                }
             }
             
         })
+        // listCont = contAtrFind   // Es lo mismo
+        // alert("aCont total en tabla")
+        // alert(aCont)
+        // alert("listCont consigue")
+        // alert(listCont)
+        aCont = 0
+        listCont = 0
+        // if(bandShow == true){
+        //     alert($(this).text())
+        //     $(this).show()
+        // }
         // alert("Siguiente fila")
+        // alert(listadoPasar)             // Dim222 mm,Dim2100 mm   Tener cuidado
         // alert("Cantidad ingresada: "+listadoPasar.length)
-        // alert("Cantidad conseguida: "+contAtrFind)
-        if (listadoPasar.length == contAtrFind){
-            $(this).show()
+        // alert()
+        // alert("Cantidad conseguida: "+contAtrFind)           // Valores conseguidos
+        // alert(listadoAll) // Cantidad de valores introducidos por filter dimensiones y atributes
+        // alert("Bandera: "+bandShow)
+        if(listadoPasar.length>0){
+            if ((listadoAll == contAtrFind) && bandShow == true){
+                // alert("Show: "+$(this).text())
+                $(this).show()
+            }
+        }
+        else{
+            if(bandShow == true){
+                $(this).show()
+            }
         }
         contAtrFind = 0
     })
 
-    // Paginado --------------------------------------------------------------------------
-
-    // Si antes hay filtro de dimensiones o atritubos
-
-    // $(".pagination").html("")
-    //     // alert(listadoPasar)
-    //     var trnum = 0
-    //     // Guarda la cantidad de filas seleccionadas
-    //     var maxRows = parseInt($("#maxRows").val())
-    //     var semiTotalRows = $(table+" tbody tr").length
-    //     totalRows = listadoPasar.length
-    //     var rev = false
-    //     var is = false
-    //     var listCont = 0
-    //     var aCont = 0
-    //     // alert(totalRows)
-
-    //     $("table tbody tr").each(function(){
-    //         // alert($(this).text())
-    //         // if($(this).is(":visible")){
-    //             $(this).find("a").each(function(){
-    //                 for(var i=0; i<totalRows; i++){
-    //                     if($(this).text() == listadoPasar[i]){
-    //                         // alert($(this).text())
-    //                     }
-    //                 }
-    //             })
-    //         // }
-    //     })
-
-    // -----------------------------------------------------------------------------------
+    
     // alert("inputTotal: "+inputTotal)
     // alert("Cont: "+cont)
     // alert("catVal: "+catVal)
     // alert("catValLeng: "+catVal.length)
-    // alert("inputTotal: "+inputTotal)
-    // alert("cont: "+cont)
+    // alert("inputTotal: "+inputTotal)            // Cantidad total de opciones de Categories
+    // alert("cont: "+cont)                        // Cantidad de checks de categories vacíos
     // alert()
-    if (inputTotal == cont){
-        if(listadoPasar.length>0){
+    if (inputTotal == cont){            // Si el checkbox está vacío
+        if(listadoPasar.length>0){      // Si se ha filtrado antes por dimension o atributos
             contAtrFind = 0
             $("tbody tr").each(function(){
-                // alert($(this).text())
                 $($(this).find("a")).each(function(){
                     if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
                         for(var i=0; i<listadoPasar.length; i++){
@@ -1186,25 +1123,121 @@ $List5.change(function(){           // Activar filtro de Categories
                                 // $(this).parent().parent().parent().show()
                                 listadoCategory.push($(this).parent().parent().text())
                                 contAtrFind = contAtrFind + 1
-                                // alert($(this).text())
                             }
                         }
                     }
                 })
-                // alert(listadoPasar.length)
-                // alert(contAtrFind)
-                if (listadoPasar.length == contAtrFind){
+                if (listadoAll == contAtrFind){
                     $(this).show()
                 }
                 contAtrFind = 0
             })
         }
-        else{
+        else{           // Si no se ha filtrado por atributos o dimensiones
             $("tbody tr").each(function(){
                 $(this).show()
             })
         }
     }
+
+    // -------------------------------------------------------------------------------------
+    // paginado
+    // $(".pagination").html("")
+    //     var trnum = 0
+    //     // Guarda la cantidad de filas seleccionadas
+    //     var maxRows = parseInt($("#maxRows").val())
+    //     var semiTotalRows = $(table+" tbody tr").length
+    //     totalRows = listado.length
+    //     var rev = false
+    //     var is = false
+    //     var listCont = 0
+    //     var aCont = 0
+    //     $("tbody tr").each(function(){
+    //         trnum++
+    //         $(this).find("td").each(function(){
+    //             $(this).find("a").each(function(){
+    //                 // alert("Cada a: "+$(this).text())
+    //                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+    //                     aCont++
+    //                     // alert("Columna: "+$(this).text())
+    //                     for(var i=0; i<listado.length; i++){
+    //                         // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
+    //                         if($(this).text()==listado[i]){
+    //                             // alert("Cada a: "+$(this).text())
+    //                             listCont++
+    //                         }else{
+    //                             is = false
+    //                         }
+    //                     }
+
+    //                 }
+
+    //                 })
+    //         })
+    //         // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
+    //         if((listCont == listadoAll) && (listCont>0)){
+    //             is = true
+    //         }else{
+    //             is = false
+    //         }
+        //     if(is == true){
+        //         rev = true
+        //         if(trnum > maxRows){
+        //             $(this).hide()
+        //         }
+        //         if(trnum <= maxRows){
+        //             $(this).show()
+        //         }
+        //     }
+        //     if(rev===false){
+        //         trnum--
+        //     }else{
+        //         rev = false
+        //     }
+        //     is = true
+        //     listCont = 0
+        // });
+        // // Antes de ésto es que debe filtrar las categorias checkeadas
+        // if(totalRows > maxRows){
+        //     // Guardo la cantidad de paginas que se necesitan
+        //     var pagenum = Math.ceil(totalRows/maxRows)
+        //     for(var i=1;i<=pagenum;){
+        //         $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+        //     }
+        // }
+        // $(".pagination li:first-child").addClass("active")
+        // $(".pagination li").on("click",function(){
+        //     var pageNum = $(this).attr("data-page")
+        //     var trIndex = 0;
+        //     var rev = false
+        //     $(".pagination li").removeClass("active")
+        //     $(this).addClass("active")
+        //     // Recorre tolas las filas de la tabla
+        //     $(table+" tr:gt(0)").each(function(){
+        //         trIndex++
+        //         $(this).find("a").each(function(){
+        //             for(var i=0; i<listado.length; i++){
+
+        //                 if($(this).text()===listado[i]){
+        //                     rev = true
+
+        //                     if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+        //                         $(this).parent().parent().parent().hide()
+        //                     }else{
+        //                         $(this).parent().parent().parent().show()
+        //                     }
+        //                 }
+        //             }
+        //         })
+        //         if(rev===false){
+        //             trIndex--
+        //         }else{
+        //             rev = false
+        //         }
+
+        //     })
+        // })
+    // -------------------------------------------------------------------------------------
 
     // listadoAll = inputTotal-cont
     // alert(listadoAll)        // Categories seleccionadas en el checkbox
