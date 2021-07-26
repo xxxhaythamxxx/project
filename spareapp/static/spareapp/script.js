@@ -35,11 +35,15 @@ $(document).ready(function(){
 var listado = []
 var listadoAll = 0
 var table = "#invoice"
+listadoPasar = [] 
+var listadoCategory = []
+var pasarCategory = []
+
 
 // Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
 function measureFilter(){
 
-    listado = []
+    // listado = []
     listadoAll = 0
 
     $("#myTable tr").each(function(){
@@ -116,7 +120,8 @@ function measureFilter(){
                     if(AtributeString){
                         // alert("Ingreso: "+AtributeString)
                         // alert("Aparece: "+varString)
-                        if(varString.indexOf(AtributeString) > -1){
+                        if(varString.toLowerCase().indexOf(AtributeString.toLowerCase()) > -1){
+                            // alert("Entra")
                             indexDiameter=$(this).text()
                             listado.push(indexDiameter)
                         }
@@ -181,6 +186,8 @@ function measureFilter(){
                                     // Si consigue 2: Atron,El Atrdown
 
     listadoAll=listadoAll/2
+
+    // alert(listadoAll)
 
     for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
         $("#myTable tr").each(function(){
@@ -252,7 +259,7 @@ function measureFilter(){
             is = true
             listCont = 0
         });
-
+        // Antes de ésto es que debe filtrar las categorias checkeadas
         if(totalRows > maxRows){
             // Guardo la cantidad de paginas que se necesitan
             var pagenum = Math.ceil(totalRows/maxRows)
@@ -293,9 +300,14 @@ function measureFilter(){
             })
         })
     // Fin paginado
-
+// alert(listado)      // Atron,El Atrdown,materialFOAM,Dim222.0 mm
+// listadoPasar = listado.slice()
+for(var x = 0;x < listado.length; x++){
+    listadoPasar.push(listado[x])
 }
-
+}
+// alert(listado)
+// alert(listadoPasar)
 // $(".dimMin").on('keyup', function (e) {
 //     alert("Entra")
 //     if (e.key === 'Enter' || e.keyCode === 13) {
@@ -949,10 +961,13 @@ $List3.change(function(){           // Activar filtro de atributos
         $("#ButtonFilter").hide();
     }
 })
-
+// compCategories = []                 // Lista de categorias seleccionadas
 $List5.change(function(){           // Activar filtro de Categories
     // alert("Entro en Categories")
+    compCategories = []
     var catVal = []
+    prueba = 5
+    var is = false
 
     $("tbody tr").each(function(){
         $(this).hide()
@@ -980,38 +995,228 @@ $List5.change(function(){           // Activar filtro de Categories
             // alert($(this).attr("name").split("check")[1])       // Filters - SENSORVVT
             // alert($(this).attr("name"))
             comp = $(this).attr("name").split("check")[1]
-            // alert(comp)
-            $("table td a").each(function(){
-                if ($(this).attr("id") == "categoryInfo"){      // Para solo revisar la columna category
-                    // alert("comp: "+comp)
-                    // alert("This: "+$(this).text().replace(' ',''))
-                    if((comp.toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                        // alert($(this).text())
-                        // alert($(this).parent().parent().text())
-                        $(this).parent().parent().show()
-                    }
-                    // else{
-                    //     $(this).parent().parent().hide()
-                    // }
-                }
-            })
+            compCategories.push(comp)
+            // alert(compCategories)
+            // $("table td a").each(function(){
+
+            //     // // alert("Valor de a: "+$(this).text())
+            //     // if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+            //     //     // alert("Entra en Dimensiones o Atributos")
+            //     //     // aCont++
+            //     //     // alert("Columna: "+$(this).text())
+            //     //     for(var i=0; i<listadoPasar.length; i++){
+            //     //         // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
+            //     //         if($(this).text()==listadoPasar[i]){    // Muestro lo que le paso de Atributos y Dimensiones
+            //     //             // alert($(this).parent().parent().parent().text())
+            //     //             $(this).parent().parent().parent().show()
+            //     //             // alert("Cada a: "+$(this).text())
+            //     //             // listCont++
+            //     //         }else{
+            //     //             is = false
+            //     //         }
+            //     //     }
+
+            //     // }
+                
+
+            // })
+
+            // $("table td a").each(function(){
+            //     // alert("Comparamos con Categoria")yyy
+            //     alert($(this).text())
+            //     alert($(this).parent().text())
+            //     alert($(this).parent().parent().text())
+            //     if ($(this).attr("id") == "categoryInfo"){      // Para solo revisar la columna category
+            //         // alert("Entra en Categoria")
+            //         // alert("comp: "+comp)
+            //         // alert("This: "+$(this).text().replace(' ',''))
+            //         if((comp.toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+            //             // alert($(this).parent().parent().text())
+            //             $(this).parentz().parent().show()
+            //             listadoCategory.push($(this).parent().parent().text())
+            //         }
+            //         else{
+            //             $(this).parent().parent().hide()
+            //         }
+            //     }
+            // })
+
         }
         else{
             cont = cont +1
         }
     })
+    // for(var i = compCategories.length -1; i >=0; i--){
+    //     if(compCategories.indexOf(compCategories[i]) !== i) compCategories.splice(i,1);
+    // }
+    // alert("listadoPasar")            // Atron,Atr2down
+    // alert(listadoPasar)             // Atributos y Dimensiones seleccionadas, palabras separadas
+    // alert("compCategories")          // Filters,SENSORVTV
+    // alert(compCategories)           // Categorias seleccionadas, une las palabras
+    var contAtrFind = 0
+    $("tbody tr").each(function(){      // Recorro por filas
+        var bandShow = false
+        // alert("Fila: "+$(this).text())      // Muestro columna
+        $(this).find("a").each(function(){      // Recorro por a
+            // alert($(this).text())           // Muestro a
+            if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
+                // alert("Entra en Category")
+                // alert(compCategories)
+                // alert(compCategories.length)
+                for(var k=0;k<compCategories.length;k++){ 
+                    // alert("this: "+$(this).text().replace(' ','').toLowerCase())    // Lo que tiene la tabla
+                    // alert("compCategories j: "+compCategories[k].toLowerCase())
+                    // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                    if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                        // alert("Consigue: "+$(this).text())
+                        bandShow = true
+                    }
+                }
+            }
+            
+            if(listadoPasar.length>0){
+                if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                    // alert("listadoPasar")
+                    // alert("Valor actual de tabla: "+$(this).text())
+                    // alert(listadoPasar)
+                    // alert("Bandera: "+bandShow)
+                    for(var i=0; i<listadoPasar.length; i++){
+                        if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                            if(bandShow == true){
+                                // alert($(this).parent().parent().parent().text())
+                                // $(this).parent().parent().parent().show()
+                                listadoCategory.push($(this).parent().parent().text())
+                                // alert("Valor que entra: "+$(this).text())
+                                contAtrFind = contAtrFind + 1
+                                // alert(contAtrFind)
+                            }
+                        }
+                        // else{
+                        //     alert($(this).text())
+                        //     contAtrFind = contAtrFind + 1
+                        // }
+                    }
+                }
+
+                // if((listCont == listadoAll) && (listCont>0)){
+                //     is = true
+                // }else{
+                //     is = false
+                // }
+                // if(is == true){
+                //     rev = true
+                //     if(trnum > maxRows){
+                //         $(this).hide()
+                //     }
+                //     if(trnum <= maxRows){
+                //         $(this).show()
+                //     }
+                // }
+                // if(rev===false){
+                //     trnum--
+                // }else{
+                //     rev = false
+                // }
+                // is = true
+                // listCont = 0
+            }
+            else{
+                if(bandShow == true){
+                    $(this).parent().parent().show()
+                }
+            }
+            
+        })
+        // alert("Siguiente fila")
+        // alert("Cantidad ingresada: "+listadoPasar.length)
+        // alert("Cantidad conseguida: "+contAtrFind)
+        if (listadoPasar.length == contAtrFind){
+            $(this).show()
+        }
+        contAtrFind = 0
+    })
+
+    // Paginado --------------------------------------------------------------------------
+
+    // Si antes hay filtro de dimensiones o atritubos
+
+    // $(".pagination").html("")
+    //     // alert(listadoPasar)
+    //     var trnum = 0
+    //     // Guarda la cantidad de filas seleccionadas
+    //     var maxRows = parseInt($("#maxRows").val())
+    //     var semiTotalRows = $(table+" tbody tr").length
+    //     totalRows = listadoPasar.length
+    //     var rev = false
+    //     var is = false
+    //     var listCont = 0
+    //     var aCont = 0
+    //     // alert(totalRows)
+
+    //     $("table tbody tr").each(function(){
+    //         // alert($(this).text())
+    //         // if($(this).is(":visible")){
+    //             $(this).find("a").each(function(){
+    //                 for(var i=0; i<totalRows; i++){
+    //                     if($(this).text() == listadoPasar[i]){
+    //                         // alert($(this).text())
+    //                     }
+    //                 }
+    //             })
+    //         // }
+    //     })
+
+    // -----------------------------------------------------------------------------------
     // alert("inputTotal: "+inputTotal)
     // alert("Cont: "+cont)
     // alert("catVal: "+catVal)
     // alert("catValLeng: "+catVal.length)
+    // alert("inputTotal: "+inputTotal)
+    // alert("cont: "+cont)
+    // alert()
     if (inputTotal == cont){
-        // alert("Vacío")
-        $("tbody tr").each(function(){
-            $(this).show()
-        })
+        if(listadoPasar.length>0){
+            contAtrFind = 0
+            $("tbody tr").each(function(){
+                // alert($(this).text())
+                $($(this).find("a")).each(function(){
+                    if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                        for(var i=0; i<listadoPasar.length; i++){
+                            if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                                // $(this).parent().parent().parent().show()
+                                listadoCategory.push($(this).parent().parent().text())
+                                contAtrFind = contAtrFind + 1
+                                // alert($(this).text())
+                            }
+                        }
+                    }
+                })
+                // alert(listadoPasar.length)
+                // alert(contAtrFind)
+                if (listadoPasar.length == contAtrFind){
+                    $(this).show()
+                }
+                contAtrFind = 0
+            })
+        }
+        else{
+            $("tbody tr").each(function(){
+                $(this).show()
+            })
+        }
     }
+
+    // listadoAll = inputTotal-cont
+    // alert(listadoAll)        // Categories seleccionadas en el checkbox
+    // alert(listadoPasar)      // Atron,El Atrdown,materialFOAM,Dim222.0 mm  es listado
     // alert(cont)
     // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
+    // alert("Listado: "+listadoCategory)
+    for(var x = 0;x < listadoCategory.length; x++){
+        pasarCategory.push(listadoCategory[x])
+    }
+    // alert(listadoCategory.length)
+    listadoCategory = []
 })
 
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
