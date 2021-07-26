@@ -972,9 +972,9 @@ $List5.change(function(){           // Activar filtro de Categories
     // Paginado
     var trnum = 0
     // Guarda la cantidad de filas seleccionadas
-    // var maxRows = parseInt($("#maxRows").val())
-    // var semiTotalRows = $(table+" tbody tr").length
-    totalRows = listado.length
+    var maxRows = parseInt($("#maxRows").val())
+    var semiTotalRows = $(table+" tbody tr").length
+    totalRows = listadoPasar.length
     var rev = false
     var is = false
     var listCont = 0
@@ -1021,7 +1021,7 @@ $List5.change(function(){           // Activar filtro de Categories
     $("tbody tr").each(function(){      // Recorro por filas
         trnum++//paginado
         var bandShow = false
-        alert("Fila: "+$(this).text())      // Muestro columna
+        // alert("Fila: "+$(this).text())      // Muestro columna
         $(this).find("a").each(function(){      // Recorro por a
             // alert($(this).text())           // Muestro a
             if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
@@ -1042,7 +1042,7 @@ $List5.change(function(){           // Activar filtro de Categories
             if(listadoPasar.length>0){
                 // alert(listadoPasar)
                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                    aCont++ //paginado
+                    // aCont++ //paginado
                     // alert("listadoPasar")
                     // alert("Valor actual de tabla: "+$(this).text())
                     // alert(listadoPasar)
@@ -1050,13 +1050,14 @@ $List5.change(function(){           // Activar filtro de Categories
                     for(var i=0; i<listadoPasar.length; i++){
                         if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
                             if(bandShow == true){
-                                listCont++ //paginado
+                                // listCont++ //paginado
                                 // alert($(this).parent().parent().parent().text())
                                 // $(this).parent().parent().parent().show()
                                 listadoCategory.push($(this).parent().parent().text())
                                 // alert("Valor que entra: "+$(this).text())
                                 contAtrFind = contAtrFind + 1
                                 // alert(contAtrFind)
+                                is = true // inventado de paginado
                             }
                             else{
                                 is = false //paginado
@@ -1077,8 +1078,8 @@ $List5.change(function(){           // Activar filtro de Categories
         // alert(aCont)
         // alert("listCont consigue")
         // alert(listCont)
-        aCont = 0
-        listCont = 0
+        // aCont = 0
+        // listCont = 0
         // if(bandShow == true){
         //     alert($(this).text())
         //     $(this).show()
@@ -1090,19 +1091,42 @@ $List5.change(function(){           // Activar filtro de Categories
         // alert("Cantidad conseguida: "+contAtrFind)           // Valores conseguidos
         // alert(listadoAll) // Cantidad de valores introducidos por filter dimensiones y atributes
         // alert("Bandera: "+bandShow)
-        if(listadoPasar.length>0){
+        if(listadoPasar.length>0){ // Si trae filtro de dimensiones y atributos
             if ((listadoAll == contAtrFind) && bandShow == true){
                 // alert("Show: "+$(this).text())
-                $(this).show()
+                // $(this).show() // ESTA SI VA
+                // is = true
             }
+            else{ // desde aqui es paginacion
+                is = false
+            }if(is == true){
+                rev = true
+                if(trnum > maxRows){
+                    $(this).hide()
+                }
+                if(trnum <= maxRows){
+                    $(this).show()
+                }
+            }
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+            is = true // hasta aqui
+            // else{
+            //     is = false
+            // }
         }
         else{
             if(bandShow == true){
-                $(this).show()
+                // $(this).show() // ESTA SI VA
+                is = true
             }
         }
+
         contAtrFind = 0
-    })
+    }) // fin del tr
 
     
     // alert("inputTotal: "+inputTotal)
@@ -1128,21 +1152,39 @@ $List5.change(function(){           // Activar filtro de Categories
                     }
                 })
                 if (listadoAll == contAtrFind){
-                    $(this).show()
+                    // $(this).show() // ESTO SI VA
+                    is = true
                 }
+                else{ // desde aqui es paginacion
+                    is = false
+                }if(is == true){
+                    rev = true
+                    if(trnum > maxRows){
+                        $(this).hide()
+                    }
+                    if(trnum <= maxRows){
+                        $(this).show()
+                    }
+                }
+                if(rev===false){
+                    trnum--
+                }else{
+                    rev = false
+                }
+                is = true // hasta aqui
                 contAtrFind = 0
             })
         }
         else{           // Si no se ha filtrado por atributos o dimensiones
             $("tbody tr").each(function(){
-                $(this).show()
+                $(this).show() // ESTA SI VA
             })
         }
     }
-
+    // alert(listadoCategory)
     // -------------------------------------------------------------------------------------
     // paginado
-    // $(".pagination").html("")
+    $(".pagination").html("")
     //     var trnum = 0
     //     // Guarda la cantidad de filas seleccionadas
     //     var maxRows = parseInt($("#maxRows").val())
@@ -1180,63 +1222,78 @@ $List5.change(function(){           // Activar filtro de Categories
     //         }else{
     //             is = false
     //         }
-        //     if(is == true){
-        //         rev = true
-        //         if(trnum > maxRows){
-        //             $(this).hide()
-        //         }
-        //         if(trnum <= maxRows){
-        //             $(this).show()
-        //         }
-        //     }
-        //     if(rev===false){
-        //         trnum--
-        //     }else{
-        //         rev = false
-        //     }
-        //     is = true
+            // if(is == true){
+            //     rev = true
+            //     if(trnum > maxRows){
+            //         $(this).hide()
+            //     }
+            //     if(trnum <= maxRows){
+            //         $(this).show()
+            //     }
+            // }
+            // if(rev===false){
+            //     trnum--
+            // }else{
+            //     rev = false
+            // }
+            // is = true
         //     listCont = 0
         // });
         // // Antes de ésto es que debe filtrar las categorias checkeadas
-        // if(totalRows > maxRows){
-        //     // Guardo la cantidad de paginas que se necesitan
-        //     var pagenum = Math.ceil(totalRows/maxRows)
-        //     for(var i=1;i<=pagenum;){
-        //         $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-        //     }
-        // }
-        // $(".pagination li:first-child").addClass("active")
-        // $(".pagination li").on("click",function(){
-        //     var pageNum = $(this).attr("data-page")
-        //     var trIndex = 0;
-        //     var rev = false
-        //     $(".pagination li").removeClass("active")
-        //     $(this).addClass("active")
-        //     // Recorre tolas las filas de la tabla
-        //     $(table+" tr:gt(0)").each(function(){
-        //         trIndex++
-        //         $(this).find("a").each(function(){
-        //             for(var i=0; i<listado.length; i++){
+    // maxRows = parseInt($("#maxRows").val())
+    totalRows = listadoCategory.length
+    // alert("totalRows")
+    // alert(totalRows)
+    // alert("maxRows")
+    // alert(maxRows)
+    // alert("listadoCategory")
+    // alert(listadoCategory.length)
+    if(totalRows > maxRows){
+        // alert("Entra")
+        // alert(totalRows)
+        // alert(maxRows)
+        // Guardo la cantidad de paginas que se necesitan
+        // alert("totalRows > maxRows")
+        var pagenum = Math.ceil(totalRows/maxRows)
+        for(var i=1;i<=pagenum;){
+            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+        }
+    }
+    $(".pagination li:first-child").addClass("active")
 
-        //                 if($(this).text()===listado[i]){
-        //                     rev = true
+    $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
 
-        //                     if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-        //                         $(this).parent().parent().parent().hide()
-        //                     }else{
-        //                         $(this).parent().parent().parent().show()
-        //                     }
-        //                 }
-        //             }
-        //         })
-        //         if(rev===false){
-        //             trIndex--
-        //         }else{
-        //             rev = false
-        //         }
+        // alert("Click")
+        var pageNum = $(this).attr("data-page")
+        var trIndex = 0;
+        var rev = false
+        $(".pagination li").removeClass("active")
+        $(this).addClass("active")
+        // Recorre tolas las filas de la tabla
+        $(table+" tr:gt(0)").each(function(){
+            trIndex++
+            $(this).find("a").each(function(){
+                for(var i=0; i<listado.length; i++){
 
-        //     })
-        // })
+                    if($(this).text()===listado[i]){
+                        rev = true
+
+                        if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                            $(this).parent().parent().parent().hide()
+                        }else{
+                            $(this).parent().parent().parent().show()
+                        }
+                    }
+                }
+            })
+            if(rev===false){
+                trIndex--
+            }else{
+                rev = false
+            }
+
+        })
+    })
     // -------------------------------------------------------------------------------------
 
     // listadoAll = inputTotal-cont
