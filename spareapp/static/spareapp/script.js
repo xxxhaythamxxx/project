@@ -1151,7 +1151,8 @@ $List5.change(function(){           // Activar filtro de Categories
         contAtrFind = 0
     }) // fin del tr
 
-    
+    // alert("Sale trnum")
+    // alert(trnum)
     // alert("inputTotal: "+inputTotal)
     // alert("Cont: "+cont)
     // alert("catVal: "+catVal)
@@ -1159,7 +1160,8 @@ $List5.change(function(){           // Activar filtro de Categories
     // alert("inputTotal: "+inputTotal)            // Cantidad total de opciones de Categories
     // alert("cont: "+cont)                        // Cantidad de checks de categories vacíos
     // alert()
-    if (inputTotal == cont){            // Si el checkbox está vacío
+    if (inputTotal == cont){      
+        // alert("Vacío")      // Si el checkbox está vacío
         if(listadoPasar.length>0){      // Si se ha filtrado antes por dimension o atributos
             contAtrFind = 0
             $("tbody tr").each(function(){
@@ -1195,15 +1197,45 @@ $List5.change(function(){           // Activar filtro de Categories
                     rev = false
                 }
                 is = true // hasta aqui
-                contAtrFind = 0
+                // contAtrFind = 0
             })
         }
         else{           // Si no se ha filtrado por atributos o dimensiones
             $("tbody tr").each(function(){
-                $(this).show() // ESTA SI VA
+                trnum++
+                // $(this).show() // ESTA SI VA
+                // is = true
+
+                // if(bandShow == true){
+                //     // $(this).show() // ESTA SI VA
+                //     is = true
+                // }
+                // else{
+                //     is = false
+                // }
+                // alert("trnum")
+                // alert(trnum)
+                // alert("maxRows")
+                // alert(maxRows)
+                if(is == true){
+                    rev = true
+                    if(trnum > maxRows){
+                        $(this).hide()
+                    }
+                    if(trnum <= maxRows){
+                        $(this).show()
+                    }
+                }
+                if(rev===false){
+                    trnum--
+                }else{
+                    rev = false
+                }
                 is = true
-                // contCategory.push($(this).text())
-                contCategory = []
+                // contAtrFind = 0
+
+                contCategory.push($(this).text())
+                // contCategory = []
 
             })
         }
@@ -1213,6 +1245,8 @@ $List5.change(function(){           // Activar filtro de Categories
     // paginado
     $(".pagination").html("")
     // maxRows = parseInt($("#maxRows").val())
+    // alert("listadoCategoryLeng: "+listadoCategory.length)
+    // alert("contCategory: "+contCategory.length)
     if(listadoCategory.length>0){
         totalRows = listadoCategory.length
     }
@@ -1273,30 +1307,6 @@ $List5.change(function(){           // Activar filtro de Categories
                         }
                     }
                 }
-                // else{
-                //     // alert("Entra")
-                //     // for(var i=0; i<listadoCategory.length; i++){
-
-                //         // if($(this).text()===listadoCategory[i]){
-                //     rev = true
-                //     // alert("trIndex")
-                //     // alert(trIndex)
-                //     // alert("trIndex")
-                //     // alert(trIndex)
-                //     // alert("maxRows")
-                //     // alert(maxRows)
-                //     // alert("pageNum")
-                //     // alert(pageNum)
-                //     if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                //         // alert("Hide: "+$(this).parent().parent().parent().text())
-                //         $(this).parent().parent().parent().hide()
-                //     }else{
-                //         $(this).parent().parent().parent().show()
-                //         // alert("Show: "+$(this).parent().parent().parent().text())
-                //     }
-                //         // }
-                //     // }
-                // }
             })
             if(listadoPasar.length<1){
                 rev = true
