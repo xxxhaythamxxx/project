@@ -37,6 +37,7 @@ var listadoAll = 0
 var table = "#invoice"
 listadoPasar = [] 
 var listadoCategory = []
+var contCategory = []
 var pasarCategory = []
 
 
@@ -1035,6 +1036,7 @@ $List5.change(function(){           // Activar filtro de Categories
                     if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
                         // alert("Consigue: "+$(this).text())
                         bandShow = true
+                        contCategory.push($(this).text())
                     }
                 }
             }
@@ -1071,6 +1073,11 @@ $List5.change(function(){           // Activar filtro de Categories
                 }
 
             }
+            if(bandShow == true){
+                // alert($(this).text())
+                // $(this).show()
+                is = true
+            }
             
         })
         // listCont = contAtrFind   // Es lo mismo
@@ -1080,10 +1087,7 @@ $List5.change(function(){           // Activar filtro de Categories
         // alert(listCont)
         // aCont = 0
         // listCont = 0
-        // if(bandShow == true){
-        //     alert($(this).text())
-        //     $(this).show()
-        // }
+        
         // alert("Siguiente fila")
         // alert(listadoPasar)             // Dim222 mm,Dim2100 mm   Tener cuidado
         // alert("Cantidad ingresada: "+listadoPasar.length)
@@ -1118,11 +1122,30 @@ $List5.change(function(){           // Activar filtro de Categories
             //     is = false
             // }
         }
-        else{
+        else{  // Muestro cuando no trae filtro de dimensiones ni atributos
             if(bandShow == true){
                 // $(this).show() // ESTA SI VA
                 is = true
             }
+            else{
+                is = false
+            }
+            if(is == true){
+                rev = true
+                if(trnum > maxRows){
+                    $(this).hide()
+                }
+                if(trnum <= maxRows){
+                    $(this).show()
+                }
+            }
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+            is = true
+            // contAtrFind = 0
         }
 
         contAtrFind = 0
@@ -1178,77 +1201,38 @@ $List5.change(function(){           // Activar filtro de Categories
         else{           // Si no se ha filtrado por atributos o dimensiones
             $("tbody tr").each(function(){
                 $(this).show() // ESTA SI VA
+                is = true
+                // contCategory.push($(this).text())
+                contCategory = []
+
             })
         }
     }
-    // alert(listadoCategory)
+    // alert(listadoCategory.length)  // Tamaño de filas por filtro de category
     // -------------------------------------------------------------------------------------
     // paginado
     $(".pagination").html("")
-    //     var trnum = 0
-    //     // Guarda la cantidad de filas seleccionadas
-    //     var maxRows = parseInt($("#maxRows").val())
-    //     var semiTotalRows = $(table+" tbody tr").length
-    //     totalRows = listado.length
-    //     var rev = false
-    //     var is = false
-    //     var listCont = 0
-    //     var aCont = 0
-    //     $("tbody tr").each(function(){
-    //         trnum++
-    //         $(this).find("td").each(function(){
-    //             $(this).find("a").each(function(){
-    //                 // alert("Cada a: "+$(this).text())
-    //                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-    //                     aCont++
-    //                     // alert("Columna: "+$(this).text())
-    //                     for(var i=0; i<listado.length; i++){
-    //                         // alert("Val a: "+$(this).text()+" con listado: "+listado[i])
-    //                         if($(this).text()==listado[i]){
-    //                             // alert("Cada a: "+$(this).text())
-    //                             listCont++
-    //                         }else{
-    //                             is = false
-    //                         }
-    //                     }
-
-    //                 }
-
-    //                 })
-    //         })
-    //         // alert("listCont: "+listCont+" listadoAll: "+listadoAll+" listadoLeng: "+listado.length)
-    //         if((listCont == listadoAll) && (listCont>0)){
-    //             is = true
-    //         }else{
-    //             is = false
-    //         }
-            // if(is == true){
-            //     rev = true
-            //     if(trnum > maxRows){
-            //         $(this).hide()
-            //     }
-            //     if(trnum <= maxRows){
-            //         $(this).show()
-            //     }
-            // }
-            // if(rev===false){
-            //     trnum--
-            // }else{
-            //     rev = false
-            // }
-            // is = true
-        //     listCont = 0
-        // });
-        // // Antes de ésto es que debe filtrar las categorias checkeadas
     // maxRows = parseInt($("#maxRows").val())
-    totalRows = listadoCategory.length
+    if(listadoCategory.length>0){
+        totalRows = listadoCategory.length
+    }
+    else{
+        totalRows = contCategory.length
+    }
     // alert("totalRows")
     // alert(totalRows)
+    // alert("contCategory")
+    // alert(contCategory.length)
     // alert("maxRows")
     // alert(maxRows)
+    // alert("listado")
+    // alert(listado)
+    // alert(listado.length)
     // alert("listadoCategory")
+    // alert(listadoCategory)
     // alert(listadoCategory.length)
-    if(totalRows > maxRows){
+    // alert(listadoCategory.length)
+    if(totalRows > maxRows){    // TotalRows: 2   maxRows: 1
         // alert("Entra")
         // alert(totalRows)
         // alert(maxRows)
@@ -1264,6 +1248,7 @@ $List5.change(function(){           // Activar filtro de Categories
     $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
 
         // alert("Click")
+        // alert(listado)
         var pageNum = $(this).attr("data-page")
         var trIndex = 0;
         var rev = false
@@ -1271,21 +1256,58 @@ $List5.change(function(){           // Activar filtro de Categories
         $(this).addClass("active")
         // Recorre tolas las filas de la tabla
         $(table+" tr:gt(0)").each(function(){
+            // alert("Esto: "+$(this).text())
             trIndex++
             $(this).find("a").each(function(){
-                for(var i=0; i<listado.length; i++){
+                if(listadoPasar.length>0){
+                    for(var i=0; i<listado.length; i++){
 
-                    if($(this).text()===listado[i]){
-                        rev = true
+                        if($(this).text()===listado[i]){
+                            rev = true
 
-                        if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                            $(this).parent().parent().parent().hide()
-                        }else{
-                            $(this).parent().parent().parent().show()
+                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                                $(this).parent().parent().parent().hide()
+                            }else{
+                                $(this).parent().parent().parent().show()
+                            }
                         }
                     }
                 }
+                // else{
+                //     // alert("Entra")
+                //     // for(var i=0; i<listadoCategory.length; i++){
+
+                //         // if($(this).text()===listadoCategory[i]){
+                //     rev = true
+                //     // alert("trIndex")
+                //     // alert(trIndex)
+                //     // alert("trIndex")
+                //     // alert(trIndex)
+                //     // alert("maxRows")
+                //     // alert(maxRows)
+                //     // alert("pageNum")
+                //     // alert(pageNum)
+                //     if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                //         // alert("Hide: "+$(this).parent().parent().parent().text())
+                //         $(this).parent().parent().parent().hide()
+                //     }else{
+                //         $(this).parent().parent().parent().show()
+                //         // alert("Show: "+$(this).parent().parent().parent().text())
+                //     }
+                //         // }
+                //     // }
+                // }
             })
+            if(listadoPasar.length<1){
+                rev = true
+                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                    // alert("Hide: "+$(this).parent().parent().parent().text())
+                    $(this).hide()
+                }else{
+                    $(this).show()
+                    // alert("Show: "+$(this).parent().parent().parent().text())
+                }
+            }
             if(rev===false){
                 trIndex--
             }else{
@@ -1307,6 +1329,7 @@ $List5.change(function(){           // Activar filtro de Categories
     }
     // alert(listadoCategory.length)
     listadoCategory = []
+    contCategory = []
 })
 
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
