@@ -58,6 +58,15 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <!-- Boton Vendor -->
+                <div style="display: inline-block;" class="">
+                    <a class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel6" data-toggle="dropdown" href="#">Vendors</a>
+                    <ul id="headerList6" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel6">            
+                        {% for cat in allVendors %}
+                            <li style="margin:auto;" class=""><input name="check{{cat.vendorName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{cat.vendorName}}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 
             </div>
             

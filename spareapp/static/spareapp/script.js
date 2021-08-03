@@ -37,8 +37,13 @@ var listadoAll = 0
 var table = "#invoice"
 listadoPasar = [] 
 var listadoCategory = []
+var listadoVendor = []
 var contCategory = []
 var pasarCategory = []
+var compVendors = []
+var contVendor = []
+var compCategories = []
+var contTotalTable = []
 
 
 // Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
@@ -807,6 +812,14 @@ $("#headerList5").each(function(){
     })
 })
 
+const $List6 = $("#headerList6");
+$("#headerList6").each(function(){
+    $(this).find("input").each(function(){
+        var comp = $(this).attr("name")
+        $(this).prop("checked",false);
+    })
+})
+
 $List2.change(function(){           // Activar filtro de dimensiones
 
     var bo = false
@@ -948,19 +961,16 @@ $List3.change(function(){           // Activar filtro de atributos
 })
 // compCategories = []                 // Lista de categorias seleccionadas
 $List5.change(function(){           // Activar filtro de Categories
-    // alert(listadoPasar)             // Lo que llega de Atributes y Dimensions
+    contTotalTable = []
+    // alert("compVendors: "+compVendors)
     for(var i = listadoPasar.length -1; i >=0; i--){
         if(listadoPasar.indexOf(listadoPasar[i]) !== i) listadoPasar.splice(i,1);
     }
-    // alert(listado)
-    // alert(listadoAll)            // Cantidad de valores introducidos por filter dimensiones y atributes
-    // alert("Entro en Categories")
     compCategories = []
     contCategory = []
 
     var catVal = []
     prueba = 5
-    // Paginado
     var trnum = 0
     // Guarda la cantidad de filas seleccionadas
     var maxRows = parseInt($("#maxRows").val())
@@ -990,7 +1000,6 @@ $List5.change(function(){           // Activar filtro de Categories
     $(this).find("input").each(function(){  // compCategories son todos los check activos
         inputTotal = inputTotal + 1
         var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
-        // alert(aux)      // Filters - Pumps - Mantenimiento - SENSOR VVT
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
             comp = $(this).attr("name").split("check")[1]
             compCategories.push(comp)
@@ -1003,56 +1012,118 @@ $List5.change(function(){           // Activar filtro de Categories
     // Aqui empieza el filtro ---------------------------------------------------
     var contAtrFind = 0
     $("tbody tr").each(function(){      // Recorro por filas
+        // alert($(this).text())
         trnum++//paginado
         var bandShow = false
+        var bandShow2 = false
         $(this).find("a").each(function(){      // Recorro por a
-            if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
-                for(var k=0;k<compCategories.length;k++){ 
-                    // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                    if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
-                        bandShow = true
-                        contCategory.push($(this).text())
+
+            if(compCategories.length>0){
+                if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
+                    for(var k=0;k<compCategories.length;k++){ 
+                        // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                            bandShow = true
+                            contCategory.push($(this).text())
+                        }
                     }
                 }
             }
 
-            if(listadoPasar.length>0){  // Si se trae velores de Dimension o atributos
+            if(listadoPasar.length>0){  // Si se trae valores de Dimension o atributos
                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                    // aCont++ //paginado
                     for(var i=0; i<listadoPasar.length; i++){
                         if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                            if(bandShow == true){
-                                // listCont++ //paginado
-                                // $(this).parent().parent().parent().show()
-                                contAtrFind = contAtrFind + 1
-                                is = true // inventado de paginado
-                            }
-                            else{
-                                is = false //paginado
-                            }
+                            contAtrFind = contAtrFind + 1
+                            bandDimAtr = true
                         }
-                        // else{
-                        //     contAtrFind = contAtrFind + 1
-                        // }
                     }
                 }
-
             }
-            if(bandShow == true){
-                is = true
+            if ($(this).attr("id") == "vendorInfo"){      // Si la columna es Vendor
+                for(var k=0;k<compVendors.length;k++){ 
+                    if(compVendors[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                        bandShow2 = true
+                        // contVendor.push($(this).text())
+                    }
+                }
+            }
+
+
+
+
+
+
+            // if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
+            //     for(var k=0;k<compCategories.length;k++){ 
+            //         // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+            //         if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+            //             bandShow = true
+            //             contCategory.push($(this).text())
+            //         }
+            //     }
+            // }
+
+            // if(listadoPasar.length>0){  // Si se trae velores de Dimension o atributos
+            //     if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+            //         for(var i=0; i<listadoPasar.length; i++){
+            //             if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+            //                 if(bandShow == true){
+            //                     // listCont++ //paginado
+            //                     // $(this).parent().parent().parent().show()
+            //                     contAtrFind = contAtrFind + 1
+            //                     is = true // inventado de paginado
+            //                 }
+            //                 else{
+            //                     is = false //paginado
+            //                 }
+            //             }
+            //             // else{
+            //             //     contAtrFind = contAtrFind + 1
+            //             // }
+            //         }
+            //     }
+
+            // }
+            // // alert("compVendors: "+compVendors)
+            // if(compVendors.length>0){
+            //     if ($(this).attr("id") == "vendorInfo"){      // Si la columna es Category
+            //         for(var k=0;k<compVendors.length;k++){ 
+            //             // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+            //             if(compVendors[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+            //                 bandShow2 = true
+            //                 // contCategory.push($(this).text())
+            //             }
+            //         }
+            //     }
+            // }
+            // if((bandShow == true) || (bandShow2 == true)){
+            //     is = true
+            // }
+            
+        }) // termina a
+        if(listadoPasar.length>0){ // Si trae filtro de dimensiones y atributos
+
+            if(compVendors.length>0){
+                if ((listadoAll == contAtrFind) && (bandShow == true && bandShow2 == true)){
+                    is = true
+                    contTotalTable.push($(this).text())
+                }
+                else{
+                    is = false
+                }
+            }
+            else{
+                if ((listadoAll == contAtrFind) && (bandShow == true)){
+                    is = true
+                    contTotalTable.push($(this).text())
+                }
+                else{
+                    is = false
+                }
             }
             
-        })
-        if(listadoPasar.length>0){ // Si trae filtro de dimensiones y atributos
-            // if ((listadoAll == contAtrFind) && bandShow == true){
-            if ((listadoAll == contAtrFind)){
-                // $(this).show() // ESTA SI VA
-                is = true
-                listadoCategory.push($(this).text())
-            }
-            else{ // desde aqui es paginacion
-                is = false
-            }if(is == true){
+            if(is == true){
                 rev = true
                 if(trnum > maxRows){
                     $(this).hide()
@@ -1066,19 +1137,72 @@ $List5.change(function(){           // Activar filtro de Categories
             }else{
                 rev = false
             }
-            is = true // hasta aqui
-            // else{
-            //     is = false
+            is = true
+
+
+            // if(compVendors.length>0){
+            //     if ((listadoAll == contAtrFind) && (bandShow == true && bandShow2 == true)){
+            //         is = true
+            //         contTotalTable.push($(this).text())
+            //     }
+            //     else{
+            //         is = false
+            //     }
             // }
+            // else{
+            //     if ((listadoAll == contAtrFind) && (bandShow == true)){
+            //         is = true
+            //         contTotalTable.push($(this).text())
+            //     }
+            //     else{
+            //         is = false
+            //     }
+            // }
+            
+            // if(is == true){
+            //     rev = true
+            //     if(trnum > maxRows){
+            //         $(this).hide()
+            //     }
+            //     if(trnum <= maxRows){
+            //         $(this).show()
+            //     }
+            // }
+            // if(rev===false){
+            //     trnum--
+            // }else{
+            //     rev = false
+            // }
+            // is = true
         }
         else{  // Muestro cuando no trae filtro de dimensiones ni atributos
-            if(bandShow == true){
-                // $(this).show() // ESTA SI VA
-                is = true
+            // alert($(this).text())
+            // alert("bandShow: "+bandShow+" bandShow2: "+bandShow2)
+            // alert("compCategories: "+compCategories+" compVendors: "+compVendors)
+            if(compCategories.length>0 && compVendors.length>0){
+                if((bandShow == true) && (bandShow2 == true)){
+                    is = true
+                    // alert("Muestro: "+$(this).text())
+                    contTotalTable.push($(this).text())
+                }
+                else{
+                    is = false
+                }
             }
             else{
-                is = false
+                if(compVendors.length<1){
+                    if(bandShow == true){
+                        is = true
+                        contTotalTable.push($(this).text())
+                        // alert("Tambien: "+$(this).text())
+                    }
+                    else{
+                        is = false
+                    }
+                }
             }
+            // alert("is: "+is)
+            // alert("trnum: "+trnum+" maxRows: "+maxRows)
             if(is == true){
                 rev = true
                 if(trnum > maxRows){
@@ -1098,8 +1222,66 @@ $List5.change(function(){           // Activar filtro de Categories
         }
 
         contAtrFind = 0
-    }) // fin del tr
 
+        // if(listadoPasar.length>0){ // Si trae filtro de dimensiones y atributos
+        //     // if ((listadoAll == contAtrFind) && bandShow == true){
+        //     if ((listadoAll == contAtrFind)){
+        //         is = true
+        //         listadoCategory.push($(this).text())
+        //     }
+        //     else{ // desde aqui es paginacion
+        //         is = false
+        //     }if(is == true){
+        //         rev = true
+        //         if(trnum > maxRows){
+        //             $(this).hide()
+        //         }
+        //         if(trnum <= maxRows){
+        //             $(this).show()
+        //         }
+        //     }
+        //     if(rev===false){
+        //         trnum--
+        //     }else{
+        //         rev = false
+        //     }
+        //     is = true // hasta aqui
+        //     // else{
+        //     //     is = false
+        //     // }
+        // }
+        // else{  // Muestro cuando no trae filtro de dimensiones ni atributos
+        //     // alert("band1 y band2: "+bandShow+" "+bandShow2)
+        //     if((bandShow == true) || (bandShow2 == true)){
+        //         is = true
+        //         // alert("is True")
+        //     }
+        //     else{
+        //         is = false
+        //     }
+        //     if(is == true){
+        //         rev = true
+        //         if(trnum > maxRows){
+        //             $(this).hide()
+        //         }
+        //         if(trnum <= maxRows){
+        //             $(this).show()
+        //         }
+        //     }
+        //     if(rev===false){
+        //         trnum--
+        //     }else{
+        //         rev = false
+        //     }
+        //     is = true
+        //     // contAtrFind = 0
+        // }
+
+        // contAtrFind = 0
+    }) // fin del tr
+    // alert(contTotalTable)
+    // alert(contTotalTable.length)
+    // alert("Ahora si")
     // Si checkbox está vacío ------------------------------------------------------
     if (inputTotal == cont){        // Si el checkbox está vacío    
         if(listadoPasar.length>0){      // Si se ha filtrado antes por dimension o atributos
@@ -1120,7 +1302,6 @@ $List5.change(function(){           // Activar filtro de Categories
                     }
                 })
                 if (listadoAll == contAtrFind){
-                    // $(this).show() // ESTO SI VA
                     is = true
                     listadoCategory.push($(this).text())
                 }
@@ -1133,7 +1314,6 @@ $List5.change(function(){           // Activar filtro de Categories
                         $(this).hide()
                     }
                     if(trnum <= maxRows){
-                        // alert($(this).text())
                         $(this).show()
                     }
                 }
@@ -1147,19 +1327,37 @@ $List5.change(function(){           // Activar filtro de Categories
             })
         }
         else{           // Si no se ha filtrado por atributos o dimensiones
+
+            trnum = 0
             $("tbody tr").each(function(){
                 trnum++
                 var bandShow = false
-                
                 $(this).find("a").each(function(){      // Recorro por a
-                    if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
-                        contCategory.push($(this).text())
-                        bandShow = true
+                    if(compVendors.length>0){    // Si hay Vendors
+                        if ($(this).attr("id") == "vendorInfo"){
+                            for(var k=0;k<compVendors.length;k++){
+                                if(compVendors[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                                    bandShow = true
+                                    contVendor.push($(this).text())
+                                }
+                            }
+                        }
                     }
-                    if(bandShow == true){
-                        is = true
+                    else{   // Si no hay Vendors
+                        if ($(this).attr("id") == "categoryInfo"){
+                            bandShow = true
+                            contCategory.push($(this).text())
+                        }
                     }
+                    
                 })
+                if(bandShow == true){
+                    // alert($(this).text())
+                    is = true
+                }else{
+                    is = false
+                }
+                // alert("is: "+is+"trnum: "+trnum+"maxRows: "+maxRows)
                 if(is == true){
                     rev = true
                     if(trnum > maxRows){
@@ -1169,6 +1367,9 @@ $List5.change(function(){           // Activar filtro de Categories
                         $(this).show()
                     }
                 }
+                else{
+                    $(this).hide()
+                }
                 if(rev===false){
                     trnum--
                 }else{
@@ -1177,30 +1378,87 @@ $List5.change(function(){           // Activar filtro de Categories
                 is = true
                 contAtrFind = 0
             })
+
+
+            // $("tbody tr").each(function(){
+            //     trnum++
+            //     var bandShow = false
+                
+            //     $(this).find("a").each(function(){      // Recorro por a
+            //         if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
+            //             // contCategory.push($(this).text())
+            //             bandShow = true
+            //         }
+            //         if(bandShow == true){
+            //             is = true
+            //         }
+            //     })
+            //     if(is == true){
+            //         rev = true
+            //         if(trnum > maxRows){
+            //             $(this).hide()
+            //         }
+            //         if(trnum <= maxRows){
+            //             $(this).show()
+            //         }
+            //     }
+            //     if(rev===false){
+            //         trnum--
+            //     }else{
+            //         rev = false
+            //     }
+            //     is = true
+            //     contAtrFind = 0
+            // })
         }
     }
     // alert(listadoCategory)
     $(".pagination").html("")
-    // if(listadoCategory.length>0){   // Si se trae algo de Dimensiones o Atributos
-    if(listadoPasar.length>0){   // Si se trae algo de Dimensiones o Atributos
-        totalRows = listadoCategory.length
+    // alert(contTotalTable)
+    // alert("contTotalTable.lenth: "+contTotalTable.length)
+    alert(contTotalTable)
+    alert(contTotalTable.length)
+    alert(contCategory)
+    alert(contCategory.length)
+    if(contTotalTable.length>0){
+        totalRows = contTotalTable.length
     }
     else{
         totalRows = contCategory.length
     }
-    // alert(totalRows)
-
-    // alert("TotalRows: "+totalRows+" maxRows: "+maxRows)
+    alert("totalRows: "+totalRows+" maxRows: "+maxRows)
+    // totalRows = contTotalTable.length
     if(totalRows > maxRows){    // Mostrar paginación
         var pagenum = Math.ceil(totalRows/maxRows)
         for(var i=1;i<=pagenum;){
             $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
         }
     }
+
+
+
+    // // if(listadoCategory.length>0){   // Si se trae algo de Dimensiones o Atributos
+    // if(listadoPasar.length>0){   // Si se trae algo de Dimensiones o Atributos
+    //     totalRows = listadoCategory.length
+    // }
+    // else{
+    //     totalRows = contCategory.length
+    // }
+
+    // // alert("totalRows: "+totalRows+" maxRows: "+maxRows)
+    // if(totalRows > maxRows){    // Mostrar paginación
+    //     var pagenum = Math.ceil(totalRows/maxRows)
+    //     for(var i=1;i<=pagenum;){
+    //         $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+    //     }
+    // }
     $(".pagination li:first-child").addClass("active")
     for(var i = contCategory.length -1; i >=0; i--){
         if(contCategory.indexOf(contCategory[i]) !== i) contCategory.splice(i,1);
     }
+    // alert(contCategory)
+
+
     $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
         var pageNum = $(this).attr("data-page")
         var trIndex = 0;
@@ -1234,20 +1492,45 @@ $List5.change(function(){           // Activar filtro de Categories
                 }
             }
             else{   // Si no trae nada desde atributos y dimensiones
+                // alert($(this).text())
+                var band1 = false
+                var band2 = false
                 for(var i=0; i<contCategory.length; i++){
                     $(this).find("a").each(function(){
-                        if($(this).text()==contCategory[i]){
-                            rev = true
-                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                                $(this).parent().parent().hide()
-                            }else{
-                                $(this).parent().parent().show()
+                        if ($(this).attr("id") == "categoryInfo"){  // Si la columna es Category
+                            if($(this).text()==contCategory[i]){
+                                // alert("Consigue: "+$(this).text())
+                                rev = true
+                                band1 = true
                             }
                         }
                     })
                 }
-            }
+                // alert("Sale")
+                // alert(contVendor)
+                // MAS ADELANTE SI HAY QUE PONERLO
+                if(contVendor.length>0){
+                    for(var i=0; i<contVendor.length; i++){
+                        $(this).find("a").each(function(){
+                            if ($(this).attr("id") == "vendorInfo"){  // Si la columna es Vendor
+                                if($(this).text()==contVendor[i]){
+                                    rev = true
+                                    band2 = true
+                                }
+                            }
+                        })
+                    }
+                }
+                // alert("pasa")
 
+                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                    $(this).hide()
+                }else{
+                    if((band1 == true) || (band2 == true)){
+                        $(this).show()
+                    }
+                }
+            }
             if(rev===false){
                 trIndex--
             }else{
@@ -1260,6 +1543,476 @@ $List5.change(function(){           // Activar filtro de Categories
         pasarCategory.push(listadoCategory[x])
     }
     listadoCategory = []
+
+
+    // $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
+    //     var pageNum = $(this).attr("data-page")
+    //     var trIndex = 0;
+    //     var rev = false
+    //     $(".pagination li").removeClass("active")
+    //     $(this).addClass("active")
+    //     $(table+" tr:gt(0)").each(function(){
+    //         trIndex++
+    //         if(listadoPasar.length>0){  // Si trae desde atributos y dimensiones
+    //             for(var i=0; i<contCategory.length; i++){
+    //                 $(this).find("a").each(function(){
+    //                     if($(this).text()==contCategory[i]){
+    //                         rev = true
+    //                     }
+    //                 })
+    //             }
+
+    //             for(var i=0; i<listadoPasar.length; i++){
+    //                 $(this).find("a").each(function(){
+    //                     if($(this).text()==listadoPasar[i]){
+    //                         rev = true
+    //                         if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+    //                             $(this).parent().parent().parent().hide()
+    //                         }else{
+    //                             if(rev == true){
+    //                                 $(this).parent().parent().parent().show()
+    //                             }
+    //                         }
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //         else{   // Si no trae nada desde atributos y dimensiones
+    //             // alert(contCategory)
+    //             // alert(contCategory.length)
+    //             for(var i=0; i<contCategory.length; i++){
+    //                 $(this).find("a").each(function(){
+    //                     if($(this).text()==contCategory[i]){
+    //                         rev = true
+    //                         if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+    //                             $(this).parent().parent().hide()
+    //                         }else{
+    //                             $(this).parent().parent().show()
+    //                         }
+    //                     }
+    //                 })
+    //             }
+    //         }
+
+    //         if(rev===false){
+    //             trIndex--
+    //         }else{
+    //             rev = false
+    //         }
+    //     })
+    // })
+    // // listadoAll = inputTotal-cont
+    // for(var x = 0;x < listadoCategory.length; x++){
+    //     pasarCategory.push(listadoCategory[x])
+    // }
+    // listadoCategory = []
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$List6.change(function(){           // Activar filtro de Vendors
+    for(var i = listadoPasar.length -1; i >=0; i--){
+        if(listadoPasar.indexOf(listadoPasar[i]) !== i) listadoPasar.splice(i,1);
+    }
+    compVendors = []
+    contVendor = []
+    contTotalTable = []
+
+    var catVal = []
+    prueba = 5
+    var trnum = 0
+    // Guarda la cantidad de filas seleccionadas
+    var maxRows = parseInt($("#maxRows").val())
+    var semiTotalRows = $(table+" tbody tr").length
+    totalRows = listadoPasar.length
+    var rev = false
+    var is = false
+    var listCont = 0
+    var aCont = 0
+
+    $("tbody tr").each(function(){
+        $(this).hide()
+    })
+    $("table td a").each(function(){
+        if ($(this).attr("id") == "vendorInfo"){
+            catVal.push($(this).text())
+        }
+    })
+    for(var i = catVal.length -1; i >=0; i--){
+        if(catVal.indexOf(catVal[i]) !== i) catVal.splice(i,1);
+    }
+    var cont = 0
+    inputTotal = 0
+    // Cuento los checks activos de Vendor -------------------------------------
+    $(this).find("input").each(function(){  // compCategories son todos los check activos
+        inputTotal = inputTotal + 1
+        var aux = $(this).attr("name").split("check")[1]        // Todos los vendors de la base
+        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            comp = $(this).attr("name").split("check")[1]
+            compVendors.push(comp)
+        }
+        else{
+            cont = cont +1
+        }
+    })
+    // Aqui empieza el filtro ---------------------------------------------------
+    var contAtrFind = 0
+    $("tbody tr").each(function(){      // Recorro por filas
+        trnum++//paginado
+        var bandShow = false
+        var bandShow2 = false
+        var bandDimAtr = false
+        $(this).find("a").each(function(){      // Recorro por a
+
+            if(compCategories.length>0){
+                if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
+                    for(var k=0;k<compCategories.length;k++){ 
+                        // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                            bandShow2 = true
+                            // contCategory.push($(this).text())
+                        }
+                    }
+                }
+            }
+
+            if(listadoPasar.length>0){  // Si se trae valores de Dimension o atributos
+                if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                    for(var i=0; i<listadoPasar.length; i++){
+                        if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                            contAtrFind = contAtrFind + 1
+                            bandDimAtr = true
+                        }
+                    }
+                }
+            }
+            if ($(this).attr("id") == "vendorInfo"){      // Si la columna es Vendor
+                for(var k=0;k<compVendors.length;k++){ 
+                    if(compVendors[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                        bandShow = true
+                        contVendor.push($(this).text())
+                    }
+                }
+            }
+
+        })  // Fin de a
+        if(listadoPasar.length>0){ // Si trae filtro de dimensiones y atributos
+
+            if(compCategories.length>0){
+                if ((listadoAll == contAtrFind) && (bandShow == true && bandShow2 == true)){
+                    is = true
+                    contTotalTable.push($(this).text())
+                }
+                else{
+                    is = false
+                }
+            }
+            else{
+                if ((listadoAll == contAtrFind) && (bandShow == true)){
+                    is = true
+                    contTotalTable.push($(this).text())
+                }
+                else{
+                    is = false
+                }
+            }
+            
+            if(is == true){
+                rev = true
+                if(trnum > maxRows){
+                    $(this).hide()
+                }
+                if(trnum <= maxRows){
+                    $(this).show()
+                }
+            }
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+            is = true
+        }
+        else{  // Muestro cuando no trae filtro de dimensiones ni atributos
+            if(compCategories.length>0 && compVendors.length>0){
+                if((bandShow == true) && (bandShow2 == true)){
+                    is = true
+                    contTotalTable.push($(this).text())
+                }
+                else{
+                    is = false
+                }
+            }
+            else{
+                if(compCategories.length<1){
+                    if(bandShow == true){
+                        is = true
+                        contTotalTable.push($(this).text())
+                    }
+                    else{
+                        is = false
+                    }
+                }
+            }
+            if(is == true){
+                rev = true
+                if(trnum > maxRows){
+                    $(this).hide()
+                }
+                if(trnum <= maxRows){
+                    $(this).show()
+                }
+            }
+            if(rev===false){
+                trnum--
+            }else{
+                rev = false
+            }
+            is = true
+            // contAtrFind = 0
+        }
+
+        contAtrFind = 0
+    }) // fin del tr
+
+    // Si checkbox está vacío ------------------------------------------------------
+    if (inputTotal == cont){        // Si el checkbox está vacío    
+        if(listadoPasar.length>0){      // Si se ha filtrado antes por dimension o atributos
+            trnum = 0
+            is = false
+            $("tbody tr").each(function(){
+                bandShow2 = false
+                trnum++
+                contAtrFind = 0
+                $($(this).find("a")).each(function(){
+
+                    if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+                        for(var i=0; i<listadoPasar.length; i++){
+                            if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                                // listadoCategory.push($(this).parent().parent().text())
+                                contAtrFind = contAtrFind + 1
+                            }
+                        }
+                    }
+
+                    if(compCategories.length>0){
+                        if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
+                            for(var k=0;k<compCategories.length;k++){ 
+                                // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                                if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                                    bandShow2 = true
+                                    // contCategory.push($(this).text())
+                                }
+                            }
+                        }
+                    }
+                })
+                if(compCategories.length>0){
+                    if ((listadoAll == contAtrFind) && (bandShow2 == true)){
+                        is = true
+                        contTotalTable.push($(this).text())
+                        listadoCategory.push($(this).text())
+                    }
+                    else{ // desde aqui es paginacion
+                        is = false
+                    }
+                }
+                else{
+                    if ((listadoAll == contAtrFind)){
+                        is = true
+                        contTotalTable.push($(this).text())
+                        listadoCategory.push($(this).text())
+                    }
+                    else{ // desde aqui es paginacion
+                        is = false
+                    }
+                }
+                
+                if(is == true){
+                    rev = true
+                    if(trnum > maxRows){
+                        $(this).hide()
+                    }
+                    if(trnum <= maxRows){
+                        $(this).show()
+                    }
+                }
+                if(rev===false){
+                    trnum--
+                }else{
+                    rev = false
+                }
+                is = true // hasta aqui
+            })
+        }
+        else{           // Si no se ha filtrado por atributos o dimensiones
+            var contTotal = 0
+            trnum = 0
+            $("tbody tr").each(function(){
+                trnum++
+                var bandShow = false
+                $(this).find("a").each(function(){      // Recorro por a
+                    if(compCategories.length>0){    // Si hay categorias
+                        if ($(this).attr("id") == "categoryInfo"){
+                            for(var k=0;k<compCategories.length;k++){
+                                if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                                    bandShow = true
+                                    contCategory.push($(this).text())
+                                }
+                            }
+                        }
+                    }
+                    else{   // Si no hay categorias
+                        if ($(this).attr("id") == "vendorInfo"){
+                            bandShow = true
+                            contVendor.push($(this).text())
+                        }
+                    }
+                    
+                })
+                if(bandShow == true){
+                    is = true
+                }else{
+                    is = false
+                }
+                if(is == true){
+                    rev = true
+                    if(trnum > maxRows){
+                        $(this).hide()
+                    }
+                    if(trnum <= maxRows){
+                        $(this).show()
+                    }
+                }
+                else{
+                    $(this).hide()
+                }
+                if(rev===false){
+                    trnum--
+                }else{
+                    rev = false
+                }
+                is = true
+                contAtrFind = 0
+            })
+        }
+    }
+    $(".pagination").html("")
+    if(contTotalTable.length>0){
+        totalRows = contTotalTable.length
+    }
+    else{
+        totalRows = contVendor.length
+    }
+    // totalRows = contTotalTable.length
+    if(totalRows > maxRows){    // Mostrar paginación
+        var pagenum = Math.ceil(totalRows/maxRows)
+        for(var i=1;i<=pagenum;){
+            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+        }
+    }
+    $(".pagination li:first-child").addClass("active")
+    // for(var i = contVendor.length -1; i >=0; i--){
+    //     if(contVendor.indexOf(contVendor[i]) !== i) contVendor.splice(i,1);
+    // }
+    $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
+        var pageNum = $(this).attr("data-page")
+        var trIndex = 0;
+        var rev = false
+        $(".pagination li").removeClass("active")
+        $(this).addClass("active")
+        $(table+" tr:gt(0)").each(function(){
+            trIndex++
+            if(listadoPasar.length>0){  // Si trae desde atributos y dimensiones
+                for(var i=0; i<contCategory.length; i++){
+                    $(this).find("a").each(function(){
+                        if($(this).text()==contCategory[i]){
+                            rev = true
+                        }
+                    })
+                }
+
+                for(var i=0; i<listadoPasar.length; i++){
+                    $(this).find("a").each(function(){
+                        if($(this).text()==listadoPasar[i]){
+                            rev = true
+                            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                                $(this).parent().parent().parent().hide()
+                            }else{
+                                if(rev == true){
+                                    $(this).parent().parent().parent().show()
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+            else{   // Si no trae nada desde atributos y dimensiones
+                var band1 = false
+                var band2 = false
+                for(var i=0; i<contVendor.length; i++){
+                    $(this).find("a").each(function(){
+                        if ($(this).attr("id") == "vendorInfo"){  // Si la columna es Vendor
+                            if($(this).text()==contVendor[i]){
+                                rev = true
+                                band1 = true
+                            }
+                        }
+                    })
+                }
+                if(contCategory.length>0){
+                    for(var i=0; i<contCategory.length; i++){
+                        $(this).find("a").each(function(){
+                            if ($(this).attr("id") == "categoryInfo"){  // Si la columna es Category
+                                if($(this).text()==contCategory[i]){
+                                    rev = true
+                                    band2 = true
+                                }
+                            }
+                        })
+                    }
+                }
+                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+                    $(this).hide()
+                }else{
+                    if((band1 == true) || (band2 == true)){
+                        $(this).show()
+                    }
+                }
+            }
+            if(rev===false){
+                trIndex--
+            }else{
+                rev = false
+            }
+        })
+    })
+    // listadoAll = inputTotal-cont
+    for(var x = 0;x < listadoCategory.length; x++){
+        pasarCategory.push(listadoCategory[x])
+    }
+    listadoCategory = []
+
 })
 
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
