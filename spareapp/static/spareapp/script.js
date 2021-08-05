@@ -49,7 +49,7 @@ var contTotalTable = []
 // Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
 function measureFilter(){
 
-    // listado = []
+    listado = []
     listadoAll = 0
 
     $("#myTable tr").each(function(){

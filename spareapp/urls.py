@@ -26,6 +26,7 @@ urlpatterns = [
     path("chasis/<str:val>",views.chasis,name="chasis"),
     path("prev/<str:val>?<str:val2>",views.prev,name="prev"),
     path("next/<str:val>?<str:val2>",views.next,name="next"),
+    path("filldb",views.filldb,name="filldb"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

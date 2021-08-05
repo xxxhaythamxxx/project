@@ -275,7 +275,7 @@ def sparedetails(request,val,val2):
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
-            pr=spare.objects.filter(spare_code=val).order_by("spare_name","spare_code","spare_brand")
+            pr1=spare.objects.filter(spare_code=val).order_by("spare_name","spare_code","spare_brand")
             ar=spare.objects.values("spare_code","car_info__car_manufacturer").filter(spare_code=val).distinct()
             spareaux = val2
             valor=spareaux.lstrip("<QuerySet [spare:")
@@ -302,9 +302,11 @@ def sparedetails(request,val,val2):
                     codeAux=v.split(" ")[0]
                 i=i+1
             pr=spare.objects.filter(spare_code=codeAux).order_by("spare_name","spare_code","spare_brand")
+            # print("-------------------------------------")
+            # print(codeAux)
             dbTotal = len(vector)
             dbActual = valAux+1
-            dic.update({"vector":vector,"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
+            dic.update({"spare1":pr1,"vector":vector,"dbTotal":dbTotal,"dbActual":dbActual,"spareAux":spareaux,"spare":pr,"spareReference":ar})
             return render(request,"spareapp/sparedetails.html",dic)
     else:
         return selectf(request)
@@ -365,7 +367,7 @@ def name(request,val):
         else:
             # pr=spare.objects.values("id","spare_photo","spare_code","spare_brand","spare_name","car_info__car_manufacturer").filter(spare_name__icontains=val).distinct()
             pr=spare.objects.filter(spare_name__icontains=val).order_by("spare_name","spare_code","spare_brand").distinct()
-            dic.update({"spare":pr,"mig":val,"parameter":"Spare name"})
+            dic.update({"spare":pr,"mig":val,"parameter":"Description"})
             return render(request,"spareapp/find.html",dic)
     else:
         return selectf(request)
@@ -851,3 +853,11 @@ def next(request,val,val2):
 #     result = list(car.objects.filter(
 #     spare_id=int(id)).values('id', 'car_manufacturer'))
 #     return HttpResponse(json.dumps(result), content_type="application/json")
+
+def filldb(request):
+    if request.method == "POST":
+        car1 = car()
+        car1.car_manufacturer = request.POST.get("manufactur")
+        car1.save()
+
+    return render(request,"spareapp/filldb.html")

@@ -6,7 +6,7 @@
 
 <div id="invoice" class="resultadoBusqueda">
     <div class="row">
-        <div class="col-lg-11 color p-2 text-white d-flex justify-content-center">
+        <div class="col-lg-9 color p-2 text-white d-flex justify-content-center">
             {{spare.0.spare_code}} - {{spare.0.spare_name}}
         </div>
         <div class="col-lg-1 color-soft text-white d-flex justify-content-center">
@@ -14,21 +14,21 @@
                 {{dbActual}} / {{dbTotal}} 
             </div>
         </div>
-        <div class="col-lg-3 mt-2">
-            <div class="imagecont d-flex justify-content-center">
-                <div style="background-image: url('/media/{{spare.0.spare_photo}}');"" class="mimage"></div>
-            </div>
+        <div class="col-lg-2 d-flex justify-content-center">
             <div class="container">
-                <div class="row mt-2">
+                <div class="row">
                     <div class="col-lg-6 d-flex justify-content-lg-start">
-                        <!-- <button class="btn btn-primary pl-4 pr-4">Prev</button> -->
                         <a href="{% url 'prev' spare.0.spare_code spareAux %}" class="btn btn-primary pl-4 pr-4">Prev</a>
                     </div>
                     <div class="col-lg-6 d-flex justify-content-lg-end">
-                        <!-- <button class="btn btn-primary pl-4 pr-4">Next</button> -->
                         <a href="{% url 'next' spare.0.spare_code spareAux %}" class="btn btn-primary pl-4 pr-4">Next</a>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-lg-3 mt-2">
+            <div class="imagecont d-flex justify-content-center">
+                <div style="background-image: url('/media/{{spare.0.spare_photo}}');"" class="mimage"></div>
             </div>
         </div>
         
@@ -62,7 +62,7 @@
                     <div class="hover"><a href="{% url 'brand' spare.0.spare_brand %}">{{spare.0.spare_brand}}</a></div>
                     {% endif %} -->
                     {% if spare.0.spare_name %}
-                    <div class="hover"><a href="#">{{spare.0.spare_category}}</a></div>
+                    <div class="hover"><a href="{% url 'categoryi' spare.0.spare_category %}">{{spare.0.spare_category}}</a></div>
                     {% endif %}
                     {% if spare.0.spare_name %}
                     <div class="hover"><a href="{% url 'name' spare.0.spare_name %}">{{spare.0.spare_name}}</a></div>
@@ -115,7 +115,7 @@
                  <div class="row">
                     <div class="col-5">
                             {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
-                            <div class="hover"><a href="{% url 'sparedetails' sp.spare_code spare %}">{{sp.spare_code}}</a></div>
+                            <div class="hover"><a href="{% url 'sparedetails' sp.spare_code spareAux %}">{{sp.spare_code}}</a></div>
                             {% endfor %}
                     </div>
                     <div class="col-6">
