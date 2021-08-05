@@ -1,0 +1,79 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Spare {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container mt-5 col-lg-4">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="cod" class="form-label">Code</label>
+            <input value="{{sparefind.0.spare_code}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp">
+            <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
+        </div>
+        <div class="mb-3">
+            <label for="descriptio" class="form-label">Description</label>
+            <input value="{{sparefind.0.spare_name}}" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp">
+        </div>
+        <!-- <div class="mb-3">
+            <label for="carinf" class="form-label">Car info</label>
+            <input type="text" class="form-control" name="carinf" id="carinf" aria-describedby="carinfoHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="enginf" class="form-label">Engine info</label>
+            <input type="text" class="form-control" name="enginf" id="enginf" aria-describedby="enginfoHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="categor" class="form-label">Category</label>
+            <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categoryHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="dimensio" class="form-label">Dimensions</label>
+            <input type="number" class="form-control" name="dimensio" id="dimensio" aria-describedby="dimensioHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="atribut" class="form-label">Atributes</label>
+            <input type="text" class="form-control" name="atribut" id="atribut" aria-describedby="atributHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="referenc" class="form-label">Reference codes</label>
+            <input type="text" class="form-control" name="referenc" id="referenc" aria-describedby="referencHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="vendo" class="form-label">Vendor</label>
+            <input type="text" class="form-control" name="vendo" id="vendo" aria-describedby="vendorHelp">
+        </div> -->
+        <div class="mb-3">
+            <label for="phot" class="form-label">Photo</label>
+            <input title=" " value="{{sparefind.0.spare_photo}}" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
+            <div id="photoHelp" class="form-text">{{sparefind.0.spare_photo}}</div>
+        </div>
+        <div class="mb-3">
+            <label for="pricem" class="form-label">Price M</label>
+            <input value="{{sparefind.0.price_m}}" type="number" class="form-control" name="pricem" id="pricem" aria-describedby="pricemHelp">
+            <div id="pricemHelp" class="form-text">Mayor price.</div>
+        </div>
+        <div class="mb-3">
+            <label for="priced" class="form-label">Price D</label>
+            <input value="{{sparefind.0.price_d}}" type="number" class="form-control" name="priced" id="priced" aria-describedby="pricedHelp">
+            <div id="pricedHelp" class="form-text">Detail price.</div>
+        </div>
+        <!-- <div class="mb-3">
+            <label for="sparetarge" class="form-label">Spare target</label>
+            <input type="text" class="form-control" name="sparetarge" id="sparetarge" aria-describedby="sparetargeHelp">
+        </div> -->
+        <!-- <div class="mb-3">
+            <label for="not" class="form-label">Note</label>
+            <input type="textfield" class="form-control" name="not" id="not" aria-describedby="notHelp">
+        </div> -->
+        
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+</div>
+
+{% endblock %}

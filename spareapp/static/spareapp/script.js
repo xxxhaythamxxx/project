@@ -2253,33 +2253,40 @@ cont = 0
 
  $("table").find("tr").each(function(){
     cont = 0
-        $(this).find("td").each(function(){
-    
-            // if($(this).attr("id")=="reference"){
-            if($(this).index()==$("#atributes").index()){
+    $(this).find("td").each(function(){
+
+        // if($(this).attr("id")=="reference"){
+        if($(this).index()==$("#atributes").index()){
+            // alert($(this).text())
+            $(this).find("a").each(function(){
                 // alert($(this).text())
-                $(this).find("a").each(function(){
-                    // alert($(this).text())
-                    var aux = $(this).text()
-                    var sp = aux.split(" ")
-                    var der = sp[sp.length-1]
-                    // alert(der)
-                    var iz = aux.split(" "+der)
-                    iz = iz[0]
-                    // alert(iz)
-                    // iz.attr("style",'background-color:gray')
-                    // iz.css({'background-color':'gray'})
-                    // $(this).text(iz+" Valor")
-                    // alert($(this).text())
-                    // alert(cont)
-                    // if(cont<5){
-                    //     $(this).show()
-                    // }else{
-                    //     $(this).hide()
-                    // }
-                    // cont = cont +1
-                })
-            }
-        })
-         
-     })
+                var aux = $(this).text()
+                var sp = aux.split(" ")
+                var der = sp[sp.length-1]
+                // alert(der)
+                var iz = aux.split(" "+der)
+                iz = iz[0]
+                // alert(iz)
+                // iz.attr("style",'background-color:gray')
+                // iz.css({'background-color':'gray'})
+                // $(this).text(iz+" Valor")
+                // alert($(this).text())
+                // alert(cont)
+                // if(cont<5){
+                //     $(this).show()
+                // }else{
+                //     $(this).hide()
+                // }
+                // cont = cont +1
+            })
+        }
+    })
+        
+})
+//  Filtrar tabla de editar base de datos
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $(".invoicefill tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})

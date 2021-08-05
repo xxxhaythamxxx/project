@@ -1,54 +1,14 @@
-{% extends "spareapp/base.html" %}
+{% extends "spareapp/fillbase.html" %}
 
 {% block title %} DataBase {% endblock %}
 
 {% block content %}
 
-<div class="container d-flex justify-content-center mt-2">
-    <div>
-        <button class="btn btn-success">Register car</button>
-        <button class="btn btn-success">Register engine</button>
-        <button class="btn btn-success">Register spare</button>
-        <!-- <button class="btn-primary">Register car</button> -->
-    </div>
-    
-</div>
+{% include "spareapp/fillsup.html" %}
 
 <div class="container mt-5 col-lg-4">
 
-    <form method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="manufactur" class="form-label">Manufacturer</label>
-            <input type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp">
-            <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
-        </div>
-        <div class="mb-3">
-            <label for="mode" class="form-label">Model</label>
-            <input type="text" class="form-control" name="mode" id="mode" aria-describedby="modeHelp">
-        </div>
-        <div class="mb-3">
-            <label for="yearfro" class="form-label">Year from</label>
-            <input type="number" class="form-control" name="yearfro" id="yearfro" aria-describedby="yearfroHelp">
-        </div>
-        <div class="mb-3">
-            <label for="yeart" class="form-label">Year to</label>
-            <input type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
-        </div>
-        <div class="mb-3">
-            <label for="chasi" class="form-label">Chasis</label>
-            <input type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
-        </div>
-        <!-- <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div> -->
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
+    
 
     <!-- <form action="">
         <div class="row d-flex justify-content-center">
