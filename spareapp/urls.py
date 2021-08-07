@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -23,6 +23,8 @@ urlpatterns = [
     path("carBrands",views.carBrands,name="carBrands"),
     # path("categoryi",views.categoryi,name="categoryi"),
     path("categoryi/<str:val>",views.categoryi,name="categoryi"),
+    re_path("categoryi/(?P<val>.*)$",views.categoryi,name="categoryi"),
+    # ['categoryi/(?P<val>)$', 'categoryi/(?P<val>[^/]+)$']
     path("chasis/<str:val>",views.chasis,name="chasis"),
     path("prev/<str:val>?<str:val2>",views.prev,name="prev"),
     path("next/<str:val>?<str:val2>",views.next,name="next"),

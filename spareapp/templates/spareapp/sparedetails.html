@@ -114,12 +114,12 @@
              <div class="color p-1 text-white mt-2 radius mb-2" for="">Spare targets</div>
                  <div class="row">
                     <div class="col-5">
-                            {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
+                            {% for sp in spare.0.spare_spare.all %}
                             <div class="hover"><a href="{% url 'sparedetails' sp.spare_code spareAux %}">{{sp.spare_code}}</a></div>
                             {% endfor %}
                     </div>
                     <div class="col-6">
-                        {% for sp in spare.0.spare_spare.all|dictsort:"spare_name" %}
+                        {% for sp in spare.0.spare_spare.all %}
                         <div class="hover"><a href="{% url 'name' sp.spare_name %}">{{sp.spare_name}}</a></div>
                         {% endfor %}
                     </div>

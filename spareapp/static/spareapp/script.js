@@ -488,6 +488,83 @@ function toggle(source,toDel) {
     }
 }
 
+//  Filtrar spare references
+$("#referenc").on("keyup",function(){                                // Cuando se teclea algo
+    // alert("Toma")
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $("#codPasar option").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+
+// Mostrar a ambos lados los references que se tienen
+$("#codPasar option").each(function(){
+    // alert($(this).text())
+    var aux = $(this).text()
+    var band = false
+    $("#codPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).hide()
+    }
+})
+
+// Pasar de un lado a otro los spares references
+function pasar(){
+    $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#codPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#codPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#codPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function regresar(){
+    $("#codPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#codPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#codPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#codPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Arreglar los valores que se pasarán
+$("#formPass").on("click",function(){
+    $("#codPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+})
 
 // Boton default para que reinicie la tabla ------------------------------------------------------------------------
 document.getElementById("default").addEventListener("click",function(){
@@ -567,7 +644,6 @@ document.getElementById("default").addEventListener("click",function(){
     })
     measureReset();
 })
-
 // boton para exportar a Excel -------------------------------------------------------------------------------------
 document.getElementById("downloadexcel").addEventListener("click",function(){
     $("#check").hide();
@@ -2283,6 +2359,7 @@ cont = 0
     })
         
 })
+
 //  Filtrar tabla de editar base de datos
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula

@@ -6,9 +6,26 @@
 
 {% include "spareapp/fillsup.html" %}
 
-<div class="container mt-5 col-lg-4">
+<!-- {{val}}
+<div></div>
+{% for spr in allSparesall %}
+    <div>Spr: {{spr}}</div>
+    <div>spr.spare_spare.all: {{spr.spare_spare.all}}</div>
+{% endfor %}
 
-    <form method="POST">
+<div>Final</div>
+{% for spr in allSparesall %}
+    {% if spr.spare_code == val %}
+        {% for sp in spr.spare_spare.all %}
+            <div>Code: {{sp.spare_code}}</div>
+            <div>Description: {{sp.spare_name}}</div>
+        {% endfor %}
+    {% endif %}
+{% endfor %} -->
+
+<div class="container mt-5 col-lg-12 d-flex justify-content-center">
+
+    <form method="POST" class="col-lg-7">
         {% csrf_token %}
         <div class="mb-3">
             <label for="cod" class="form-label">Code</label>
@@ -39,10 +56,60 @@
             <label for="atribut" class="form-label">Atributes</label>
             <input type="text" class="form-control" name="atribut" id="atribut" aria-describedby="atributHelp">
         </div> -->
-        <!-- <div class="mb-3">
+        <div class="mb-3">
             <label for="referenc" class="form-label">Reference codes</label>
-            <input type="text" class="form-control" name="referenc" id="referenc" aria-describedby="referencHelp">
-        </div> -->
+            <input placeholder="Search by code or description" type="text" class="form-control" name="referenc" id="referenc" aria-describedby="referencHelp">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="color text-white p-2 m-2">Available Spare target</div>
+                    <div class="container">
+                        <select class="form-select" multiple aria-label="multiple select example" name="toPass" id="codPasar" size="5">
+                            {% for spr in allSparesall %}
+                                <option class="p-1">{{spr}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-2">
+                    <div>></div>
+                    <div><</div>
+                </div> -->
+                <div class="col-lg-6">
+                    <div class="color text-white p-2 m-2">Chosen Spare target</div>
+                    <div class="container">
+                        <select class="form-select" multiple aria-label="multiple select example" name="toReg" id="codPasado" size="5">
+                            {% for spr in allSparesall %}
+                                {% if spr.spare_code == val %}
+                                    {% for sp in spr.spare_spare.all %}
+                                    <option value="{{sp}}" class="p-1">{{sp}}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="container d-flex justify-content-center">
+                        <div class="m-2">
+                            <a onClick="pasar()" href="#" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="m-2">
+                            <a onClick="regresar()" href="#" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <!-- <div class="m-2 text-white color p-2">Del</div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- <div class="mb-3">
             <label for="vendo" class="form-label">Vendor</label>
             <input type="text" class="form-control" name="vendo" id="vendo" aria-describedby="vendorHelp">
@@ -71,7 +138,7 @@
             <input type="textfield" class="form-control" name="not" id="not" aria-describedby="notHelp">
         </div> -->
         
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button id="formPass" type="submit" class="btn btn-primary">Save</button>
     </form>
 
 </div>

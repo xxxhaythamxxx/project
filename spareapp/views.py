@@ -934,8 +934,7 @@ def fillengine(request):
         return render(request,"spareapp/fillengine.html",dic)
 
 def fillspare(request,val):
-    print("---------------------------------------------------")
-    print(val)
+
     dim=dimension.objects.values("atributeName").distinct()
     dim2=dimension.objects.all()
     atr=atribute.objects.values("atributeName").distinct()
@@ -950,24 +949,45 @@ def fillspare(request,val):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
+    print("Val: "+val)
+
     if val=="empty":
+        print("empty")
         spare1 = spare()
+        # reference1 = reference()
         dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
     else:
+        print("No empty")
         spare1 = spare.objects.get(spare_code=val)
+        print(spare1)
         sparefind=spare.objects.filter(spare_code=val)
         dic={"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
-        
+        print("POST")
+        sparrr = request.POST.getlist("toReg")
         spare1.spare_code = request.POST.get("cod")
         spare1.spare_name = request.POST.get("descriptio")
         spare1.spare_photo = request.POST.get("phot")
         spare1.price_m = request.POST.get("pricem")
         spare1.price_d = request.POST.get("priced")
         spare1.save()
+        for sp in sparrr:
+            varId = 0
+            aux = sp.split(" ")
+            code = (aux[0])
 
-        return render(request,"spareapp/fillspare.html")
+            auxSp = spare.objects.filter(spare_code=code)
+            for sp in auxSp:
+                varId = sp.id
+            targetCode = spare.objects.get(id=varId)
+            spare1.spare_spare.add(targetCode)
+        
+        # sparefind = ""
+        # dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+        # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+        return render(request,"spareapp/fillspare.html",dic)
     else:
         return render(request,"spareapp/fillspare.html",dic)
 
@@ -999,6 +1019,7 @@ def deletespare(request,val):
     spare1 = spare.objects.get(spare_code=val)
     spare1.delete()
     # sparefind=spare.objects.filter(spare_code=val)
-    # dic={"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"spares":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
-    return render(request,"spareapp/fillspare.html")
+    return render(request,"spareapp/editspare.html",dic)
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
