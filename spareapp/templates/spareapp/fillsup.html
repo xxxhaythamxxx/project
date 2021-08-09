@@ -10,7 +10,7 @@
         <div>
             <button onclick="window.location.href='/editcar'" class="btn btn-secondary">Edit car</button>
             <button onclick="window.location.href='/fillengine'" class="btn btn-secondary">Edit engine</button>
-            <button onclick="window.location.href='/editspare'" class="btn btn-secondary">Edit spare</button>
+            <a href="{% url 'listspare' %}" class="btn btn-secondary">Edit spare</a>
         </div>
     </div>
 </html>

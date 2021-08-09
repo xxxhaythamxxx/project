@@ -25,16 +25,37 @@
 
 <div class="container mt-5 col-lg-12 d-flex justify-content-center">
 
-    <form method="POST" class="col-lg-7">
+    <form method="POST" class="col-lg-7" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="cod" class="form-label">Code</label>
-            <input value="{{sparefind.0.spare_code}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp">
+            <input value="" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp" maxlength="15">
             <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
         </div>
         <div class="mb-3">
             <label for="descriptio" class="form-label">Description</label>
-            <input value="{{sparefind.0.spare_name}}" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp">
+            <input value="" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp" maxlength="80">
+        </div>
+        <div class="mb-3" id="refCodesTittle">
+            <label for="refcodes" class="form-label">Reference Codes</label>
+            <div id="reference-content" class="row">
+                <div id="ref-val" class="ref-val row">
+                    <div class="col-lg-11">
+                        <input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
+                        <input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
+                    </div>
+                    <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                        <div>
+                            <a style="text-decoration: none;color: rgb(136,12,12);" id="addRef" class="p-2" href="javascript:void(0);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <!-- <div class="mb-3">
             <label for="carinf" class="form-label">Car info</label>
@@ -57,7 +78,7 @@
             <input type="text" class="form-control" name="atribut" id="atribut" aria-describedby="atributHelp">
         </div> -->
         <div class="mb-3">
-            <label for="referenc" class="form-label">Reference codes</label>
+            <label for="referenc" class="form-label">Spare targets</label>
             <input placeholder="Search by code or description" type="text" class="form-control" name="referenc" id="referenc" aria-describedby="referencHelp">
             <div class="row">
                 <div class="col-lg-6">
@@ -92,17 +113,17 @@
                 <div class="col-lg-12">
                     <div class="container d-flex justify-content-center">
                         <div class="m-2">
-                            <a onClick="pasar()" href="#" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-                                </svg>
+                            <a onClick="pasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                  </svg>
                             </a>
                         </div>
                         <div class="m-2">
-                            <a onClick="regresar()" href="#" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
-                                </svg>
+                            <a onClick="regresar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                  </svg>
                             </a>
                         </div>
                         <!-- <div class="m-2 text-white color p-2">Del</div> -->
@@ -116,17 +137,17 @@
         </div> -->
         <div class="mb-3">
             <label for="phot" class="form-label">Photo</label>
-            <input title=" " value="{{sparefind.0.spare_photo}}" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
-            <div id="photoHelp" class="form-text">{{sparefind.0.spare_photo}}</div>
+            <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
+            <!-- <div id="photoHelp" class="form-text">{{sparefind.0.spare_photo}}</div> -->
         </div>
         <div class="mb-3">
-            <label for="pricem" class="form-label">Price M</label>
-            <input value="{{sparefind.0.price_m}}" type="number" class="form-control" name="pricem" id="pricem" aria-describedby="pricemHelp">
+            <label for="pricem" class="form-label">Price Mayor</label>
+            <input value="" type="number" class="form-control" name="pricem" id="pricem" aria-describedby="pricemHelp">
             <div id="pricemHelp" class="form-text">Mayor price.</div>
         </div>
         <div class="mb-3">
-            <label for="priced" class="form-label">Price D</label>
-            <input value="{{sparefind.0.price_d}}" type="number" class="form-control" name="priced" id="priced" aria-describedby="pricedHelp">
+            <label for="priced" class="form-label">Price Detail</label>
+            <input value="" type="number" class="form-control" name="priced" id="priced" aria-describedby="pricedHelp">
             <div id="pricedHelp" class="form-text">Detail price.</div>
         </div>
         <!-- <div class="mb-3">

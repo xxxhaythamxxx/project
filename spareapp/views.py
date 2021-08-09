@@ -949,29 +949,47 @@ def fillspare(request,val):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    print("Val: "+val)
-
-    if val=="empty":
-        print("empty")
-        spare1 = spare()
-        # reference1 = reference()
-        dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
-    else:
-        print("No empty")
-        spare1 = spare.objects.get(spare_code=val)
-        print(spare1)
-        sparefind=spare.objects.filter(spare_code=val)
-        dic={"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    spare1 = spare()
+    dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
         print("POST")
+        # Spare ------------------------------------------------------
+        spareAux = spare.objects.filter(spare_code=request.POST.get("cod"))
+        if spareAux:
+            print("Ya existe")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        else:
+            print("Es nuevo")
         sparrr = request.POST.getlist("toReg")
         spare1.spare_code = request.POST.get("cod")
         spare1.spare_name = request.POST.get("descriptio")
-        spare1.spare_photo = request.POST.get("phot")
-        spare1.price_m = request.POST.get("pricem")
-        spare1.price_d = request.POST.get("priced")
+        print(request.POST)
+        print("Files")
+        print(request.FILES)
+
+        if "phot" in request.FILES:
+            print("Consigue phot")
+            spare1.spare_photo = request.FILES['phot']
+            # pass
+        else:
+            print("No consigue photo")
+        # if request.FILES['phot']:
+            # spare1.spare_photo = request.FILES['phot']
+        # spare1.spare_photo = request.POST.get("phot")
+
+        if request.POST.get("pricem")=="":
+            pass
+        else:
+            spare1.price_m = request.POST.get("pricem")
+
+        if request.POST.get("priced")=="":
+            pass
+        else:
+            spare1.price_d = request.POST.get("priced")    
         spare1.save()
+
+        # Spare targets -----------------------------------------------
         for sp in sparrr:
             varId = 0
             aux = sp.split(" ")
@@ -983,22 +1001,167 @@ def fillspare(request,val):
             targetCode = spare.objects.get(id=varId)
             spare1.spare_spare.add(targetCode)
         
-        # sparefind = ""
-        # dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
-        # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        # Reference ------------------------------------------------------
+        codesList = request.POST.getlist("refcodes")
+        notesList = request.POST.getlist("refcodesnote")
+        i = 0
+        for ref in codesList:
+
+            if (ref != "") and (notesList[i] != ""):
+                reference1 = reference()
+                auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
+                for sp in auxSp:
+                    varId = sp.id
+                targetSpare = spare.objects.get(id=varId)
+                reference1.referenceSpare = targetSpare
+                reference1.referenceCode = ref
+                reference1.referenceNote = notesList[i]
+                reference1.save()
+            i = i + 1
 
         return render(request,"spareapp/fillspare.html",dic)
     else:
         return render(request,"spareapp/fillspare.html",dic)
 
+def editspare(request,val):
 
-def editspare(request):
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
+
+    print("Val: "+val)
+
+    refAux = reference.objects.filter(referenceSpare__spare_code=val)
+    # print(refAux)
+
+    spare1 = spare.objects.get(spare_code=val)
+    sparefind=spare.objects.filter(spare_code=val)
+    # Con sparefind puedo enviar el mismo valor al final para seguir editando
+    dic={"refAux":refAux,"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    print("Antes del POST")
+    print(request.FILES)
+    if request.FILES:
+        print("Trajo")
+    else:
+        print("No trajo")
+
+    if request.method == "POST":
+        print("POST en Editar")
+
+        if request.FILES:
+            print("Trajo")
+        else:
+            print("No trajo")
+
+        # auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
+        # if auxSp:
+        #     print("Consigue codigo")
+        #     spare1 = spare.objects.get(spare_code=request.POST.get("cod"))
+        # else:
+        #     print("No consigue codigo")
+        #     spare1 = spare()
+        # print(auxSp)
+        # Spare ------------------------------------------------------
+        sparrr = request.POST.getlist("toReg")
+        spare1.spare_code = request.POST.get("cod")
+        # print(spare1.spare_code)
+        spare1.spare_name = request.POST.get("descriptio")
+        # print(spare1.spare_name)
+
+        print(request.POST)
+        print("Files")
+        print(request.FILES)
+        
+        if "phot" in request.FILES:
+            print("Consigue phot")
+            spare1.spare_photo = request.FILES['phot']
+        else:
+            print("No consigue phot")
+            # spare1.spare_photo = request.FILES['phot']
+
+# -------------------------------------------------------------------
+        # if "phot" in request.POST:
+        #     request.FILE
+        #     # spare1.spare_photo = request.FILES['phot']
+
+        # else:
+        #     print("No consigue phot")
+
+# -------------------------------------------------------------------
+
+
+        if request.POST.get("pricem")=="":
+            pass
+        else:
+            spare1.price_m = request.POST.get("pricem")
+
+        if request.POST.get("priced")=="":
+            pass
+        else:
+            spare1.price_d = request.POST.get("priced")
+        spare1.save()
+
+        # Spare targets -----------------------------------------------
+        for sp in sparrr:
+            varId = 0
+            aux = sp.split(" ")
+            code = (aux[0])
+
+            auxSp = spare.objects.filter(spare_code=code)
+            for sp in auxSp:
+                varId = sp.id
+            targetCode = spare.objects.get(id=varId)
+            spare1.spare_spare.add(targetCode)
+        
+        # Reference ------------------------------------------------------
+        codesList = request.POST.getlist("refcodes")
+        notesList = request.POST.getlist("refcodesnote")
+
+        auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
+        if auxSp:
+            reference1 = reference.objects.filter(referenceSpare__spare_code=request.POST.get("cod"))
+            reference1.delete()
+        else:
+            print("No consigue codigo")
+            reference1 = reference()
+
+        i = 0
+        for ref in codesList:
+
+            if (ref != "") and (notesList[i] != ""):
+                reference1 = reference()
+                auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
+                for sp in auxSp:
+                    varId = sp.id
+                targetSpare = spare.objects.get(id=varId)
+                reference1.referenceSpare = targetSpare
+                reference1.referenceCode = ref
+                reference1.referenceNote = notesList[i]
+                reference1.save()
+            i = i + 1
+        
+        return render(request,"spareapp/listspare.html",dic)
+    else:
+        return render(request,"spareapp/editspare.html",dic)
+
+
+def listspare(request):
 
     allSparesall=spare.objects.all()
     allVendors=vendor.objects.all()
-    dic={"spares":allSparesall,"allVendors":allVendors}
+    dic={"allSparesall":allSparesall,"allVendors":allVendors}
 
-    return render(request,"spareapp/editspare.html",dic)
+    return render(request,"spareapp/listspare.html",dic)
 
 def deletespare(request,val):
 
@@ -1019,7 +1182,7 @@ def deletespare(request,val):
     spare1 = spare.objects.get(spare_code=val)
     spare1.delete()
     # sparefind=spare.objects.filter(spare_code=val)
-    dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"spares":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
-    return render(request,"spareapp/editspare.html",dic)
+    return render(request,"spareapp/listspare.html",dic)
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

@@ -32,7 +32,8 @@ urlpatterns = [
     path("fillcar",views.fillcar,name="fillcar"),
     path("fillengine",views.fillengine,name="fillengine"),
     path("fillspare/<str:val>",views.fillspare,name="fillspare"),
-    path("editspare",views.editspare,name="editspare"),
+    path("editspare/<str:val>",views.editspare,name="editspare"),
+    path("listspare",views.listspare,name="listspare"),
     path("deletespare/<str:val>",views.deletespare,name="deletespare"),
 
     # path('getCar/$', views.getCar,name="getCar")

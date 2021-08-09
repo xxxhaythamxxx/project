@@ -1,0 +1,88 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Edit Spare {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container invoicecont mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-5">
+            <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by code, description, category or vendor">
+        </div>
+        <!-- <div class="col-lg-3">
+            <input type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptioHelp" placeholder="Search by description">
+        </div>
+        <div class="col-lg-3">
+            <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categorHelp" placeholder="Search by category">
+        </div>
+        <div class="col-lg-3">
+            <input type="text" class="form-control" name="vendo" id="vendo" aria-describedby="vendoHelp" placeholder="Search by vendor">
+        </div> -->
+    </div>
+
+    <table class="invoice invoicefill table-striped mt-3">
+        <thead>
+            <tr class="text-white">
+                <th class="trsup color">Code</th>
+                <th class="trsup color">Description</th>
+                <th class="trsup color">Category</th>
+                <th class="trsup color">Vendor</th>
+                <th class="trsup color">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for br in allSparesall %}
+            <tr>
+                {% if br.spare_code %}
+                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_code}}</a></td>
+                {% else %}
+                    <td class="pr-0"><a href="#"></a></td>
+                {% endif %}
+
+                {% if br.spare_name %}
+                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_name}}</a></td>
+                {% else %}
+                    <td class="pr-0"><a href="#"></a></td>
+                {% endif %}
+
+                {% if br.spare_category %}
+                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_category}}</a></td>
+                {% else %}
+                    <td class="pr-0"><a href="#"></a></td>
+                {% endif %}
+
+                {% if br.spare_vendor.all %}
+                    <td class="pr-0">
+                {% for dim in allVendors %}
+                    {% for sp in br.spare_vendor.all %}
+
+                        {% if sp.vendorName == dim.vendorName %}
+                            <div><a href="{% url 'editspare' br.spare_code %}">{{sp.vendorName}}</a></div>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            {% else %}
+            <td class="pr-0"><div><a id="vendorInfo" href=""></a></div></td>
+            {% endif %}
+            <td class="pr-0"><a class="btn btn-danger text-white" href="{% url 'deletespare' br.spare_code %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+
+<script>
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $(".invoicefill tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+</script>
+{% endblock %}
