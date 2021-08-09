@@ -488,7 +488,107 @@ function toggle(source,toDel) {
     }
 }
 
+//  Filtrar spare references
+$("#referenc").on("keyup",function(){                                // Cuando se teclea algo
+    // alert("Toma")
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $("#codPasar option").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
 
+// Mostrar a ambos lados los references que se tienen
+$("#codPasar option").each(function(){
+    // alert($(this).text())
+    var aux = $(this).text()
+    var band = false
+    $("#codPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).hide()
+    }
+})
+
+// Pasar de un lado a otro los spares references
+function pasar(){
+    $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#codPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#codPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#codPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function regresar(){
+    $("#codPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#codPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#codPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#codPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Arreglar los valores que se pasarán
+$("#formPass").on("click",function(){
+    $("#codPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+})
+
+reftam = 1
+// Agregar ref codes
+// function addRef(){
+$("#addRef").click(function(){
+    // alert("Agrega")
+    reftam++
+    // $("#reference-content").append("<input placeholder='Add the reference code' value='' type='text' class='form-control' name='refcodes' id='refcodes' aria-describedby='refcodesHelp' maxlength='80'><input placeholder='Add a note' value='' type='text' class='form-control' name='refcodesnote' id='refcodesnote' aria-describedby='refcodesnoteHelp' maxlength='80'><a onClick='addRef()' class='btn btn-secondary' href='javascript:void(0);'>Add ref</a>")
+    $("#reference-content")
+    .append(
+        // '<div class="col-lg-11"><input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80"><input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="addRef()" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></a><a style="text-decoration: none;color: rgb(136,12,12);" id="deleteRef()" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div>'
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80"><input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="deleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
+// Eliminar ref codes
+// function deleteRef(){
+// $("#deleteRef").click(function(){
+$("#reference-content").on("click","#deleteRef",function(a){
+    a.preventDefault()
+    // $("#reference-content").remove()
+    // $("#reference-content").children().remove()
+    $(this).parent().parent().parent().remove()
+    reftam--
+})
 // Boton default para que reinicie la tabla ------------------------------------------------------------------------
 document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=photo]").prop("checked",true);
@@ -567,7 +667,6 @@ document.getElementById("default").addEventListener("click",function(){
     })
     measureReset();
 })
-
 // boton para exportar a Excel -------------------------------------------------------------------------------------
 document.getElementById("downloadexcel").addEventListener("click",function(){
     $("#check").hide();
@@ -2283,6 +2382,7 @@ cont = 0
     })
         
 })
+
 //  Filtrar tabla de editar base de datos
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
