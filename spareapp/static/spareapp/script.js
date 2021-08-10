@@ -488,7 +488,7 @@ function toggle(source,toDel) {
     }
 }
 
-//  Filtrar spare references
+//  Filtrar spare references -----------------------------------------------------------------
 $("#referenc").on("keyup",function(){                                // Cuando se teclea algo
     // alert("Toma")
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
@@ -497,9 +497,31 @@ $("#referenc").on("keyup",function(){                                // Cuando s
     })
 })
 
-// Mostrar a ambos lados los references que se tienen
+//  Filtrar car info ----------------------------------------------------------------------
+$("#carinf").on("keyup",function(){       
+    var value = $(this).val().toLowerCase();
+    $("#carcodPasar option").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+
+//  Filtrar engine info ----------------------------------------------------------------------
+$("#enginf").on("keyup",function(){       
+    var value = $(this).val().toLowerCase();
+    $("#enginecodPasar option").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+
+//  Filtrar vendors ----------------------------------------------------------------------
+$("#vendorinf").on("keyup",function(){       
+    var value = $(this).val().toLowerCase();
+    $("#vendorcodPasar option").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+// Mostrar a ambos lados los references que se tienen -------------------------------------
 $("#codPasar option").each(function(){
-    // alert($(this).text())
     var aux = $(this).text()
     var band = false
     $("#codPasado option").each(function(){
@@ -508,11 +530,61 @@ $("#codPasar option").each(function(){
         }
     })
     if (band == true){
-        $(this).hide()
+        $(this).remove()
+        // $(this).hide()
     }
 })
 
-// Pasar de un lado a otro los spares references
+// Mostrar a ambos lados los vendors que se tienen -------------------------------------
+$("#vendorPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#vendorPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
+// Mostrar a ambos lados los car info que se tienen -------------------------------------
+$("#carcodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#carcodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+// Mostrar a ambos lados los engine info que se tienen -------------------------------------
+$("#enginecodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#enginecodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+// Para filtrar por categoria
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#catSelect').select2();
+    });
+});
+// Pasar de un lado a otro los spares references ---------------------------------------------
 function pasar(){
     $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
         band = false
@@ -557,38 +629,227 @@ function regresar(){
             $("#codPasar").prepend("<option class='p-1'>"+aux2+"</option>")
         }
     })
+    
 }
 
-// Arreglar los valores que se pasarán
+// Pasar de un lado a otro los car info  --------------------------------------------------
+function carpasar(){
+    $("#carcodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#carcodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#carcodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#carcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function carregresar(){
+    $("#carcodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#carcodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#carcodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#carcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Pasar de un lado a otro los vendors  ---------------------------------------------
+function vendorpasar(){
+    $("#vendorPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#vendorPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#vendorPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#vendorPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function vendorregresar(){
+    $("#vendorPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#vendorPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#vendorPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#vendorPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+    
+}
+
+// Pasar de un lado a otro los engine info  --------------------------------------------------
+function enginepasar(){
+    $("#enginecodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#enginecodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#enginecodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#enginecodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function engineregresar(){
+    $("#enginecodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#enginecodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#enginecodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#enginecodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Arreglar los valores que se pasarán ------------------------------------------------
 $("#formPass").on("click",function(){
     $("#codPasado option").each(function(){
         $(this).attr("selected",true)
     })
+    $("#codPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
 })
 
-reftam = 1
+
+// reftam = 1
 // Agregar ref codes
-// function addRef(){
 $("#addRef").click(function(){
-    // alert("Agrega")
-    reftam++
-    // $("#reference-content").append("<input placeholder='Add the reference code' value='' type='text' class='form-control' name='refcodes' id='refcodes' aria-describedby='refcodesHelp' maxlength='80'><input placeholder='Add a note' value='' type='text' class='form-control' name='refcodesnote' id='refcodesnote' aria-describedby='refcodesnoteHelp' maxlength='80'><a onClick='addRef()' class='btn btn-secondary' href='javascript:void(0);'>Add ref</a>")
+    // reftam++
     $("#reference-content")
     .append(
-        // '<div class="col-lg-11"><input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80"><input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="addRef()" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></a><a style="text-decoration: none;color: rgb(136,12,12);" id="deleteRef()" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div>'
         '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80"><input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="deleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
         )
 })
 // Eliminar ref codes
-// function deleteRef(){
-// $("#deleteRef").click(function(){
 $("#reference-content").on("click","#deleteRef",function(a){
     a.preventDefault()
-    // $("#reference-content").remove()
-    // $("#reference-content").children().remove()
     $(this).parent().parent().parent().remove()
-    reftam--
+    // reftam--
 })
+
+// atrtam = 1
+// Agregar Atributos
+$("#atributaddRef").click(function(){
+    // alert("Entra")
+    // atrtam++
+    $("#atribute-content")
+    .append(
+        // '<div>HOla</div>')
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"><input placeholder="Add the atribute valor" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
+// Eliminar Atributes
+$("#atribute-content").on("click","#atributdeleteRef",function(a){
+    a.preventDefault()
+    $(this).parent().parent().parent().remove()
+    // atrtam--
+})
+
+// Agregar dimensiones
+$("#dimensaddRef").click(function(){
+    $("#dimension-content")
+    .append(
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the dimension name" value="" type="text" class="form-control" name="dimensName" id="dimensName" aria-describedby="dimensNameHelp" maxlength="80"><input placeholder="Add the dimension value" value="" type="number" class="form-control" name="dimensVal" id="dimensVal" aria-describedby="dimensValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="dimesdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
+// Eliminar dimensiones
+$("#dimension-content").on("click","#dimensdeleteRef",function(a){
+    a.preventDefault()
+    $(this).parent().parent().parent().remove()
+})
+
 // Boton default para que reinicie la tabla ------------------------------------------------------------------------
 document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=photo]").prop("checked",true);
