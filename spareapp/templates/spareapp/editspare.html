@@ -119,7 +119,7 @@
             <label for="cod" class="form-label">Category</label>
             <select name="catSelect" id="catSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
                 {% if sparefind.0.spare_category %}
-                    <option>Select category</option>
+                    <option value="">Select category</option>
                     {% for sp in allCategories %}
                         {% if sp == sparefind.0.spare_category %}
                         <option value="" selected value="{{sp}}">{{sp}}</option>

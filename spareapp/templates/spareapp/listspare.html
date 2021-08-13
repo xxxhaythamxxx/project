@@ -64,15 +64,41 @@
 
                     {% endfor %}
                 {% endfor %}
-            </td>
-            {% else %}
-            <td class="pr-0"><div><a id="vendorInfo" href=""></a></div></td>
-            {% endif %}
-            <td class="pr-0"><a class="btn btn-danger text-white" href="{% url 'deletespare' br.spare_code %}">Delete</a></td>
+                </td>
+                {% else %}
+                <td class="pr-0"><div><a id="vendorInfo" href=""></a></div></td>
+                {% endif %}
+                <td class="pr-0"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
+
+                <div class="modal fade" id="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label">Caution</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Are you sure to eliminate the spare {{br.spare_code}} ?
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a id="deleteSpare" class="btn btn-primary" href="{% url 'deletespare' br.spare_code %}">Delete</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Modal -------------------------------------------------------------------------- -->
+      
+      <!-- Modal -->
+      
+
+    <!-- -------------------------------------------------------------------------------- -->
     
 </div>
 

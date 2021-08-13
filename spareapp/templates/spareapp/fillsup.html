@@ -8,8 +8,8 @@
     </div>
     <div class="container d-flex justify-content-center mt-1">
         <div>
-            <button onclick="window.location.href='/editcar'" class="btn btn-secondary">Edit car</button>
-            <button onclick="window.location.href='/fillengine'" class="btn btn-secondary">Edit engine</button>
+            <a href="{% url 'listcar' %}" class="btn btn-secondary">Edit Car</a>
+            <a href="{% url 'listengine' %}" class="btn btn-secondary">Edit engine</a>
             <a href="{% url 'listspare' %}" class="btn btn-secondary">Edit spare</a>
         </div>
     </div>

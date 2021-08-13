@@ -1,0 +1,97 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Engine {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container mt-5 col-lg-6">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="engcarinf" class="form-label">Car info</label>
+            <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="engcarinf" id="engcarinf" aria-describedby="engcarinfHelp">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="color text-white p-2 m-2">Available Cars</div>
+                    <div class="container">
+                        <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
+                            {% for spr in allCars|dictsort:"car_manufacturer" %}
+                                <option class="p-1">{{spr}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="color text-white p-2 m-2">Chosen Cars</div>
+                    <div class="container">
+                        <select class="form-select" multiple aria-label="multiple select example" name="engcartoReg" id="engcarcodPasado" size="5">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="container d-flex justify-content-center">
+                        <div class="m-2">
+                            <a onClick="engcarpasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                  </svg>
+                            </a>
+                        </div>
+                        <div class="m-2">
+                            <a onClick="engcarregresar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                  </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- <div class="mb-3">
+            <label for="manufactur" class="form-label">Car info</label>
+            <select name="carSelect" id="carSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                <option value="" selected>Select car</option>
+                {% for sp in allCars|dictsort:"car_manufacturer" %}
+                <option value="{{sp}}">{{sp}}</option>
+                {% endfor %}
+            </select>
+        </div> -->
+        <div class="mb-3">
+            <label for="litresfill" class="form-label">Litres</label>
+            <input type="text" class="form-control" name="litresfill" id="litresfill" aria-describedby="litresfillHelp">
+        </div>
+        <div class="mb-3">
+            <label for="codefill" class="form-label">Code</label>
+            <input type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp">
+        </div>
+        <div class="mb-3">
+            <label for="typefill" class="form-label">Type</label>
+            <input type="text" class="form-control" name="typefill" id="typefill" aria-describedby="typefillHelp">
+            <div id="typefillHelp" class="form-text">Eg. Diesel, Petrol...</div>
+        </div>
+        <div class="mb-3">
+            <label for="valvefill" class="form-label">Valve</label>
+            <input type="number" class="form-control" name="valvefill" id="valvefill" aria-describedby="valvefillHelp">
+        </div>
+        <div class="mb-3">
+            <label for="pistonsfill" class="form-label">Pistons</label>
+            <input type="number" class="form-control" name="pistonsfill" id="pistonsfill" aria-describedby="pistonsfillHelp">
+        </div>
+        <button id="formPass" type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+</div>
+
+{% endblock %}

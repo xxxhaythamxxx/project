@@ -505,6 +505,14 @@ $("#carinf").on("keyup",function(){
     })
 })
 
+// Filtrar car en FillEngine
+$("#engcarinf").on("keyup",function(){       
+    var value = $(this).val().toLowerCase();
+    $("#engcarcodPasar option").filter(function(){
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+
 //  Filtrar engine info ----------------------------------------------------------------------
 $("#enginf").on("keyup",function(){       
     var value = $(this).val().toLowerCase();
@@ -564,6 +572,22 @@ $("#carcodPasar option").each(function(){
         // $(this).hide()
     }
 })
+
+// Mostrar a ambos lados los car info que se tienen en fillEngine -------------------------------------
+$("#engcarcodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#engcarcodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
 // Mostrar a ambos lados los engine info que se tienen -------------------------------------
 $("#enginecodPasar option").each(function(){
     var aux = $(this).text()
@@ -582,6 +606,13 @@ $("#enginecodPasar option").each(function(){
 jQuery(document).ready(function($){
     $(document).ready(function() {
         $('#catSelect').select2();
+    });
+});
+
+// Para filtrar por car
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#carSelect').select2();
     });
 });
 // Pasar de un lado a otro los spares references ---------------------------------------------
@@ -675,6 +706,53 @@ function carregresar(){
         $(this).remove()
         if(band == true){
             $("#carcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Pasar de un lado a otro los car info en FillSpare --------------------------------------
+function engcarpasar(){
+    $("#engcarcodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#engcarcodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#engcarcodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#engcarcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function engcarregresar(){
+    $("#engcarcodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#engcarcodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#engcarcodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#engcarcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
         }
     })
 }
@@ -800,6 +878,12 @@ $("#formPass").on("click",function(){
     $("#vendorPasar option").each(function(){
         $(this).attr("selected",true)
     })
+    $("#engcarcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
 })
 
 
@@ -849,6 +933,21 @@ $("#dimension-content").on("click","#dimensdeleteRef",function(a){
     a.preventDefault()
     $(this).parent().parent().parent().remove()
 })
+
+// Confirmar eliminar
+
+// $("#deleteSpare").on("click",function(){
+//     var mensaje;
+//     var opcion = confirm("¿Deseas eliminar el repuesto?");
+//     if (opcion == true) {
+//         mensaje = "Has clickado OK";
+// 	} else {
+// 	    mensaje = "Has clickado Cancelar";
+//     }
+//     // alert(mensaje)
+//     // confirm("Has eliminado el repuesto")
+// })
+
 
 // Boton default para que reinicie la tabla ------------------------------------------------------------------------
 document.getElementById("default").addEventListener("click",function(){
