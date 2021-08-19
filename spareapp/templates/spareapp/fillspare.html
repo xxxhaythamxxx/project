@@ -6,13 +6,13 @@
 
 {% include "spareapp/fillsup.html" %}
 
-<div class="container mt-5 col-lg-12 d-flex justify-content-center">
+<div class="container mt-5 col-lg-7 d-flex justify-content-center">
 
-    <form method="POST" class="col-lg-7" enctype="multipart/form-data">
+    <form method="POST" class="needs-validation" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="cod" class="form-label">Code</label>
-            <input value="" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp" maxlength="15">
+            <input value="" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp" maxlength="15" required>
         </div>
         <div class="mb-3">
             <label for="descriptio" class="form-label">Description</label>
@@ -26,7 +26,7 @@
             <label for="carinf" class="form-label">Car info</label>
             <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="carinf" id="carinf" aria-describedby="carinfHelp">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Available Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="cartoPass" id="carcodPasar" size="5">
@@ -36,14 +36,23 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Chosen Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="cartoReg" id="carcodPasado" size="5">
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-1 d-flex align-items-center">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal1" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
                     <div class="container d-flex justify-content-center">
                         <div class="m-2">
                             <a onClick="carpasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
@@ -70,7 +79,7 @@
             <label for="enginf" class="form-label">Engine info</label>
             <input placeholder="Search by engine model" type="text" class="form-control" name="enginf" id="enginf" aria-describedby="enginfHelp">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Available Engines</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="enginetoPass" id="enginecodPasar" size="5">
@@ -80,14 +89,23 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Chosen Engines</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="enginetoReg" id="enginecodPasado" size="5">
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-1 d-flex align-items-center">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal2" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory2" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
                     <div class="container d-flex justify-content-center">
                         <div class="m-2">
                             <a onClick="enginepasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
@@ -111,13 +129,28 @@
         <!------------------------------------ Category ------------------------------------------>
 
         <div class="mb-3">
-            <label for="cod" class="form-label">Category</label>
-            <select name="catSelect" id="catSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
-                <option value="" selected>Select category</option>
-                {% for sp in allCategories %}
-                <option value="{{sp}}">{{sp}}</option>
-                {% endfor %}
-              </select>
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="cod" class="form-label">Category</label>
+                    <select name="catSelect" id="catSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select category</option>
+                        {% for sp in allCategories %}
+                        <option value="{{sp}}">{{sp}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal3" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
         </div>
 
         <!------------------------------------ Vendor ------------------------------------------>
@@ -126,7 +159,7 @@
             <label for="vendorinf" class="form-label">Vendor</label>
             <input placeholder="Search by name" type="text" class="form-control" name="vendorinf" id="vendorinf" aria-describedby="vendorinfHelp">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Available Vendors</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="vendortoPass" id="vendorPasar" size="5">
@@ -136,14 +169,23 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Chosen Vendors</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="vendortoReg" id="vendorPasado" size="5">
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-1 d-flex align-items-center">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal4" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
                     <div class="container d-flex justify-content-center">
                         <div class="m-2">
                             <a onClick="vendorpasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
@@ -308,6 +350,292 @@
         <button id="formPass" type="submit" class="btn btn-primary">Save</button>
     </form>
 
+    <!-- Modal ------------------------------------------------------------------------------------>
+    <div tabindex="-1" id="categoryModal1" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add a car</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- Agregar carro --------------------------------------------------------------------- -->
+                    
+                    <div class="container mt-5 col-lg-12">
+
+                        <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
+                        <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="manufactur" class="form-label">Manufacturer</label>
+                                <input type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp">
+                                <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
+                            </div>
+                            <div class="mb-3">
+                                <label for="mode" class="form-label">Model</label>
+                                <input type="text" class="form-control" name="mode" id="mode" aria-describedby="modeHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="yearfro" class="form-label">Year from</label>
+                                <input type="number" class="form-control" name="yearfro" id="yearfro" aria-describedby="yearfroHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="yeart" class="form-label">Year to</label>
+                                <input type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="chasi" class="form-label">Chasis</label>
+                                <input type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button from="secondForm" id="secondFormSubmit" type="submit" class="btn btn-primary">Save</button>
+                            <input type="hidden" name="id" value="secondForm">
+                        </form>
+                        
+                    </div>
+
+                    <!-- ----------------------------------------------------------------------------------- -->
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Fin del modal -->
+
+    <!-- Modal ----------------------------------------------------------------------------------->
+    <div tabindex="-1" id="categoryModal2" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add a engine</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- Agregar engine --------------------------------------------------------------------- -->
+                    
+                    <div class="container mt-5 col-lg-12">
+
+                        <form action="{% url 'fillengine' %}" id="firstForm" method="POST">
+                            {% csrf_token %}
+                    
+                            <div class="mb-3">
+                                <label for="engcarinf" class="form-label">Car info</label>
+                                <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="engcarinf" id="engcarinf" aria-describedby="engcarinfHelp">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <div class="color text-white p-2 m-2">Available Cars</div>
+                                        <div class="container">
+                                            <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
+                                                {% for spr in allCars|dictsort:"car_manufacturer" %}
+                                                    <option class="p-1">{{spr}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="color text-white p-2 m-2">Chosen Cars</div>
+                                        <div class="container">
+                                            <select class="form-select" multiple aria-label="multiple select example" name="engcartoReg" id="engcarcodPasado" size="5">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 d-flex align-items-center">
+                                        <div>
+                                            <a data-bs-toggle="modal" data-bs-target="#categoryModal" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory" class="p-2" href="javascript:void(0);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                                </svg>
+                                            </a>
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-lg-10">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="m-2">
+                                            <a onClick="engcarpasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                                    </svg>
+                                            </a>
+                                        </div>
+                                        <div class="m-2">
+                                            <a onClick="engcarregresar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                                    </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <div class="mb-3">
+                                <label for="litresfill" class="form-label">Litres</label>
+                                <input type="text" class="form-control" name="litresfill" id="litresfill" aria-describedby="litresfillHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="codefill" class="form-label">Code</label>
+                                <input type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="typefill" class="form-label">Type</label>
+                                <input type="text" class="form-control" name="typefill" id="typefill" aria-describedby="typefillHelp">
+                                <div id="typefillHelp" class="form-text">Eg. Diesel, Petrol...</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="valvefill" class="form-label">Valve</label>
+                                <input type="number" class="form-control" name="valvefill" id="valvefill" aria-describedby="valvefillHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="pistonsfill" class="form-label">Pistons</label>
+                                <input type="number" class="form-control" name="pistonsfill" id="pistonsfill" aria-describedby="pistonsfillHelp">
+                            </div>
+                            <button form="firstForm" id="formPass2" type="submit" class="btn btn-primary">Save</button>
+                            <input type="hidden" name="id" value="secondForm">
+                        </form>
+                    
+                        <!-- Modal -->
+                        <div tabindex="-1" id="categoryModal" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="categoryModalLabel">Add a car</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                        <!-- Agregar carro --------------------------------------------------------------------- -->
+                                        
+                                        <div class="container mt-5 col-lg-12">
+                    
+                                            <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
+                                            <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="manufactur" class="form-label">Manufacturer</label>
+                                                    <input type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp">
+                                                    <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="mode" class="form-label">Model</label>
+                                                    <input type="text" class="form-control" name="mode" id="mode" aria-describedby="modeHelp">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="yearfro" class="form-label">Year from</label>
+                                                    <input type="number" class="form-control" name="yearfro" id="yearfro" aria-describedby="yearfroHelp">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="yeart" class="form-label">Year to</label>
+                                                    <input type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="chasi" class="form-label">Chasis</label>
+                                                    <input type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
+                                                </div>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button from="secondForm" id="secondFormSubmit" type="submit" class="btn btn-primary">Save</button>
+                                                <input type="hidden" name="id" value="secondForm">
+                                            </form>
+                                            
+                                        </div>
+                    
+                                        <!-- ----------------------------------------------------------------------------------- -->
+                    
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin del modal -->
+                    </div>
+
+                    <!-- ----------------------------------------------------------------------------------- -->
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Fin del modal -->
+
+    <!-- Modal ------------------------------------------------------------------------------------>
+    <div tabindex="-1" id="categoryModal3" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add a category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- Agregar category --------------------------------------------------------------------- -->
+                    
+                    <div class="container col-lg-12">
+                    
+                        <form action="{% url 'fillcategory' %}" method="POST">
+                        <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="categor" class="form-label">Category name</label>
+                                <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categorHelp">
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <input type="hidden" name="id" value="secondForm">
+                        </form>
+                    </div>
+
+                    <!-- ----------------------------------------------------------------------------------- -->
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Fin del modal -->
+
+    <!-- Modal ------------------------------------------------------------------------------------>
+    <div tabindex="-1" id="categoryModal4" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add a Vendor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- Agregar vendor --------------------------------------------------------------------- -->
+                    
+                    <div class="container col-lg-12">
+
+                        <form action="{% url 'fillvendor' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="vendo" class="form-label">Manufacturer</label>
+                                <input type="text" class="form-control" name="vendo" id="vendo" aria-describedby="vendoHelp">
+                            </div>
+                            
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button from="secondForm" type="submit" class="btn btn-primary">Save</button>
+                            <input type="hidden" name="id" value="secondForm">
+                        </form>
+                        
+                    </div>
+
+                    <!-- ----------------------------------------------------------------------------------- -->
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Fin del modal -->
 </div>
 
 {% endblock %}

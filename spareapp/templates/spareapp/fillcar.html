@@ -12,7 +12,7 @@
         {% csrf_token %}
         <div class="mb-3">
             <label for="manufactur" class="form-label">Manufacturer</label>
-            <input type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp">
+            <input type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp" required>
             <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
         </div>
         <div class="mb-3">
@@ -31,37 +31,8 @@
             <label for="chasi" class="form-label">Chasis</label>
             <input type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
         </div>
-        <!-- <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div> -->
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
-
-    <!-- <form action="">
-        <div class="row d-flex justify-content-center">
-            <div class="col-lg-2">
-                <div><label for="manufact">Manufacturer</label></div>
-                <div><label for="mode">Model</label></div>
-                <div><label for="yfrom">Year From</label></div>
-                <div><label for="yto">Year To</label></div>
-                <div><label for="chasi">Chasis</label></div>
-            </div>
-            <div class="col-lg-4">
-                <div><input style="width: 100%;" id="manufact" type="text"></div>
-                <div><input style="width: 100%;" id="mode" type="text"></div>
-                <div><input style="width: 100%;" id="yfrom" type="number"></div>
-                <div><input style="width: 100%;" id="yto" type="number"></div>
-                <div><input style="width: 100%;" id="chasi" type="text"></div>
-            </div>
-        </div>
-        
-        
-    </form> -->
 </div>
 
 {% endblock %}

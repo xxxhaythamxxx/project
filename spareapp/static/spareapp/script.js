@@ -470,6 +470,12 @@ function viewPDF(){
       });
 }
 
+
+// $("#secondFormSubmit").on("click",function(a){
+//     alert("ENtra")
+//     a.preventDefault()
+// })
+
 // Función para que los checkboxes se seleccionen todos ------------------------------------------------------------
 
 function toggle(source,toAdd) {
@@ -854,6 +860,39 @@ function engineregresar(){
 
 // Arreglar los valores que se pasarán ------------------------------------------------
 $("#formPass").on("click",function(){
+    $("#codPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#codPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+})
+
+$("#formPass2").on("click",function(){
     $("#codPasado option").each(function(){
         $(this).attr("selected",true)
     })
@@ -2750,3 +2789,4 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     })
 })
+

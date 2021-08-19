@@ -6,7 +6,7 @@
 
 {% include "spareapp/fillsup.html" %}
 
-<div class="container mt-5 col-lg-6">
+<div class="container mt-5 col-lg-7">
 
     <form method="POST">
         {% csrf_token %}
@@ -15,7 +15,7 @@
             <label for="engcarinf" class="form-label">Car info</label>
             <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="engcarinf" id="engcarinf" aria-describedby="engcarinfHelp">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Available Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
@@ -25,7 +25,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-5">
                     <div class="color text-white p-2 m-2">Chosen Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="engcartoReg" id="engcarcodPasado" size="5">
@@ -33,6 +33,17 @@
                             <option class="p-1">{{spr}}</option>
                             {% endfor %}
                         </select>
+                    </div>
+                </div>
+                <div class="col-lg-1 d-flex align-items-center">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                        
+                        
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -62,7 +73,7 @@
         </div>
         <div class="mb-3">
             <label for="codefill" class="form-label">Code</label>
-            <input value="{{sparefind.0.engine_ide}}" type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp">
+            <input value="{{sparefind.0.engine_ide}}" type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp" required>
         </div>
         <div class="mb-3">
             <label for="typefill" class="form-label">Type</label>
@@ -79,6 +90,60 @@
         </div>
         <button id="formPass" type="submit" class="btn btn-primary">Save</button>
     </form>
+
+    <!-- Modal ------------------------------------------------------------------------------------->
+    <div tabindex="-1" id="categoryModal" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add a car</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- Agregar carro --------------------------------------------------------------------- -->
+                    
+                    <div class="container mt-5 col-lg-12">
+
+                        <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
+                        <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="manufactur" class="form-label">Manufacturer</label>
+                                <input type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp">
+                                <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
+                            </div>
+                            <div class="mb-3">
+                                <label for="mode" class="form-label">Model</label>
+                                <input type="text" class="form-control" name="mode" id="mode" aria-describedby="modeHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="yearfro" class="form-label">Year from</label>
+                                <input type="number" class="form-control" name="yearfro" id="yearfro" aria-describedby="yearfroHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="yeart" class="form-label">Year to</label>
+                                <input type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="chasi" class="form-label">Chasis</label>
+                                <input type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button from="secondForm" id="secondFormSubmit" type="submit" class="btn btn-primary">Save</button>
+                            <input type="hidden" name="id" value="secondForm">
+                        </form>
+                        
+                    </div>
+
+                    <!-- ----------------------------------------------------------------------------------- -->
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Fin del modal -->
 
 </div>
 

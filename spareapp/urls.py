@@ -41,6 +41,8 @@ urlpatterns = [
     path("deletecar/<str:val>",views.deletecar,name="deletecar"),
     path("deleteengine/<str:val>",views.deleteengine,name="deleteengine"),
     path("deletespare/<str:val>",views.deletespare,name="deletespare"),
+    path("fillcategory",views.fillcategory,name="fillcategory"),
+    path("fillvendor",views.fillvendor,name="fillvendor"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]
