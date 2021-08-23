@@ -5,12 +5,23 @@ from .models import *
 
 from django.shortcuts import redirect, HttpResponseRedirect
 from django.urls import reverse
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
-class carAdmin(admin.ModelAdmin):
+class carResource(resources.ModelResource):
+    class Meta:
+        model = car
+
+class spareResource(resources.ModelResource):
+    class Meta:
+        model = spare
+
+class carAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     list_display=("car_manufacturer","car_model","transmission","carfrom","carto")
     search_fields=("car_manufacturer","car_model")
     list_filter=("car_manufacturer",)
     ordering = ('car_manufacturer', 'car_model')
+    resource_class = carResource
 
 class engineAdmin(admin.ModelAdmin):
     list_display=("engine_ide","engine_l","engine_type","engine_cylinder","engine_pistons")
@@ -20,7 +31,7 @@ class engineAdmin(admin.ModelAdmin):
     filter_horizontal=["car_engine_info",]
     exclude=("engine_power_kw","engine_power_hp",)
 
-class spareAdmin(admin.ModelAdmin):
+class spareAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     # raw_id_fields=("car_info","engine_info",)
     list_display=("spare_code","spare_name","spare_category","note")
     search_fields=("spare_code","spare_name")
@@ -29,6 +40,7 @@ class spareAdmin(admin.ModelAdmin):
     filter_horizontal=["car_info","engine_info","spare_spare","spare_vendor"]
     exclude=("spare_brand","shape",)
     autocomplete_fields = ("spare_category",)
+    resource_class = spareResource
 
 class vendorAdmin(admin.ModelAdmin):
     list_display=("vendorName",)

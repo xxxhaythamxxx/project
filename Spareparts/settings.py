@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'spareapp',
     'smart_selects',
+    'import_export',
     # 'crispy_forms',
 ]
 

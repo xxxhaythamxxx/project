@@ -4,6 +4,7 @@
             <a href="{% url 'fillcar' %}" class="btn btn-success">Register car</a>
             <a href="{% url 'fillengine' %}" class="btn btn-success">Register engine</a>
             <a href="{% url 'fillspare' 'empty' %}" class="btn btn-success">Register spare</a>
+            
         </div>
     </div>
     <div class="container d-flex justify-content-center mt-1">
@@ -13,6 +14,112 @@
             <a href="{% url 'listspare' %}" class="btn btn-secondary">Edit spare</a>
         </div>
     </div>
+    <div class="container d-flex justify-content-center mt-1">
+        <div>
+            <!-- <a class="btn btn-danger" href="{% url 'importCar' %}">Import car</a> -->
+            <a data-bs-toggle="modal" data-bs-target="#carImportModal" id="carImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import car</a>
+            <a data-bs-toggle="modal" data-bs-target="#engineImportModal" id="engineImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import engine</a>
+            <a data-bs-toggle="modal" data-bs-target="#spareImportModal" id="spareImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import spare</a>
+            <!-- <a class="btn btn-danger" href="{% url 'importEngine' %}">Import engine</a> -->
+            <!-- <a class="btn btn-danger" href="{% url 'importSpare' %}">Import spare</a> -->
+        </div>
+    </div>
+
+    <div tabindex="-1" id="carImportModal" class="modal fade modal-dialog-scrollable" aria-labelledby="carInputLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="carInputLabel">Import car from Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aqui el modal -->
+                    <div class="container mt-3 col-lg-12">
+                        <form action="{% url 'importCar' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="phot" class="form-label">Parameters:</label>
+                            <div>manufacturer</div>
+                            <div>model</div>
+                            <div>from</div>
+                            <div>to</div>
+                            <div class="mb-3">chasis</div>
+                            <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
+                        </div>
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="carInputSubmit" type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div tabindex="-1" id="engineImportModal" class="modal fade modal-dialog-scrollable" aria-labelledby="engineInputLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="engineInputLabel">Import engine from Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aqui el modal -->
+                    <div class="container mt-3 col-lg-12">
+                        <form action="{% url 'importEngine' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="phot" class="form-label">Parameters:</label>
+                            <div>litres</div>
+                            <div>ecode</div>
+                            <div>type</div>
+                            <div>valve</div>
+                            <div class="mb-3">pistons</div>
+                            <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
+                        </div>
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="engineInputSubmit" type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div tabindex="-1" id="spareImportModal" class="modal fade modal-dialog-scrollable" aria-labelledby="spareInputLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="spareInputLabel">Import spare from Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aqui el modal -->
+                    <div class="container mt-3 col-lg-12">
+                        <form action="{% url 'importSpare' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="phot" class="form-label">Parameters:</label>
+                            <div>code</div>
+                            <div>description</div>
+                            <div>pricem</div>
+                            <div>priced</div>
+                            <div>reference</div>
+                            <div>attribute</div>
+                            <div>dimension</div>
+                            <div>category</div>
+                            <div>vendor</div>
+                            <div class="mb-3">note</div>
+                            <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
+                        </div>
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="spareInputSubmit" type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </html>
 
 

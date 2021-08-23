@@ -43,6 +43,9 @@ urlpatterns = [
     path("deletespare/<str:val>",views.deletespare,name="deletespare"),
     path("fillcategory",views.fillcategory,name="fillcategory"),
     path("fillvendor",views.fillvendor,name="fillvendor"),
+    path("importCar",views.importCar,name="importCar"),
+    path("importEngine",views.importEngine,name="importEngine"),
+    path("importSpare",views.importSpare,name="importSpare"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]
