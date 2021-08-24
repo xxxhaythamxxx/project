@@ -364,8 +364,7 @@
                     
                     <div class="container mt-5 col-lg-12">
 
-                        <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
-                        <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                        <form id="secondForm" action="{% url 'fillcar' %}" method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="manufactur" class="form-label">Manufacturer</label>
@@ -578,7 +577,7 @@
                     
                     <div class="container col-lg-12">
                     
-                        <form action="{% url 'fillcategory' %}" method="POST">
+                        <form id="firstCategory" action="{% url 'fillcategory' %}" method="POST">
                         <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
                             {% csrf_token %}
                             <div class="mb-3">
@@ -614,7 +613,7 @@
                     
                     <div class="container col-lg-12">
 
-                        <form action="{% url 'fillvendor' %}" method="POST">
+                        <form id="firstVendor" action="{% url 'fillvendor' %}" method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="vendo" class="form-label">Manufacturer</label>
@@ -638,4 +637,93 @@
     <!-- Fin del modal -->
 </div>
 
+<script>
+
+// Formulario del modal para carro
+$("#secondForm").submit(function(e){
+    e.preventDefault()
+
+    manuf = $("#manufactur").val()
+    model = $("#mode").val()
+    from = $("#yearfro").val()
+    to = $("#yeart").val()
+    valor = manuf+" "+model+",("+from+" / "+to+")"
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+            $("#carcodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+
+// Formulario del modal para engine
+$("#firstForm").submit(function(e){
+    e.preventDefault()
+
+    code = $("#codefill").val()
+    litres = $("#litresfill").val()
+    type = $("#typefill").val()
+    valve = $("#valvefill").val()
+    pistons = $("#pistonsfill").val()
+    valor = code+" "+litres+" "+type+" "+valve+" "+pistons+" pistons"
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+            $("#enginecodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+
+// Agregar modal Category
+$("#firstCategory").submit(function(e){
+    e.preventDefault()
+
+    cat = $("#categor").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+
+            $("#catSelect").append("<option value="+cat+" selected>"+cat+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+
+// Formulario del modal para vendor
+$("#firstVendor").submit(function(e){
+    e.preventDefault()
+
+    vendor = $("#vendo").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+            $("#vendorPasado").prepend("<option class='p-1'>"+vendor+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+
+</script>
 {% endblock %}
