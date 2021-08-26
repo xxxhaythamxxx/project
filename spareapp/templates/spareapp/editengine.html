@@ -8,7 +8,7 @@
 
 <div class="container mt-5 col-lg-7">
 
-    <form method="POST">
+    <form id="firstForm" method="POST">
         {% csrf_token %}
 
         <div class="mb-3">
@@ -88,7 +88,7 @@
             <label for="pistonsfill" class="form-label">Pistons</label>
             <input value="{{sparefind.0.engine_pistons}}" type="number" class="form-control" name="pistonsfill" id="pistonsfill" aria-describedby="pistonsfillHelp">
         </div>
-        <button id="formPass" type="submit" class="btn btn-primary">Save</button>
+        <button form="firstForm" id="formPass" type="submit" class="btn btn-primary">Save</button>
     </form>
 
     <!-- Modal ------------------------------------------------------------------------------------->
@@ -105,8 +105,7 @@
                     
                     <div class="container mt-5 col-lg-12">
 
-                        <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
-                        <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                        <form data-url="{% url 'fillcar' %}" id="secondForm" action="{% url 'fillcar' %}" method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="manufactur" class="form-label">Manufacturer</label>
@@ -146,5 +145,31 @@
     <!-- Fin del modal -->
 
 </div>
+
+<script>
+
+    $("#secondForm").submit(function(e){
+        e.preventDefault()
+    
+        manuf = $("#manufactur").val()
+        model = $("#mode").val()
+        from = $("#yearfro").val()
+        to = $("#yeart").val()
+        valor = manuf+" "+model+",("+from+" / "+to+")"
+    
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: $(this).serialize(),
+    
+            success: function(){
+                console.log("Success")
+                $("#engcarcodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+                $(".btn-close").click()
+            }
+        })
+    })
+    
+</script>
 
 {% endblock %}

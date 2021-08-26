@@ -355,8 +355,14 @@
                 {% for atr in auxAtributes %}
                 <div id="ref-val" class="ref-val row">
                     <div class="col-lg-11">
-                        <input placeholder="Add the atribute name" value="{{atr.atributeName}}" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">
-                        <input placeholder="Add the atribute value" value="{{atr.atributeVal}}" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input placeholder="Add the atribute name" value="{{atr.atributeName}}" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">
+                            </div>
+                            <div class="col-lg-6">
+                                <input placeholder="Add the atribute value" value="{{atr.atributeVal}}" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
                         <div>
@@ -407,8 +413,14 @@
                 {% for atr in auxDimensions %}
                 <div id="ref-val" class="ref-val row">
                     <div class="col-lg-11">
-                        <input placeholder="Add the dimension name" value="{{atr.atributeName}}" type="text" class="form-control" name="dimensName" id="dimensName" aria-describedby="dimensNameHelp" maxlength="80">
-                        <input placeholder="Add the dimension value" value="{{atr.atributeVal}}" type="number" class="form-control" name="dimensVal" id="dimensVal" aria-describedby="dimensValHelp" maxlength="80">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input placeholder="Add the dimension name" value="{{atr.atributeName}}" type="text" class="form-control" name="dimensName" id="dimensName" aria-describedby="dimensNameHelp" maxlength="80">
+                            </div>
+                            <div class="col-lg-6">
+                                <input placeholder="Add the dimension value" value="{{atr.atributeVal}}" type="number" class="form-control" name="dimensVal" id="dimensVal" aria-describedby="dimensValHelp" maxlength="80">
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
                         <div>
@@ -419,7 +431,7 @@
                                 </svg>
                             </a>
                         {% else %}
-                            <a style="text-decoration: none;color: rgb(136,12,12);" id="dimensdeleteRef" class="p-2" href="javascript:void(0);">
+                            <a style="text-decoration: none;color: rgb(136,12,12);" id="dimesdeleteRef" class="p-2" href="javascript:void(0);">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
                                 </svg>
@@ -467,8 +479,7 @@
                     
                     <div class="container mt-5 col-lg-12">
 
-                        <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
-                        <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                        <form data-url="{% url 'fillcar' %}" id="secondForm" action="{% url 'fillcar' %}" method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="manufactur" class="form-label">Manufacturer</label>
@@ -617,8 +628,7 @@
                                         
                                         <div class="container mt-5 col-lg-12">
                     
-                                            <form onsubmit="return enviar();" id="secondForm" action="{% url 'fillcar' %}" method="POST">
-                                            <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
+                                            <form data-url="{% url 'fillcar' %}" id="secondForm" action="{% url 'fillcar' %}" method="POST">
                                                 {% csrf_token %}
                                                 <div class="mb-3">
                                                     <label for="manufactur" class="form-label">Manufacturer</label>
@@ -681,7 +691,7 @@
                     
                     <div class="container col-lg-12">
                     
-                        <form action="{% url 'fillcategory' %}" method="POST">
+                        <form id="firstCategory" action="{% url 'fillcategory' %}" method="POST">
                         <!-- <form onsubmit="return enviar();" data-url="{% url 'fillcar' %}" id="secondForm" action="" method="POST"> -->
                             {% csrf_token %}
                             <div class="mb-3">
@@ -717,7 +727,7 @@
                     
                     <div class="container col-lg-12">
 
-                        <form action="{% url 'fillvendor' %}" method="POST">
+                        <form id="firstVendor" action="{% url 'fillvendor' %}" method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="vendo" class="form-label">Manufacturer</label>
@@ -741,5 +751,96 @@
     <!-- Fin del modal -->
 
 </div>
+
+
+<script>
+
+    // Formulario del modal para carro
+    $("#secondForm").submit(function(e){
+        e.preventDefault()
+    
+        manuf = $("#manufactur").val()
+        model = $("#mode").val()
+        from = $("#yearfro").val()
+        to = $("#yeart").val()
+        valor = manuf+" "+model+",("+from+" / "+to+")"
+    
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: $(this).serialize(),
+    
+            success: function(){
+                console.log("Success")
+                $("#carcodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+                $(".btn-close").click()
+            }
+        })
+    })
+    
+    // Formulario del modal para engine
+    $("#firstForm").submit(function(e){
+        e.preventDefault()
+    
+        code = $("#codefill").val()
+        litres = $("#litresfill").val()
+        type = $("#typefill").val()
+        valve = $("#valvefill").val()
+        pistons = $("#pistonsfill").val()
+        valor = code+" "+litres+" "+type+" "+valve+" "+pistons+" pistons"
+    
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: $(this).serialize(),
+    
+            success: function(){
+                console.log("Success")
+                $("#enginecodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+                $(".btn-close").click()
+            }
+        })
+    })
+    
+    // Agregar modal Category
+    $("#firstCategory").submit(function(e){
+        e.preventDefault()
+    
+        cat = $("#categor").val()
+    
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: $(this).serialize(),
+    
+            success: function(){
+                console.log("Success")
+    
+                $("#catSelect").append("<option value="+cat+" selected>"+cat+"</option>")
+                $(".btn-close").click()
+            }
+        })
+    })
+    
+    // Formulario del modal para vendor
+    $("#firstVendor").submit(function(e){
+        e.preventDefault()
+    
+        vendor = $("#vendo").val()
+    
+        $.ajax({
+            url: $(this).attr("action"),
+            type: $(this).attr("method"),
+            data: $(this).serialize(),
+    
+            success: function(){
+                console.log("Success")
+                $("#vendorPasado").prepend("<option class='p-1'>"+vendor+"</option>")
+                $(".btn-close").click()
+            }
+        })
+    })
+    
+</script>
 
 {% endblock %}
