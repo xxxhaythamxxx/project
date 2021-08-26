@@ -1,4 +1,8 @@
 <html>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    
 <body>
     <div class="options my-2">
         <div id="filterContent" class="row align-items-center">
@@ -99,7 +103,7 @@
             <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
                 <div class="col-lg-6 mt-2">
                     <input style="font-size: small;" class="col-lg-3 atrUnique" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
-                    <button style="font-size: small;" id="{{dim.atributeName}}Button" type="button" class="btn btn-sm btn-danger" data-bs-toggle="popover" data-bs-trigger="focus" data-toggle="popover" title="Valid values" data-bs-content="Valores permitidos">Values</button>
+                    <button style="font-size: small;" id="{{dim.atributeName}}Button" type="button" class="btn btn-sm btn-danger" data-bs-toggle="popover" data-bs-trigger="focus" title="Valid values" data-bs-content="Valores">Values</button>
                 </div>
             </div>
 
@@ -115,4 +119,10 @@
     </div>  
 
 </body>
+<script>
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+</script>
 </html>

@@ -1485,6 +1485,7 @@ $List5.change(function(){           // Activar filtro de Categories
     var cont = 0
     inputTotal = 0
     // Cuento los checks activos de Categoria
+
     $(this).find("input").each(function(){  // compCategories son todos los check activos
         inputTotal = inputTotal + 1
         var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
@@ -1500,7 +1501,6 @@ $List5.change(function(){           // Activar filtro de Categories
     // Aqui empieza el filtro ---------------------------------------------------
     var contAtrFind = 0
     $("tbody tr").each(function(){      // Recorro por filas
-        // alert($(this).text())
         trnum++//paginado
         var bandShow = false
         var bandShow2 = false
@@ -2784,11 +2784,11 @@ cont = 0
         
 })
 
-//  Filtrar tabla de editar base de datos
-$("#cod").on("keyup",function(){                                // Cuando se teclea algo
-    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-    $(".invoicefill tbody tr").filter(function(){                             // 
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    })
-})
+// //  Filtrar tabla de editar base de datos
+// $("#cod").on("keyup",function(){                                // Cuando se teclea algo
+//     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+//     $(".invoicefill tbody tr").filter(function(){                             // 
+//         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//     })
+// })
 
