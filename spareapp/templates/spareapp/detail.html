@@ -179,9 +179,9 @@
             {% endif %} -->
 
             {% if br.spare_category %}
-            <td class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>
+            <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>
             {% else %}
-            <td class="pr-0"><a id="categoryInfo" href="#"></a></td>
+            <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="#"></a></td>
             {% endif %}
 
             {% if br.spare_name %}
