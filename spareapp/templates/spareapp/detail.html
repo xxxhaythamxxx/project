@@ -161,7 +161,7 @@
             {% endif %}
 
             {% if reference %}
-            <td style="max-width: 150px;" class="pr-0">
+            <td style="max-width: 120px;" class="pr-0">
                 {% for dim in reference|slice:":5" %}
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
                     <div><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
@@ -169,7 +169,7 @@
                 {% endfor %}
             </td>
             {% else %}
-                <td style="max-width: 150px;" class="pr-0"><a href="#"></a></td>
+                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
 
             <!-- {% if br.car_info.all %}
