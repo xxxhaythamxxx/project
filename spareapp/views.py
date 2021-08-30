@@ -1167,6 +1167,8 @@ def fillspare(request,val):
         if request.POST.get("catSelect") == "":
             pass
         else:
+            print("catSelect")
+            print(request.POST.get("catSelect"))
             category1 = category.objects.get(category=request.POST.get("catSelect"))
             spare1.spare_category = category1    
 
@@ -1699,6 +1701,8 @@ def deletecar(request,val):
 
 def fillcategory(request):
 
+    print("Entra en fillCategory")
+
     dim=dimension.objects.values("atributeName").distinct()
     dim2=dimension.objects.all()
     atr=atribute.objects.values("atributeName").distinct()
@@ -1713,8 +1717,10 @@ def fillcategory(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    print(request.POST.get("categor"))
+    print(request.POST)
     category1 = category()
+    print("categor")
+    print(request.POST.get("categor"))
     category1.category = request.POST.get("categor")
     category1.save()
 

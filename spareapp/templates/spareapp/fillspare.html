@@ -8,7 +8,7 @@
 
 <div class="container mt-5 col-lg-7 d-flex justify-content-center">
 
-    <form method="POST" class="needs-validation" enctype="multipart/form-data">
+    <form id="formMain" method="POST" class="needs-validation" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="cod" class="form-label">Code</label>
@@ -708,11 +708,11 @@ $("#firstCategory").submit(function(e){
         url: $(this).attr("action"),
         type: $(this).attr("method"),
         data: $(this).serialize(),
-
+        
         success: function(){
             console.log("Success")
 
-            $("#catSelect").append("<option value="+cat+" selected>"+cat+"</option>")
+            $("#catSelect").append("<option value='"+cat+"' selected>"+cat+"</option>")
             $(".btn-close").click()
         }
     })
@@ -723,7 +723,6 @@ $("#firstVendor").submit(function(e){
     e.preventDefault()
 
     vendor = $("#vendo").val()
-
     $.ajax({
         url: $(this).attr("action"),
         type: $(this).attr("method"),
@@ -735,6 +734,10 @@ $("#firstVendor").submit(function(e){
             $(".btn-close").click()
         }
     })
+})
+
+$("#formPass").click(function(){
+    alert($("#formMain").serialize())
 })
 
 </script>

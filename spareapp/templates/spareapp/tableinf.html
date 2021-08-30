@@ -45,7 +45,7 @@
             {% endif %}
 
             {% if allAtributes %}
-                <td class="pr-0">
+                <td style="max-width: 120px;" class="pr-0">
                     {% for dim in allAtributes|dictsort:"atributeName" %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
                         <!-- <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}"><div class=""><div class="text-left col-lg-6">{{dim.atributeName}}</div><div class="text-right col-lg-5">{{dim.atributeVal}}</div></div></a></div> -->
@@ -55,11 +55,11 @@
                     {% endfor %}
                 </td>
             {% else %}
-                <td class="pr-0"><a href="#"></a></td>
+                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if allDimensions %}
-                <td class="">
+                <td style="max-width: 120px;" class="">
                     {% for dim in allDimensions|dictsort:"atributeName" %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
                         <!-- <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}"><div class=""><div class="text-left col-lg-12">{{dim.atributeName}}</div><div class="text-right col-lg-12">{{dim.atributeVal}} mm</div></div></a></div> -->
@@ -69,7 +69,7 @@
                     {% endfor %}
                 </td>
             {% else %}
-                <td class="pr-0"><a href="#"></a></td>
+                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_m %}

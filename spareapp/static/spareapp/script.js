@@ -316,17 +316,29 @@ $(function(){
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
 function measureReset(){
 
-    $("#headerList2").each(function(){
+    $("#headerList2").each(function(){      // Dimensiones
         $(this).find("input").each(function(){
             var aux = $(this).attr("name").split("check")[1]
             $("#"+aux+"Min").val(null);
             $("#"+aux+"Max").val(null);
         })
     })
-    $("#headerList3").each(function(){
+    $("#headerList3").each(function(){      // Atributos
         $(this).find("input").each(function(){
             var aux = $(this).attr("name").split("check")[1]
             $("#"+aux).val(null);
+        })
+    })
+
+    $("#headerList5").each(function(){              // Categories
+        $(this).find("input").each(function(){
+            $(this).prop("checked",false);
+        })
+    })
+
+    $("#headerList6").each(function(){              // Vendors
+        $(this).find("input").each(function(){
+            $(this).prop("checked",false);
         })
     })
 
@@ -992,6 +1004,7 @@ $("#dimension-content").on("click","#dimesdeleteRef",function(a){
 
 // Boton default para que reinicie la tabla ------------------------------------------------------------------------
 document.getElementById("default").addEventListener("click",function(){
+    
     $("input:checkbox[name=photo]").prop("checked",true);
     $("input:checkbox[name=code]").prop("checked",true);
     $("input:checkbox[name=brand]").prop("checked",true);
@@ -1006,13 +1019,14 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=reference]").prop("checked",true);
     $("input:checkbox[name=ecode]").prop("checked",true);
-    $("#headerList2").each(function(){
+
+    $("#headerList2").each(function(){              // Dimensions
         $(this).find("input").each(function(){
             var comp = $(this).attr("name")
             $(this).prop("checked",false);
         })
     })
-    $("#headerList3").each(function(){
+    $("#headerList3").each(function(){              // Atributes
         $(this).find("input").each(function(){
             var comp = $(this).attr("name")
             $(this).prop("checked",false);
@@ -1047,14 +1061,15 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#category").index() + 1)+")").show();
     $("#ecode").show();
     $("table td:nth-child("+($("#ecode").index() + 1)+")").show();
-    $("#headerList2").each(function(){
+
+    $("#headerList2").each(function(){                  // Dimensions
         $(this).find("input").each(function(){
 
             var aux = $(this).attr("name").split("check")[1]
             $("#"+aux+"Filter").hide();
         })
     })
-    $("#headerList3").each(function(){
+    $("#headerList3").each(function(){                  // Atributes
         $(this).find("input").each(function(){
 
             var aux = $(this).attr("name").split("check")[1]
@@ -1291,7 +1306,7 @@ $("#headerList3").each(function(){
     })
 })
 
-const $List5 = $("#headerList5");
+const $List5 = $("#headerList5");       // Categories
 $("#headerList5").each(function(){
     $(this).find("input").each(function(){
         var comp = $(this).attr("name")
@@ -1448,6 +1463,7 @@ $List3.change(function(){           // Activar filtro de atributos
 })
 // compCategories = []                 // Lista de categorias seleccionadas
 $List5.change(function(){           // Activar filtro de Categories
+
     contTotalTable = []
     // alert("compVendors: "+compVendors)
     for(var i = listadoPasar.length -1; i >=0; i--){
@@ -1490,7 +1506,9 @@ $List5.change(function(){           // Activar filtro de Categories
         inputTotal = inputTotal + 1
         var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+            alert($(this).attr("name"))
             comp = $(this).attr("name").split("check")[1]
+            // alert(comp)
             compCategories.push(comp)
 
         }
