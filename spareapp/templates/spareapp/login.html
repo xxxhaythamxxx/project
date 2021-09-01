@@ -1,0 +1,21 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Search {% endblock %}
+
+{% block content %}
+
+
+<div class="container mt-5 col-lg-6">
+
+    <form class="form" action="" method="POST">
+    {% csrf_token %}
+
+        {{form.as_p}}
+
+        <button class="btn btn-primary" type="submit" id="submit">Login</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

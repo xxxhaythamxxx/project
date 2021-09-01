@@ -4,6 +4,16 @@
 
 {% block content %}
 
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="notification alert alert-primary">
+                {{message}}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
 <div class="resultadoBusqueda">
 
     {% include "spareapp/superior.html" %}
