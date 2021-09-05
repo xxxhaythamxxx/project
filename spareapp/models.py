@@ -135,3 +135,12 @@ class reference(models.Model):
 
     def __str__(self):
         return '%s - %s' %(self.referenceSpare, self.referenceCode)
+    
+class spareCart(models.Model):
+
+    spareId=models.CharField(max_length=20, verbose_name="Id", blank=True,null=True)          #Ejemplo: 50013073
+    spareCode=models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)          #Ejemplo: 50013073
+    nameUser=models.CharField(max_length=20, verbose_name="User", blank=True,null=True)          #Ejemplo: 50013073
+
+    def __str__(self):
+            return '%s %s %s' %(self.spareId, self.spareCode, self.nameUser)

@@ -8,6 +8,12 @@ from openpyxl import load_workbook, workbook
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm
+from random import seed
+from random import random
+import random
+import datetime
+from datetime import date
+from datetime import datetime
 # import numpy as np
 
 # Create your views here.
@@ -221,22 +227,92 @@ def home(request):
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
-    dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    # spCart=spareCart.objects.values("spareId","nameUser").distinct()
+    
+    spCart = spareCart.objects.filter(nameUser=request.user.get_username()).values("spareId","nameUser").distinct().order_by("spareId")
+    if request.user.get_username() == "":
+        spCart = spareCart.objects.filter(nameUser="AnonymousUser").values("spareId","nameUser").distinct()
+    dic={"spCart":spCart,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
     if request.method=="POST":
         list = request.POST.getlist('toAdd')
         delist = request.POST.getlist("toDel")
-        if delist:
-            carrito = Cart(request)
-            for a in delist:                
-                spare_part = get_object_or_404(spare, id = a)
-                carrito.remove(spare_part)
+        # print("list")
+        # print(list)
+        # print("delist")
+        # print(delist)
+        # Si es una lista que se envía para guardarla
         if list:
-            carrito = Cart(request)
-            for a in list:                
-                spare_part = get_object_or_404(spare, id = a)
-                carrito.add(spare_part)
+            # print("List")
+            # print(list)
+            # cart = spareCart()
+            # Si se va a crear un nuevo carrito
+            if request.POST.get("cartNumber") == "":
+                randomNum = datetime.now().strftime("%Y%m%d%H%M%S")
+                # print("Fecha actual")
+                # print(datetime.now().strftime("%Y%m%d%H%M%S"))
+                # cart = spareCart()
+                # cart.save()
+                # form = UserRegisterForm(request.POST)
+                print("Voy a entrar a list")
+                for a in list:
+                    cart = spareCart()
+                    print("Random: "+str(randomNum))
+                    cart.spareId = randomNum
+                    # cart1 = spareCart.objects.get(id=cart.id)
+                    print("Imprimo cart1")
+                    # print(cart)
+                    cart.spareCode = a
+                    print("Voy a guardar add a")
+                    # cart1.spareCode.add(a)
+                    print("Codigo: "+str(a))
+                    # Si hay iniciada una sesion
+                    if request.user.get_username() != "":
+                        username = request.user.get_username()
+                        cart.nameUser = username
+                        # cart1.nameUser.add(username)
+                    # Si no hay iniciada una sesion
+                    else:
+                        cart.nameUser = "AnonymousUser"
+                        # cart1.nameUser.add("User")
+                    print("Guarda")
+                    cart.save()
+                    # cart1.add(cart1)
+            else:
+                print("Envía a un carrito especifico")
+                for a in list:
+                    cart = spareCart()
+                    if request.user.get_username() == "":
+                        cartPrueba=spareCart.objects.filter(spareId=request.POST.get("cartNumber"),spareCode=a,nameUser="AnonymousUser")
+                    else:
+                        cartPrueba=spareCart.objects.filter(spareId=request.POST.get("cartNumber"),spareCode=a,nameUser=request.user.get_username())
+                    if cartPrueba:
+                        print("Ya existe")
+                    else:
+                        cart.spareId = request.POST.get("cartNumber")
+                        cart.spareCode = a
+                        # Si hay iniciada una sesion
+                        if request.user.get_username() != "":
+                            username = request.user.get_username()
+                            cart.nameUser = username
+                        # Si no hay iniciada una sesion
+                        else:
+                            cart.nameUser = "AnonymousUser"
+                        cart.save()
+        
+
+        # # Carrito antes
+        # if delist:
+        #     carrito = Cart(request)
+        #     for a in delist:                
+        #         spare_part = get_object_or_404(spare, id = a)
+        #         carrito.remove(spare_part)
+        # if list:
+        #     carrito = Cart(request)
+        #     for a in list:                
+        #         spare_part = get_object_or_404(spare, id = a)
+        #         carrito.add(spare_part)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     if request.method=="GET":
@@ -1348,7 +1424,10 @@ def editspare(request,val):
                 if bandt == False:
                     sparrrAux.append(sp)
         spare1.spare_code = request.POST.get("cod")
-        spare1.spare_name = request.POST.get("descriptio")
+        if request.POST.get("descriptio") == "":
+            spare1.spare_name = None
+        else:
+            spare1.spare_name = request.POST.get("descriptio")
         
         if "phot" in request.FILES:
             spare1.spare_photo = request.FILES['phot']
@@ -2271,3 +2350,66 @@ def register(request):
     dic={"form":form,"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     return render(request,"spareapp/register.html",dic)
+
+def cart(request,val):
+
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    spCartAll=spareCart.objects.all()
+    # spCart=spareCart.objects.values("spareId","nameUser").distinct()
+    spares = spare.objects.all().order_by("spare_name","spare_code","spare_brand")
+
+    # print("User: "+str(val))
+    spCartPost=spareCart.objects.filter(spareId=request.POST.get("cartN"))
+    spCart = spareCart.objects.filter(nameUser=val).values("spareId","nameUser").distinct().order_by("spareId")
+    # print("Cart")
+    # print(spCartMain)
+    cartIdPasar = request.POST.get("cartN")
+    
+    if request.method == "POST":
+        print("Entra al POST")
+        print(request.POST)
+        if request.POST.get("cartN") == None:
+            cartIdPasar = request.POST.get("cartPasar")
+        else:
+            cartIdPasar = request.POST.get("cartN")
+        spCartPost = spareCart.objects.filter(spareId=request.POST.get("cartN"),nameUser=val)
+        spCart = spareCart.objects.values("spareId","nameUser").filter(nameUser=val).distinct().order_by("spareId")
+
+        # print(request.POST)
+        if request.POST.get("cartOpen"):
+            print("Manda a abrir")
+        if request.POST.get("cartDelete"):
+            print("Manda a borrar")
+            cartDelete=spareCart.objects.filter(spareId=request.POST.get("cartN"))
+            print(cartDelete)
+            cartDelete.delete()
+        # spCart = spareCart.objects.values("spareId","nameUser").filter(spareId=request.POST.get("cartN"),nameUser=val).distinct()
+
+        delist = request.POST.getlist("toDel")
+        if delist:
+            print("Entra a delist para borrar individualmente")
+            cartElementDelete=spareCart.objects.filter(spareId=request.POST.get("cartPasar"))
+            for el in cartElementDelete:
+                for de in delist:
+                    if el.spareCode == de:
+                        print("Debe borrar")
+                        print(de)
+                        el.delete()
+            spCartPost = spareCart.objects.filter(spareId=request.POST.get("cartPasar"))
+            
+
+    dic={"cartIdPasar":cartIdPasar,"spare":spares,"spCartMain":spCartPost,"spCartAll":spCartAll,"spCart":spCart,"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    return render(request,"spareapp/cart.html",dic)

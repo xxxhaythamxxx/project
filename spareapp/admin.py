@@ -146,6 +146,10 @@ class referenceAdmin(admin.ModelAdmin):
         else:
             return HttpResponseRedirect(reverse("admin:spareapp_reference_changelist"))
 
+class spareCartAdmin(admin.ModelAdmin):
+    list_display=("spareId","spareCode","nameUser",)
+    search_fields=("spareCode",)
+
 admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)
@@ -154,6 +158,7 @@ admin.site.register(vendor,vendorAdmin)
 admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)
+admin.site.register(spareCart,spareCartAdmin)
 
 admin.site.site_header = "Auto Repuestos Interamericana administrator"
 admin.site.site_title = "UMSRA Admin Portal"

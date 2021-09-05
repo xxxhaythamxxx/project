@@ -1,0 +1,332 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+
+<link href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<div class="resultadoBusqueda">
+
+    
+    <div class="options my-2">
+    <form name="cartForm" method="POST" action="">
+    {% csrf_token %}
+        <div class="row align-items-center">
+                <!-- <label for="">Select cart</label> -->
+                <div class="col-lg-2">
+                    <select style="font-size: small;" name="cartN" id="cartN" class="form-control">
+                        <option value="">Select cart</option>
+                        {% for car in spCart %}
+                            {% if car.nameUser|cut:" " == request.user|cut:" " %}
+                                <option value="{{car.spareId}}">Cart {{forloop.counter}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+        </div>
+        <div class="row mt-2 mb-1">
+            <div class="col-lg-10">
+                <div style="display: inline-block;">
+                    <button value="cartOpen" type="submit" name="cartOpen" style="font-size: small;" class="btn btn-primary">Open</button>
+                </div>
+                <div style="display: inline-block;">
+                    <button value="cartDelete" type="submit" name="cartDelete" style="font-size: small;" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+        
+        <div id="filterContent" class="row align-items-center">
+            
+            <div style="font-size: small;" class="col-lg-7 col-md-7 col-sm-12 col-12 mt-1">
+                <!-- Boton default -->
+                <div style="display: inline-block;" class="">
+                    <div style="font-size: small;" id="default" class="btn btn-success">Default</div>
+                </div>
+                <!-- Boton headers -->
+                <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
+                    <ul style="font-size: small;" id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
+                        <li style="margin:auto;" class=""><input name="atributes" class="ml-2" type="checkbox"><label class="ml-1">Atributes</label></li>
+                        <!-- <li style="margin:auto;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li> -->
+                        <li style="margin:auto;" class=""><input name="car" class="ml-2" type="checkbox"><label class="ml-1">Car</label></li>
+                        <li style="margin:auto;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>
+                        <li style="margin:auto;" class=""><input name="code" class="ml-2" type="checkbox"><label class="ml-1">Code</label></li>
+                        <li style="margin:auto;" class=""><input name="type" class="ml-2" type="checkbox"><label class="ml-1">Description</label></li>
+                        <li style="margin:auto;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="ml-1">Dimensions</label></li>
+                        <li style="margin:auto;" class=""><input name="priceM" class="ml-2" type="checkbox"><label class="ml-1">Price Major</label></li>
+                        <li style="margin:auto;" class=""><input name="priceD" class="ml-2" type="checkbox"><label class="ml-1">Price Detail</label></li>
+                        {% if parameter == 'Engine code' %}
+                        <li style="margin:auto;" class=""><input name="ecode" class="ml-2" type="checkbox"><label class="ml-1">Engine code</label></li>
+                        {% endif %}
+                        <li style="margin:auto;" class=""><input name="detail-id" class="ml-2" type="checkbox"><label class="ml-1">ID</label></li>
+                        <li style="margin:auto;" class=""><input name="photo" class="ml-2" type="checkbox"><label class="ml-1">Photo</label></li>
+                        <li style="margin:auto;" class=""><input name="reference" class="ml-2" type="checkbox"><label class="ml-1">Reference Code</label></li>
+                        <!-- <li style="margin:auto;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
+                        <li style="margin:auto;" class=""><input name="vendor" class="ml-2" type="checkbox"><label class="ml-1">Vendor</label></li>
+                    </ul>
+                </div>
+                <!-- Boton filter dimensiones -->
+                <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Dimensions</a>
+                    <ul style="font-size: small;" id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
+                        {% for dim in dimension|dictsort:"atributeName" %}
+                            <li style="margin:auto;" class=""><input name="check{{dim.atributeName|cut:' '|cut:'/'}}" class="ml-2" type="checkbox"><label class="ml-1">{{dim.atributeName}}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Boton filter atribute -->
+                <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
+                    <ul style="font-size: small;" id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
+                        {% for atr in atribute|dictsort:"atributeName" %}
+                            <li style="margin:auto;" class=""><input name="check{{atr.atributeName|cut:' '}}" class="ml-2" type="checkbox"><label class="ml-1">{{atr.atributeName}}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Boton Categories -->
+                <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel5" data-toggle="dropdown" href="#">Categories</a>
+                    <ul style="font-size: small;" id="headerList5" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel5">            
+                        {% for cat in allCategories %}
+                            <li style="margin:auto;" class=""><input name="check{{cat.category|cut:' '|cut:'/'}}" class="ml-2" type="checkbox"><label class="ml-1">{{cat.category}}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Boton Vendor -->
+                <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel6" data-toggle="dropdown" href="#">Vendors</a>
+                    <ul style="font-size: small;" id="headerList6" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel6">            
+                        {% for cat in allVendors %}
+                            <li style="margin:auto;" class=""><input name="check{{cat.vendorName|cut:' '|cut:'/'}}" class="ml-2" type="checkbox"><label class="ml-1">{{cat.vendorName}}</label></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-6 col-6 mt-1">
+                <div class="d-flex justify-content-end">
+                    <div style="display: inline-block;" class="">
+                        <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel4" data-toggle="dropdown" href="#">Options</a>
+                        <ul style="font-size: small;" id="headerList4" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel4">            
+                            <li><a class="dropdown-item" href="#" onClick="viewPDF()">View</a></li>
+                            <li><a class="dropdown-item" href="#" onClick="generatePDF()">PDF</a></li>
+                            <li><a class="dropdown-item" href="#" id="downloadexcel">Excel</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% for dim in dimension %}
+
+            <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
+                <div class="col-lg-6 mt-2">
+                    <input class="col-lg-3 dimMin" type="number" placeholder="Min {{dim.atributeName}}" id="{{dim.atributeName}}Min">
+                    <input class="col-lg-3 dimMax" type="number" placeholder="Max {{dim.atributeName}}" id="{{dim.atributeName}}Max">
+                </div>
+            </div>
+
+            {% endfor %}
+
+            {% for dim in atribute %}
+
+            <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
+                <div class="col-lg-6 mt-2">
+                    <input style="font-size: small;" class="col-lg-3 atrUnique" type="text" placeholder="{{dim.atributeName}}" id="{{dim.atributeName}}">
+                    <button style="font-size: small;" id="{{dim.atributeName}}Button" type="button" class="btn btn-sm btn-danger" data-bs-toggle="popover" data-bs-trigger="focus" data-toggle="popover" title="Valid values" data-bs-content="Valores permitidos">Values</button>
+                </div>
+            </div>
+
+            {% endfor %}
+
+            <div style="display: none;" id="ButtonFilter" class="row">
+                <div class="col mt-2">
+                    <button style="font-size: small;" class="btn btn-success" onClick="measureFilter()" id="measureFilter">Filter</button>
+                    <button style="font-size: small;" class="btn btn-danger" onClick="measureReset()" id="measureReset">Reset</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <form method="POST" action="">
+        {% include "spareapp/delete.html" %}
+        
+        {% csrf_token %}
+        <input id="cartPasar" name="cartPasar" value="{{cartIdPasar}}" type="text" hidden= "true">
+
+    <table style="font-size: small;" id="invoice" class="invoice table-striped draggable forget-ordering table-bordered">
+        <thead>
+            <tr class="trsup color text-white">
+                <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
+                <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
+                <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
+                <!-- <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th> -->
+                <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
+                <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+                <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
+                <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
+                <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;">Price Major</th>
+                <th id="priceD" class="trsup color" style="position: sticky;top: 70;display: none;">Price Det.</th>
+                <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
+                {% if parameter == 'Engine code' %}
+                <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
+                {% endif %}
+                <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
+                <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+        {% for car in spCartMain %}
+        {% for br in spare %}
+        {% if car.spareCode|add:"0" == br.id|add:"0" %}
+        <tr class="text-left">
+            <td class="pr-0"><a href=""></a></div></td>
+
+            {% if br.spare_code %}
+            <td class="pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
+            {% else %}
+            <td class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
+            {% if reference %}
+            <td style="max-width: 120px;" class="pr-0">
+                {% for dim in reference|slice:":5" %}
+                    {% if br.spare_code == dim.referenceSpare.spare_code %}
+                    <div><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            {% else %}
+                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
+            <!-- {% if br.car_info.all %}
+            <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
+            {% else %}
+            <td><a href="#"></a></td>
+            {% endif %} -->
+
+            {% if br.spare_category %}
+            <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>
+            {% else %}
+            <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_name %}
+            <td style="max-width: 120px;" class="pr-0"><a href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_name}}</a></td>
+            {% else %}
+            <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
+            {% if allAtributes %}
+                <td style="max-width: 120px;" class="pr-0">
+                    {% for dim in allAtributes|dictsort:"atributeName" %}
+                        {% if br.spare_code == dim.atributeSpare.spare_code %}
+                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}}</div></div></div></a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
+            {% if allDimensions %}
+                <td style="max-width: 120px;" class="">
+                    {% for dim in allDimensions|dictsort:"atributeName" %}
+                        {% if br.spare_code == dim.dimensionSpare.spare_code %}
+                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}} mm</div></div></div></a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% else %}
+                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+            
+            {% if br.price_m %}
+            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m}}</a></td>
+            {% else %}
+            <td class="pr-0" style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.price_d %}
+            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_d}}</a></td>
+            {% else %}
+            <td class="pr-0" style="display: none;"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_photo %}
+            <td class="pr-0"><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
+            {% else %}
+            <td class="pr-0"><a href="#"></a></td>
+            {% endif %}
+            
+            {% if parameter == 'Engine code' %}
+            <td class="pr-0"><a href="#">{{mig}}</a></td>
+            {% endif %}
+
+            {% if br.spare_vendor.all %}
+            <td class="pr-0" style="display: none;">
+                {% for dim in allVendors %}
+                    {% for sp in br.spare_vendor.all %}
+
+                        {% if sp.vendorName == dim.vendorName %}
+                            <div><a id="vendorInfo" href="#">{{sp.vendorName}}</a></div>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            {% else %}
+            <td class="pr-0" style="display: none;"><div><a id="vendorInfo" href="#"></a></div></td>
+            {% endif %}
+
+            <td class="pr-0"><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include "spareapp/numPagesDown.html" %}
+    
+</form>
+</div>
+<script>
+$('tbody').sortable({
+    stop:function(){
+        var i = 1;
+        $("tbody tr").each(function(){
+            $(this).find("td").each(function(){
+                if($(this).index()==$("#detail-id").index()){
+                    if($(this).parent().is(":visible")){
+                        $(this).text(i)
+                        i=i+1;
+                    }
+                }
+                
+            })
+        });
+    }
+});
+
+$(function () {
+  $('[data-bs-toggle="popover"]').popover()
+})
+
+function enviarPost(url){
+  var formulario = document.cartForm;
+  formulario.action = url;
+  formulario.submit();
+}
+
+</script>
+{% load static %}
+{% endblock %}
+
+
+
+
+

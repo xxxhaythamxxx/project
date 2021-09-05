@@ -18,6 +18,14 @@
                     </div>
 
                     <div class="d-flex ml-auto">
+                        <select style="font-size: small;" name="cartNumber" id="cartNumber" class="form-control">
+                            <option value="">New Cart</option>
+                            {% for c in spCart %}
+                                {% if request.user|cut:" " == c.nameUser|cut:" " %}
+                                    <option value="{{c.spareId}}">Cart {{forloop.counter}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
                         <button class="toCart btn btn-primary" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
                                 <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>

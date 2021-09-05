@@ -50,6 +50,7 @@ urlpatterns = [
     path("register",views.register,name="register"),
     path("login/",LoginView.as_view(template_name="spareapp/login.html"),name="login"),
     path("logout/",LogoutView.as_view(template_name="spareapp/logout.html"),name="logout"),
+    path("cart/<str:val>",views.cart,name="cart"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]
