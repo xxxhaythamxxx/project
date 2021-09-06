@@ -117,7 +117,7 @@
                         </div>
                     </div>
                 </div> -->
-
+                {% if request.user.is_authenticated %}
                 <div class="col-lg-4 col-md-12 col-sm-4 col-4 d-sm-none d-md-block">
                     <!-- <a class="nav-link d-flex justify-content-center" aria-current="page" href="{% url 'detail' %}"> -->
                     <a class="nav-link d-flex justify-content-center" aria-current="page" href="{% url 'cart' request.user %}">
@@ -126,7 +126,7 @@
                         </svg>
                     </a>
                 </div>
-                
+                {% endif %}
             </div>
         </div>
         </div>

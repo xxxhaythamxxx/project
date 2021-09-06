@@ -14,10 +14,14 @@
             {% if parameter == 'Engine code' %}
             <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
             {% endif %}
+            {% if request.user.is_authenticated %}
             <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
+            {% endif %}
             <!-- <th id="brand" class="trsup color" style="position: sticky;top: 70;">Brand</th> -->
             <!-- <th id="shape" class="trsup color" style="position: sticky;top: 70;display: none;">Shape</th> -->
+            {% if request.user.is_authenticated %}
             <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
+            {% endif %}
         </tr>
     </thead>
 </html>

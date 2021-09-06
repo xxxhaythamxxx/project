@@ -17,6 +17,7 @@
                         </div>
                     </div>
 
+                    {% if request.user.is_authenticated %}
                     <div class="d-flex ml-auto">
                         <select style="font-size: small;" name="cartNumber" id="cartNumber" class="form-control">
                             <option value="">New Cart</option>
@@ -33,6 +34,8 @@
                             </svg>
                         </button>
                     </div>
+                    {% endif %}
+
                 </div>
 
             </div>

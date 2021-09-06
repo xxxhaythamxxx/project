@@ -17,7 +17,9 @@
                         <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li> -->
                         <!-- <li style="margin:auto;text-align:center;" class=""><input name="car" class="ml-2" type="checkbox"><label class="ml-1">Car</label></li> -->
                         <li style="margin:auto;" class=""><input name="category" class="ml-2" type="checkbox"><label class="ml-1">Category</label></li>
+                        {% if request.user.is_authenticated %}
                         <li style="margin:auto;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>
+                        {% endif %}
                         <li style="margin:auto;" class=""><input name="code" class="ml-2" type="checkbox"><label class="ml-1">Code</label></li>
                         <li style="margin:auto;" class=""><input name="type" class="ml-2" type="checkbox"><label class="ml-1">Description</label></li>
                         <li style="margin:auto;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="ml-1">Dimensions</label></li>
@@ -29,7 +31,9 @@
                         <li style="margin:auto;" class=""><input name="photo" class="ml-2" type="checkbox"><label class="ml-1">Photo</label></li>
                         <li style="margin:auto;" class=""><input name="reference" class="ml-2" type="checkbox"><label class="ml-1">Reference Code</label></li>
                         <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
+                        {% if request.user.is_authenticated %}
                         <li style="margin:auto;" class=""><input name="vendor" class="ml-2" type="checkbox"><label class="ml-1">Vendor</label></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- Boton filter dimensiones -->
@@ -59,6 +63,7 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% if request.user.is_authenticated %}
                 <!-- Boton Vendor -->
                 <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel6" data-toggle="dropdown" href="#">Vendors</a>
@@ -68,7 +73,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                
+                {% endif %}
             </div>
             
             <div class="col-lg-5 col-md-5 col-sm-6 col-6 mt-1">
