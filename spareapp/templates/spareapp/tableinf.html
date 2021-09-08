@@ -48,8 +48,6 @@
                 <td style="max-width: 120px;" class="pr-0">
                     {% for dim in allAtributes|dictsort:"atributeName" %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <!-- <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}"><div class=""><div class="text-left col-lg-6">{{dim.atributeName}}</div><div class="text-right col-lg-5">{{dim.atributeVal}}</div></div></a></div> -->
-                        <!-- <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'atributes' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}}</a></div> -->
                         <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}}</div></div></div></a></div>
                         {% endif %}
                     {% endfor %}
@@ -64,7 +62,7 @@
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
                         <!-- <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}"><div class=""><div class="text-left col-lg-12">{{dim.atributeName}}</div><div class="text-right col-lg-12">{{dim.atributeVal}} mm</div></div></a></div> -->
                         <!-- <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'longi' dim.atributeName dim.atributeVal %}">{{dim.atributeName}} {{dim.atributeVal}} mm</a></div> -->
-                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}} mm</div></div></div></a></div>
+                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal|floatformat:2}} mm</div></div></div></a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -73,13 +71,13 @@
             {% endif %}
 
             {% if br.price_m %}
-            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m}}</a></td>
+            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m|floatformat:2}}</a></td>
             {% else %}
             <td class="pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_d %}
-            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_d}}</a></td>
+            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_d|floatformat:2}}</a></td>
             {% else %}
             <td class="pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}

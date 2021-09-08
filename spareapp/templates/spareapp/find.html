@@ -11,7 +11,7 @@
 <form class="" method="POST" action="">
     {% include "spareapp/add.html" %}
     {% csrf_token %}
-<table style="font-size: small;" id="invoice" class="invoice table-striped table-sortable draggable table-bordered">
+<table style="font-size: small;" id="invoice" class="invoice table-sortable draggable table-bordered">
     {% include "spareapp/tablesup.html" %}
     {% include "spareapp/tableinf.html" %}
 </table>

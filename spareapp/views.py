@@ -5,6 +5,7 @@ from django.views import View
 from .cart import *
 import json
 from openpyxl import load_workbook, workbook
+from openpyxl.utils import get_column_letter
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm
@@ -2033,12 +2034,13 @@ def importSpare(request):
 
         # FILE_PATH = "prueba3.xlsx"
 
-        workbook = load_workbook(FILE_PATH)
+        workbook = load_workbook(FILE_PATH, data_only = True)
         sheet = workbook.active
 
         maxCol = []
 
         for col in sheet.iter_rows():
+            # print(col)
             maxCol.append(col)
         
         i=0
@@ -2057,34 +2059,35 @@ def importSpare(request):
         for fil in maxCol:
             j=0
             for col in fil:
-                if col.value == "code":
+                if col.value == "CODE":
                     spCode = j
                     cont = cont + 1
-                if col.value == "description":
+                if col.value == "DESCRIPTION":
                     spDesc = j
                     cont = cont + 1
-                if col.value == "pricem":
+                if col.value == "PRICEM":
                     spPricem = j
                     cont = cont + 1
-                if col.value == "priced":
+                if col.value == "PRICED":
                     spPriced = j
                     cont = cont + 1
-                if col.value == "reference":
+                if col.value == "REFERENCE":
                     spReference = j
                     cont = cont + 1
-                if col.value == "attribute":
+                if col.value == "ATTRIBUTE":
                     spAttribute = j
                     cont = cont + 1
-                if col.value == "dimension":
+                if col.value == "DIMENSION":
+                    print("Entra en dimension j")
                     spDimension = j
                     cont = cont + 1
-                if col.value == "category":
+                if col.value == "CATEGORY":
                     spCategory = j
                     cont = cont + 1
-                if col.value == "vendor":
+                if col.value == "VENDOR":
                     spVendor = j
                     cont = cont + 1
-                if col.value == "note":
+                if col.value == "NOTE":
                     spNote = j
                     cont = cont + 1
                 j=j+1
@@ -2100,7 +2103,14 @@ def importSpare(request):
             DimName = ""
             DimDesc = ""
             VenName = ""
+
+            varRefAux = ""
+            varAtrAux = ""
+            varDimAux = ""
             for fil in maxCol:
+                varRefAux = ""
+                varAtrAux = ""
+                varDimAux = ""
                 bandera = True
                 j=0
                 if i>0:
@@ -2108,8 +2118,10 @@ def importSpare(request):
                     spare1 = spare()
                     
                 for col in fil:
+
                     if i>0:
                         if j == spCode:
+                            print("Entra en codigo.....")
                             if col.value == None:
                                 print("Codigo: "+CodeAux)
                                 bandera = False
@@ -2120,9 +2132,12 @@ def importSpare(request):
                                 spare1.spare_code = col.value
                                 bandera = True
                         if j == spDesc:
+                            print("Entra en descripcion.....")
                             print("Descripción: "+str(col.value))
                             spare1.spare_name = col.value
                         if j == spPricem:
+                            print("Entra en Price M.....")
+                            # print(get_column_letter(col.value))
                             print("Price M: "+str(col.value))
                             spare1.price_m = col.value
                         if j == spPriced:
@@ -2132,6 +2147,7 @@ def importSpare(request):
                             print("Note: "+str(col.value))
                             spare1.note = col.value
                         if j == spCategory:
+                            print("Entra en category.....")
                             if col.value != None:
                                 print("Category: "+str(col.value))
                                 if category.objects.filter(category=col.value):
@@ -2142,6 +2158,7 @@ def importSpare(request):
                                     category1.save()
                                 spare1.spare_category = category1
                         if j == spVendor:
+                            print("Entra a vendor....")
                             if col.value != None:
                                 print("Vendor: "+str(col.value))
                                 # if vendor.objects.filter(category=col.value):
@@ -2156,37 +2173,48 @@ def importSpare(request):
                                 VenName = None
 
                         if j == spReference:
-                            print("Entra en referencia")
+                            print("Entra en referencia.....")
                             if col.value != None:
-                                varA = col.value.split("=")
-                                print(varA[0])
-                                refName = varA[0]
-                                print(varA[1])
-                                refDesc = varA[1]
-                                
-                                print("Reference: "+str(col.value))
+                                varRefAux = col.value.split("\n")
+                                print(varRefAux)
+                                print(len(varRefAux))
+                                # for varA in varRefAux:
+
+                                #     varA = col.value.split("=")
+                                #     print(varA)
+                                #     print(len(varA))
+                                #     print(varA[0])
+                                #     refName = varA[0]
+                                #     if len(varA)>1:
+                                #         print(varA[1])
+                                #         refDesc = varA[1]
+                                    
+                                #     print("Reference: "+str(col.value))
                             else:
                                 refName = None
                                 refDesc = None
                         if j == spAttribute:
-                            print("Entra en atributos")
+                            print("Entra en atributos.....")
                             if col.value != None:
-                                varA = col.value.split("=")
-                                print(varA[0])
-                                AtrName = varA[0]
-                                print(varA[1])
-                                AtrDesc = varA[1]
+                                varAtrAux = col.value.split("\n")
+
+                                # varA = col.value.split("=")
+                                # print(varA[0])
+                                # AtrName = varA[0]
+                                # print(varA[1])
+                                # AtrDesc = varA[1]
                             else:
                                 AtrName = None
                                 AtrDesc = None
                         if j == spDimension:
-                            print("Entra en dimensiones")
+                            print("Entra en dimensiones.....")
                             if col.value != None:
-                                varA = col.value.split("=")
-                                print(varA[0])
-                                DimName = varA[0]
-                                print(varA[1])
-                                DimDesc = varA[1]
+                                varDimAux = col.value.split("\n")
+                                # varA = col.value.split("=")
+                                # print(varA[0])
+                                # DimName = varA[0]
+                                # print(varA[1])
+                                # DimDesc = varA[1]
                             else:
                                 DimName = None
                                 DimDesc = None
@@ -2198,48 +2226,81 @@ def importSpare(request):
                     print("Guarda spare")
                     spare1.save()
                     # Agregamos referencias
-                    if refName != None:
-                        reference1 = reference()
-                        print("Crea la referencia")
-                        print(CodeAux)
-                        auxSp = spare.objects.filter(spare_code=CodeAux)
-                        print("Crea el spare:")
-                        print(auxSp)
-                        varId=0
-                        for sp in auxSp:
-                            varId = sp.id
-                        targetSpare = spare.objects.get(id=varId)
-                        reference1.referenceSpare = targetSpare
-                        reference1.referenceCode = refName
-                        reference1.referenceNote = refDesc
-                        reference1.save()
+                    print("Agregamos referencias")
+                    for var in varRefAux:
+                        varA = var.split("=")
+                        # print(varA)
+                        # print(len(varA))
+                        # print(varA[0])
+                        refName = varA[0]
+                        if len(varA)>1:
+                            # print(varA[1])
+                            refDesc = varA[1]
+                        
+                        print("Reference: "+str(var))
+
+                        if refName != None:
+                            reference1 = reference()
+                            print("Agregamos la referencia.....")
+                            # print(CodeAux)
+                            auxSp = spare.objects.filter(spare_code=CodeAux)
+                            # print("Crea el spare:.....")
+                            # print(auxSp)
+                            varId=0
+                            for sp in auxSp:
+                                varId = sp.id
+                            targetSpare = spare.objects.get(id=varId)
+                            reference1.referenceSpare = targetSpare
+                            reference1.referenceCode = refName
+                            reference1.referenceNote = refDesc
+                            reference1.save()
                     # Agregamos atributos
-                    if AtrName != None:
-                        atribute1 = atribute()
-                        auxSp = spare.objects.filter(spare_code=CodeAux)
-                        varId=0
-                        for sp in auxSp:
-                            varId = sp.id
-                        targetSpare = spare.objects.get(id=varId)
-                        atribute1.atributeSpare = targetSpare
-                        atribute1.atributeName = AtrName
-                        atribute1.atributeVal = AtrDesc
-                        atribute1.save()
+                    print("Agregamos atributos")
+                    for var in varAtrAux:
+                        print(var)
+                        varA = var.split("=")
+                        AtrName = varA[0]
+                        print(AtrName)
+                        AtrDesc = varA[1]
+                        print(AtrDesc)
+
+                        if AtrName != None:
+                            print("Tiene un atributo para agregar.....")
+                            if AtrName != "":
+                                print("Agregamos el atributo.....")
+                                atribute1 = atribute()
+                                auxSp = spare.objects.filter(spare_code=CodeAux)
+                                print(auxSp)
+                                varId=0
+                                for sp in auxSp:
+                                    varId = sp.id
+                                targetSpare = spare.objects.get(id=varId)
+                                atribute1.atributeSpare = targetSpare
+                                atribute1.atributeName = AtrName
+                                atribute1.atributeVal = AtrDesc
+                                atribute1.save()
                     # Agregamos dimensiones
-                    if DimName != None:
-                        dimension1 = dimension()
-                        auxSp = spare.objects.filter(spare_code=CodeAux)
-                        varId=0
-                        for sp in auxSp:
-                            varId = sp.id
-                        targetSpare = spare.objects.get(id=varId)
-                        dimension1.dimensionSpare = targetSpare
-                        dimension1.atributeName = DimName
-                        dimension1.atributeVal = DimDesc
-                        dimension1.save()
+                    for var in varDimAux:
+                        varA = var.split("=")
+                        DimName = varA[0]
+                        DimDesc = varA[1]
+                        if DimName != None:
+                            print("Tiene una dimension para agregar")
+                            if DimName != "":
+                                print("Agregamos la dimension.....")
+                                dimension1 = dimension()
+                                auxSp = spare.objects.filter(spare_code=CodeAux)
+                                varId=0
+                                for sp in auxSp:
+                                    varId = sp.id
+                                targetSpare = spare.objects.get(id=varId)
+                                dimension1.dimensionSpare = targetSpare
+                                dimension1.atributeName = DimName
+                                dimension1.atributeVal = DimDesc
+                                dimension1.save()
                     # Agregamos vendor
                     if VenName != None:
-
+                        print("Agregamos vendor")
                         if vendor.objects.filter(vendorName=VenName):
                             vendor1 = vendor.objects.get(vendorName=VenName)
                         else:
@@ -2262,7 +2323,7 @@ def importSpare(request):
                     print("No guarda Spare")
                     # Pero puede guardar referencias
                     if refName != None and i>0:
-                        print("Hay reference Code")
+                        print("Hay reference Code.....")
                         print(auxSp)
                         # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
                         reference1 = reference()
@@ -2276,35 +2337,37 @@ def importSpare(request):
                         reference1.referenceNote = refDesc
                         reference1.save()
                     if AtrName != None and i>0:
-                        print("Hay Atributos")
-                        print(auxSp)
-                        # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
-                        atribute1 = atribute()
-                        auxSp = spare.objects.filter(spare_code=CodeAux)
-                        varId=0
-                        for sp in auxSp:
-                            varId = sp.id
-                        targetSpare = spare.objects.get(id=varId)
-                        atribute1.atributeSpare = targetSpare
-                        atribute1.atributeName = AtrName
-                        atribute1.atributeVal = AtrDesc
-                        atribute1.save()
+                        if AtrName != "":
+                            print("Hay Atributos.....")
+                            print(auxSp)
+                            # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
+                            atribute1 = atribute()
+                            auxSp = spare.objects.filter(spare_code=CodeAux)
+                            varId=0
+                            for sp in auxSp:
+                                varId = sp.id
+                            targetSpare = spare.objects.get(id=varId)
+                            atribute1.atributeSpare = targetSpare
+                            atribute1.atributeName = AtrName
+                            atribute1.atributeVal = AtrDesc
+                            atribute1.save()
                     if DimName != None and i>0:
-                        print("Hay dimensiones")
-                        print(auxSp)
-                        # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
-                        dimension1 = dimension()
-                        auxSp = spare.objects.filter(spare_code=CodeAux)
-                        varId=0
-                        for sp in auxSp:
-                            varId = sp.id
-                        targetSpare = spare.objects.get(id=varId)
-                        dimension1.dimensionSpare = targetSpare
-                        dimension1.atributeName = DimName
-                        dimension1.atributeVal = DimDesc
-                        dimension1.save()
+                        if DimName != "":
+                            print("Hay dimensiones.....")
+                            print(auxSp)
+                            # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
+                            dimension1 = dimension()
+                            auxSp = spare.objects.filter(spare_code=CodeAux)
+                            varId=0
+                            for sp in auxSp:
+                                varId = sp.id
+                            targetSpare = spare.objects.get(id=varId)
+                            dimension1.dimensionSpare = targetSpare
+                            dimension1.atributeName = DimName
+                            dimension1.atributeVal = DimDesc
+                            dimension1.save()
                     if VenName != None and i>0:
-                        print("Hay vendor")
+                        print("Hay vendor.....")
                         if vendor.objects.filter(vendorName=VenName):
                             vendor1 = vendor.objects.get(vendorName=VenName)
                         else:

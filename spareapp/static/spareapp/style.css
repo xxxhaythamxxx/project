@@ -1,3 +1,11 @@
+.invoice tr:hover {
+    background-color: rgb(140, 140, 140);
+}
+
+.invoice tr {
+    background-color: rgb(180, 180, 180)
+}
+
 table {
     font-size: small!important;
 }

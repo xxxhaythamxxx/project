@@ -158,7 +158,7 @@ admin.site.register(vendor,vendorAdmin)
 admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)
-admin.site.register(spareCart,spareCartAdmin)
+# admin.site.register(spareCart,spareCartAdmin)
 
 admin.site.site_header = "Auto Repuestos Interamericana administrator"
 admin.site.site_title = "UMSRA Admin Portal"

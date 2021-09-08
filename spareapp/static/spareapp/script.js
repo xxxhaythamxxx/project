@@ -1506,7 +1506,6 @@ $List5.change(function(){           // Activar filtro de Categories
         inputTotal = inputTotal + 1
         var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            alert($(this).attr("name"))
             comp = $(this).attr("name").split("check")[1]
             // alert(comp)
             compCategories.push(comp)
