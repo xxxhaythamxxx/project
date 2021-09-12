@@ -21,26 +21,37 @@
                 <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel" data-toggle="dropdown" href="#">Headers</a>
                     <ul style="font-size: small;" id="headerList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel">            
+                        {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="atributes" class="ml-2" type="checkbox"><label class="ml-1">Atributes</label></li>
+                        {% endif %}
                         <!-- <li style="margin:auto;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li> -->
                         <li style="margin:auto;" class=""><input name="car" class="ml-2" type="checkbox"><label class="ml-1">Car</label></li>
                         <li style="margin:auto;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>
                         <li style="margin:auto;" class=""><input name="code" class="ml-2" type="checkbox"><label class="ml-1">Code</label></li>
                         <li style="margin:auto;" class=""><input name="type" class="ml-2" type="checkbox"><label class="ml-1">Description</label></li>
+                        {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="ml-1">Dimensions</label></li>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
                         <li style="margin:auto;" class=""><input name="priceM" class="ml-2" type="checkbox"><label class="ml-1">Price Major</label></li>
                         <li style="margin:auto;" class=""><input name="priceD" class="ml-2" type="checkbox"><label class="ml-1">Price Detail</label></li>
+                        {% endif %}
                         {% if parameter == 'Engine code' %}
                         <li style="margin:auto;" class=""><input name="ecode" class="ml-2" type="checkbox"><label class="ml-1">Engine code</label></li>
                         {% endif %}
                         <li style="margin:auto;" class=""><input name="detail-id" class="ml-2" type="checkbox"><label class="ml-1">ID</label></li>
                         <li style="margin:auto;" class=""><input name="photo" class="ml-2" type="checkbox"><label class="ml-1">Photo</label></li>
+                        {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
                         <li style="margin:auto;" class=""><input name="reference" class="ml-2" type="checkbox"><label class="ml-1">Reference Code</label></li>
+                        {% endif %}
                         <!-- <li style="margin:auto;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
+                        {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="vendor" class="ml-2" type="checkbox"><label class="ml-1">Vendor</label></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- Boton filter dimensiones -->
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Dimensions</a>
                     <ul style="font-size: small;" id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
@@ -49,7 +60,9 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% endif %}
                 <!-- Boton filter atribute -->
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel3" data-toggle="dropdown" href="#">Atributes</a>
                     <ul style="font-size: small;" id="headerList3" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel3">            
@@ -58,6 +71,7 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% endif %}
                 <!-- Boton Categories -->
                 <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel5" data-toggle="dropdown" href="#">Categories</a>
@@ -68,6 +82,7 @@
                     </ul>
                 </div>
                 <!-- Boton Vendor -->
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel6" data-toggle="dropdown" href="#">Vendors</a>
                     <ul style="font-size: small;" id="headerList6" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel6">            
@@ -76,7 +91,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                
+                {% endif %}
             </div>
             <div class="col-lg-5 col-md-5 col-sm-6 col-6 mt-1">
                 <div class="d-flex justify-content-end">
@@ -91,6 +106,7 @@
                 </div>
             </div>
 
+            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% for dim in dimension %}
 
             <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
@@ -101,7 +117,9 @@
             </div>
 
             {% endfor %}
+            {% endif %}
 
+            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% for dim in atribute %}
 
             <div style="display: none;" id="{{dim.atributeName|cut:' '}}Filter" class="row filterDim">
@@ -112,6 +130,7 @@
             </div>
 
             {% endfor %}
+            {% endif %}
 
             <div style="display: none;" id="ButtonFilter" class="row">
                 <div class="col mt-2">
@@ -131,19 +150,28 @@
             <tr class="trsup color text-white">
                 <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
                 <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
                 <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
-                <!-- <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th> -->
+                {% endif %}
                 <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
                 <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
+                {% endif %}
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
+                {% endif %}
+                {% if request.user.is_superuser %}
                 <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;">Price Major</th>
                 <th id="priceD" class="trsup color" style="position: sticky;top: 70;display: none;">Price Det.</th>
+                {% endif %}
                 <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
                 {% if parameter == 'Engine code' %}
                 <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
                 {% endif %}
+                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
+                {% endif %}
                 <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
             </tr>
         </thead>
@@ -160,6 +188,7 @@
             <td class="pr-0"><a href="#"></a></td>
             {% endif %}
 
+            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
             {% if reference %}
             <td style="max-width: 120px;" class="pr-0">
                 {% for dim in reference|slice:":5" %}
@@ -171,12 +200,7 @@
             {% else %}
                 <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
-
-            <!-- {% if br.car_info.all %}
-            <td><a href="{% url 'manuf' br.car_info.all.0.car_manufacturer %}">{{br.car_info.all.0.car_manufacturer}}</a></td>
-            {% else %}
-            <td><a href="#"></a></td>
-            {% endif %} -->
+            {% endif %}
 
             {% if br.spare_category %}
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>
@@ -190,6 +214,7 @@
             <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
 
+            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if allAtributes %}
                 <td style="max-width: 120px;" class="pr-0">
                     {% for dim in allAtributes|dictsort:"atributeName" %}
@@ -201,7 +226,9 @@
             {% else %}
                 <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
+            {% endif %}
 
+            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if allDimensions %}
                 <td style="max-width: 120px;" class="">
                     {% for dim in allDimensions|dictsort:"atributeName" %}
@@ -213,7 +240,9 @@
             {% else %}
                 <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
+            {% endif %}
             
+            {% if request.user.is_superuser %}
             {% if br.price_m %}
             <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m}}</a></td>
             {% else %}
@@ -224,6 +253,7 @@
             <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_d}}</a></td>
             {% else %}
             <td class="pr-0" style="display: none;"><a href="#"></a></td>
+            {% endif %}
             {% endif %}
 
             {% if br.spare_photo %}
@@ -236,6 +266,7 @@
             <td class="pr-0"><a href="#">{{mig}}</a></td>
             {% endif %}
 
+            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if br.spare_vendor.all %}
             <td class="pr-0" style="display: none;">
                 {% for dim in allVendors %}
@@ -250,6 +281,7 @@
             </td>
             {% else %}
             <td class="pr-0" style="display: none;"><div><a id="vendorInfo" href="#"></a></div></td>
+            {% endif %}
             {% endif %}
 
             <td class="pr-0"><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>

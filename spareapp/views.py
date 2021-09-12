@@ -15,6 +15,7 @@ import random
 import datetime
 from datetime import date
 from datetime import datetime
+from django.contrib.auth.models import User, Permission
 # import numpy as np
 
 # Create your views here.
@@ -1198,7 +1199,7 @@ def editengine(request,val):
     else:
         return render(request,"spareapp/editengine.html",dic)
 
-def fillspare(request,val):
+def fillspare(request):
 
     dim=dimension.objects.values("atributeName").distinct()
     dim2=dimension.objects.all()
@@ -1215,7 +1216,7 @@ def fillspare(request,val):
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
     spare1 = spare()
-    dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
         print("POST")
@@ -2134,18 +2135,22 @@ def importSpare(request):
                         if j == spDesc:
                             print("Entra en descripcion.....")
                             print("Descripción: "+str(col.value))
-                            spare1.spare_name = col.value
+                            if col.value != None:
+                                spare1.spare_name = col.value
                         if j == spPricem:
                             print("Entra en Price M.....")
                             # print(get_column_letter(col.value))
                             print("Price M: "+str(col.value))
-                            spare1.price_m = col.value
+                            if col.value != None:
+                                spare1.price_m = col.value
                         if j == spPriced:
                             print("Price D: "+str(col.value))
-                            spare1.price_d = col.value
+                            if col.value != None:
+                                spare1.price_d = col.value
                         if j == spNote:
                             print("Note: "+str(col.value))
-                            spare1.note = col.value
+                            if col.value != None:
+                                spare1.note = col.value
                         if j == spCategory:
                             print("Entra en category.....")
                             if col.value != None:
@@ -2404,7 +2409,17 @@ def register(request):
             form.save()
             print("Form is valid")
             username = form.cleaned_data["username"]
+            userAux=User.objects.get(username=form.cleaned_data["username"])
             print(username)
+            print(form)
+            print(type(form))
+            profileAux = Profile()
+            profileAux.ventas = False
+            profileAux.bodega = False
+            profileAux.mayorista = False
+            profileAux.detal = True
+            profileAux.user = userAux
+            profileAux.save()
             messages.success(request,f"User {username} created")
             return redirect("home")
     else:
@@ -2476,3 +2491,141 @@ def cart(request,val):
     dic={"cartIdPasar":cartIdPasar,"spare":spares,"spCartMain":spCartPost,"spCartAll":spCartAll,"spCart":spCart,"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     return render(request,"spareapp/cart.html",dic)
+
+def listAdmin(request):
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    spCartAll=spareCart.objects.all()
+    allUser=User.objects.all()
+
+    dic={"allUser":allUser,"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    return render(request,"spareapp/listAdmin.html",dic)
+
+def userProfile(request,val):
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    spCartAll=spareCart.objects.all()
+    allUser=User.objects.all()
+    userP=User.objects.filter(id=val)
+
+    dic={"userP":userP,"allUser":allUser,"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    if request.method == "POST":
+
+        print(request.POST)
+        userP=User.objects.get(id=val)
+        print(type(userP))
+        print(userP)
+        # userPa=User.objects.filter(id=val)
+        # print(userP.profile.all)
+        profileP=Profile.objects.filter(user=userP)
+        print("Obtiene profileP")
+        print(profileP)
+        # print(userP)
+        # print(userP.is_superuser)
+        if request.POST.get("superuser"):
+            print("Es superuser")
+            userP.is_superuser=True
+        else:
+            userP.is_superuser=False
+
+        if profileP:
+            if request.POST.get("ventas"):
+                print("Es ventas")
+                userP.profile.ventas=True
+            else:
+                userP.profile.ventas=False
+            if request.POST.get("bodega"):
+                print("Es bodega")
+                userP.profile.bodega=True
+            else:
+                userP.profile.bodega=False
+            if request.POST.get("mayorista"):
+                print("Es mayorista")
+                userP.profile.mayorista=True
+            else:
+                userP.profile.mayorista=False
+            if request.POST.get("detal"):
+                print("Es detal")
+                userP.profile.detal=True
+            else:
+                userP.profile.detal=False
+        else:
+            profileAux=Profile()
+            profileAux.user=userP
+            if request.POST.get("ventas"):
+                print("Es ventas")
+                profileAux.ventas=True
+            else:
+                profileAux.ventas=False
+            if request.POST.get("bodega"):
+                print("Es bodega")
+                profileAux.bodega=True
+            else:
+                profileAux.bodega=False
+            if request.POST.get("mayorista"):
+                print("Es mayorista")
+                profileAux.mayorista=True
+            else:
+                profileAux.mayorista=False
+            if request.POST.get("detal"):
+                print("Es detal")
+                profileAux.detal=True
+            else:
+                profileAux.detal=False
+            profileAux.save()
+        userP.save()
+        userP.profile.save()
+
+        return render(request,"spareapp/listAdmin.html",dic)
+
+
+    return render(request,"spareapp/userProfile.html",dic)
+
+def deleteuser(request,val):
+    dim=dimension.objects.values("atributeName").distinct()
+    dim2=dimension.objects.all()
+    atr=atribute.objects.values("atributeName").distinct()
+    atr2=atribute.objects.all()
+    allSparesall=spare.objects.all()
+    allCategories=category.objects.all()
+    allEngines=engine.objects.all()
+    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+    manu=car.objects.values("car_manufacturer").order_by("car_manufacturer").distinct()
+    allCars=car.objects.all()
+    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+    allVendors=vendor.objects.all()
+    ref=reference.objects.all().order_by("referenceSpare")
+    spCartAll=spareCart.objects.all()
+    allUser=User.objects.all()
+
+    userAux=User.objects.filter(id=val)
+    print(userAux)
+    userAux.delete()
+
+    dic={"allUser":allUser,"manu":manu,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    return render(request,"spareapp/listAdmin.html",dic)

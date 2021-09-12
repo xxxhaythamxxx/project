@@ -1,0 +1,103 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Edit Admin {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container invoicecont mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-5">
+            <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by username, email or status">
+        </div>
+    </div>
+
+    <table class="invoice invoicefill table-striped mt-3">
+        <thead>
+            <tr class="text-white">
+                <th class="trsup color">Username</th>
+                <th class="trsup color">Email</th>
+                <th class="trsup color">Superuser</th>
+                <th class="trsup color">Ventas</th>
+                <th class="trsup color">Bodega</th>
+                <th class="trsup color">Mayorista</th>
+                <th class="trsup color">Detal</th>
+                <th class="trsup color">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for br in allUser %}
+            <tr>
+                <td class="p-2"><a href="{% url 'userProfile' br.id %}">{{br.username}}</a></td>
+                <td class="p-2"><a href="{% url 'userProfile' br.id %}">{{br.email}}</a></td>
+                {% if br.is_superuser %}
+                <td class="p-2"><input type="checkbox" checked></td>
+                {% else %}
+                <td class="p-2"><input type="checkbox"></td>
+                {% endif %}
+                {% if br.profile.ventas %}
+                <td class="p-2"><input type="checkbox" checked></td>
+                {% else %}
+                <td class="p-2"><input type="checkbox"></td>
+                {% endif %}
+                {% if br.profile.bodega %}
+                <td class="p-2"><input type="checkbox" checked></td>
+                {% else %}
+                <td class="p-2"><input type="checkbox"></td>
+                {% endif %}
+                {% if br.profile.mayorista %}
+                <td class="p-2"><input type="checkbox" checked></td>
+                {% else %}
+                <td class="p-2"><input type="checkbox"></td>
+                {% endif %}
+                {% if br.profile.detal %}
+                <td class="p-2"><input type="checkbox" checked></td>
+                {% else %}
+                <td class="p-2"><input type="checkbox"></td>
+                {% endif %}
+                <td class="pr-0"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
+
+                <div class="modal fade" id="exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label">Caution</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Are you sure to eliminate the user {{br.username}} ?
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a id="deleteuser" class="btn btn-primary" href="{% url 'deleteuser' br.id %}">Delete</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- <td class="p-2"><a href="#">{{br.username}}</a></td>
+                <td class="p-2"><a href="#">{{br.email}}</a></td>
+                <td class="p-2"><a href="#">{{br.is_superuser}}</a></td>
+                <td class="p-2"><a href="#">{{br.profile.ventas}}</a></td>
+                <td class="p-2"><a href="#">{{br.profile.bodega}}</a></td>
+                <td class="p-2"><a href="#">{{br.profile.mayorista}}</a></td>
+                <td class="p-2"><a href="#">{{br.profile.detal}}</a></td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $(".invoicefill tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+</script>
+
+{% endblock %}

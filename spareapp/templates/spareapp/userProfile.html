@@ -1,0 +1,54 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} User {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<!-- {{userP}}
+<div></div>
+{{userP.all.0.username}}
+<div></div>
+{{userP.all.0.profile.bodega}} -->
+
+<div class="container mt-5 col-lg-4 d-flex justify-content-center">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <label name= "username" id="username" class="form-label">{{userP.all.0.username}}</label>
+            <!-- <input value="{{userP.all.0.username}}" type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp"> -->
+        </div>
+        <!-- <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input value="******" type="text" class="form-control" name="password" id="password" aria-describedby="passwordHelp">
+        </div> -->
+        <div class="mb-3">
+            <label for="superuser" class="form-label">Superuser</label>
+            <input {% if userP.all.0.is_superuser %} checked {% endif %} type="checkbox" class="" name="superuser" id="superuser" aria-describedby="superuserHelp">
+        </div>
+        <div class="mb-3">
+            <label for="ventas" class="form-label">Ventas</label>
+            <input {% if userP.all.0.profile.ventas %} checked {% endif %} type="checkbox" class="" name="ventas" id="ventas" aria-describedby="ventasHelp">
+        </div>
+        <div class="mb-3">
+            <label for="bodega" class="form-label">Bodega</label>
+            <input {% if userP.all.0.profile.bodega %} checked {% endif %} type="checkbox" class="" name="bodega" id="bodega" aria-describedby="bodegaHelp">
+        </div>
+        <div class="mb-3">
+            <label for="mayorista" class="form-label">Mayorista</label>
+            <input {% if userP.all.0.profile.mayorista %} checked {% endif %} type="checkbox" class="" name="mayorista" id="mayorista" aria-describedby="mayoristaHelp">
+        </div>
+        <div class="mb-3">
+            <label for="detal" class="form-label">Detal</label>
+            <input {% if userP.all.0.profile.detal %} checked {% endif %} type="checkbox" class="" name="detal" id="detal" aria-describedby="detalHelp">
+        </div>
+        
+        <button id="formPass" type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+</div>
+
+{% endblock %}

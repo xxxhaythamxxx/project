@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 from smart_selects.db_fields import ChainedManyToManyField, ChainedForeignKey
 import os
+from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class car(models.Model):
@@ -144,3 +146,25 @@ class spareCart(models.Model):
 
     def __str__(self):
             return '%s %s %s' %(self.spareId, self.spareCode, self.nameUser)
+
+# class Usuario(models.Model):
+#     REQUIRED_FIELDS = ('usuario',)
+#     usuario = models.OneToOneField(User,related_name='usuario',on_delete=CASCADE,unique=True)
+#     # USERNAME_FIELD = models.CharField(max_length=20, verbose_name="Username")
+#     # email = models.CharField(max_length=30, verbose_name="Email")
+#     # password1 = models.CharField(max_length=30, verbose_name="Password")
+#     # password2 = models.CharField(max_length=30, verbose_name="Confirm password")
+#     sexo = models.CharField(max_length = 10,blank=True,null=True)
+
+#     def __str__(self):
+#             return '%s' %(self.sexo)
+
+class Profile(models.Model):
+    user = models.OneToOneField(User,null=True,on_delete=CASCADE)
+    ventas = models.BooleanField(default=False)
+    bodega = models.BooleanField(default=False)
+    mayorista = models.BooleanField(default=False)
+    detal = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.user)

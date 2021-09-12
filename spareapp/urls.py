@@ -32,7 +32,7 @@ urlpatterns = [
     path("filldb",views.filldb,name="filldb"),
     path("fillcar",views.fillcar,name="fillcar"),
     path("fillengine",views.fillengine,name="fillengine"),
-    path("fillspare/<str:val>",views.fillspare,name="fillspare"),
+    path("fillspare",views.fillspare,name="fillspare"),
     path("editcar/<str:val>",views.editcar,name="editcar"),
     path("editengine/<str:val>",views.editengine,name="editengine"),
     path("editspare/<str:val>",views.editspare,name="editspare"),
@@ -51,6 +51,9 @@ urlpatterns = [
     path("login/",LoginView.as_view(template_name="spareapp/login.html"),name="login"),
     path("logout/",LogoutView.as_view(template_name="spareapp/logout.html"),name="logout"),
     path("cart/<str:val>",views.cart,name="cart"),
+    path("listAdmin",views.listAdmin,name="listAdmin"),
+    path("userProfile/<str:val>",views.userProfile,name="userProfile"),
+    path("deleteuser/<str:val>",views.deleteuser,name="deleteuser"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

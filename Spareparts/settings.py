@@ -158,3 +158,5 @@ MESSAGE_TAGS = {
 LOGIN_REDIRECT_URL = "home"
 
 LOGOUT_REDIRECT_URL = "home"
+
+# AUTH_USER_MODEL = 'spareapp.Usuario'
