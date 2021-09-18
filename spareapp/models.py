@@ -168,3 +168,14 @@ class mainTable(models.Model):
 
     def __str__(self):
         return '%s' %(self.fecha)
+
+class mainTableAux(models.Model):
+
+    tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
+    tabStart = models.FloatField(verbose_name="Start")
+    tabPagos = models.FloatField(verbose_name="Pagos")
+    tabRetiros = models.FloatField(verbose_name="Retiros")
+    tabTotal = models.FloatField(verbose_name="Total")
+
+    def __str__(self):
+        return '%s' %(self.tabTotal)

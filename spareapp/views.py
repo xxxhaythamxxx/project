@@ -2823,13 +2823,19 @@ def contEntry(request):
 
     return render(request,"spareapp/contEntry.html",dic)
 
-def contType(request,val):
+def contType(request,val,val2):
 
     tod = datetime.now().date()
 
     allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=val)
 
-    dic = {"allFacturesVal":allFacturesVal,"val":val}
+    if val2 != "today":
+
+        tod = val2
+
+        allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=val)
+
+    dic = {"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     if request.method == "POST":
 
@@ -3176,7 +3182,7 @@ def contEditCategory(request,val):
 
     return render(request,"spareapp/contEditCategory.html",dic)
 
-def contByDay(request,val):
+def contByDay(request):
 
     tod = request.POST.get("searchDate")
 
@@ -3210,6 +3216,140 @@ def contByDay(request,val):
     facturesToPay = len(allFacturesToPay)
     facturesToCollect = len(allFacturesToCollect)
 
-    dic = {"contStart":contStart,"contPagos":contPagos,"contRetiros":contRetiros,"contTotal":contTotal,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"tod":tod,"contStart":contStart,"contPagos":contPagos,"contRetiros":contRetiros,"contTotal":contTotal,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/contByDay.html",dic)
+
+def contByRange(request):
+
+    tod = request.POST.get("searchDate")
+
+    if request.method == "POST":
+
+        print("Entra a POST")
+
+        contStart = 0
+        contIngreso = 0
+        contEgreso = 0
+
+        # Obtengo las fechas de inicio y fin de busqueda
+        dateFrom = request.POST.get("searchDateFrom")
+        dateTo = request.POST.get("searchDateTo")
+
+        # OBtengo todos los types
+        allTypes = factType.objects.all()
+
+        # tableAux = mainTable.objects.filter(fecha__date__gte=dateFrom,fecha__date__lte=dateTo)
+
+        # Inicializo todas las facturas por el rango deseado
+        allFacturesRange = ""
+
+        # Si existe el rango, obtengo todas las facturas en dicho rango
+        if dateFrom and dateTo:
+            allFacturesRange = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
+
+        # Obtengo todas las tablas auxiliares
+        tableAux = mainTableAux.objects.all()
+
+        # Borro todas las tablas auxiliares
+        for all in tableAux:
+
+            all.delete()
+
+        for typ in allTypes:
+
+            contStart = 0
+
+            # Creo una tabla auxiliar para cada type
+            tableAuxGet = mainTableAux()
+
+            # Obtengo las tablas de dicho rango de acuerdo a ese tipo
+            tableAux = mainTable.objects.filter(fecha__date__gte=dateFrom,fecha__date__lte=dateTo,tabTipo=typ)
+
+            # print(len(tableAux))
+
+            for ta in tableAux:
+
+                # print(ta.tabStart)
+
+                contStart = contStart + float(ta.tabStart)
+
+            tableAuxGet.tabTipo = typ   
+
+            print(tableAuxGet.tabTipo)
+
+            tableAuxGet.tabStart = contStart
+
+            print(tableAuxGet.tabStart)
+
+            facturaAuxIngreso = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__ingreso=True,refType__nombre=typ)
+            contIngreso = 0
+
+            for ing in facturaAuxIngreso:
+                contIngreso = contIngreso+float(ing.monto)
+
+            tableAuxGet.tabPagos = contIngreso
+
+            print(tableAuxGet.tabPagos)
+
+            facturaAuxEgreso = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__egreso=True,refType__nombre=typ)
+            contEgreso = 0
+
+            for ing in facturaAuxEgreso:
+                contEgreso = contEgreso+float(ing.monto)
+
+            tableAuxGet.tabRetiros = contEgreso
+
+            print(tableAuxGet.tabRetiros)
+
+            # print(type(tableAuxGet.tabStart))
+            # print(type(contIngreso))
+            # print(type(contEgreso))
+
+            tableAuxGet.tabTotal = contStart + float(contIngreso)-float(contEgreso)
+            # tableAuxGet.tabTotal = tableAuxGet.tabStart+float(contIngreso)-float(contEgreso)
+
+            print(tableAuxGet.tabTotal)
+
+            tableAuxGet.save()    
+
+        tableAux = mainTableAux.objects.all()  
+
+        contStart = 0
+        contPagos = 0
+        contRetiros = 0
+        contTotal = 0
+
+        for tab in tableAux:
+
+            if tab.tabStart > 0:
+
+                contStart = contStart + tab.tabStart
+
+            if tab.tabPagos > 0:
+
+                contPagos = contPagos + tab.tabPagos
+            
+            if tab.tabRetiros > 0:
+
+                contRetiros = contRetiros + tab.tabRetiros
+        
+        contTotal = contStart + contPagos - contRetiros
+
+        allFacturesToPay = factura.objects.filter(refCategory__ingreso=True,refCategory__limite=True)
+        allFacturesToCollect = factura.objects.filter(refCategory__egreso=True,refCategory__limite=True)
+        
+        facturesToPay = len(allFacturesToPay)
+        facturesToCollect = len(allFacturesToCollect)
+
+        # print(tableAux)
+
+        # ---------------------------------
+
+        dic = {"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contStart":contStart,"contPagos":contPagos,"contRetiros":contRetiros,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
+
+        return render(request,"spareapp/contByRange.html",dic)   
+
+    dic = {"tod":tod}
+
+    return render(request,"spareapp/contByRange.html",dic)

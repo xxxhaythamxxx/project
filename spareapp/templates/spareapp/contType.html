@@ -4,12 +4,13 @@
 
 {% block content %}
 
-<div class="container d-flex justify-content-center container mt-5 col-lg-4">
+<div class="container d-flex justify-content-center container mb-2 mt-5 col-lg-4">
     <label for="">Type: {{val}}</label>
 </div>
 
+{% if val2 == "today" %}
 <div class="d-flex justify-content-center">
-    <div class="container mt-2 col-lg-4">
+    <div class="container col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
             <div class="mb-3">
@@ -19,6 +20,7 @@
             <button class="btn btn-primary" type="submit">Ingresar</button>
         </form>
     </div>
+{% endif %}
     
 </div>
 <div class="container">

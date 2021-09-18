@@ -57,7 +57,7 @@ urlpatterns = [
     path("contBase",views.contBase,name="contBase"),
     path("contDay",views.contDay,name="contDay"),
     path("contEntry",views.contEntry,name="contEntry"),
-    path("contType/<str:val>",views.contType,name="contType"),
+    path("contType/<str:val>?<str:val2>",views.contType,name="contType"),
     path("contSpend",views.contSpend,name="contSpend"),
     path("contToPay",views.contToPay,name="contToPay"),
     path("contToCollect",views.contToCollect,name="contToCollect"),
@@ -70,7 +70,8 @@ urlpatterns = [
     path("contDeleteType/<str:val>",views.contDeleteType,name="contDeleteType"),
     path("contEditType/<str:val>",views.contEditType,name="contEditType"),
     path("contEditCategory/<str:val>",views.contEditCategory,name="contEditCategory"),
-    path("contByDay/<str:val>",views.contByDay,name="contByDay"),
+    path("contByDay",views.contByDay,name="contByDay"),
+    path("contByRange",views.contByRange,name="contByRange"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]
