@@ -2648,6 +2648,7 @@ def contDay(request):
     contPagos = 0
     contRetiros = 0
     contStart = 0
+    contTotal = 0
 
     if tableAux:
 
