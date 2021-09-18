@@ -159,6 +159,11 @@ admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)
 admin.site.register(atribute,atributeAdmin)
 admin.site.register(Profile)
+admin.site.register(persona)
+admin.site.register(factType)
+admin.site.register(factCategory)
+admin.site.register(factura)
+admin.site.register(mainTable)
 # admin.site.register(spareCart,spareCartAdmin)
 
 admin.site.site_header = "Auto Repuestos Interamericana administrator"

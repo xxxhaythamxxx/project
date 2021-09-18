@@ -1,0 +1,51 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} To Pay {% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center container mt-5 col-lg-4">
+    <label for="">To Pay</label>
+</div>
+
+<div class="container mt-2">
+    <table class="table-bordered invoice">
+        <thead>
+            <tr class="color text-white">
+                <th class="p-2"># Facture</th>
+                <th class="p-2">Name</th>
+                <th class="p-2">Category</th>
+                <th class="p-2">Registration date</th>
+                <th class="p-2">Deadline</th>
+                <th class="p-2">Amount</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for facture in allFacturesPay %}
+            <tr>
+                <td class="p-2">{{facture.num}}</td>
+                <td class="p-2">{{facture.refPersona}}</td>
+                <td class="p-2">{{facture.refCategory}}</td>
+                <td class="p-2">{{facture.fechaCreado}}</td>
+                <td class="p-2">{{facture.fechaTope}}</td>
+                <td class="p-2">${{facture.monto}}</td>
+            </tr>
+            {% endfor %}
+            
+            <tr>
+                <td class="p-2 color text-white">Total</td>
+                <td class="p-2"></td>
+                <td class="p-2"></td>
+                <td class="p-2"></td>
+                <td class="p-2"></td>
+                <td class="p-2">${{montoTotal}}</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}

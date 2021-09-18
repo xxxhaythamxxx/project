@@ -1,0 +1,22 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Type {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="d-flex justify-content-center">
+    <div class="container  mt-5 col-lg-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="typeNombre">Type's name</label>
+                <input value="{{singleType.0.nombre}}" class="form-control" id="typeNombre" type="text" name="typeNombre" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Update</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

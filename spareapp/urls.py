@@ -54,6 +54,23 @@ urlpatterns = [
     path("listAdmin",views.listAdmin,name="listAdmin"),
     path("userProfile/<str:val>",views.userProfile,name="userProfile"),
     path("deleteuser/<str:val>",views.deleteuser,name="deleteuser"),
+    path("contBase",views.contBase,name="contBase"),
+    path("contDay",views.contDay,name="contDay"),
+    path("contEntry",views.contEntry,name="contEntry"),
+    path("contType/<str:val>",views.contType,name="contType"),
+    path("contSpend",views.contSpend,name="contSpend"),
+    path("contToPay",views.contToPay,name="contToPay"),
+    path("contToCollect",views.contToCollect,name="contToCollect"),
+    path("contAdmin",views.contAdmin,name="contAdmin"),
+    path("contAddType",views.contAddType,name="contAddType"),
+    path("contAddCategory",views.contAddCategory,name="contAddCategory"),
+    path("contListCategory",views.contListCategory,name="contListCategory"),
+    path("contListType",views.contListType,name="contListType"),
+    path("contDeleteCategory/<str:val>",views.contDeleteCategory,name="contDeleteCategory"),
+    path("contDeleteType/<str:val>",views.contDeleteType,name="contDeleteType"),
+    path("contEditType/<str:val>",views.contEditType,name="contEditType"),
+    path("contEditCategory/<str:val>",views.contEditCategory,name="contEditCategory"),
+    path("contByDay/<str:val>",views.contByDay,name="contByDay"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

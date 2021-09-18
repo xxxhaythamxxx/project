@@ -1,0 +1,35 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Category {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="d-flex justify-content-center">
+    <div class="container  mt-5 col-lg-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="catNombre">Category's name</label>
+                <input value="{{singleCategory.0.nombre}}" class="form-control" id="catNombre" type="text" name="catNombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="catIngreso">Entry</label>
+                <input {% if singleCategory.0.ingreso == True %} checked {% else %} '' {% endif %} id="catIngreso" name="catIngreso" type="checkbox">
+            </div>
+            <div class="mb-3">
+                <label for="catEgreso">Spend</label>
+                <input {% if singleCategory.0.egreso == True %} checked {% else %} '' {% endif %} id="catEgreso" name="catEgreso" type="checkbox">
+            </div>
+            <div class="mb-3">
+                <label for="catExpirationDate">Has expiration date</label>
+                <input {% if singleCategory.0.limite == True %} checked {% else %} '' {% endif %} id="catExpirationDate" name="catExpirationDate" type="checkbox">
+            </div>
+            
+            <button class="btn btn-primary" type="submit">Update</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

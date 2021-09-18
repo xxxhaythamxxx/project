@@ -1,0 +1,52 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Entry {% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center">
+    <div class="container mt-5 col-lg-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="contNombre">Name</label>
+                <input class="form-control" id="contNombre" type="text" name="contNombre" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="contNumFac"># Facture</label>
+                <input class="form-control" id="contNumFac" type="text" name="contNumFac" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="contTypeIng">Type</label>
+                <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
+                    <option value="" selected>Select entry type</option>
+                    {% for type in allTypes %}
+                    <option value="{{type.nombre}}">{{type.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="contCatIng">Category</label>
+                <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
+                    <option value="" selected>Select category</option>
+                    {% for category in allCategories %}
+                    <option limit="{{category.limite}}" value="{{category.nombre}}">{{category.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="divFechaTope" class="mb-3" style="display: none;">
+                <label class="form-label" for="contFechaTope">Deadline</label>
+                <input class="form-control" id="contFechaTope" type="date" name="contFechaTope">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="contMonto">Amount</label>
+                <input class="form-control" id="contMonto" type="number" name="contMonto" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Accept</button>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}

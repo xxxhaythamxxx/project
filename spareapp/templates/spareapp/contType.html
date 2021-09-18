@@ -1,0 +1,52 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Type {% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center container mt-5 col-lg-4">
+    <label for="">Type: {{val}}</label>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="container mt-2 col-lg-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="contStart">Start</label>
+                <input class="form-control" id="contStart" type="number" name="contStart">
+            </div>
+            <button class="btn btn-primary" type="submit">Ingresar</button>
+        </form>
+    </div>
+    
+</div>
+<div class="container">
+    <table class="table-bordered invoice">
+        <thead>
+            <tr class="color text-white">
+                <th class="p-2"># Factura</th>
+                <th class="p-2">Nombre</th>
+                <th class="p-2">Categoría</th>
+                <th class="p-2">Monto</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for fac in allFacturesVal %}
+            <tr>
+                <td class="p-2">{{fac.num}}</td>
+                <td class="p-2">{{fac.refPersona}}</td>
+                <td class="p-2">{{fac.refCategory}}</td>
+                <td class="p-2">${{fac.monto}}</td>
+            </tr>
+            {% endfor %}
+            
+            
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}

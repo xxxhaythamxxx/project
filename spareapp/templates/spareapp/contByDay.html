@@ -1,0 +1,43 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Day {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contSuperior.html" %}
+
+<div class="container mt-2">
+    <table class="table-bordered invoice">
+        <thead>
+            <tr class="color text-white">
+                <th class="p-2">Type</th>
+                <th class="p-2">Start+Adds</th>
+                <th class="p-2">Payments</th>
+                <th class="p-2">Withdraws</th>
+                <th class="p-2">Total Remanining</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for tab in tableAux %}
+            <tr>
+                <td class="p-2"><a href="{% url 'contType' tab.tabTipo %}">{{tab.tabTipo}}</a></td>
+                <td class="p-2">${{tab.tabStart}}</td>
+                <td class="p-2">${{tab.tabPagos}}</td>
+                <td class="p-2">${{tab.tabRetiros}}</td>
+                <td class="p-2">${{tab.tabTotal}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td class="p-2 color text-white">Total</td>
+                <td class="p-2">${{contStart}}</td>
+                <td class="p-2">${{contPagos}}</td>
+                <td class="p-2">${{contRetiros}}</td>
+                <td class="p-2">${{contTotal}}</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
