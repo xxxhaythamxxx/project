@@ -2645,6 +2645,9 @@ def contDay(request):
     allTypes = factType.objects.all()
 
     contStart = 0
+    contPagos = 0
+    contRetiros = 0
+    contStart = 0
 
     if tableAux:
 
@@ -2677,10 +2680,6 @@ def contDay(request):
                     tableAuxGet.tabTotal = tableAuxGet.tabStart+contIngreso-contEgreso
 
                     tableAuxGet.save()
-        
-        contPagos = 0
-        contRetiros = 0
-        contStart = 0
 
         for tab in tableAux:
 
