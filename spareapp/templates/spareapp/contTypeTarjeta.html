@@ -23,7 +23,8 @@
                 <th class="p-2">Monto</th>
                 <th class="p-2">ITBM 7%</th>
                 <th class="p-2">Total</th>
-                <th class="p-2">Option</th>
+                <th class="p-2">Interes</th>
+                <th class="p-2">Retención</th>
             </tr>
         </thead>
 
@@ -36,9 +37,10 @@
                 <td class="p-2">{{fac.refPersona}}</td>
                 <td class="p-2">{{fac.refCategory}}</td>
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
-                <td class="p-2">${{value|floatformat:2}}</td>
+                <td class="p-2">${{value.0|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
-                <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fac.id %}">Edite</a></td>
+                <td class="p-2">${{value.1|floatformat:2}}</td>
+                <td class="p-2">${{value.2|floatformat:2}}</td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -50,6 +52,8 @@
                 <td class="p-2">$ {{montoTotal|floatformat:2}}</td>
                 <td class="p-2">$ {{itbmTotal|floatformat:2}}</td>
                 <td class="p-2">$ {{totalTotal|floatformat:2}}</td>
+                <td class="p-2">$ {{interesTotal|floatformat:2}}</td>
+                <td class="p-2">$ {{retencionTotal|floatformat:2}}</td>
             </tr>
             
             

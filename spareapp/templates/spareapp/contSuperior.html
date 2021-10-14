@@ -52,23 +52,26 @@
                 <div class="col-lg-6">
                     <a href="{% url 'contEntry' %}" style="font-size: small;" class="btn btn-primary">Entry</a>
                     <a href="{% url 'contSpend' %}" style="font-size: small;" class="btn btn-primary">Spending</a>
+                    <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-primary">Account Stat</a>
+                    <a href="{% url 'contTotalDay' %}" style="font-size: small;" class="btn btn-primary">New Day</a>
 
                     <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: small;">Search</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a onClick="functionByThisMonth()" id="thisMonth" class="dropdown-item" href="{% url 'contThisMonth' %}">This month</a></li>
+                        <li><a onClick="functionByLastMonth()" id="lastMonth" class="dropdown-item" href="{% url 'contLastMonth' %}">Last month</a></li>
                         <li><a onClick="functionByDay()" id="byDay" class="dropdown-item" href="#">By day</a></li>
                         <li><a onClick="functionByRange()" id="byRange" class="dropdown-item" href="#">By range</a></li>
                     </ul>
-                   
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div>
-                        <a href="{% url 'contToPay' %}" style="font-size: small;" type="button" class="btn btn-primary">
-                            To Collect<span class="badge bg-secondary">{{facturesToPay}}</span>
+                        <a href="{% url 'contToCollect' %}" style="font-size: small;" type="button" class="btn btn-primary">
+                            To Collect<span class="badge bg-secondary">{{facturesToCollect}}</span>
                         </a>
                     </div>
                     <div class="px-1">
-                        <a href="{% url 'contToCollect' %}" style="font-size: small;" type="button" class="btn btn-primary">
-                            To Pay<span class="badge bg-secondary">{{facturesToCollect}}</span>
+                        <a href="{% url 'contToPay' %}" style="font-size: small;" type="button" class="btn btn-primary">
+                            To Pay<span class="badge bg-secondary">{{facturesToPay}}</span>
                         </a>
                     </div>
                     

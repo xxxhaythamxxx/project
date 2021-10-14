@@ -11,9 +11,6 @@
         <thead>
             <tr class="color text-white">
                 <th class="p-2">Type</th>
-                <th class="p-2">Start+Adds</th>
-                <th class="p-2">Payments</th>
-                <th class="p-2">Withdraws</th>
                 <th class="p-2">Total Remanining</th>
             </tr>
         </thead>
@@ -21,23 +18,13 @@
         <tbody>
             {% for tab in tableAux %}
             <tr>
-                {% if tod %}
-                <td class="p-2"><a href="{% url 'contType' tab.tabTipo tod %}">{{tab.tabTipo}}</a></td>
-                {% else %}
-                <td class="p-2"><a href="{% url 'contType' tab.tabTipo 'today' %}">{{tab.tabTipo}}</a></td>
-                {% endif %}
-                <td class="p-2">${{tab.tabStart}}</td>
-                <td class="p-2">${{tab.tabPagos}}</td>
-                <td class="p-2">${{tab.tabRetiros}}</td>
-                <td class="p-2">${{tab.tabTotal}}</td>
+                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo dateFrom dateTo %}" {% endif %}>{{tab.tabTipo}}</a></td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
             </tr>
             {% endfor %}
             <tr>
                 <td class="p-2 color text-white">Total</td>
-                <td class="p-2">${{contStart}}</td>
-                <td class="p-2">${{contPagos}}</td>
-                <td class="p-2">${{contRetiros}}</td>
-                <td class="p-2">${{contTotal}}</td>
+                <td class="p-2">${{contTotal|floatformat:2}}</td>
             </tr>
             
         </tbody>

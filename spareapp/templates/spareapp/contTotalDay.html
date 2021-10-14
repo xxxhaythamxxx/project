@@ -9,6 +9,11 @@
 <form method="POST" action="">
 {% csrf_token %}
 <div class="container mt-2">
+<div class="col-lg-2">
+<input name="searchDate" id="searchDate" class="form-control" type="date">
+</div>
+</div>
+<div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
             <tr class="color text-white">

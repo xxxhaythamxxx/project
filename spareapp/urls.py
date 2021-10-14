@@ -72,6 +72,17 @@ urlpatterns = [
     path("contEditCategory/<str:val>",views.contEditCategory,name="contEditCategory"),
     path("contByDay",views.contByDay,name="contByDay"),
     path("contByRange",views.contByRange,name="contByRange"),
+    path("contCollectFac/<str:val>",views.contCollectFac,name="contCollectFac"),
+    path("contPayFac/<str:val>",views.contPayFac,name="contPayFac"),
+    path("contTypeRange/<str:val>?<str:val2>?<str:val3>",views.contTypeRange,name="contTypeRange"),
+    path("contTypeRangeTarjeta/<str:val>?<str:val2>?<str:val3>",views.contTypeRangeTarjeta,name="contTypeRangeTarjeta"),
+    path("contAddPerson",views.contAddPerson,name="contAddPerson"),
+    path("accountStat",views.accountStat,name="accountStat"),
+    path("contTypeTarjeta/<str:val>?<str:val2>",views.contTypeTarjeta,name="contTypeTarjeta"),
+    path("contThisMonth",views.contThisMonth,name="contThisMonth"),
+    path("contLastMonth",views.contLastMonth,name="contLastMonth"),
+    path("editeFact/<str:val>",views.editeFact,name="editeFact"),
+    path("contTotalDay",views.contTotalDay,name="contTotalDay"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

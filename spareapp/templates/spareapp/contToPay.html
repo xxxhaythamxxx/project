@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container d-flex justify-content-center container mt-5 col-lg-4">
-    <label for="">To Pay</label>
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">To Pay</span></label>
 </div>
 
 <div class="container mt-2">
@@ -18,6 +18,9 @@
                 <th class="p-2">Registration date</th>
                 <th class="p-2">Deadline</th>
                 <th class="p-2">Amount</th>
+                <th class="p-2">IVA</th>
+                <th class="p-2">Total</th>
+                <th class="p-2">Action</th>
             </tr>
         </thead>
 
@@ -27,9 +30,16 @@
                 <td class="p-2">{{facture.num}}</td>
                 <td class="p-2">{{facture.refPersona}}</td>
                 <td class="p-2">{{facture.refCategory}}</td>
-                <td class="p-2">{{facture.fechaCreado}}</td>
-                <td class="p-2">{{facture.fechaTope}}</td>
+                <td class="p-2">{{facture.fechaCreado|date:"M d, Y"}}</td>
+                {% for key,value in deadlineDic.items %}
+                    {% if key == facture.num %}
+                        <td style="max-width: 120px;" class="p-2">{{value}} days</td>
+                    {% endif %}
+                {% endfor %}
                 <td class="p-2">${{facture.monto}}</td>
+                <td class="p-2">{{facture.iva}}</td>
+                <td class="p-2">${{facture.total}}</td>
+                <td class="p-2"><a href="{% url 'contPayFac' facture.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Pay</a></td>
             </tr>
             {% endfor %}
             
@@ -40,6 +50,9 @@
                 <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2">${{montoTotal}}</td>
+                <td class="p-2"></td>
+                <td class="p-2">${{totalTotal}}</td>
+                <td class="p-2"></td>
             </tr>
             
         </tbody>

@@ -119,20 +119,23 @@ class Profile(models.Model):
 class persona(models.Model):
 
     nombre = models.CharField(max_length=20, verbose_name="Nombre")
+    documento = models.CharField(max_length=20, verbose_name="Documento",default="")
 
     def __str__(self):
         return str(self.nombre)
 
 class factType(models.Model):
 
-    nombre = models.CharField(max_length=20, verbose_name="Tipo",default='Tipo')
+    nombre = models.CharField(max_length=40, verbose_name="Tipo",default='Tipo')
+    include = models.BooleanField(default=True,verbose_name="Include")
+    manual = models.BooleanField(default=True,verbose_name="Manual")
     # models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
     def __str__(self):
         return str(self.nombre)
 
 class factCategory(models.Model):
 
-    nombre = models.CharField(max_length=20, verbose_name="Categoría",blank=True,null=True)
+    nombre = models.CharField(max_length=40, verbose_name="Categoría",blank=True,null=True)
     ingreso = models.BooleanField(default=False,verbose_name="Ingreso")
     egreso = models.BooleanField(default=False,verbose_name="Egreso")
     limite = models.BooleanField(default=False,verbose_name="Fecha imite")
@@ -148,22 +151,21 @@ class factura(models.Model):
     refCategory = models.ForeignKey(factCategory,on_delete=CASCADE,verbose_name="Category",default='Categoria')
     fechaCreado = models.DateTimeField(auto_now_add=True,verbose_name="Fecha")
     fechaTope = models.DateField(auto_now=False,auto_now_add=False,verbose_name="Fecha tope",blank=True,null=True)
+    fechaCobrado = models.DateField(auto_now=False,auto_now_add=False,verbose_name="Fecha cobrado",blank=True,null=True)
     iva = models.FloatField(verbose_name="Impuesto",blank=True,null=True)
     monto = models.FloatField(verbose_name="Monto")
+    total = models.FloatField(verbose_name="Total",default=0)
+    pendiente = models.BooleanField(default=False,verbose_name="Pendiente",blank=True,null=True)
 
     def __str__(self):
         return '%s %s %s' %(self.num, self.refPersona, self.fechaCreado)
-        # return self.fechaCreado
-        # return self.num, self.refPersona, self.fechaCreado
-            # return '%s %s %s %s %s %s %s' %(self.num, self.refPersona, self.refType, self.refCategory, self.fechaCreado, self.fechaTope, self.iva, self.monto)
     
 class mainTable(models.Model):
 
     fecha = models.DateTimeField(auto_now_add=True,verbose_name="Fecha")
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
-    tabStart = models.FloatField(verbose_name="Start")
-    tabPagos = models.FloatField(verbose_name="Pagos")
-    tabRetiros = models.FloatField(verbose_name="Retiros")
+    # tabPagos = models.FloatField(verbose_name="Pagos")
+    # tabRetiros = models.FloatField(verbose_name="Retiros")
     tabTotal = models.FloatField(verbose_name="Total")
 
     def __str__(self):
@@ -172,9 +174,8 @@ class mainTable(models.Model):
 class mainTableAux(models.Model):
 
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
-    tabStart = models.FloatField(verbose_name="Start")
-    tabPagos = models.FloatField(verbose_name="Pagos")
-    tabRetiros = models.FloatField(verbose_name="Retiros")
+    # tabPagos = models.FloatField(verbose_name="Pagos")
+    # tabRetiros = models.FloatField(verbose_name="Retiros")
     tabTotal = models.FloatField(verbose_name="Total")
 
     def __str__(self):

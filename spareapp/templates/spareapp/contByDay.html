@@ -6,42 +6,55 @@
 
 {% include "spareapp/contSuperior.html" %}
 
+<form method="POST" action="">
+{% csrf_token %}
+<input value="{{tod}}" name="searchDate" id="searchDate" class="form-control" type="hidden">
+
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
             <tr class="color text-white">
                 <th class="p-2">Type</th>
-                <th class="p-2">Start+Adds</th>
-                <th class="p-2">Payments</th>
-                <th class="p-2">Withdraws</th>
                 <th class="p-2">Total Remanining</th>
             </tr>
         </thead>
 
         <tbody>
+
             {% for tab in tableAux %}
+            {% if tableAux and editPrueba == False %}
             <tr>
-                {% if tod %}
                 <td class="p-2"><a href="{% url 'contType' tab.tabTipo tod %}">{{tab.tabTipo}}</a></td>
-                {% else %}
-                <td class="p-2"><a href="{% url 'contType' tab.tabTipo 'today' %}">{{tab.tabTipo}}</a></td>
-                {% endif %}
-                <td class="p-2">${{tab.tabStart}}</td>
-                <td class="p-2">${{tab.tabPagos}}</td>
-                <td class="p-2">${{tab.tabRetiros}}</td>
-                <td class="p-2">${{tab.tabTotal}}</td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
             </tr>
+            {% else %}
+                {% if editPrueba == True %}
+                <tr>
+                    <td class="p-2"><a href="{% url 'contType' tab.tabTipo tod %}">{{tab.tabTipo}}</a></td>
+                    {% if tab.tabTipo.manual == True %}
+                    <td class="p-2">$<input value="{{tab.tabTotal}}" id="{{tab.tabTipo.nombre|cut:' '}}Total" name="{{tab.tabTipo.nombre|cut:' '}}Total" type="number"></td>
+                    {% else %}
+                    <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                    {% endif %}
+                </tr>
+                {% endif %}
+            {% endif %}
             {% endfor %}
             <tr>
                 <td class="p-2 color text-white">Total</td>
-                <td class="p-2">${{contStart}}</td>
-                <td class="p-2">${{contPagos}}</td>
-                <td class="p-2">${{contRetiros}}</td>
-                <td class="p-2">${{contTotal}}</td>
+                <td class="p-2">${{contTotal|floatformat:2}}</td>
             </tr>
-            
+
         </tbody>
     </table>
 </div>
+<div class="container mt-2 d-flex justify-content-end">
+    {% if tableAux and editPrueba == False %}
+    <button value="submit" id="adjustButton" name="adjustButton" class="btn btn-secondary" type="submit">Adjust</button>
+    {% else %}
+    <button value="submit" id="acceptButton" name="acceptButton" class="btn btn-primary" type="submit">Accept</button>
+    {% endif %}
+</div>
+</form>
 
 {% endblock %}

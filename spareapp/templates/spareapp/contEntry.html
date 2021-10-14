@@ -4,14 +4,37 @@
 
 {% block content %}
 
+<div class="container mt-5 col-lg-12 d-flex justify-content-center">
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">New facture: Entry</span></label>
+</div>
 <div class="d-flex justify-content-center">
-    <div class="container mt-5 col-lg-4">
+    <div class="container mt-3 col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
+            
             <div class="mb-3">
-                <label class="form-label" for="contNombre">Name</label>
-                <input class="form-control" id="contNombre" type="text" name="contNombre" required>
+                <div class="row">
+                    <div class="col-lg-11">
+                        <label class="form-label" for="contNombre">Customer</label>
+                        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example">
+                            <option value="" selected>Select customer</option>
+                            {% for cust in allCustomers %}
+                            <option value="{{cust.nombre}}documento{{cust.documento}}">{{cust.nombre}} - {{cust.documento}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-1 d-flex align-items-end">
+                        <div>
+                            <a data-bs-toggle="modal" data-bs-target="#contNombreModal" style="text-decoration: none;color: rgb(136,12,12);" id="contNombreModalId" class="" href="javascript:void(0);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
             <div class="mb-3">
                 <label class="form-label" for="contNumFac"># Facture</label>
                 <input class="form-control" id="contNumFac" type="text" name="contNumFac" required>
@@ -42,11 +65,67 @@
                 <label class="form-label" for="contMonto">Amount</label>
                 <input class="form-control" id="contMonto" type="number" name="contMonto" required>
             </div>
+            <div class="mb-3">
+                <label class="form-label" for="ivaCheck">ITBM</label>
+                <input id="ivaCheck" type="checkbox" name="ivaCheck">
+            </div>
+            <div style="display: none;" id="itbm7" class="mb-3">
+                <label class="form-label" for="contIva">ITBM 7%</label>
+                <input step="any" class="form-control" id="contIva" type="text" name="contIva" readonly>
+            </div>
             <button class="btn btn-primary" type="submit">Accept</button>
         </form>
     </div>
 </div>
 
+<div tabindex="-1" id="contNombreModal" class="modal fade modal-dialog-scrollable" aria-labelledby="contNombreModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contNombreModallLabel">Add a customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> 
+                <form id="formCust" method="POST" action="{% url 'contAddPerson' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label" for="custName">Name</label>
+                        <input class="form-control" id="custName" type="text" name="custName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="custId">Identification</label>
+                        <input class="form-control" id="custId" type="text" name="custId" required>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+                
+            </div>   
+        </div>
+    </div>
+</div>  
+<script>
 
+// Agregar modal Customer
+$("#formCust").submit(function(e){
+    e.preventDefault()
 
+    cat = $("#custName").val()
+    doc = $("#custId").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+        
+        success: function(){
+            console.log("Success")
+
+            $("#contNombre").append("<option value='"+cat+"documento"+doc+"' selected>"+cat+" - "+doc+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+
+</script>
 {% endblock %}

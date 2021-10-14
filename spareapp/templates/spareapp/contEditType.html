@@ -14,6 +14,10 @@
                 <label class="form-label" for="typeNombre">Type's name</label>
                 <input value="{{singleType.0.nombre}}" class="form-control" id="typeNombre" type="text" name="typeNombre" required>
             </div>
+            <div class="mb-3">
+                <label for="typeInclude">Include</label>
+                <input {% if singleType.0.include == True %} checked {% else %} '' {% endif %} id="typeInclude" name="typeInclude" type="checkbox">
+            </div>
             <button class="btn btn-primary" type="submit">Update</button>
         </form>
     </div>
