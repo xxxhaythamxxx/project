@@ -2591,6 +2591,8 @@ def contBase(request):
 
 def contDay(request):
 
+    # Lleno los types basicos -------------------------------
+
     typeAux = factType.objects.filter(nombre="CASH")
     if typeAux:
         print("Repetido")
@@ -2689,6 +2691,8 @@ def contDay(request):
         typA = factType()
         typA.nombre = "AJUSTES"
         typA.save()
+
+    # ----------------------------------------------------
 
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
@@ -2809,10 +2813,7 @@ def contEntry(request):
 
     if request.method == "POST":
 
-        print(request.POST)
-
         factAux = factura()
-
         contNombre = request.POST.get("contNombre").split("documento")[0]
         contDocumento = request.POST.get("contNombre").split("documento")[1]
         nomAux = persona.objects.get(nombre=contNombre,documento=contDocumento)
@@ -2842,15 +2843,17 @@ def contEntry(request):
         contMonto = request.POST.get("contMonto")
         factAux.monto = contMonto
 
-        factAux.iva = 0.07
+        
 
         if request.POST.get("ivaCheck") == "on":
 
+            factAux.iva = 0.07
             valTotal = request.POST.get("contIva").split("= ")
             factAux.total = valTotal[1]
 
         else:
 
+            factAux.iva = 0
             factAux.total = contMonto
         
         factAux.save()
@@ -2941,7 +2944,10 @@ def contEntry(request):
 
                     for fac in allFacturesMercCash:
 
-                        acum = acum + fac.total
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + fac.total
+                        else:
+                            acum = acum - fac.total
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -3017,6 +3023,21 @@ def contEntry(request):
                             acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
+                
+                if ty.nombre == "MERCANCIA CONTADO CASH":
+
+                    allFacturesMercCash = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+
+                    acum = 0
+
+                    for fac in allFacturesMercCash:
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + fac.total
+                        else:
+                            acum = acum - fac.total
+
+                    tableAuxType.tabTotal = float(acum)
 
                 tableAuxType.save()
 
@@ -3067,15 +3088,17 @@ def contSpend(request):
         contMonto = request.POST.get("contMonto")
         factAux.monto = contMonto
 
-        factAux.iva = 0.07
+        
 
         if request.POST.get("ivaCheck") == "on":
 
+            factAux.iva = 0.07
             valTotal = request.POST.get("contIva").split("= ")
             factAux.total = valTotal[1]
 
         else:
 
+            factAux.iva = 0
             factAux.total = contMonto
         
         factAux.save()
@@ -3153,6 +3176,21 @@ def contSpend(request):
                             acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
+                
+                if ty.nombre == "MERCANCIA CONTADO CASH":
+
+                    allFacturesMercCash = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+
+                    acum = 0
+
+                    for fac in allFacturesMercCash:
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + fac.total
+                        else:
+                            acum = acum - fac.total
+
+                    tableAuxType.tabTotal = float(acum)
 
                 tableAuxType.save()
 
@@ -3224,6 +3262,21 @@ def contSpend(request):
                             acum = acum + (fac.total-retencion-interes)
                         else:
                             acum = acum - (fac.total-retencion-interes)
+
+                    tableAuxType.tabTotal = float(acum)
+                
+                if ty.nombre == "MERCANCIA CONTADO CASH":
+
+                    allFacturesMercCash = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+
+                    acum = 0
+
+                    for fac in allFacturesMercCash:
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + fac.total
+                        else:
+                            acum = acum - fac.total
 
                     tableAuxType.tabTotal = float(acum)
 
