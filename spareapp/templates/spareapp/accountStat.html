@@ -32,7 +32,8 @@
             <th class="p-2">Fact #</th>
             <th class="p-2">Date</th>
             <th class="p-2">Type</th>
-            <th class="p-2">Total</th>
+            <th class="p-2">Debito</th>
+            <th class="p-2">Credito</th>
         </tr>
     </thead>
     <tbody id="myTable">
@@ -41,7 +42,16 @@
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refType.nombre}}</td>
-            <td class="p-2">{{fact.total}}</td>
+            {% if fact.refCategory.ingreso == True %}
+            <td class="p-2">{{fact.total|floatformat:2}}</td>
+            {% else %}
+            <td class="p-2">0.00</td>
+            {% endif %}
+            {% if fact.refCategory.egreso == True %}
+            <td class="p-2">{{fact.total|floatformat:2}}</td>
+            {% else %}
+            <td class="p-2">0.00</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

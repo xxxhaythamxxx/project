@@ -1,4 +1,12 @@
 
+if ($("#ivaCheck").prop("checked")){
+    // alert("Seleccionado")
+    $("#itbm7").show()
+}
+else{
+    $("#itbm7").hide()
+}
+
 $("#ivaCheck").on("click",function(){
     // alert("Cambia")
     if ($(this).prop("checked")){

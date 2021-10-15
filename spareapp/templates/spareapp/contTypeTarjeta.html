@@ -25,6 +25,8 @@
                 <th class="p-2">Total</th>
                 <th class="p-2">Interes</th>
                 <th class="p-2">Retención</th>
+                <th class="p-2">Neto</th>
+                <th class="p-2">Option</th>
             </tr>
         </thead>
 
@@ -41,6 +43,8 @@
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
                 <td class="p-2">${{value.1|floatformat:2}}</td>
                 <td class="p-2">${{value.2|floatformat:2}}</td>
+                <td class="p-2">${{value.3|floatformat:2}}</td>
+                <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fac.id %}">Edite</a></td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -54,6 +58,7 @@
                 <td class="p-2">$ {{totalTotal|floatformat:2}}</td>
                 <td class="p-2">$ {{interesTotal|floatformat:2}}</td>
                 <td class="p-2">$ {{retencionTotal|floatformat:2}}</td>
+                <td class="p-2">$ {{netoTotal|floatformat:2}}</td>
             </tr>
             
             

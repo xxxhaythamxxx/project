@@ -78,6 +78,14 @@
                 <input value="{{facAux.0.monto|floatformat:2}}" class="form-control" id="contMonto" type="number" name="contMonto" required>
             </div>
             <div class="mb-3">
+                <label class="form-label" for="ivaCheck">ITBM</label>
+                {% if check == True %}
+                <input id="ivaCheck" type="checkbox" name="ivaCheck" checked>
+                {% else %}
+                <input id="ivaCheck" type="checkbox" name="ivaCheck">
+                {% endif %}
+            </div>
+            <div style="display: none;" id="itbm7" class="mb-3">
                 <label class="form-label" for="contIva">ITBM 7%</label>
                 <input step="any" class="form-control" id="contIva" type="text" name="contIva" readonly>
             </div>

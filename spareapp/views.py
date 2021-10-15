@@ -2591,6 +2591,105 @@ def contBase(request):
 
 def contDay(request):
 
+    typeAux = factType.objects.filter(nombre="CASH")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "CASH"
+        # typA.include = True
+        # typA.manual = True
+        typA.save()
+    typeAux = factType.objects.filter(nombre="ACH")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "ACH"
+        typA.save()
+    typeAux = factType.objects.filter(nombre="TARJETA VISA")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "TARJETA VISA"
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="TARJETA CLAVE")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "TARJETA CLAVE"
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="MERCANCIA CONTADO CASH")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "MERCANCIA CONTADO CASH"
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="MERCANCIA CREDITO PAGADO")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "MERCANCIA CREDITO PAGADO"
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="MERCANCIA CREDITO POR COBRAR")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "MERCANCIA CREDITO POR COBRAR"
+        typA.include = False
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="MERCANCIA CREDITO COBRADO")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "MERCANCIA CREDITO COBRADO"
+        # typA.include = False
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="FACTURA POR COBRAR")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "FACTURA POR COBRAR"
+        typA.include = False
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="FACTURA COBRADO")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "FACTURA COBRADO"
+        # typA.include = False
+        typA.manual = False
+        typA.save()
+    typeAux = factType.objects.filter(nombre="GASTOS OPERACION")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "GASTOS OPERACION"
+        typA.save()
+    typeAux = factType.objects.filter(nombre="AJUSTES")
+    if typeAux:
+        print("Repetido")
+    else:
+        typA = factType()
+        typA.nombre = "AJUSTES"
+        typA.save()
+
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     editPrueba = False
@@ -2786,7 +2885,21 @@ def contEntry(request):
 
                     for fac in allFacturesVisa:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.0225*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
                 
@@ -2798,7 +2911,25 @@ def contEntry(request):
 
                     for fac in allFacturesClave:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                            # retencion = float(itbm/2)
+
+                        else:
+
+                            itbm = fac.monto*0.07
+                            # interes = float(fac.total)*0.02*1.07
+                            # retencion = float(itbm/2)
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.02*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -2843,7 +2974,21 @@ def contEntry(request):
 
                     for fac in allFacturesVisa:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.0225*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
                 
@@ -2855,7 +3000,21 @@ def contEntry(request):
 
                     for fac in allFacturesClave:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.02*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -2910,10 +3069,15 @@ def contSpend(request):
 
         factAux.iva = 0.07
 
-        valTotal = request.POST.get("contIva").split("= ")
+        if request.POST.get("ivaCheck") == "on":
 
-        factAux.total = valTotal[1]
+            valTotal = request.POST.get("contIva").split("= ")
+            factAux.total = valTotal[1]
 
+        else:
+
+            factAux.total = contMonto
+        
         factAux.save()
 
         tod = datetime.now().date()
@@ -2946,7 +3110,21 @@ def contSpend(request):
 
                     for fac in allFacturesVisa:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.0225*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
                 
@@ -2958,7 +3136,21 @@ def contSpend(request):
 
                     for fac in allFacturesClave:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.02*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -2991,7 +3183,21 @@ def contSpend(request):
 
                     for fac in allFacturesVisa:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.0225*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
                 
@@ -3003,7 +3209,21 @@ def contSpend(request):
 
                     for fac in allFacturesClave:
 
-                        acum = acum + fac.total
+                        if fac.monto == fac.total:
+
+                            itbm = 0
+                            
+                        else:
+
+                            itbm = fac.monto*0.07
+
+                        retencion = float(itbm/2)
+                        interes = float(fac.total)*0.02*1.07
+
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total-retencion-interes)
+                        else:
+                            acum = acum - (fac.total-retencion-interes)
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -3045,9 +3265,23 @@ def contType(request,val,val2):
     
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        itbmTotal = itbmTotal + float(fac.monto)*0.07
-        totalTotal = totalTotal + fac.total
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            if fac.monto == fac.total:
+                itbmTotal = itbmTotal + float(0)
+            else:
+                itbmTotal = itbmTotal + float(fac.monto)*0.07
+            totalTotal = totalTotal + fac.total
+
+        else:
+
+            montoTotal = montoTotal - fac.monto
+            if fac.monto == fac.total:
+                itbmTotal = itbmTotal - float(0)
+            else:
+                itbmTotal = itbmTotal - float(fac.monto)*0.07
+            totalTotal = totalTotal - fac.total
 
     typeDate = val2
 
@@ -3064,6 +3298,7 @@ def contTypeTarjeta(request,val,val2):
     totalTotal = 0
     interesTotal = 0
     retencionTotal = 0
+    netoTotal = 0
 
     allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=val)
 
@@ -3075,35 +3310,65 @@ def contTypeTarjeta(request,val,val2):
 
     itbm7 = {}
 
-    # Clave
-    # Tasa interes 2%+ITBM (Total*2%)*1.07
-    # Retencion ITBM 7% /2
-
-    # Visa
-    # Tasa interes 2.25%+ITBM (Total*2.25%)*1.07
-    # Retencion ITBM 7% /2
-
     for fac in allFacturesVal:
 
-        if val == "TARJETA VISA":
+        if fac.monto == fac.total:
 
-            itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.0225*1.07),float(float(float(fac.monto)*0.07)/2)]
+            itbmMonto = float(0)
 
         else:
 
-            itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(float(fac.monto)*0.07)/2)]
+            itbmMonto = float(fac.monto)*0.07
+
+        if val == "TARJETA VISA":
+
+            neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
+            if fac.refCategory.ingreso == True:
+                interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
+                retencionTotal = retencionTotal + float(itbmMonto/2)
+                netoTotal = netoTotal + neto
+            else:
+                interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
+                retencionTotal = retencionTotal - float(itbmMonto/2)
+                netoTotal = netoTotal - neto
+            itbm7[fac.id] = [float(itbmMonto),float(float(fac.total)*0.0225*1.07),float(float(itbmMonto)/2),float(neto)]
+
+        else:
+
+            neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
+            if fac.refCategory.ingreso == True:
+                interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
+                retencionTotal = retencionTotal + float(itbmMonto/2)
+                netoTotal = netoTotal + neto
+            else:
+                interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
+                retencionTotal = retencionTotal - float(itbmMonto/2)
+                netoTotal = netoTotal - neto
+            itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(itbmMonto)/2),float(neto)]
 
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        itbmTotal = itbmTotal + float(fac.monto)*0.07
-        totalTotal = totalTotal + fac.total
-        interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
-        retencionTotal = retencionTotal + float(float(float(fac.monto)*0.07)/2)
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            if fac.monto == fac.total:
+                itbmTotal = itbmTotal + float(0)
+            else:
+                itbmTotal = itbmTotal + float(fac.monto)*0.07
+            totalTotal = totalTotal + fac.total
+        
+        else:
+
+            montoTotal = montoTotal - fac.monto
+            if fac.monto == fac.total:
+                itbmTotal = itbmTotal - float(0)
+            else:
+                itbmTotal = itbmTotal - float(fac.monto)*0.07
+            totalTotal = totalTotal - fac.total
 
     typeDate = val2
 
-    dic = {"retencionTotal":retencionTotal,"interesTotal":interesTotal,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    dic = {"netoTotal":netoTotal,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contTypeTarjeta.html",dic)
 
@@ -3831,10 +4096,16 @@ def contThisMonth(request):
 
 def editeFact(request,val):
 
+    check = False
     allCustomers = persona.objects.all()
     allTypes = factType.objects.all()
     facAux = factura.objects.filter(id=val)
     facTotal = 0
+    auxFacGet = factura.objects.get(id=val)
+    if auxFacGet.monto == auxFacGet.total:
+        check = False
+    else:
+        check = True
 
     if facAux[0].refCategory.ingreso == True:
 
@@ -3950,8 +4221,8 @@ def editeFact(request,val):
         #                 print("FACTURA COBRADO")
 
         #             tableAuxGet.save()
-
-    dic = {"allCategories":allCategories,"allTypes":allTypes,"allCustomers":allCustomers,"facAux":facAux}
+    
+    dic = {"check":check,"allCategories":allCategories,"allTypes":allTypes,"allCustomers":allCustomers,"facAux":facAux}
 
     return render(request,"spareapp/editeFact.html",dic)
 
