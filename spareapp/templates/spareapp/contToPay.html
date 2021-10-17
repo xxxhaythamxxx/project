@@ -28,11 +28,11 @@
             {% for facture in allFacturesPay %}
             <tr>
                 <td class="p-2">{{facture.num}}</td>
-                <td class="p-2">{{facture.refPersona}}</td>
+                <td class="p-2"><a href="{% url 'contIndividual' facture.refPersona.id %}">{{facture.refPersona}}</a></td>
                 <td class="p-2">{{facture.refCategory}}</td>
                 <td class="p-2">{{facture.fechaCreado|date:"M d, Y"}}</td>
                 {% for key,value in deadlineDic.items %}
-                    {% if key == facture.num %}
+                    {% if key == facture.id %}
                         <td style="max-width: 120px;" class="p-2">{{value}} days</td>
                     {% endif %}
                 {% endfor %}

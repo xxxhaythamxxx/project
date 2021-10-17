@@ -118,8 +118,8 @@ class Profile(models.Model):
 
 class persona(models.Model):
 
-    nombre = models.CharField(max_length=20, verbose_name="Nombre")
-    documento = models.CharField(max_length=20, verbose_name="Documento",default="")
+    nombre = models.CharField(max_length=100, verbose_name="Nombre")
+    documento = models.CharField(max_length=50, verbose_name="Documento",default="",blank=True,null=True)
 
     def __str__(self):
         return str(self.nombre)
@@ -145,7 +145,7 @@ class factCategory(models.Model):
 
 class factura(models.Model):
 
-    num = models.CharField(max_length=20,verbose_name="Número de factura")
+    num = models.CharField(max_length=20,verbose_name="Número de factura",blank=True,null=True)
     refPersona = models.ForeignKey(persona,on_delete=CASCADE,verbose_name="Persona",default='Persona')
     refType = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     refCategory = models.ForeignKey(factCategory,on_delete=CASCADE,verbose_name="Category",default='Categoria')
