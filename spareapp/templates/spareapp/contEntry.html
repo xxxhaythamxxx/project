@@ -5,13 +5,20 @@
 {% block content %}
 
 <div class="container mt-5 col-lg-12 d-flex justify-content-center">
-    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">New facture: Entry</span></label>
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">New facture</span></label>
 </div>
 <div class="d-flex justify-content-center">
     <div class="container mt-3 col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
-            
+
+            <div class="mb-3">
+                <!-- <label class="form-check mb-2">Facture type</label> -->
+                <input onclick="factTypeFun('entry');" class="form-check-input" id="contFacType1" type="radio" name="contFacType" checked>
+                <label class="form-check-label" for="contFacType1">Entry</label>
+                <input onclick="factTypeFun('spending');" class="form-check-input" id="contFacType2" type="radio" name="contFacType">
+                <label class="form-check-label" for="contFacType2">Spending</label>
+            </div>
             <div class="mb-3">
                 <div class="row">
                     <div class="col-lg-11">
@@ -48,7 +55,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="mb-3">
+            <div id="categoryEntry" class="mb-3">
                 <label class="form-label" for="contCatIng">Category</label>
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
                     <option value="" selected>Select category</option>
@@ -66,12 +73,12 @@
                 <input class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="ivaCheck">ITBM</label>
-                <input id="ivaCheck" type="checkbox" name="ivaCheck">
+                <label class="form-label" for="contItbm">ITBM</label>
+                <input class="form-control" id="contItbm" type="number" name="contItbm" step="0.001">
             </div>
-            <div style="display: none;" id="itbm7" class="mb-3">
-                <label class="form-label" for="contIva">ITBM 7%</label>
-                <input step="any" class="form-control" id="contIva" type="text" name="contIva" readonly>
+            <div class="mb-3">
+                <label class="form-label" for="contTotal">Total</label>
+                <input class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
             </div>
             <button class="btn btn-primary" type="submit">Accept</button>
         </form>
@@ -120,12 +127,57 @@ $("#formCust").submit(function(e){
         
         success: function(){
             console.log("Success")
+            // var js = JSON.parse(res);
+            // for (var i = 0;1<js.lengh;i++){
+            //     alert(js[i])
+            // }
 
             $("#contNombre").append("<option value='"+cat+"documento"+doc+"' selected>"+cat+" - "+doc+"</option>")
             $(".btn-close").click()
         }
     })
 })
+
+function factTypeFun(type){
+    $.ajax({
+        method: 'GET',
+        url: '/factTypeES',
+        data: {'val': type},
+        success:function(data){
+            // alert(data)
+            // console.log(data)
+
+            select = $("#contCatIng")
+            select.empty()
+            // <option value="" selected>Select category</option>
+            // {% for category in allCategories %}
+            // <option limit="{{category.limite}}" value="{{category.nombre}}">{{category.nombre}}</option>
+            // {% endfor %}
+            var option = document.createElement("option")
+            option.innerHTML = "<option value='' selected>Select category</option>"
+            select.append(option)
+
+            for(var i = 0; i<data.allCategories.length;i++){
+                // alert(data.allCategories[i].nombre)
+                var option = document.createElement("option")
+                // alert("Crea option")
+                option.innerHTML = "<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].nombre+">"+data.allCategories[i].nombre+"</option>"
+                // alert(option.innerHTML)
+                // alert("Crea innerhtml al option")
+                select.append(option)
+                // alert("appendCHild al select")
+            }
+        }
+        // success: factTypeES (data) {
+        //      //this gets called when server returns an OK response
+        //      console.log('it worked!');
+        //      console.log(data.result);
+        // },
+        // error: factTypeES () {
+        //      console.log("it didnt work");
+        // }
+    });
+}
 
 </script>
 {% endblock %}

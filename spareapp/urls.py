@@ -84,6 +84,7 @@ urlpatterns = [
     path("editeFact/<str:val>",views.editeFact,name="editeFact"),
     path("contTotalDay",views.contTotalDay,name="contTotalDay"),
     path("contIndividual/<str:val>",views.contIndividual,name="contIndividual"),
+    path("factTypeES",views.factTypeES,name="factTypeES"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

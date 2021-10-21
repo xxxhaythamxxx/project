@@ -1,22 +1,22 @@
 
-if ($("#ivaCheck").prop("checked")){
-    // alert("Seleccionado")
-    $("#itbm7").show()
-}
-else{
-    $("#itbm7").hide()
-}
+// if ($("#ivaCheck").prop("checked")){
+//     // alert("Seleccionado")
+//     $("#itbm7").show()
+// }
+// else{
+//     $("#itbm7").hide()
+// }
 
-$("#ivaCheck").on("click",function(){
-    // alert("Cambia")
-    if ($(this).prop("checked")){
-        // alert("Seleccionado")
-        $("#itbm7").show()
-    }
-    else{
-        $("#itbm7").hide()
-    }
-})
+// $("#ivaCheck").on("click",function(){
+//     // alert("Cambia")
+//     if ($(this).prop("checked")){
+//         // alert("Seleccionado")
+//         $("#itbm7").show()
+//     }
+//     else{
+//         $("#itbm7").hide()
+//     }
+// })
 // if ($("#ivaCheck").prop("checked")){
 //     alert("Seleccionado")
 // }
@@ -56,20 +56,35 @@ jQuery(document).ready(function($){
     });
 });
 
-if ($("#contMonto").val()){
-    total = parseFloat(parseFloat($("#contMonto").val())+parseFloat(parseFloat($("#contMonto").val())*parseFloat(0.07))).toFixed(2)
-    iva = parseFloat(($("#contMonto").val()*0.07)).toFixed(2)
-    $("#contIva").val($("#contMonto").val()+" + "+iva+" = "+total)
-}
+// if ($("#contMonto").val()){
+//     total = parseFloat(parseFloat($("#contMonto").val())+parseFloat(parseFloat($("#contMonto").val())*parseFloat(0.07))).toFixed(2)
+//     iva = parseFloat(($("#contMonto").val()*0.07)).toFixed(2)
+//     $("#contIva").val($("#contMonto").val()+" + "+iva+" = "+total)
+// }
 
 $("#contMonto").on("keyup",function(){
-    total = parseFloat(parseFloat($(this).val())+parseFloat(parseFloat($(this).val())*parseFloat(0.07))).toFixed(2)
-    iva = parseFloat(($(this).val()*0.07)).toFixed(2)
-    $("#contIva").val($(this).val()+" + "+iva+" = "+total)
+    iva=parseFloat(($(this).val()*0.07)).toFixed(2)
+    $("#contItbm").val(iva)
+    total=parseFloat(parseFloat($(this).val())+parseFloat(iva)).toFixed(2)
+    $("#contTotal").val(total)
+})
+$("#contItbm").on("keyup",function(){
+    amount=$("#contMonto").val()
+    total=parseFloat(parseFloat(amount)+parseFloat($(this).val())).toFixed(2)
+    $("#contTotal").val(total)
     if($(this).val()==""){
-        $("#contIva").val("")
+        $("#contTotal").val(amount)
     }
 })
+
+// $("#contFacType1").click(function(){
+//     $("#categoryEntry").show()
+//     $("#categorySpending").hide()
+// })
+// $("#contFacType2").click(function(){
+//     $("#categoryEntry").hide()
+//     $("#categorySpending").show()
+// })
 
 // boton para exportar a Excel -------------------------------------------------------------------------------------
 document.getElementById("downloadexcel").addEventListener("click",function(){
