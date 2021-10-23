@@ -153,19 +153,21 @@ function factTypeFun(type){
             // {% for category in allCategories %}
             // <option limit="{{category.limite}}" value="{{category.nombre}}">{{category.nombre}}</option>
             // {% endfor %}
-            var option = document.createElement("option")
-            option.innerHTML = "<option value='' selected>Select category</option>"
-            select.append(option)
+
+            // var option = document.createElement("option")
+            // option.innerHTML = "<option value='' selected>Select category</option>"
+            // select.append(option)
+            select.append("<option value='' selected>Select category</option>")
+
 
             for(var i = 0; i<data.allCategories.length;i++){
-                // alert(data.allCategories[i].nombre)
-                var option = document.createElement("option")
-                // alert("Crea option")
-                option.innerHTML = "<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].nombre+">"+data.allCategories[i].nombre+"</option>"
+                // var option = document.createElement("option")
+                // option.innerHTML = "<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].nombre+">"+data.allCategories[i].nombre+"</option>"
                 // alert(option.innerHTML)
-                // alert("Crea innerhtml al option")
-                select.append(option)
-                // alert("appendCHild al select")
+                // select.append(option)
+                select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].nombre+">"+data.allCategories[i].nombre+"</option>")
+                // $('#select').append('<option value="1">One</option>');
+                // $('#select').append('<option value="1">One</option>');
             }
         }
         // success: factTypeES (data) {

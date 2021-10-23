@@ -36,9 +36,9 @@
                         <td style="max-width: 120px;" class="p-2">{{value}} days</td>
                     {% endif %}
                 {% endfor %}
-                <td class="p-2">${{facture.monto}}</td>
-                <td class="p-2">{{facture.iva}}</td>
-                <td class="p-2">${{facture.total}}</td>
+                <td class="p-2">${{facture.monto|floatformat:2}}</td>
+                <td class="p-2">{{facture.iva|floatformat:2}}</td>
+                <td class="p-2">${{facture.total|floatformat:2}}</td>
                 <td class="p-2"><a href="{% url 'contPayFac' facture.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Pay</a></td>
             </tr>
             {% endfor %}
@@ -49,9 +49,9 @@
                 <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
-                <td class="p-2">${{montoTotal}}</td>
+                <td class="p-2">${{montoTotal|floatformat:2}}</td>
                 <td class="p-2"></td>
-                <td class="p-2">${{totalTotal}}</td>
+                <td class="p-2">${{totalTotal|floatformat:2}}</td>
                 <td class="p-2"></td>
             </tr>
             

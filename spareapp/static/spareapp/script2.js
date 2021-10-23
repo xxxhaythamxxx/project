@@ -22,7 +22,14 @@
 // }
 
 $("#contCatIng").change(function(){
-    if($(this).find("option:selected").attr("limit") == "True"){
+    // alert($(this).find("option:selected").attr("limit").toLowerCase())
+    // alert($(this).find("option:selected"))
+    // alert($(this).find("option:selected").text())
+    // alert($(this).find("option:selected").attr("limit").text())
+    // alert($(this).find("option:selected").attr("limit").val())
+    // alert($(this).find("option"))
+    // alert($(this).find("option").attr("limit"))
+    if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
         $("#divFechaTope").show()
     }
     else{
@@ -30,14 +37,14 @@ $("#contCatIng").change(function(){
     }
 })
 
-$("#contCatEgr").change(function(){
-    if($(this).find("option:selected").attr("limit") == "True"){
-        $("#divFechaTope").show()
-    }
-    else{
-        $("#divFechaTope").hide()
-    }
-})
+// $("#contCatEgr").change(function(){
+//     if($(this).find("option:selected").attr("limit") == "True"){
+//         $("#divFechaTope").show()
+//     }
+//     else{
+//         $("#divFechaTope").hide()
+//     }
+// })
 
 function functionByDay(){
     $("#formByDay").show()

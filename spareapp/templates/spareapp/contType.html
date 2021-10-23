@@ -21,7 +21,7 @@
                 <th class="p-2">Nombre</th>
                 <th class="p-2">Categoría</th>
                 <th class="p-2">Monto</th>
-                <th class="p-2">ITBM 7%</th>
+                <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
                 <th class="p-2">Option</th>
             </tr>
@@ -29,19 +29,15 @@
 
         <tbody>
             {% for fac in allFacturesVal %}
-            {% for key,value in itbm7.items %}
-            {% if key == fac.id %}
             <tr>
                 <td class="p-2">{{fac.num}}</td>
-                <td class="p-2">{{fac.refPersona}}</td>
+                <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory}}</td>
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
-                <td class="p-2">${{value|floatformat:2}}</td>
+                <td class="p-2">${{fac.iva|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
                 <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fac.id %}">Edite</a></td>
             </tr>
-            {% endif %}
-            {% endfor %}
             {% endfor %}
             <tr>
                 <td class="p-2 color text-white">Total</td>
