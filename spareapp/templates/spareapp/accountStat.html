@@ -32,6 +32,8 @@
             <th class="p-2">Fact #</th>
             <th class="p-2">Date</th>
             <th class="p-2">Type</th>
+            <th class="p-2">Note</th>
+            <th class="p-2">Category</th>
             <th class="p-2">Debito</th>
             <th class="p-2">Credito</th>
             <th class="p-2">Balance</th>
@@ -39,22 +41,39 @@
     </thead>
     <tbody id="myTable">
         {% for fact in factureName %}
+        {% for key,value in balance.items %}
+        {% if key == fact.id %}
         <tr>
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refType.nombre}}</td>
-            {% if fact.refCategory.ingreso == True %}
-            <td class="p-2">{{fact.total|floatformat:2}}</td>
+            <td style="max-width: 100px;" class="p-2">{{fact.note}}</td>
+            <td class="p-2">{{fact.refCategory.nombre}}</td>
+
+            {% if fact.refCategory.ingreso == True and fact.refType.nombre != 'FACTURA POR COBRAR' %}
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
             {% else %}
-            <td class="p-2">0.00</td>
-            {% endif %}
-            {% if fact.refCategory.egreso == True %}
-            <td class="p-2">{{fact.total|floatformat:2}}</td>
+            {% if fact.refType.nombre != 'FACTURA POR COBRAR' %}
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
             {% else %}
-            <td class="p-2">0.00</td>
+            <td class="p-2">$0.00</td>
             {% endif %}
-            <td class="p-2">0.00</td>
+            {% endif %}
+
+            {% if fact.refCategory.egreso == True or fact.refType.nombre == 'FACTURA POR COBRAR' %}
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
+            {% else %}
+            {% if fact.refType.nombre != 'FACTURA POR COBRAR' %}
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
+            {% else %}
+            <td class="p-2">$0.00</td>
+            {% endif %}
+            {% endif %}
+
+            <td class="p-2">${{value|floatformat:2}}</td>
         </tr>
+        {% endif %}
+        {% endfor %}
         {% endfor %}
     </tbody>
 </table>
@@ -63,7 +82,7 @@
 <table>
     <tr>
         <td style="width: 80px;" class="p-2 color text-white">Total</td>
-        <td class="p-2">$ 0.00</td>
+        <td class="p-2">$ {{balanceTotal|floatformat:2}}</td>
     </tr>
 </table>
 </div>

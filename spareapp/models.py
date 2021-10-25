@@ -156,6 +156,7 @@ class factura(models.Model):
     monto = models.FloatField(verbose_name="Monto")
     total = models.FloatField(verbose_name="Total",default=0)
     pendiente = models.BooleanField(default=False,verbose_name="Pendiente",blank=True,null=True)
+    note = models.TextField(max_length=400, verbose_name="Nota",blank=True,null=True)
 
     def __str__(self):
         return '%s %s %s' %(self.num, self.refPersona, self.fechaCreado)

@@ -24,7 +24,11 @@
             {% for tab in tableAux %}
             {% if tableAux and editPrueba == False %}
             <tr>
-                <td class="p-2"><a href="{% url 'contType' tab.tabTipo tod %}">{{tab.tabTipo}}</a></td>
+                {% if tab.tabTipo.include == True %}
+                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo tod %}" {% else %} href="{% url 'contType' tab.tabTipo tod %}" {% endif %}>{{tab.tabTipo}}</a></td>
+                {% else %}
+                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo tod %}" {% else %} href="{% url 'contType' tab.tabTipo tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                {% endif %}
                 <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
             </tr>
             {% else %}

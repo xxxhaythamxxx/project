@@ -21,7 +21,7 @@
                 <th class="p-2">Nombre</th>
                 <th class="p-2">Categoría</th>
                 <th class="p-2">Monto</th>
-                <th class="p-2">ITBM 7%</th>
+                <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
                 <th class="p-2">Interes</th>
                 <th class="p-2">Retención</th>
@@ -39,7 +39,7 @@
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory}}</td>
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
-                <td class="p-2">${{value.0|floatformat:2}}</td>
+                <td class="p-2">${{fac.iva|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
                 <td class="p-2">${{value.1|floatformat:2}}</td>
                 <td class="p-2">${{value.2|floatformat:2}}</td>
