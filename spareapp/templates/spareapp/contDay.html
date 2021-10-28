@@ -64,7 +64,11 @@
 
                     {% for tab in allTypes %}
                     <tr>
+                        {% if tab.include == True %}
                         <td class="p-2"><a href="">{{tab.nombre}}</a></td>
+                        {% else %}
+                        <td class="p-2"><a href="">(  {{tab.nombre}}  )</a></td>
+                        {% endif %}
                         {% if tab.manual == True %}
                         <td class="p-2">$<input id="{{tab.nombre|cut:' '}}Total" name="{{tab.nombre|cut:' '}}Total" type="number"></td>
                         {% else %}
