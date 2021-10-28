@@ -58,7 +58,7 @@
             <div id="categoryEntry" class="mb-3">
                 <label class="form-label" for="contCatIng">Category</label>
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
-                    <option value="" selected>Select category</option>
+                    <option limit="false" value="" selected>Select category</option>
                     {% for category in allCategories %}
                     <option limit="{{category.limite}}" value="{{category.id}}">{{category.nombre}}</option>
                     {% endfor %}

@@ -23,6 +23,30 @@ $("#contCatIng").change(function(){
     }
 })
 
+$("#contTypeIng").change(function(){
+    if ($(this).find("option:selected").text()=="FACTURA POR COBRAR"){
+        $("#contCatIng").find("option").each(function(){
+            if ($(this).attr("limit").toLowerCase() == "true" || $(this).text().toLowerCase() == "select category"){
+                $(this).show()
+            }
+            else{
+                $(this).hide()
+            }
+        })
+    }
+    else{
+        $("#contCatIng").find("option").each(function(){
+            if ($(this).attr("limit").toLowerCase() == "false"){
+                $(this).show()
+            }
+            else{
+                $(this).hide()
+            }
+        })
+        $("#divFechaTope").hide()
+    }
+})
+
 function functionByDay(){
     $("#formByDay").show()
     $("#formByRange").hide()
