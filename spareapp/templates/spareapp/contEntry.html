@@ -148,7 +148,7 @@ function factTypeFun(type){
             select2 = $("#contTypeIng")
             select.empty()
             select2.empty()
-            select.append("<option value='' selected>Select category</option>")
+            select.append("<option limit='false' value='' selected>Select category</option>")
             select2.append("<option value='' selected>Select entry type</option>")
 
             for(var i = 0; i<data.allTypes.length;i++){

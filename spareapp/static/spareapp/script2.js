@@ -24,13 +24,16 @@ $("#contCatIng").change(function(){
 })
 
 $("#contTypeIng").change(function(){
-    if ($(this).find("option:selected").text()=="FACTURA POR COBRAR"){
+    if ($(this).find("option:selected").text()=="FACTURA POR COBRAR" || $(this).find("option:selected").text()=="MERCANCIA CREDITO POR PAGAR"){
         $("#contCatIng").find("option").each(function(){
             if ($(this).attr("limit").toLowerCase() == "true" || $(this).text().toLowerCase() == "select category"){
                 $(this).show()
             }
             else{
                 $(this).hide()
+            }
+            if($(this).text().toLowerCase() == "select category"){
+                $(this).prop("selected",true)
             }
         })
     }
@@ -41,6 +44,9 @@ $("#contTypeIng").change(function(){
             }
             else{
                 $(this).hide()
+            }
+            if($(this).text().toLowerCase() == "select category"){
+                $(this).prop("selected",true)
             }
         })
         $("#divFechaTope").hide()
