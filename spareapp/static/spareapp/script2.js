@@ -1,34 +1,20 @@
-
-// if ($("#ivaCheck").prop("checked")){
-//     // alert("Seleccionado")
-//     $("#itbm7").show()
-// }
-// else{
-//     $("#itbm7").hide()
-// }
-
-// $("#ivaCheck").on("click",function(){
-//     // alert("Cambia")
-//     if ($(this).prop("checked")){
-//         // alert("Seleccionado")
-//         $("#itbm7").show()
-//     }
-//     else{
-//         $("#itbm7").hide()
-//     }
-// })
-// if ($("#ivaCheck").prop("checked")){
-//     alert("Seleccionado")
-// }
+$("#search4").click(function(){
+    $("#formByRange").show()
+})
+$("#search1").click(function(){
+    $("#formByRange").hide()
+})
+$("#search2").click(function(){
+    $("#formByRange").hide()
+})
+$("#search3").click(function(){
+    $("#formByRange").hide()
+})
+$("#search5").click(function(){
+    $("#formByRange").hide()
+})
 
 $("#contCatIng").change(function(){
-    // alert($(this).find("option:selected").attr("limit").toLowerCase())
-    // alert($(this).find("option:selected"))
-    // alert($(this).find("option:selected").text())
-    // alert($(this).find("option:selected").attr("limit").text())
-    // alert($(this).find("option:selected").attr("limit").val())
-    // alert($(this).find("option"))
-    // alert($(this).find("option").attr("limit"))
     if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
         $("#divFechaTope").show()
     }
@@ -36,15 +22,6 @@ $("#contCatIng").change(function(){
         $("#divFechaTope").hide()
     }
 })
-
-// $("#contCatEgr").change(function(){
-//     if($(this).find("option:selected").attr("limit") == "True"){
-//         $("#divFechaTope").show()
-//     }
-//     else{
-//         $("#divFechaTope").hide()
-//     }
-// })
 
 function functionByDay(){
     $("#formByDay").show()
@@ -63,12 +40,6 @@ jQuery(document).ready(function($){
     });
 });
 
-// if ($("#contMonto").val()){
-//     total = parseFloat(parseFloat($("#contMonto").val())+parseFloat(parseFloat($("#contMonto").val())*parseFloat(0.07))).toFixed(2)
-//     iva = parseFloat(($("#contMonto").val()*0.07)).toFixed(2)
-//     $("#contIva").val($("#contMonto").val()+" + "+iva+" = "+total)
-// }
-
 $("#contMonto").on("keyup",function(){
     iva=parseFloat(($(this).val()*0.07)).toFixed(2)
     $("#contItbm").val(iva)
@@ -83,15 +54,6 @@ $("#contItbm").on("keyup",function(){
         $("#contTotal").val(amount)
     }
 })
-
-// $("#contFacType1").click(function(){
-//     $("#categoryEntry").show()
-//     $("#categorySpending").hide()
-// })
-// $("#contFacType2").click(function(){
-//     $("#categoryEntry").hide()
-//     $("#categorySpending").show()
-// })
 
 // boton para exportar a Excel -------------------------------------------------------------------------------------
 document.getElementById("downloadexcel").addEventListener("click",function(){

@@ -9,15 +9,40 @@
     {% csrf_token %}
     <div class="mb-3">
         <label class="form-label" for="contNombre">Customer</label>
-        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example">
+        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
             <option value="" selected>Select customer</option>
             {% for cust in allCustomers %}
             <option value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
             {% endfor %}
         </select>
     </div>
+    <div class="mb-3">
+        <input value="all" class="form-check-input" id="search1" type="radio" name="search" checked>
+        <label class="form-check-label" for="search1">All</label>
+        <input value="month" class="form-check-input" id="search2" type="radio" name="search">
+        <label class="form-check-label" for="search2">This month</label>
+        <input value="range" class="form-check-input" id="search4" type="radio" name="search">
+        <label class="form-check-label" for="search4">Range</label>
+        <input value="balance" class="form-check-input" id="search5" type="radio" name="search">
+        <label class="form-check-label" for="search5">Last balance</label>
+    </div>
+    <div class="mb-3" id="formByRange" style="display: none;">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label for="searchDateFrom">From</label>
+                    <input name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
+                </div>
+                <div class="col-lg-6">
+                    <label for="searchDateTo">To</label>
+                    <input name="searchDateTo" id="searchDateTo" class="form-control" type="date">
+                </div>
+            </div>
+        </div>
+    </div>
     <button class="btn btn-primary" type="submit">Accept</button>
 </form>
+
 </div>
 {% if factureName %}
 <div class="container mt-2">

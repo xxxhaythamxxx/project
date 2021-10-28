@@ -3289,9 +3289,17 @@ def contTypeRange(request,val,val2,val3):
     
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        itbmTotal = itbmTotal + float(fac.monto)*0.07
-        totalTotal = totalTotal + fac.total
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            itbmTotal = itbmTotal + float(fac.iva)
+            totalTotal = totalTotal + fac.total
+
+        else:
+
+            montoTotal = montoTotal - fac.monto
+            itbmTotal = itbmTotal - float(fac.iva)
+            totalTotal = totalTotal - fac.total
 
     # typeDate = val2
 
@@ -3716,7 +3724,7 @@ def contByRange(request):
 
             tableAuxGet.save()    
 
-        tableAux = mainTableAux.objects.all().order_by("tabTipo")  
+        tableAux = mainTableAux.objects.all().order_by("tabTipo__nombre")  
 
         allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
         allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -4052,20 +4060,18 @@ def contAddPerson(request):
 def accountStat(request):
 
     allCustomers = persona.objects.all()
-
-    # itbm7[fac.id] = [float(itbmMonto),float(float(fac.total)*0.0225*1.07),float(float(itbmMonto)/2),float(neto)]
-
     cont = 0
+    pos = 0
     balance = {}
     balanceTotal = 0
     factureName = None
 
     if request.method == "POST":
 
+        print(request.POST)
+
         auxNombre = request.POST.get("contNombre")
-
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado")
-
         cont = 0
         
         for fac in factureName:
@@ -4095,6 +4101,36 @@ def accountStat(request):
                 balance[fac.id] = cont
 
         balanceTotal = cont
+
+        # ---------------------------------------------------------------
+
+        if request.POST.get("search") == "balance":
+
+            for key in balance:
+
+                if balance[key]==0:
+                    pos = key
+            
+            facAct = factura.objects.get(id=pos)
+
+            factureName = factura.objects.filter(fechaCreado__gt=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        if request.POST.get("search") == "range":
+
+            dateFrom = request.POST.get("searchDateFrom")
+            dateTo = request.POST.get("searchDateTo")
+
+            if dateFrom and dateTo:
+                
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        # ---------------------------------------------------------------
 
     dic = {"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
@@ -4438,9 +4474,7 @@ def contIndividual(request,val):
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
-
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado")
-
         cont = 0
         
         for fac in factureName:
@@ -4468,6 +4502,38 @@ def contIndividual(request,val):
                         cont = cont - fac.total
 
                 balance[fac.id] = cont
+
+        balanceTotal = cont
+
+        # ---------------------------------------------------------------
+
+        if request.POST.get("search") == "balance":
+
+            for key in balance:
+
+                if balance[key]==0:
+                    pos = key
+            
+            facAct = factura.objects.get(id=pos)
+
+            factureName = factura.objects.filter(fechaCreado__gt=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        if request.POST.get("search") == "range":
+
+            dateFrom = request.POST.get("searchDateFrom")
+            dateTo = request.POST.get("searchDateTo")
+
+            if dateFrom and dateTo:
+                
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        # ---------------------------------------------------------------
 
     balanceTotal = cont
 
