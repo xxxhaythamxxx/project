@@ -24,7 +24,6 @@ $("#contCatIng").change(function(){
 })
 
 $("#contTypeIng").change(function(){
-    alert("Entra")
     if ($(this).find("option:selected").text()=="FACTURA POR COBRAR" || $(this).find("option:selected").text()=="MERCANCIA CREDITO POR PAGAR"){
         $("#contCatIng").find("option").each(function(){
             if ($(this).attr("limit").toLowerCase() == "true" || $(this).text().toLowerCase() == "select category"){
