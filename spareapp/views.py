@@ -2869,27 +2869,27 @@ def contEntry(request):
 
                 tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
 
-                if ty.nombre == "CASH":
+                # if ty.nombre == "CASH":
 
-                    allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                    acum = 0
-                    for fac in allFacturesCash:
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + fac.total
-                        else:
-                            acum = acum - fac.total
-                    tableAuxType.tabTotal = float(acum)
+                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                acum = 0
+                for fac in allFacturesCash:
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                tableAuxType.tabTotal = float(acum)
 
-                if ty.nombre == "ACH":
+                # if ty.nombre == "ACH":
 
-                    allFacturesACH = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                    acum = 0
-                    for fac in allFacturesACH:
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + fac.total
-                        else:
-                            acum = acum - fac.total
-                    tableAuxType.tabTotal = float(acum)
+                #     allFacturesACH = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                #     acum = 0
+                #     for fac in allFacturesACH:
+                #         if fac.refCategory.ingreso == True:
+                #             acum = acum + fac.total
+                #         else:
+                #             acum = acum - fac.total
+                #     tableAuxType.tabTotal = float(acum)
 
                 if ty.nombre == "FACTURA POR COBRAR":
 
@@ -2906,7 +2906,6 @@ def contEntry(request):
                 if ty.nombre == "MERCANCIA CREDITO POR PAGAR":
 
                     allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
-                    print(allFacturesPay)
 
                     acum2 = 0
 
@@ -3001,27 +3000,27 @@ def contEntry(request):
                 tableAuxType.tabTipo = ty
                 tableAuxType.tabTotal = 0
 
-                if ty.nombre == "CASH":
+                # if ty.nombre == "CASH":
 
-                    allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                    acum = 0
-                    for fac in allFacturesCash:
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + fac.total
-                        else:
-                            acum = acum - fac.total
-                    tableAuxType.tabTotal = float(acum)
+                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                acum = 0
+                for fac in allFacturesCash:
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                tableAuxType.tabTotal = float(acum)
 
-                if ty.nombre == "ACH":
+                # if ty.nombre == "ACH":
 
-                    allFacturesACH = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                    acum = 0
-                    for fac in allFacturesACH:
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + fac.total
-                        else:
-                            acum = acum - fac.total
-                    tableAuxType.tabTotal = float(acum)
+                #     allFacturesACH = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                #     acum = 0
+                #     for fac in allFacturesACH:
+                #         if fac.refCategory.ingreso == True:
+                #             acum = acum + fac.total
+                #         else:
+                #             acum = acum - fac.total
+                #     tableAuxType.tabTotal = float(acum)
 
                 if ty.nombre == "FACTURA POR COBRAR":
 
@@ -3496,6 +3495,10 @@ def contAddType(request):
 
                 factTypeAux = factType()
                 factTypeAux.nombre = typeNombre
+                if request.POST.get("typeInclude") == "on":
+                    factTypeAux.include = True
+                else:
+                    factTypeAux.include = False
                 factTypeAux.save()
 
         return render(request,"spareapp/contAddType.html")
