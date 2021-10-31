@@ -75,24 +75,16 @@
             <td style="max-width: 100px;" class="p-2">{{fact.note}}</td>
             <td class="p-2">{{fact.refCategory.nombre}}</td>
 
-            {% if fact.refCategory.ingreso == True and fact.refType.nombre != 'FACTURA POR COBRAR' %}
-            <td class="p-2">${{fact.total|floatformat:2}}</td>
-            {% else %}
-            {% if fact.refType.nombre != 'FACTURA POR COBRAR' %}
-            <td class="p-2">${{fact.total|floatformat:2}}</td>
-            {% else %}
+            {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" %}
             <td class="p-2">$0.00</td>
-            {% endif %}
+            {% else %}
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
             {% endif %}
 
-            {% if fact.refCategory.egreso == True or fact.refType.nombre == 'FACTURA POR COBRAR' %}
-            <td class="p-2">${{fact.total|floatformat:2}}</td>
-            {% else %}
-            {% if fact.refType.nombre != 'FACTURA POR COBRAR' %}
+            {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" %}
             <td class="p-2">${{fact.total|floatformat:2}}</td>
             {% else %}
             <td class="p-2">$0.00</td>
-            {% endif %}
             {% endif %}
 
             <td class="p-2">${{value|floatformat:2}}</td>

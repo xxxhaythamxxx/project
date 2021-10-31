@@ -11,6 +11,13 @@
     <div class="container mt-3 col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
+            <div class="mb-3">
+                <!-- <label class="form-check mb-2">Facture type</label> -->
+                <input onclick="factTypeFun('entry');" class="form-check-input" id="contFacType1" type="radio" name="contFacType" checked>
+                <label class="form-check-label" for="contFacType1">Entry</label>
+                <input onclick="factTypeFun('spending');" class="form-check-input" id="contFacType2" type="radio" name="contFacType">
+                <label class="form-check-label" for="contFacType2">Spending</label>
+            </div>
             
             <div class="mb-3">
                 <div class="row">
@@ -20,9 +27,9 @@
                             <option value="">Select customer</option>
                             {% for cust in allCustomers %}
                             {% if cust.nombre == facAux.0.refPersona.nombre %} 
-                            <option value="{{cust.nombre}}documento{{cust.documento}}" selected>{{cust.nombre}} - {{cust.documento}}</option>
+                            <option value="{{cust.id}}" selected>{{cust.nombre}} - {{cust.documento}}</option>
                             {% else %} 
-                            <option value="{{cust.nombre}}documento{{cust.documento}}" >{{cust.nombre}} - {{cust.documento}}</option>
+                            <option value="{{cust.id}}" >{{cust.nombre}} - {{cust.documento}}</option>
                             {% endif %}
                             {% endfor %}
                         </select>
@@ -75,19 +82,19 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contMonto">Amount</label>
-                <input value="{{facAux.0.monto|floatformat:2}}" class="form-control" id="contMonto" type="number" name="contMonto" required>
+                <input value="{{facAux.0.monto}}" class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="ivaCheck">ITBM</label>
-                {% if check == True %}
-                <input id="ivaCheck" type="checkbox" name="ivaCheck" checked>
-                {% else %}
-                <input id="ivaCheck" type="checkbox" name="ivaCheck">
-                {% endif %}
+                <label class="form-label" for="contItbm">ITBM</label>
+                <input value="{{facAux.0.iva}}" class="form-control" id="contItbm" type="number" name="contItbm" step="0.001">
             </div>
-            <div style="display: none;" id="itbm7" class="mb-3">
-                <label class="form-label" for="contIva">ITBM 7%</label>
-                <input step="any" class="form-control" id="contIva" type="text" name="contIva" readonly>
+            <div class="mb-3">
+                <label class="form-label" for="contTotal">Total</label>
+                <input value="{{facAux.0.total}}" class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="contNota">Note</label>
+                <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
             <button class="btn btn-primary" type="submit">Accept</button>
         </form>
@@ -134,14 +141,39 @@ $("#formCust").submit(function(e){
         type: $(this).attr("method"),
         data: $(this).serialize(),
         
-        success: function(){
+        success: function(data){
             console.log("Success")
-
-            $("#contNombre").append("<option value='"+cat+"documento"+doc+"' selected>"+cat+" - "+doc+"</option>")
+            $("#contNombre").append("<option value="+data.lastPerson[0].id+" selected>"+cat+" - "+doc+"</option>")
             $(".btn-close").click()
         }
     })
 })
+
+function factTypeFun(type){
+    $.ajax({
+        method: 'GET',
+        url: '/factTypeES',
+        data: {'val': type},
+        success:function(data){
+
+            select = $("#contCatIng")
+            select2 = $("#contTypeIng")
+            select.empty()
+            select2.empty()
+            select.append("<option limit='false' value='' selected>Select category</option>")
+            select2.append("<option value='' selected>Select entry type</option>")
+
+            for(var i = 0; i<data.allTypes.length;i++){
+                select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
+            }
+
+            for(var i = 0; i<data.allCategories.length;i++){
+                select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre+"</option>")
+            }
+        }
+    });
+}
+
 
 </script>
 {% endblock %}

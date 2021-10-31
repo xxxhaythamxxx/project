@@ -128,7 +128,7 @@ class factType(models.Model):
 
     nombre = models.CharField(max_length=40, verbose_name="Tipo",default='Tipo')
     include = models.BooleanField(default=True,verbose_name="Include")
-    manual = models.BooleanField(default=True,verbose_name="Manual")
+    manual = models.BooleanField(default=False,verbose_name="Manual")
     # models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
     def __str__(self):
         return str(self.nombre)
