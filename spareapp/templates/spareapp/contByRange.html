@@ -6,8 +6,6 @@
 
 {% include "spareapp/contSuperior.html" %}
 
-{{facturesToCollect}}
-
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
@@ -21,9 +19,9 @@
             {% for tab in tableAux %}
             <tr>
                 {% if tab.tabTipo.include == True %}
-                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo dateFrom dateTo %}" {% endif %}>{{tab.tabTipo}}</a></td>
+                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>{{tab.tabTipo}}</a></td>
                 {% else %}
-                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
                 {% endif %}
                 <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
             </tr>

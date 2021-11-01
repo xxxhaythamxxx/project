@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% load static %}
+
 <div class="container mt-5 col-lg-4">
 <form action="" method="POST">
     {% csrf_token %}
@@ -51,7 +53,7 @@
 </div>
 <div class="container mt-2">
 <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Customer: </span>{{factureName.0.refPersona.nombre}}</label>
-<table id="invoice" style="font-size: small;" class="table-bordered invoice table-sortable mt-2 mb-2">
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
     <thead>
         <tr class="color text-white">
             <th class="p-2">Fact #</th>
@@ -104,6 +106,10 @@
 </table>
 </div>
 
+<script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+<script>
+$("#invoice").dragtable()
+</script>
 {% endif %}
 
 {% endblock %}

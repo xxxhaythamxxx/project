@@ -57,6 +57,7 @@ urlpatterns = [
     path("contBase",views.contBase,name="contBase"),
     path("contDay",views.contDay,name="contDay"),
     path("contEntry",views.contEntry,name="contEntry"),
+    # re_path("contType/(?P<val>.*)$?<str:val2>",views.contType,name="contType"),
     path("contType/<str:val>?<str:val2>",views.contType,name="contType"),
     # path("contSpend",views.contSpend,name="contSpend"),
     path("contToPay",views.contToPay,name="contToPay"),

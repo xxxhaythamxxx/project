@@ -36,7 +36,14 @@
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
                 <td class="p-2">${{fac.iva|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
-                <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fac.id %}">Edite</a></td>
+                <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id %}">Edite</a>
+                    {% if fac.pendiente == True %}
+                    {% if fac.refCategory.ingreso == True %}
+                    <a href="{% url 'contCollectFac' fac.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Collect</a></td>
+                    {% else %}
+                    <a href="{% url 'contPayFac' fac.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Pay</a>
+                    {% endif %}
+                    {% endif %}
             </tr>
             {% endfor %}
             <tr>

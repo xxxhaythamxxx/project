@@ -12,11 +12,20 @@
         <form action="" method="POST">
             {% csrf_token %}
             <div class="mb-3">
-                <!-- <label class="form-check mb-2">Facture type</label> -->
-                <input onclick="factTypeFun('entry');" class="form-check-input" id="contFacType1" type="radio" name="contFacType" checked>
-                <label class="form-check-label" for="contFacType1">Entry</label>
-                <input onclick="factTypeFun('spending');" class="form-check-input" id="contFacType2" type="radio" name="contFacType">
-                <label class="form-check-label" for="contFacType2">Spending</label>
+                <label class="form-label" for="contFacType">Facture Type</label>
+                <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
+                    <option value="">Select facture type</option>
+                    {% if facAux.0.refCategory.ingreso == True %}
+                    <option value="entry" selected>Entry</option>
+                    {% else %}
+                    <option value="entry">Entry</option>
+                    {% endif %}
+                    {% if facAux.0.refCategory.egreso == True %}
+                    <option value="spending" selected>Spending</option>
+                    {% else %}
+                    <option value="spending">Spending</option>
+                    {% endif %}
+                </select>
             </div>
             
             <div class="mb-3">
@@ -96,6 +105,7 @@
                 <label class="form-label" for="contNota">Note</label>
                 <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
+            <input id="facId" name="facId" value="{{facAux.0.id}}" type="text" style="display: none;">
             <button class="btn btn-primary" type="submit">Accept</button>
         </form>
     </div>
@@ -149,7 +159,13 @@ $("#formCust").submit(function(e){
     })
 })
 
-function factTypeFun(type){
+$("#contFacType").change(function(){
+    if($(this).val()=="entry"){
+        type="entry"
+    }
+    if($(this).val()=="spending"){
+        type="Spending"
+    }
     $.ajax({
         method: 'GET',
         url: '/factTypeES',
@@ -172,7 +188,7 @@ function factTypeFun(type){
             }
         }
     });
-}
+})
 
 
 </script>
