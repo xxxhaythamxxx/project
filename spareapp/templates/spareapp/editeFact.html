@@ -12,6 +12,10 @@
         <form action="" method="POST">
             {% csrf_token %}
             <div class="mb-3">
+                <label class="form-label" for="searchDateFrom">Change date</label>
+                <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
+            </div>
+            <div class="mb-3">
                 <label class="form-label" for="contFacType">Facture Type</label>
                 <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
                     <option value="">Select facture type</option>
