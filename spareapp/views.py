@@ -3111,18 +3111,6 @@ def contType(request,val,val2):
     
     for fac in allFacturesVal:
 
-        # if fac.refCategory.ingreso == True:
-
-        #     montoTotal = montoTotal + fac.monto
-        #     itbmTotal = itbmTotal + float(fac.iva)
-        #     totalTotal = totalTotal + fac.total
-
-        # else:
-
-        #     montoTotal = montoTotal - fac.monto
-        #     itbmTotal = itbmTotal - float(fac.iva)
-        #     totalTotal = totalTotal - fac.total
-        
         montoTotal = montoTotal + fac.monto
         itbmTotal = itbmTotal + float(fac.iva)
         totalTotal = totalTotal + fac.total
@@ -3161,14 +3149,6 @@ def contTypeTarjeta(request,val,val2):
         if val == "TARJETA VISA":
 
             neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
-            #     interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
-            #     retencionTotal = retencionTotal + float(itbmMonto/2)
-            #     netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
@@ -3177,14 +3157,6 @@ def contTypeTarjeta(request,val,val2):
         else:
 
             neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
-            #     interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
-            #     retencionTotal = retencionTotal + float(itbmMonto/2)
-            #     netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
@@ -3192,18 +3164,6 @@ def contTypeTarjeta(request,val,val2):
 
     for fac in allFacturesVal:
 
-        # if fac.refCategory.ingreso == True:
-
-        #     montoTotal = montoTotal + fac.monto
-        #     itbmTotal = itbmTotal + float(fac.iva)
-        #     totalTotal = totalTotal + fac.total
-        
-        # else:
-
-        #     montoTotal = montoTotal - fac.monto
-        #     itbmTotal = itbmTotal - float(fac.iva)
-        #     totalTotal = totalTotal - fac.total
-        
         montoTotal = montoTotal + fac.monto
         itbmTotal = itbmTotal + float(fac.iva)
         totalTotal = totalTotal + fac.total
@@ -3267,18 +3227,6 @@ def contTypeRange(request,val,val2,val3):
     
     for fac in allFacturesVal:
 
-        # if fac.refCategory.ingreso == True:
-
-        #     montoTotal = montoTotal + fac.monto
-        #     itbmTotal = itbmTotal + float(fac.iva)
-        #     totalTotal = totalTotal + fac.total
-
-        # else:
-
-        #     montoTotal = montoTotal - fac.monto
-        #     itbmTotal = itbmTotal - float(fac.iva)
-        #     totalTotal = totalTotal - fac.total
-        
         montoTotal = montoTotal + fac.monto
         itbmTotal = itbmTotal + float(fac.iva)
         totalTotal = totalTotal + fac.total
@@ -3329,14 +3277,6 @@ def contTypeRangeTarjeta(request,val,val2,val3):
         if val == "TARJETA VISA":
 
             neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
-            #     interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
-            #     retencionTotal = retencionTotal + float(itbmMonto/2)
-            #     netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
@@ -3345,14 +3285,6 @@ def contTypeRangeTarjeta(request,val,val2,val3):
         else:
 
             neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
-            #     interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
-            #     retencionTotal = retencionTotal + float(itbmMonto/2)
-            #     netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
@@ -3360,24 +3292,6 @@ def contTypeRangeTarjeta(request,val,val2,val3):
 
     for fac in allFacturesVal:
 
-        # if fac.refCategory.ingreso == True:
-
-        #     montoTotal = montoTotal + fac.monto
-        #     if fac.monto == fac.total:
-        #         itbmTotal = itbmTotal + float(0)
-        #     else:
-        #         itbmTotal = itbmTotal + float(fac.monto)*0.07
-        #     totalTotal = totalTotal + fac.total
-        
-        # else:
-
-        #     montoTotal = montoTotal - fac.monto
-        #     if fac.monto == fac.total:
-        #         itbmTotal = itbmTotal - float(0)
-        #     else:
-        #         itbmTotal = itbmTotal - float(fac.monto)*0.07
-        #     totalTotal = totalTotal - fac.total
-        
         montoTotal = montoTotal + fac.monto
         if fac.monto == fac.total:
             itbmTotal = itbmTotal + float(0)
@@ -3385,37 +3299,11 @@ def contTypeRangeTarjeta(request,val,val2,val3):
             itbmTotal = itbmTotal + float(fac.monto)*0.07
         totalTotal = totalTotal + fac.total
 
-    # ---------------------------------------
-
-    # for fac in allFacturesVal:
-
-    #     if val == "TARJETA VISA":
-
-    #         itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.0225*1.07),float(float(float(fac.monto)*0.07)/2)]
-
-    #     else:
-
-    #         itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(float(fac.monto)*0.07)/2)]
-
-    # for fac in allFacturesVal:
-
-    #     montoTotal = montoTotal + fac.monto
-    #     itbmTotal = itbmTotal + float(fac.monto)*0.07
-    #     totalTotal = totalTotal + fac.total
-    #     interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
-    #     retencionTotal = retencionTotal + float(float(float(fac.monto)*0.07)/2)
-
-    # # typeDate = val2
-
-    # -----------------------------------------
-
     typeDate = "From "+val2+", to "+val3
 
     dic = {"netoTotal":netoTotal,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contTypeTarjeta.html",dic)
-
-    # pass
 
 def contToCollect(request):
 
@@ -3865,8 +3753,6 @@ def contCollectFac(request,val):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-    # return render(request,"spareapp/contDay.html",dic)
-
 def contPayFac(request,val):
 
     tod = datetime.now().date()
@@ -3878,7 +3764,6 @@ def contPayFac(request,val):
 
         factErase = factura.objects.get(id=val)
         factErase.pendiente = False
-        # factErase.fechaCobrado = tod
         factErase.save()
 
         for ty in allTypes:
@@ -4025,28 +3910,6 @@ def accountStat(request):
         cont = 0
         
         for fac in factureName:
-
-            # if fac.refType.nombre!="MERCANCIA CREDITO POR PAGAR" and fac.refType.nombre!="MERCANCIA CREDITO PAGADO":
-
-            # if fac.refCategory.ingreso and fac.refType.nombre!="FACTURA POR COBRAR":
-
-            #     if fac.refType.nombre=="FACTURA COBRADO":
-
-            #         cont = cont + fac.total
-
-            #     else:
-
-            #         cont = cont
-
-            # if fac.refCategory.egreso or fac.refType.nombre=="FACTURA POR COBRAR":
-
-            #     if fac.refType.nombre!="FACTURA POR COBRAR":
-
-            #         cont = cont
-                
-            #     else:
-
-            #         cont = cont - fac.total
 
         # ----------------------------------------------
             if fac.refCategory.ingreso:
