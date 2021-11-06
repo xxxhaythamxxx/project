@@ -2663,14 +2663,6 @@ def contDay(request):
         # typA.include = False
         typA.manual = False
         typA.save()
-    typeAux = factType.objects.filter(nombre="GASTOS OPERACION")
-    if typeAux:
-        pass
-    else:
-        typA = factType()
-        typA.nombre = "GASTOS OPERACION"
-        typA.manual = False
-        typA.save()
     typeAux = factType.objects.filter(nombre="AJUSTES")
     if typeAux:
         pass
@@ -2786,14 +2778,24 @@ def contDay(request):
     for tab in tableAux:
 
         if tab.tabTipo.include == True:
-        # if tab.tabTipo.nombre != "FACTURA COBRADO" and tab.tabTipo.nombre != "MERCANCIA CREDITO PAGADO" and tab.tabTipo.nombre != "FACTURA POR COBRAR":
 
             contTotal = contTotal + tab.tabTotal
+            
+    facSpending = factura.objects.filter(fechaCreado__date=tod) | factura.objects.filter(fechaCobrado=tod)
+    
+    spendTotal = 0
 
-    dic = {"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    for fac in facSpending:
 
-    # for tab in tableAux:
-    #     print(tab.tabTipo)
+        # if fac.refCategory.ingreso:
+
+        #     spendTotal = spendTotal + fac.total
+
+        if fac.refCategory.egreso and fac.refType.nombre != "MERCANCIA CREDITO POR PAGAR":
+
+            spendTotal = spendTotal + fac.total
+
+    dic = {"spendTotal":spendTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
 
@@ -2805,8 +2807,12 @@ def contEntry(request):
     allCategoriesEntry = factCategory.objects.filter(ingreso=True).order_by("nombre")
     allCategoriesSpending = factCategory.objects.filter(egreso=True).order_by("nombre")
     allCustomers = persona.objects.all()
+    tod = datetime.now().date()
+    deadlineDefault=(datetime.now()+timedelta(days=30)).date()
+    actual=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+    print(actual)
 
-    dic = {"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
+    dic = {"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
 
     if request.method == "POST":
 
@@ -2874,11 +2880,11 @@ def contEntry(request):
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
                 for fac in allFacturesCash:
-                    # if fac.refCategory.ingreso == True:
-                    #     acum = acum + fac.total
-                    # else:
-                    #     acum = acum - fac.total
-                    acum = acum + fac.total
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                        # acum = acum + fac.total
                 tableAuxType.tabTotal = float(acum)
 
                 if ty.nombre == "FACTURA POR COBRAR":
@@ -2924,7 +2930,13 @@ def contEntry(request):
                         retencion = float(itbm/2)
                         interes = float(fac.total)*0.0225*1.07
 
-                        acum = acum + (fac.total)
+                        if fac.refCategory.ingreso == True:
+
+                            acum = acum + (fac.total)
+                        
+                        else:
+
+                            acum = acum - (fac.total)
 
                     tableAuxType.tabTotal = float(acum)
                 
@@ -2951,11 +2963,12 @@ def contEntry(request):
                         retencion = float(itbm/2)
                         interes = float(fac.total)*0.02*1.07
 
+                        if fac.refCategory.ingreso == True:
+                            acum = acum + (fac.total)
+                        else:
+                            acum = acum - (fac.total)
                         # if fac.refCategory.ingreso == True:
                         #     acum = acum + (fac.total)
-                        # else:
-                        #     acum = acum - (fac.total)
-                        acum = acum + (fac.total)
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -2978,11 +2991,11 @@ def contEntry(request):
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
                 for fac in allFacturesCash:
-                    # if fac.refCategory.ingreso == True:
-                    #     acum = acum + fac.total
-                    # else:
-                    #     acum = acum - fac.total
-                    acum = acum + fac.total
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                        # acum = acum + fac.total
                 tableAuxType.tabTotal = float(acum)
 
                 if ty.nombre == "FACTURA POR COBRAR":
@@ -3066,7 +3079,7 @@ def contEntry(request):
 
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-        dic = {"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
+        dic = {"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
     return render(request,"spareapp/contEntry.html",dic)
 
@@ -3111,9 +3124,17 @@ def contType(request,val,val2):
     
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        itbmTotal = itbmTotal + float(fac.iva)
-        totalTotal = totalTotal + fac.total
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            itbmTotal = itbmTotal + float(fac.iva)
+            totalTotal = totalTotal + fac.total
+        
+        else:
+
+            montoTotal = montoTotal - fac.monto
+            itbmTotal = itbmTotal - float(fac.iva)
+            totalTotal = totalTotal - fac.total
 
     typeDate = val2
 
@@ -3149,24 +3170,42 @@ def contTypeTarjeta(request,val,val2):
         if val == "TARJETA VISA":
 
             neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
-            interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
-            retencionTotal = retencionTotal + float(itbmMonto/2)
-            netoTotal = netoTotal + neto
+            if fac.refCategory.ingreso == True:
+                interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
+                retencionTotal = retencionTotal + float(itbmMonto/2)
+                netoTotal = netoTotal + neto
+            else:
+                interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
+                retencionTotal = retencionTotal - float(itbmMonto/2)
+                netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(itbmMonto),float(float(fac.total)*0.0225*1.07),float(float(itbmMonto)/2),float(neto)]
 
         else:
 
             neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
-            interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
-            retencionTotal = retencionTotal + float(itbmMonto/2)
-            netoTotal = netoTotal + neto
+            if fac.refCategory.ingreso == True:
+                interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
+                retencionTotal = retencionTotal + float(itbmMonto/2)
+                netoTotal = netoTotal + neto
+            else:
+                interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
+                retencionTotal = retencionTotal - float(itbmMonto/2)
+                netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(itbmMonto)/2),float(neto)]
 
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        itbmTotal = itbmTotal + float(fac.iva)
-        totalTotal = totalTotal + fac.total
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            itbmTotal = itbmTotal + float(fac.iva)
+            totalTotal = totalTotal + fac.total
+
+        else:
+
+            montoTotal = montoTotal - fac.monto
+            itbmTotal = itbmTotal - float(fac.iva)
+            totalTotal = totalTotal - fac.total
 
     typeDate = val2
 
@@ -3217,19 +3256,29 @@ def contTypeRange(request,val,val2,val3):
 
     for fac in allFacturesVal:
 
-        if fac.monto == fac.total:
+        if fac.refCategory.ingreso == True:
 
-            itbm7[fac.id] = float(0)
+            if fac.monto == fac.total:
 
-        else:
+                itbm7[fac.id] = float(0)
 
-            itbm7[fac.id] = float(fac.monto)*0.07
+            else:
+
+                itbm7[fac.id] = float(fac.monto)*0.07
     
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        itbmTotal = itbmTotal + float(fac.iva)
-        totalTotal = totalTotal + fac.total
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            itbmTotal = itbmTotal + float(fac.iva)
+            totalTotal = totalTotal + fac.total
+        
+        else:
+
+            montoTotal = montoTotal - fac.monto
+            itbmTotal = itbmTotal - float(fac.iva)
+            totalTotal = totalTotal - fac.total
 
     # typeDate = val2
 
@@ -3262,6 +3311,8 @@ def contTypeRangeTarjeta(request,val,val2,val3):
 
     itbm7 = {}
 
+    netoTotal = 0
+
     for fac in allFacturesVal:
 
         if fac.monto == fac.total:
@@ -3271,33 +3322,52 @@ def contTypeRangeTarjeta(request,val,val2,val3):
         else:
 
             itbmMonto = float(fac.monto)*0.07
-        
-        netoTotal = 0
 
         if val == "TARJETA VISA":
 
             neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
-            interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
-            retencionTotal = retencionTotal + float(itbmMonto/2)
-            netoTotal = netoTotal + neto
+            if fac.refCategory.ingreso == True:
+                interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
+                retencionTotal = retencionTotal + float(itbmMonto/2)
+                netoTotal = netoTotal + neto
+            else:
+                interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
+                retencionTotal = retencionTotal - float(itbmMonto/2)
+                netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(itbmMonto),float(float(fac.total)*0.0225*1.07),float(float(itbmMonto)/2),float(neto)]
 
         else:
 
             neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
-            interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
-            retencionTotal = retencionTotal + float(itbmMonto/2)
-            netoTotal = netoTotal + neto
+            if fac.refCategory.ingreso == True:
+                interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
+                retencionTotal = retencionTotal + float(itbmMonto/2)
+                netoTotal = netoTotal + neto
+            else:
+                interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
+                retencionTotal = retencionTotal - float(itbmMonto/2)
+                netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(itbmMonto)/2),float(neto)]
 
     for fac in allFacturesVal:
 
-        montoTotal = montoTotal + fac.monto
-        if fac.monto == fac.total:
-            itbmTotal = itbmTotal + float(0)
+        if fac.refCategory.ingreso == True:
+
+            montoTotal = montoTotal + fac.monto
+            if fac.monto == fac.total:
+                itbmTotal = itbmTotal + float(0)
+            else:
+                itbmTotal = itbmTotal + float(fac.monto)*0.07
+            totalTotal = totalTotal + fac.total
+        
         else:
-            itbmTotal = itbmTotal + float(fac.monto)*0.07
-        totalTotal = totalTotal + fac.total
+
+            montoTotal = montoTotal - fac.monto
+            if fac.monto == fac.total:
+                itbmTotal = itbmTotal - float(0)
+            else:
+                itbmTotal = itbmTotal -float(fac.monto)*0.07
+            totalTotal = totalTotal - fac.total
 
     typeDate = "From "+val2+", to "+val3
 
@@ -4189,7 +4259,7 @@ def editeFact(request,val):
 
         if  tableAux:
 
-            print("Ya hay tabla")
+            print("Ya hay tabla nueva")
 
             allTypes = factType.objects.all().order_by("nombre")
 
@@ -4202,7 +4272,13 @@ def editeFact(request,val):
 
                 for fac in allFacturesCash:
 
-                    acum = acum + fac.total
+                    if fac.refCategory.ingreso == True:
+
+                        acum = acum + fac.total
+                    
+                    else:
+
+                        acum = acum - fac.total
 
                 tableAuxType.tabTotal = float(acum)
 
@@ -4280,7 +4356,7 @@ def editeFact(request,val):
 
         else:
 
-            print("No hay tabla")
+            print("No hay tabla nueva")
 
             allTypes = factType.objects.all().order_by("nombre")
 
@@ -4295,7 +4371,13 @@ def editeFact(request,val):
 
                 for fac in allFacturesCash:
 
-                    acum = acum + fac.total
+                    if fac.refCategory.ingreso == True:
+
+                        acum = acum + fac.total
+                    
+                    else:
+
+                        acum = acum - fac.total
                     
                 tableAuxType.tabTotal = float(acum)
 
@@ -4350,7 +4432,7 @@ def editeFact(request,val):
                 
                 if ty.nombre == "TARJETA CLAVE":
 
-                    allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+                    allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty.nombre).order_by("fechaCreado")
 
                     acum = 0
 
@@ -4375,6 +4457,13 @@ def editeFact(request,val):
                     tableAuxType.tabTotal = float(acum)
                 
                 tableAuxType.save()
+
+                # tableAux.save()
+                tableChange = mainTable.objects.get(id=tableAuxType.id)
+                tableChange.fecha=tod
+                tableChange.save()
+
+                # tableAuxType.fecha=tod
 
         # Fin fecha nueva ---------------------------------------------------------
 
@@ -4385,20 +4474,24 @@ def editeFact(request,val):
 
         if  tableAux:
 
-            print("Ya hay tabla")
-
             allTypes = factType.objects.all().order_by("nombre")
 
             for ty in allTypes:
 
-                tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
+                tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty.nombre)
 
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
 
                 for fac in allFacturesCash:
 
-                    acum = acum + fac.total
+                    if fac.refCategory.ingreso == True:
+
+                        acum = acum + fac.total
+
+                    else:
+
+                        acum = acum - fac.total
 
                 tableAuxType.tabTotal = float(acum)
 
@@ -4445,7 +4538,13 @@ def editeFact(request,val):
                         retencion = float(itbm/2)
                         interes = float(fac.total)*0.0225*1.07
 
-                        acum = acum + (fac.total)
+                        if fac.refCategory.ingreso == True:
+
+                            acum = acum + (fac.total)
+                        
+                        else:
+
+                            acum = acum - (fac.total)
 
                     tableAuxType.tabTotal = float(acum)
                 
@@ -4468,7 +4567,13 @@ def editeFact(request,val):
                         retencion = float(itbm/2)
                         interes = float(fac.total)*0.02*1.07
 
-                        acum = acum + (fac.total)
+                        if fac.refCategory.ingreso == True:
+
+                            acum = acum + (fac.total)
+                        
+                        else:
+
+                            acum = acum - (fac.total)
 
                     tableAuxType.tabTotal = float(acum)
 
@@ -4491,7 +4596,13 @@ def editeFact(request,val):
 
                 for fac in allFacturesCash:
 
-                    acum = acum + fac.total
+                    if fac.refCategory.ingreso == True:
+
+                        acum = acum + fac.total
+
+                    else:
+
+                        acum = acum - fac.total
                     
                 tableAuxType.tabTotal = float(acum)
 
@@ -4794,3 +4905,187 @@ def factTypeES(request):
     # <label class="form-check-label" for="contFacType1">Entry</label>
     # <input onclick="factTypeFun('spending');" class="form-check-input" id="contFacType2" type="radio" name="contFacType">
     # <label class="form-check-label" for="contFacType2">Spending</label>
+
+
+
+
+# CONTDAY ANTES DE SEPARAR EN DOS TABLAS
+
+# {% extends "spareapp/contBase.html" %}
+
+# {% block title %} Day {% endblock %}
+
+# {% block content %}
+
+# {% include "spareapp/contSuperior.html" %}
+
+# <form method="POST" action="">
+# {% csrf_token %}
+# <div class="container mt-2">
+#     <table style="font-size: small;" class="table-bordered invoice">
+#         <thead>
+#             <tr class="color text-white">
+#                 <th class="p-2">Type</th>
+#                 <th class="p-2">Total Remanining</th>
+#             </tr>
+#         </thead>
+
+#         <tbody>
+
+#             {% if tableAux and editPrueba == False %}
+
+#                 {% for tab in tableAux %}
+#                 <tr>
+#                     {% if tab.tabTipo.include == True %}
+#                     <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>{{tab.tabTipo}}</a></td>
+#                     {% else %}
+#                     <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+#                     {% endif %}
+#                     <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+#                 </tr>
+#                 {% endfor %}
+                
+#                 <tr>
+#                     <td class="p-2 color text-white">Total</td>
+#                     <td class="p-2">${{contTotal|floatformat:2}}</td>
+#                 </tr>
+
+#                 <!-- <tr>
+#                     <td class="p-2 color text-white">Spending total</td>
+#                     <td class="p-2">${{spendTotal|floatformat:2}}</td>
+#                 </tr> -->
+
+#             {% else %}
+
+#                 {% if editPrueba == True %}
+
+#                     {% for tab in tableAux %}
+#                     <tr>
+#                         {% if tod %}
+#                         <td class="p-2"><a href="{% url 'contType' tab.tabTipo tod %}">{{tab.tabTipo}}</a></td>
+#                         {% else %}
+#                         <td class="p-2"><a href="{% url 'contType' tab.tabTipo 'today' %}">{{tab.tabTipo}}</a></td>
+#                         {% endif %}
+#                         {% if tab.tabTipo.manual == True %}
+#                         <td class="p-2">$<input value="{{tab.tabTotal}}" id="{{tab.tabTipo.nombre|cut:' '}}Total" name="{{tab.tabTipo.nombre|cut:' '}}Total" type="number"></td>
+#                         {% else %}
+#                         <td class="p-2">$ {{tab.tabTotal|floatformat:2}}</td>
+#                         {% endif %}
+#                     </tr>
+#                     {% endfor %}
+#                     <tr>
+#                         <td class="p-2 color text-white">Total</td>
+#                         <td class="p-2">${{contTotal|floatformat:2}}</td>
+#                     </tr>
+
+#                 {% else %}
+
+#                     {% for tab in allTypes %}
+#                     <tr>
+#                         {% if tab.include == True %}
+#                         <td class="p-2"><a href="">{{tab.nombre}}</a></td>
+#                         {% else %}
+#                         <td class="p-2"><a href="">(  {{tab.nombre}}  )</a></td>
+#                         {% endif %}
+#                         {% if tab.manual == True %}
+#                         <td class="p-2">$<input id="{{tab.nombre|cut:' '}}Total" name="{{tab.nombre|cut:' '}}Total" type="number"></td>
+#                         {% else %}
+#                         <td class="p-2">$ 0.00</td>
+#                         {% endif %}
+#                     </tr>
+#                     {% endfor %}
+#                     <tr>
+#                         <td class="p-2 color text-white">Total</td>
+#                         <td class="p-2">$ 0.00</td>
+#                     </tr>
+
+#                 {% endif %}
+
+#             {% endif %}
+
+#         </tbody>
+#     </table>
+# </div>
+
+
+
+# <div class="container mt-2">
+#     <table style="font-size: small;" class="table-bordered invoice">
+        
+
+#         <tbody>
+
+#             {% if tableAux and editPrueba == False %}
+
+#                 {% for tab in tableAux %}
+#                 <tr>
+#                     {% if tab.tabTipo.include == False %}
+#                     <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+#                     <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+#                     {% endif %}
+#                 </tr>
+#                 {% endfor %}
+                
+#                 <tr>
+#                     <td class="p-2 color text-white">Total</td>
+#                     <td class="p-2">${{contTotal|floatformat:2}}</td>
+#                 </tr>
+
+#                 <!-- <tr>
+#                     <td class="p-2 color text-white">Spending total</td>
+#                     <td class="p-2">${{spendTotal|floatformat:2}}</td>
+#                 </tr> -->
+
+#             {% else %}
+
+#                 {% if editPrueba == True %}
+
+#                     {% for tab in tableAux %}
+#                     <tr>
+#                         {% if tod %}
+#                         <td class="p-2"><a href="{% url 'contType' tab.tabTipo tod %}">{{tab.tabTipo}}</a></td>
+#                         {% else %}
+#                         <td class="p-2"><a href="{% url 'contType' tab.tabTipo 'today' %}">{{tab.tabTipo}}</a></td>
+#                         {% endif %}
+#                         {% if tab.tabTipo.manual == True %}
+#                         <td class="p-2">$<input value="{{tab.tabTotal}}" id="{{tab.tabTipo.nombre|cut:' '}}Total" name="{{tab.tabTipo.nombre|cut:' '}}Total" type="number"></td>
+#                         {% else %}
+#                         <td class="p-2">$ {{tab.tabTotal|floatformat:2}}</td>
+#                         {% endif %}
+#                     </tr>
+#                     {% endfor %}
+#                     <tr>
+#                         <td class="p-2 color text-white">Total</td>
+#                         <td class="p-2">${{contTotal|floatformat:2}}</td>
+#                     </tr>
+
+#                 {% else %}
+
+#                     {% for tab in allTypes %}
+#                     <tr>
+#                         {% if tab.include == False %}
+#                         <td class="p-2"><a href="">(  {{tab.nombre}}  )</a></td>
+                        
+#                         {% if tab.manual == True %}
+#                         <td class="p-2">$<input id="{{tab.nombre|cut:' '}}Total" name="{{tab.nombre|cut:' '}}Total" type="number"></td>
+#                         {% else %}
+#                         <td class="p-2">$ 0.00</td>
+#                         {% endif %}
+#                         {% endif %}
+#                     </tr>
+#                     {% endfor %}
+#                     <tr>
+#                         <td class="p-2 color text-white">Total</td>
+#                         <td class="p-2">$ 0.00</td>
+#                     </tr>
+
+#                 {% endif %}
+
+#             {% endif %}
+
+#         </tbody>
+#     </table>
+# </div>
+# </form>
+
+# {% endblock %}

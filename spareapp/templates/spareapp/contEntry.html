@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container mt-5 col-lg-12 d-flex justify-content-center">
-    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">New facture</span></label>
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Nueva factura</span></label>
 </div>
 <div class="d-flex justify-content-center">
     <div class="container mt-3 col-lg-4">
@@ -13,9 +13,9 @@
             {% csrf_token %}
 
             <div class="mb-3">
-                <label class="form-label" for="contFacType">Facture Type</label>
+                <label class="form-label" for="contFacType">Tipo de factura</label>
                 <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
-                    <option value="">Select facture type</option>
+                    <option value="">Seleccione tipo de factura</option>
                     <option value="entry">Entry</option>
                     <option value="spending">Spending</option>
                 </select>
@@ -23,9 +23,9 @@
             <div class="mb-3">
                 <div class="row">
                     <div class="col-lg-11">
-                        <label class="form-label" for="contNombre">Customer</label>
+                        <label class="form-label" for="contNombre">Cliente</label>
                         <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example">
-                            <option value="" selected>Select customer</option>
+                            <option value="" selected>Seleccione cliente</option>
                             {% for cust in allCustomers %}
                             <option value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
                             {% endfor %}
@@ -44,33 +44,33 @@
             </div>
             
             <div class="mb-3">
-                <label class="form-label" for="contNumFac"># Facture</label>
+                <label class="form-label" for="contNumFac">Número de factura</label>
                 <input class="form-control" id="contNumFac" type="text" name="contNumFac">
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contTypeIng">Entry type</label>
+                <label class="form-label" for="contTypeIng">Tipo de pago</label>
                 <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
-                    <option value="" selected>Select entry type</option>
+                    <option value="" selected>Seleccione tipo de pago</option>
                     {% for type in allTypes %}
                     <option value="{{type.id}}">{{type.nombre}}</option>
                     {% endfor %}
                 </select>
             </div>
             <div id="categoryEntry" class="mb-3">
-                <label class="form-label" for="contCatIng">Category</label>
+                <label class="form-label" for="contCatIng">Categoría</label>
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
-                    <option limit="false" value="" selected>Select category</option>
+                    <option limit="false" value="" selected>Seleccione categoría</option>
                     {% for category in allCategories %}
                     <option limit="{{category.limite}}" value="{{category.id}}">{{category.nombre}}</option>
                     {% endfor %}
                 </select>
             </div>
             <div id="divFechaTope" class="mb-3" style="display: none;">
-                <label class="form-label" for="contFechaTope">Deadline</label>
-                <input class="form-control" id="contFechaTope" type="date" name="contFechaTope">
+                <label class="form-label" for="contFechaTope">Fecha límite</label>
+                <input value="{{actual}}" class="form-control" id="contFechaTope" type="date" name="contFechaTope">
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contMonto">Amount</label>
+                <label class="form-label" for="contMonto">Sub total</label>
                 <input class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
             </div>
             <div class="mb-3">
@@ -82,10 +82,10 @@
                 <input class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contNota">Note</label>
+                <label class="form-label" for="contNota">Nota</label>
                 <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
-            <button class="btn btn-primary" type="submit">Accept</button>
+            <button class="btn btn-primary" type="submit">Aceptar</button>
         </form>
     </div>
 </div>

@@ -39,7 +39,7 @@
                 <td class="p-2">${{facture.monto|floatformat:2}}</td>
                 <td class="p-2">{{facture.iva|floatformat:2}}</td>
                 <td class="p-2">${{facture.total|floatformat:2}}</td>
-                <td class="p-2"><a href="{% url 'contCollectFac' facture.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Collect</a></td>
+                <td class="p-2"><a href="{% url 'contCollectFac' facture.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Cobrar</a></td>
             </tr>
             {% endfor %}
             

@@ -14,34 +14,35 @@
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
             <tr class="color text-white">
-                <th class="p-2">Type</th>
-                <th class="p-2">Total Remanining</th>
+                <th class="p-2">Tipo de pago</th>
+                <th class="p-2">Total</th>
             </tr>
         </thead>
 
         <tbody>
 
             {% for tab in tableAux %}
-            {% if tableAux and editPrueba == False %}
+            {% if tableAux %}
             <tr>
                 {% if tab.tabTipo.include == True %}
                 <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>{{tab.tabTipo}}</a></td>
-                {% else %}
-                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
-                {% endif %}
                 <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
-            </tr>
-            {% else %}
-                {% if editPrueba == True %}
-                <tr>
-                    <td class="p-2"><a href="{% url 'contType' tab.tabTipo|cut:'/' tod %}">{{tab.tabTipo}}</a></td>
-                    {% if tab.tabTipo.manual == True %}
-                    <td class="p-2">$<input value="{{tab.tabTotal}}" id="{{tab.tabTipo.nombre|cut:' '|cut:'/'}}Total" name="{{tab.tabTipo.nombre|cut:' '|cut:'/'}}Total" type="number"></td>
-                    {% else %}
-                    <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
-                    {% endif %}
-                </tr>
                 {% endif %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <td class="p-2 color text-white">Total</td>
+                <td class="p-2">${{contTotal|floatformat:2}}</td>
+            </tr>
+            {% for tab in tableAux %}
+            {% if tableAux %}
+            <tr>
+                {% if tab.tabTipo.include == False %}
+                <td class="p-2"><a {% if tab.tabTipo.nombre == "TARJETA VISA" or tab.tabTipo.nombre == "TARJETA CLAVE" %} href="{% url 'contTypeTarjeta' tab.tabTipo tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                {% endif %}
+            </tr>
             {% endif %}
             {% endfor %}
             <tr>
@@ -52,13 +53,7 @@
         </tbody>
     </table>
 </div>
-<!-- <div class="container mt-2 d-flex justify-content-end">
-    {% if tableAux and editPrueba == False %}
-    <button value="submit" id="adjustButton" name="adjustButton" class="btn btn-secondary" type="submit">Adjust</button>
-    {% else %}
-    <button value="submit" id="acceptButton" name="acceptButton" class="btn btn-primary" type="submit">Accept</button>
-    {% endif %}
-</div> -->
+
 </form>
 
 {% endblock %}

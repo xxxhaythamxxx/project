@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container mt-5 col-lg-12 d-flex justify-content-center">
-    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Edite Factura</span></label>
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Editar factura</span></label>
 </div>
 <div class="d-flex justify-content-center">
     <div class="container mt-3 col-lg-4">
@@ -16,9 +16,9 @@
                 <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contFacType">Facture Type</label>
+                <label class="form-label" for="contFacType">Tipo de factura</label>
                 <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
-                    <option value="">Select facture type</option>
+                    <option value="">Seleccione tipo de factura</option>
                     {% if facAux.0.refCategory.ingreso == True %}
                     <option value="entry" selected>Entry</option>
                     {% else %}
@@ -35,9 +35,9 @@
             <div class="mb-3">
                 <div class="row">
                     <div class="col-lg-11">
-                        <label class="form-label" for="contNombre">Customer</label>
+                        <label class="form-label" for="contNombre">Cliente</label>
                         <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example">
-                            <option value="">Select customer</option>
+                            <option value="">Seleccione cliente</option>
                             {% for cust in allCustomers %}
                             {% if cust.nombre == facAux.0.refPersona.nombre %} 
                             <option value="{{cust.id}}" selected>{{cust.nombre}} - {{cust.documento}}</option>
@@ -60,13 +60,13 @@
             </div>
             
             <div class="mb-3">
-                <label class="form-label" for="contNumFac"># Facture</label>
+                <label class="form-label" for="contNumFac">Número de factura</label>
                 <input value="{{facAux.0.num}}" class="form-control" id="contNumFac" type="text" name="contNumFac" required>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contTypeIng">Type</label>
+                <label class="form-label" for="contTypeIng">Tipo de pago</label>
                 <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
-                    <option value="">Select entry type</option>
+                    <option value="">Seleccione tipo de pago</option>
                     {% for type in allTypes %}
                     {% if type.nombre == facAux.0.refType.nombre %}
                     <option value="{{type.nombre}}" selected>{{type.nombre}}</option>
@@ -77,9 +77,9 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contCatIng">Category</label>
+                <label class="form-label" for="contCatIng">Categoría</label>
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
-                    <option value="">Select category</option>
+                    <option value="">Seleccione categoría</option>
                     {% for category in allCategories %}
                     {% if category.nombre == facAux.0.refCategory.nombre %}
                     <option limit="{{category.limite}}" value="{{category.nombre}}" selected>{{category.nombre}}</option>
@@ -90,11 +90,11 @@
                 </select>
             </div>
             <div id="divFechaTope" class="mb-3" style="display: none;">
-                <label class="form-label" for="contFechaTope">Deadline</label>
+                <label class="form-label" for="contFechaTope">Fecha límite</label>
                 <input class="form-control" id="contFechaTope" type="date" name="contFechaTope">
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contMonto">Amount</label>
+                <label class="form-label" for="contMonto">Sub total</label>
                 <input value="{{facAux.0.monto}}" class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
             </div>
             <div class="mb-3">
@@ -106,11 +106,11 @@
                 <input value="{{facAux.0.total}}" class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contNota">Note</label>
+                <label class="form-label" for="contNota">Nota</label>
                 <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
             <input id="facId" name="facId" value="{{facAux.0.id}}" type="text" style="display: none;">
-            <button class="btn btn-primary" type="submit">Accept</button>
+            <button class="btn btn-primary" type="submit">Aceptar</button>
         </form>
     </div>
 </div>

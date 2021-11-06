@@ -3,12 +3,12 @@
     <body>
         
         {% if tod %}
-        <div class="container mt-2">Day: {{tod}}</div>
+        <div class="container mt-2">Día: {{tod}}</div>
         {% else %}
             {% if dateFrom %}
-            <div class="container mt-2">From: {{dateFrom}}, to: {{dateTo}}</div>
+            <div class="container mt-2">Desde: {{dateFrom}}, hasta: {{dateTo}}</div>
             {% else %}
-            <div class="container mt-2">Today: {% now "Y-m-d" %}</div>
+            <div class="container mt-2">Hoy: {% now "Y-m-d" %}</div>
             {% endif %}
         {% endif %}
 
@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="col-lg-1 d-flex align-items-center mt-2">
-                            <button type="submit" class="btn btn-danger" style="font-size: small;" href="">Search</button>
+                            <button type="submit" class="btn btn-danger" style="font-size: small;" href="">Buscar</button>
                         </div>
                     </div>
                 </form>
@@ -45,31 +45,31 @@
                             </div>
                         </div>
                         <div class="col-lg-1 d-flex align-items-center mt-2">
-                            <button type="submit" class="btn btn-danger" style="font-size: small;" href="">Search</button>
+                            <button type="submit" class="btn btn-danger" style="font-size: small;" href="">Buscar</button>
                         </div>
                     </div>
                 </form>
                 <div class="col-lg-6">
-                    <a href="{% url 'contEntry' %}" style="font-size: small;" class="btn btn-primary">Facture</a>
-                    <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-primary">Account Stat</a>
+                    <a href="{% url 'contEntry' %}" style="font-size: small;" class="btn btn-primary">Agregar</a>
+                    <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-primary">Estado de cuenta</a>
 
-                    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: small;">Search</a>
+                    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: small;">Buscar</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a onClick="functionByThisMonth()" id="thisMonth" class="dropdown-item" href="{% url 'contThisMonth' %}">This month</a></li>
-                        <li><a onClick="functionByLastMonth()" id="lastMonth" class="dropdown-item" href="{% url 'contLastMonth' %}">Last month</a></li>
-                        <li><a onClick="functionByDay()" id="byDay" class="dropdown-item" href="#">By day</a></li>
-                        <li><a onClick="functionByRange()" id="byRange" class="dropdown-item" href="#">By range</a></li>
+                        <li><a onClick="functionByThisMonth()" id="thisMonth" class="dropdown-item" href="{% url 'contThisMonth' %}">Mes actual</a></li>
+                        <li><a onClick="functionByLastMonth()" id="lastMonth" class="dropdown-item" href="{% url 'contLastMonth' %}">Mes pasado</a></li>
+                        <li><a onClick="functionByDay()" id="byDay" class="dropdown-item" href="#">Por día</a></li>
+                        <li><a onClick="functionByRange()" id="byRange" class="dropdown-item" href="#">Por rango</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div>
                         <a href="{% url 'contToCollect' %}" style="font-size: small;" type="button" class="btn btn-primary">
-                            To Collect<span class="badge bg-secondary">{{facturesToCollect}}</span>
+                            Facturas por cobrar<span class="badge bg-secondary">{{facturesToCollect}}</span>
                         </a>
                     </div>
                     <div class="px-1">
                         <a href="{% url 'contToPay' %}" style="font-size: small;" type="button" class="btn btn-primary">
-                            To Pay<span class="badge bg-secondary">{{facturesToPay}}</span>
+                            Facturas por pagar<span class="badge bg-secondary">{{facturesToPay}}</span>
                         </a>
                     </div>
                     

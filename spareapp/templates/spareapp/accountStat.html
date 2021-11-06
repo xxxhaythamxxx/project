@@ -76,7 +76,7 @@
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refPersona.nombre}}</td>
             <td class="p-2">{{fact.refType.nombre}}</td>
-            <td style="max-width: 100px;" class="p-2">{{fact.note}}</td>
+            <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2">{{fact.refCategory.nombre}}</td>
 
             {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" %}
