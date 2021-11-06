@@ -14,44 +14,62 @@ $("#search5").click(function(){
     $("#formByRange").hide()
 })
 
-$("#contCatIng").change(function(){
-    if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
-        $("#divFechaTope").show()
-    }
-    else{
-        $("#divFechaTope").hide()
-    }
-})
+// $("#contCatIng").change(function(){
+//     if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
+//         $("#divFechaTope").show()
+//         $("#contTypeIng option").each(function(){
+//             $(this).hide()
+//         })
+//     }
+//     else{
+//         $("#divFechaTope").hide()
+//         $("#contTypeIng option").each(function(){
+//             $(this).show()
+//         })
+//     }
+// })
 
-$("#contTypeIng").change(function(){
-    if ($(this).find("option:selected").text()=="FACTURA POR COBRAR" || $(this).find("option:selected").text()=="MERCANCIA CREDITO POR PAGAR"){
-        $("#contCatIng").find("option").each(function(){
-            if ($(this).attr("limit").toLowerCase() == "true" || $(this).text().toLowerCase() == "select category"){
-                $(this).show()
-            }
-            else{
-                $(this).hide()
-            }
-            if($(this).text().toLowerCase() == "select category"){
-                $(this).prop("selected",true)
-            }
-        })
-    }
-    else{
-        $("#contCatIng").find("option").each(function(){
-            if ($(this).attr("limit").toLowerCase() == "false"){
-                $(this).show()
-            }
-            else{
-                $(this).hide()
-            }
-            if($(this).text().toLowerCase() == "select category"){
-                $(this).prop("selected",true)
-            }
-        })
-        $("#divFechaTope").hide()
-    }
-})
+// $("#contCatIng").find("option").each(function(){
+//     if ($(this).attr("limit").toLowerCase() == "true" || $(this).text().toLowerCase() == "seleccione categoría"){
+//         $(this).show()
+//     }
+//     else{
+//         $(this).hide()
+//     }
+//     if($(this).text().toLowerCase() == "seleccione categoría"){
+//         $(this).prop("selected",true)
+//     }
+// })
+
+// $("#contTypeIng").change(function(){
+//     if ($(this).find("option:selected").text()=="FACTURA POR COBRAR" || $(this).find("option:selected").text()=="MERCANCIA CREDITO POR PAGAR"){
+//         $("#contCatIng").find("option").each(function(){
+//             if ($(this).attr("limit").toLowerCase() == "true" || $(this).text().toLowerCase() == "select category"){
+//                 $(this).show()
+//             }
+//             else{
+//                 $(this).hide()
+//             }
+//             if($(this).text().toLowerCase() == "select category"){
+//                 $(this).prop("selected",true)
+//             }
+//         })
+//     }
+//     else{
+//         $("#contCatIng").find("option").each(function(){
+//             if ($(this).attr("limit").toLowerCase() == "false"){
+//                 $(this).show()
+//             }
+//             else{
+//                 $(this).hide()
+//             }
+//             if($(this).text().toLowerCase() == "select category"){
+//                 $(this).prop("selected",true)
+//             }
+//         })
+//         $("#divFechaTope").hide()
+//     }
+// })
 
 function functionByDay(){
     $("#formByDay").show()

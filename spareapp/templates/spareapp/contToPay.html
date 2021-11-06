@@ -5,22 +5,22 @@
 {% block content %}
 
 <div class="container d-flex justify-content-center container mt-5 col-lg-4">
-    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">To Pay</span></label>
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Por pagar</span></label>
 </div>
 
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
             <tr class="color text-white">
-                <th class="p-2"># Facture</th>
-                <th class="p-2">Name</th>
-                <th class="p-2">Category</th>
-                <th class="p-2">Registration date</th>
-                <th class="p-2">Deadline</th>
-                <th class="p-2">Amount</th>
+                <th class="p-2"># Factura</th>
+                <th class="p-2">Nombre</th>
+                <th class="p-2">Categoría</th>
+                <th class="p-2">Fecha de registro</th>
+                <th class="p-2">Límite</th>
+                <th class="p-2">Sub total</th>
                 <th class="p-2">IVA</th>
                 <th class="p-2">Total</th>
-                <th class="p-2">Action</th>
+                <th class="p-2">Acción</th>
             </tr>
         </thead>
 
@@ -39,7 +39,33 @@
                 <td class="p-2">${{facture.monto|floatformat:2}}</td>
                 <td class="p-2">{{facture.iva|floatformat:2}}</td>
                 <td class="p-2">${{facture.total|floatformat:2}}</td>
-                <td class="p-2"><a href="{% url 'contPayFac' facture.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Pagar</a></td>
+                <td class="p-2"><a data-bs-toggle="modal" type="button" data-bs-target="#modalPagar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalPagar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Pagar</a></td>
+
+                <div tabindex="-1" id="modalPagar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{facture.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalPagar{{facture.id}}Label">Tipo de pago</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body"> 
+                                <form id="formCust" method="POST" action="{% url 'contPayFac' facture.id %}">
+                                    {% csrf_token %}
+                                    <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
+                                        <option value="" selected>Seleccione tipo de pago</option>
+                                        {% for type in allTypes %}
+                                        <option value="{{type.id}}">{{type.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </form>
+                                
+                            </div>   
+                        </div>
+                    </div>
+                </div> 
+
             </tr>
             {% endfor %}
             
@@ -58,6 +84,7 @@
         </tbody>
     </table>
 </div>
+
 
 
 

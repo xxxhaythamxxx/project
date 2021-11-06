@@ -10,9 +10,9 @@
 <form action="" method="POST">
     {% csrf_token %}
     <div class="mb-3">
-        <label class="form-label" for="contNombre">Customer</label>
+        <label class="form-label" for="contNombre">Cliente</label>
         <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
-            <option value="" selected>Select customer</option>
+            <option value="" selected>Seleccionar cliente</option>
             {% for cust in allCustomers %}
             <option value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
             {% endfor %}
@@ -20,23 +20,23 @@
     </div>
     <div class="mb-3">
         <input value="all" class="form-check-input" id="search1" type="radio" name="search" checked>
-        <label class="form-check-label" for="search1">All</label>
+        <label class="form-check-label" for="search1">Todos</label>
         <input value="month" class="form-check-input" id="search2" type="radio" name="search">
-        <label class="form-check-label" for="search2">This month</label>
+        <label class="form-check-label" for="search2">Éste mes</label>
         <input value="range" class="form-check-input" id="search4" type="radio" name="search">
-        <label class="form-check-label" for="search4">Range</label>
+        <label class="form-check-label" for="search4">Rango</label>
         <input value="balance" class="form-check-input" id="search5" type="radio" name="search">
-        <label class="form-check-label" for="search5">Last balance</label>
+        <label class="form-check-label" for="search5">Último balance</label>
     </div>
     <div class="mb-3" id="formByRange" style="display: none;">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-6">
-                    <label for="searchDateFrom">From</label>
+                    <label for="searchDateFrom">Desde</label>
                     <input name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
                 </div>
                 <div class="col-lg-6">
-                    <label for="searchDateTo">To</label>
+                    <label for="searchDateTo">Hasta</label>
                     <input name="searchDateTo" id="searchDateTo" class="form-control" type="date">
                 </div>
             </div>
@@ -52,16 +52,16 @@
 <a href="#" onClick="generatePDF()" class="btn btn-success">PDF</a>
 </div>
 <div class="container mt-2">
-<label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Customer: </span>{{factureName.0.refPersona.nombre}}</label>
+<label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
     <thead>
         <tr class="color text-white">
             <th class="p-2">Fact #</th>
-            <th class="p-2">Date</th>
-            <th class="p-2">Customer</th>
-            <th class="p-2">Type</th>
-            <th class="p-2">Note</th>
-            <th class="p-2">Category</th>
+            <th class="p-2">Fecha</th>
+            <th class="p-2">Cliente</th>
+            <th class="p-2">Tipo de pago</th>
+            <th class="p-2">Nota</th>
+            <th class="p-2">Categoría</th>
             <th class="p-2">Debito</th>
             <th class="p-2">Credito</th>
             <th class="p-2">Balance</th>
@@ -79,13 +79,13 @@
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2">{{fact.refCategory.nombre}}</td>
 
-            {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" %}
+            {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" or fact.refType.nombre == "MERCANCIA CREDITO POR PAGAR" %}
             <td class="p-2">$0.00</td>
             {% else %}
             <td class="p-2">${{fact.total|floatformat:2}}</td>
             {% endif %}
 
-            {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" %}
+            {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" or fact.refType.nombre == "MERCANCIA CREDITO POR PAGAR" %}
             <td class="p-2">${{fact.total|floatformat:2}}</td>
             {% else %}
             <td class="p-2">$0.00</td>

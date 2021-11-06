@@ -39,9 +39,59 @@
                 <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id %}">Editar</a>
                     {% if fac.pendiente == True %}
                     {% if fac.refCategory.ingreso == True %}
-                    <a href="{% url 'contCollectFac' fac.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Cobrar</a></td>
+
+                    <a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{fac.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{fac.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a>
+                    <div tabindex="-1" id="modalCobrar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{fac.id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalCobrar{{fac.id}}Label">Tipo de pago</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body"> 
+                                    <form id="formCust" method="POST" action="{% url 'contCollectFac' fac.id %}">
+                                        {% csrf_token %}
+                                        <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
+                                            <option value="" selected>Seleccione tipo de pago</option>
+                                            {% for type in allTypes %}
+                                            <option value="{{type.id}}">{{type.nombre}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                    
+                                </div>   
+                            </div>
+                        </div>
+                    </div> 
                     {% else %}
-                    <a href="{% url 'contPayFac' fac.id %}" type="button" style="font-size: small;color: aliceblue;" class="btn btn-danger">Pagar</a>
+
+                    <a data-bs-toggle="modal" type="button" data-bs-target="#modalPagar{{fac.id}}" style="font-size: small;color: aliceblue;" id="modalPagar{{fac.id}}Id" class="btn btn-danger" href="javascript:void(0);">Pagar</a>
+                    <div tabindex="-1" id="modalPagar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{fac.id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPagar{{fac.id}}Label">Tipo de pago</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body"> 
+                                    <form id="formCust" method="POST" action="{% url 'contPayFac' fac.id %}">
+                                        {% csrf_token %}
+                                        <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
+                                            <option value="" selected>Seleccione tipo de pago</option>
+                                            {% for type in allTypes %}
+                                            <option value="{{type.id}}">{{type.nombre}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                    
+                                </div>   
+                            </div>
+                        </div>
+                    </div> 
                     {% endif %}
                     {% endif %}
             </tr>

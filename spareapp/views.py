@@ -2592,6 +2592,24 @@ def contBase(request):
 
 def contDay(request):
 
+    # Lleno las categorias basicas -------------------------------
+    catAux = factCategory.objects.filter(nombre="Factura cobrada")
+    if catAux:
+        pass
+    else:
+        catA = factCategory()
+        catA.nombre = "Factura cobrada"
+        catA.ingreso = True
+        catA.save()
+    catAux = factCategory.objects.filter(nombre="Mercancia credito pagada")
+    if catAux:
+        pass
+    else:
+        catA = factCategory()
+        catA.nombre = "Mercancia credito pagada"
+        catA.egreso = True
+        catA.save()
+
     # Lleno los types basicos -------------------------------
 
     typeAux = factType.objects.filter(nombre="CASH")
@@ -2690,88 +2708,88 @@ def contDay(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    if request.method == "POST":
+    # if request.method == "POST":
 
-        if request.POST.get("acceptButton"):
+    #     if request.POST.get("acceptButton"):
 
-            tablePrueba = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo")
+    #         tablePrueba = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo")
 
-            if tablePrueba:
+    #         if tablePrueba:
 
-                for ty in allTypes:
+    #             for ty in allTypes:
 
-                    tableAux = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
-                    totalAuxType = request.POST.get(str(ty).replace(" ", "")+"Total")
-                    tableAux.tabTipo = ty
+    #                 tableAux = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
+    #                 totalAuxType = request.POST.get(str(ty).replace(" ", "")+"Total")
+    #                 tableAux.tabTipo = ty
 
-                    if totalAuxType == "":
+    #                 if totalAuxType == "":
 
-                        totalAuxType = 0
+    #                     totalAuxType = 0
 
-                    if totalAuxType:
+    #                 if totalAuxType:
 
-                        tableAux.tabTotal = float(totalAuxType)
+    #                     tableAux.tabTotal = float(totalAuxType)
                         
-                    else:
+    #                 else:
 
-                        if ty.nombre == "FACTURA POR COBRAR":
+    #                     if ty.nombre == "FACTURA POR COBRAR":
 
-                            allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+    #                         allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
 
-                            acum2 = 0
+    #                         acum2 = 0
 
-                            for fac in allFacturesPay:
+    #                         for fac in allFacturesPay:
 
-                                acum2 = acum2 + fac.total
+    #                             acum2 = acum2 + fac.total
                             
-                            tableAux.tabTotal = float(acum2)
+    #                         tableAux.tabTotal = float(acum2)
 
-                    tableAux.save()
+    #                 tableAux.save()
 
-                tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+    #             tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-            else:
+    #         else:
 
-                for ty in allTypes:
+    #             for ty in allTypes:
 
-                    tableAux = mainTable()
-                    totalAuxType = request.POST.get(str(ty).replace(" ", "")+"Total")
+    #                 tableAux = mainTable()
+    #                 totalAuxType = request.POST.get(str(ty).replace(" ", "")+"Total")
 
-                    if ty.nombre == "FACTURA POR COBRAR":
+    #                 if ty.nombre == "FACTURA POR COBRAR":
 
-                        allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+    #                     allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
 
-                        acum2 = 0
+    #                     acum2 = 0
 
-                        for fac in allFacturesPay:
+    #                     for fac in allFacturesPay:
 
-                            acum2 = acum2 + fac.total
+    #                         acum2 = acum2 + fac.total
                         
-                        tableAux.tabTotal = float(acum2)
+    #                     tableAux.tabTotal = float(acum2)
 
-                    if totalAuxType == "":
+    #                 if totalAuxType == "":
 
-                        totalAuxType = 0
+    #                     totalAuxType = 0
 
-                    tableAux.tabTipo = ty
+    #                 tableAux.tabTipo = ty
 
-                    if totalAuxType:
+    #                 if totalAuxType:
 
-                        tableAux.tabTotal = float(totalAuxType)
+    #                     tableAux.tabTotal = float(totalAuxType)
 
-                    else:
+    #                 else:
 
-                        tableAux.tabTotal = 0
+    #                     tableAux.tabTotal = 0
 
-                    tableAux.save()
+    #                 tableAux.save()
 
-                tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+    #             tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-        else:
+    #     else:
 
-            tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+    #         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-            editPrueba = True
+    #         editPrueba = True
 
     contTotal = 0
 
@@ -2787,10 +2805,6 @@ def contDay(request):
 
     for fac in facSpending:
 
-        # if fac.refCategory.ingreso:
-
-        #     spendTotal = spendTotal + fac.total
-
         if fac.refCategory.egreso and fac.refType.nombre != "MERCANCIA CREDITO POR PAGAR":
 
             spendTotal = spendTotal + fac.total
@@ -2801,16 +2815,14 @@ def contDay(request):
 
 def contEntry(request):
 
-    allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES")
-    # allCategories = factCategory.objects.all().order_by("nombre")
-    allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
-    allCategoriesEntry = factCategory.objects.filter(ingreso=True).order_by("nombre")
-    allCategoriesSpending = factCategory.objects.filter(egreso=True).order_by("nombre")
+    allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES").exclude(nombre="FACTURA POR COBRAR").exclude(nombre="MERCANCIA CREDITO POR PAGAR")
+    allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+    allCategoriesEntry = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+    allCategoriesSpending = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
     allCustomers = persona.objects.all()
     tod = datetime.now().date()
     deadlineDefault=(datetime.now()+timedelta(days=30)).date()
     actual=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
-    print(actual)
 
     dic = {"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
 
@@ -3085,6 +3097,7 @@ def contEntry(request):
 
 def contType(request,val,val2):
 
+    allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="FACTURA POR COBRAR").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES")
     todos = factType.objects.all()
     tod = datetime.now().date()
     montoTotal = 0
@@ -3138,7 +3151,7 @@ def contType(request,val,val2):
 
     typeDate = val2
 
-    dic = {"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    dic = {"allTypes":allTypes,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contType.html",dic)
 
@@ -3378,6 +3391,7 @@ def contTypeRangeTarjeta(request,val,val2,val3):
 def contToCollect(request):
 
     allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+    allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="FACTURA POR COBRAR").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES")
     
     deadlineDic = {}
 
@@ -3397,13 +3411,14 @@ def contToCollect(request):
 
     tod = datetime.now()
 
-    dic = {"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
+    dic = {"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
 
     return render(request,"spareapp/contToCollect.html",dic)
 
 def contToPay(request):
 
     allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+    allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="FACTURA POR COBRAR").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES")
 
     deadlineDic = {}
 
@@ -3423,7 +3438,7 @@ def contToPay(request):
 
     tod = datetime.now()
 
-    dic = {"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
+    dic = {"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
 
     return render(request,"spareapp/contToPay.html",dic)
 
@@ -3709,21 +3724,23 @@ def contByRange(request):
 
 def contCollectFac(request,val):
 
+    acum = 0
+
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     factAux = factura.objects.filter(id=val)
     tableAux = mainTable.objects.filter(fecha__date=tod)
 
+    typeAux = request.POST.get("contTypeIng")
+    typeAux = factType.objects.get(id=typeAux)
+
     if factAux:
 
         factErase = factura.objects.get(id=val)
         factErase.pendiente = False
-        # factErase.fechaCobrado = tod
         factErase.save()
 
-        # print(factErase.fechaCreado)
         tablePast = mainTable.objects.filter(fecha__date=factErase.fechaCreado)
-        # print(tablePast)
 
         # Borro la factura pendiente en el pasado
         for ty in allTypes:
@@ -3747,9 +3764,10 @@ def contCollectFac(request,val):
         reciboCollect = factura()
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
-        auxType = factType.objects.get(nombre="FACTURA COBRADO")
-        reciboCollect.refType = auxType
-        reciboCollect.refCategory = factErase.refCategory
+        # auxType = factType.objects.get(nombre="FACTURA COBRADO")
+        reciboCollect.refType = typeAux
+        auxCat = factCategory.objects.get(nombre="Factura cobrada")
+        reciboCollect.refCategory = auxCat
         reciboCollect.fechaTope = factErase.fechaTope
         reciboCollect.fechaCobrado = tod
         reciboCollect.iva = factErase.iva
@@ -3760,15 +3778,22 @@ def contCollectFac(request,val):
 
         if tableAux:
 
-            # for tab in tableAux:
-
             for ty in allTypes:
 
                 aux = mainTable.objects.get(tabTipo=ty,fecha__date=tod)
 
+                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                acum = 0
+                for fac in allFacturesCash:
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                aux.tabTotal = float(acum)
+
                 if ty.nombre == "FACTURA COBRADO":
 
-                    aux.tabTotal = aux.tabTotal + factErase.total
+                    aux.tabTotal = aux.tabTotal + reciboCollect.total
 
                 if ty.nombre == "FACTURA POR COBRAR":
 
@@ -3790,6 +3815,15 @@ def contCollectFac(request,val):
 
                 tableNew = mainTable()
                 tableNew.tabTipo = ty
+
+                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                acum = 0
+                for fac in allFacturesCash:
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                tableNew.tabTotal = float(acum)
 
                 if ty.nombre == "FACTURA COBRADO":
 
@@ -3825,10 +3859,15 @@ def contCollectFac(request,val):
 
 def contPayFac(request,val):
 
+    acum = 0
+
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     factAux = factura.objects.filter(id=val)
     tableAux = mainTable.objects.filter(fecha__date=tod)
+
+    typeAux = request.POST.get("contTypeIng")
+    typeAux = factType.objects.get(id=typeAux)
 
     if factAux:
 
@@ -3857,9 +3896,10 @@ def contPayFac(request,val):
         reciboCollect = factura()
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
-        auxType = factType.objects.get(nombre="MERCANCIA CREDITO PAGADO")
-        reciboCollect.refType = auxType
-        reciboCollect.refCategory = factErase.refCategory
+        # auxType = factType.objects.get(nombre="MERCANCIA CREDITO PAGADO")
+        reciboCollect.refType = typeAux
+        auxCat = factCategory.objects.get(nombre="Mercancia credito pagada")
+        reciboCollect.refCategory = auxCat
         reciboCollect.fechaTope = factErase.fechaTope
         reciboCollect.fechaCobrado = tod
         reciboCollect.iva = factErase.iva
@@ -3870,11 +3910,18 @@ def contPayFac(request,val):
 
         if tableAux:
 
-            # for tab in tableAux:
-
             for ty in allTypes:
 
                 aux = mainTable.objects.get(tabTipo=ty,fecha__date=tod)
+
+                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                acum = 0
+                for fac in allFacturesCash:
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                aux.tabTotal = float(acum)
 
                 if ty.nombre == "MERCANCIA CREDITO PAGADO":
 
@@ -3900,6 +3947,15 @@ def contPayFac(request,val):
 
                 tableNew = mainTable()
                 tableNew.tabTipo = ty
+
+                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                acum = 0
+                for fac in allFacturesCash:
+                    if fac.refCategory.ingreso == True:
+                        acum = acum + fac.total
+                    else:
+                        acum = acum - fac.total
+                tableNew.tabTotal = float(acum)
 
                 if ty.nombre == "FACTURA PAGADO":
 
@@ -3990,7 +4046,7 @@ def accountStat(request):
 
                     cont = cont - fac.total
                 
-                if fac.refType.nombre=="FACTURA COBRADO":
+                if fac.refCategory.nombre=="Factura cobrada":
 
                     cont = cont + fac.total
             
@@ -4002,7 +4058,7 @@ def accountStat(request):
 
                     cont = cont + fac.total
                 
-                if fac.refType.nombre=="MERCANCIA CREDITO PAGADO":
+                if fac.refCategory.nombre=="Mercancia credito pagada":
 
                     cont = cont - fac.total
         # ----------------------------------------------
@@ -4853,30 +4909,25 @@ def contIndividual(request,val):
 
 def factTypeES(request):
 
-    # print("Entra a factType")
-
-    # print(request.GET)
-
-    # print(request.GET.get("val"))
+    cobrarPagar = None
 
     if request.GET.get("val") == "entry":
 
-        allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
-        allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES")
+        allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+        allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="MERCANCIA CREDITO POR PAGAR").exclude(nombre="AJUSTES").exclude(nombre="FACTURA POR COBRAR")
+        cobrarPagar = factType.objects.filter(nombre="FACTURA POR COBRAR")
     
     else:
 
-        allCategories = factCategory.objects.filter(egreso=True).order_by("nombre")
-        allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="FACTURA POR COBRAR").exclude(nombre="AJUSTES")
+        allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+        allTypes = factType.objects.all().order_by("nombre").exclude(nombre="FACTURA COBRADO").exclude(nombre="MERCANCIA CREDITO PAGADO").exclude(nombre="FACTURA POR COBRAR").exclude(nombre="AJUSTES").exclude(nombre="MERCANCIA CREDITO POR PAGAR")
+        cobrarPagar = factType.objects.filter(nombre="MERCANCIA CREDITO POR PAGAR")
 
     allCategories = list(allCategories.values())
     allTypes = list(allTypes.values())
+    cobrarPagar = list(cobrarPagar.values())
 
-    # dic = {"allCategories":allCategories}
-
-    # return render(request,"spareapp/contEntry.html",dic)
-
-    return JsonResponse({'allTypes':allTypes,'allCategories': allCategories})
+    return JsonResponse({'cobrarPagar':cobrarPagar,'allTypes':allTypes,'allCategories': allCategories})
 
 
 
