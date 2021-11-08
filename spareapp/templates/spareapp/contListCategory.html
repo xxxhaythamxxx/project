@@ -8,24 +8,27 @@
 
 <div class="row mb-3">
     <div class="container mt-5 col-lg-6 d-flex justify-content-center">
+        <form method="POST" action="">
+        {% csrf_token %}
         <table style="font-size: small;" class="table-bordered ">
             <thead>
                 <tr class="color text-white">
-                    <th class="p-2">Category</th>
-                    <th class="p-2">Entry</th>
-                    <th class="p-2">Spend</th>
-                    <th class="p-2">Expiration</th>
-                    <th class="p-2">Option</th>
+                    <th class="p-2">Categoría</th>
+                    <th class="p-2">Ingreso</th>
+                    <th class="p-2">Gasto</th>
+                    <th class="p-2">Expiración</th>
+                    <th class="p-2">Opcion</th>
                 </tr>
             </thead>
             <tbody>
                 {% for ty in allCategories %}
                 <tr>
-                    <td class="p-2">{{ty.nombre}}</td>
-                    <td class="p-2"><input type="checkbox" {% if ty.ingreso == True %} checked {% else %} '' {% endif %}></td>
-                    <td class="p-2"><input type="checkbox" {% if ty.egreso == True %} checked {% else %} '' {% endif %}></td>
-                    <td class="p-2"><input type="checkbox" {% if ty.limite == True %} checked {% else %} '' {% endif %}></td>
-                    <td class="p-2"><a class="btn btn-success mx-1" href="{% url 'contEditCategory' ty.id %}">Edit</a><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Delete</a></td>
+                    <td class="p-2"><input name="contNom{{ty.id}}" value="{{ty.nombre}}" type="text"></td>
+                    <input value="{{ty.id}}" name="catId" type="text" style="display: none;">
+                    <td class="p-2"><input name="catEntry{{ty.id}}" type="checkbox" {% if ty.ingreso == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="catSpending{{ty.id}}" type="checkbox" {% if ty.egreso == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="catExpiration{{ty.id}}" type="checkbox" {% if ty.limite == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><button class="btn btn-success mx-1" type="submit">Actualizar</button><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
                     <div class="modal fade" id="exampleModal{{ty.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{ty.id}}" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
@@ -47,6 +50,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </form>
     </div>
 </div>
 

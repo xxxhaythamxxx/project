@@ -3449,33 +3449,64 @@ def contListCategory(request):
 
     allCategories = factCategory.objects.all().order_by("nombre")
 
+    if request.method == "POST":
+
+        allCategories = factCategory.objects.all().order_by("nombre")
+
+        for cat in request.POST.getlist("catId"):
+
+            singleCategory = factCategory.objects.get(id=cat)
+
+            if request.POST.get("contNom"+cat):
+
+                singleCategory.nombre = request.POST.get("contNom"+cat)
+
+            if request.POST.get("catEntry"+cat):
+
+                singleCategory.ingreso = True
+                singleCategory.egreso = False
+            
+            else:
+
+                singleCategory.ingreso = False
+                singleCategory.egreso = True
+
+            if request.POST.get("catExpiration"+cat):
+                singleCategory.limite = True
+            else:
+                singleCategory.limite = False
+            
+            singleCategory.save()
+
     dic = {"allCategories":allCategories}
 
     return render(request,"spareapp/contListCategory.html",dic)
 
 def contDeleteType(request,val):
 
-    allTypes = factType.objects.all()
-
     singleType = factType.objects.get(id=val)
 
     singleType.delete()
 
+    allTypes = factType.objects.all()
+
     dic = {"allTypes":allTypes}
 
-    return render(request,"spareapp/contListType.html",dic)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    # return render(request,"spareapp/contListType.html",dic)
 
 def contDeleteCategory(request,val):
-
-    allCategories = factCategory.objects.all().order_by("nombre")
 
     singleCategory = factCategory.objects.get(id=val)
 
     singleCategory.delete()
 
+    allCategories = factCategory.objects.all().order_by("nombre")
+
     dic = {"allCategories":allCategories}
 
-    return render(request,"spareapp/contListCategory.html",dic)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contEditType(request,val):
 
