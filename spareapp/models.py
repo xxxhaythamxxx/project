@@ -149,7 +149,7 @@ class factura(models.Model):
     refPersona = models.ForeignKey(persona,on_delete=CASCADE,verbose_name="Persona",default='Persona')
     refType = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     refCategory = models.ForeignKey(factCategory,on_delete=CASCADE,verbose_name="Category",default='Categoria')
-    fechaCreado = models.DateTimeField(auto_now_add=True,verbose_name="Fecha")
+    fechaCreado = models.DateTimeField(auto_now_add=False,verbose_name="Fecha")
     fechaTope = models.DateField(auto_now=False,auto_now_add=False,verbose_name="Fecha tope",blank=True,null=True)
     fechaCobrado = models.DateField(auto_now=False,auto_now_add=False,verbose_name="Fecha cobrado",blank=True,null=True)
     iva = models.FloatField(verbose_name="Impuesto",blank=True,null=True)
@@ -163,7 +163,7 @@ class factura(models.Model):
     
 class mainTable(models.Model):
 
-    fecha = models.DateTimeField(auto_now_add=True,verbose_name="Fecha")
+    fecha = models.DateTimeField(auto_now_add=False,verbose_name="Fecha")
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     # tabPagos = models.FloatField(verbose_name="Pagos")
     # tabRetiros = models.FloatField(verbose_name="Retiros")

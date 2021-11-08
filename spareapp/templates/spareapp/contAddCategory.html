@@ -11,23 +11,24 @@
         <form action="" method="POST">
             {% csrf_token %}
             <div class="mb-3">
-                <label class="form-label" for="catNombre">Category's name</label>
+                <label class="form-label" for="catNombre">Nombre de la categoría</label>
                 <input class="form-control" id="catNombre" type="text" name="catNombre" required>
             </div>
             <div class="mb-3">
-                <label for="catIngreso">Entry</label>
+                <label for="catIngreso">Ingreso</label>
                 <input id="catIngreso" name="catIngreso" type="checkbox">
             </div>
             <div class="mb-3">
-                <label for="catEgreso">Spend</label>
+                <label for="catEgreso">Gasto</label>
                 <input id="catEgreso" name="catEgreso" type="checkbox">
             </div>
             <div class="mb-3">
-                <label for="catExpirationDate">Has expiration date</label>
+                <label for="catExpirationDate">Tiene fecha de expiración</label>
                 <input id="catExpirationDate" name="catExpirationDate" type="checkbox">
             </div>
             
-            <button class="btn btn-primary" type="submit">Accept</button>
+            <button class="btn btn-primary" type="submit">Aceptar</button>
+            <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>
 </div>

@@ -16,9 +16,13 @@
                 <label class="form-label" for="contFacType">Tipo de factura</label>
                 <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
                     <option value="">Seleccione tipo de factura</option>
-                    <option value="entry">Entry</option>
-                    <option value="spending">Spending</option>
+                    <option value="entry">Ingreso</option>
+                    <option value="spending">Gasto</option>
                 </select>
+            </div>
+            <div id="divFechaCreado" class="mb-3">
+                <label class="form-label" for="contFechaCreado">Fecha</label>
+                <input value="{{actualDay}}" class="form-control" id="contFechaCreado" type="date" name="contFechaCreado">
             </div>
             <div class="mb-3">
                 <div class="row">
@@ -86,7 +90,9 @@
                 <label class="form-label" for="contNota">Nota</label>
                 <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
-            <button class="btn btn-primary" type="submit">Aceptar</button>
+            <button value="otro" name="entryOption" class="btn btn-primary" type="submit">Aceptar</button>
+            <button class="btn btn-primary" type="submit">Aceptar y agregar otra</button>
+            <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>
 </div>
@@ -110,7 +116,7 @@
                         <input class="form-control" id="custId" type="text" name="custId">
                     </div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
                 
             </div>   
