@@ -4912,8 +4912,67 @@ def factTypeES(request):
 
     return JsonResponse({'cobrarPagar':cobrarPagar,'allTypes':allTypes,'allCategories': allCategories})
 
+def contListByType(request,val):
 
+    allTypes = factType.objects.all().order_by("nombre")
 
+    factureName = factura.objects.filter(refType__nombre=val)
+
+    if request.method == "POST":
+
+        val = request.POST.get("contNombre")
+
+        factureName = factura.objects.filter(refType__id=val)
+
+        if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado")
+
+        if request.POST.get("search") == "range":
+
+            dateFrom = request.POST.get("searchDateFrom")
+            dateTo = request.POST.get("searchDateTo")
+
+            if dateFrom and dateTo:
+                
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado")
+
+    dic = {"factureName":factureName,"allTypes":allTypes}
+
+    return render(request,"spareapp/contListByType.html",dic)
+
+def contListByCategory(request,val):
+
+    allCategorys = factCategory.objects.all().order_by("nombre")
+
+    factureName = factura.objects.filter(refCategory__nombre=val)
+
+    if request.method == "POST":
+
+        val = request.POST.get("contNombre")
+
+        factureName = factura.objects.filter(refCategory__id=val)
+
+        if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado")
+
+        if request.POST.get("search") == "range":
+
+            dateFrom = request.POST.get("searchDateFrom")
+            dateTo = request.POST.get("searchDateTo")
+
+            if dateFrom and dateTo:
+                
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado")
+
+    dic = {"factureName":factureName,"allCategorys":allCategorys}
+
+    return render(request,"spareapp/contListByCategory.html",dic)
 
 
 
