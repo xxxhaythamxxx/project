@@ -3441,6 +3441,29 @@ def contListType(request):
 
     allTypes = factType.objects.all().order_by("nombre")
 
+    if request.method == "POST":
+
+        allTypes = factType.objects.all().order_by("nombre")
+
+        for cat in request.POST.getlist("typId"):
+
+            singleType = factType.objects.get(id=cat)
+
+            if request.POST.get("typNom"+cat):
+
+                singleType.nombre = request.POST.get("typNom"+cat)
+
+            if request.POST.get("typInclude"+cat):
+
+                singleType.include = True
+            
+            else:
+
+                singleType.include = False
+
+            singleType.save()
+
+
     dic = {"allTypes":allTypes}
 
     return render(request,"spareapp/contListType.html",dic)
@@ -3493,8 +3516,6 @@ def contDeleteType(request,val):
     dic = {"allTypes":allTypes}
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-    # return render(request,"spareapp/contListType.html",dic)
 
 def contDeleteCategory(request,val):
 
@@ -4224,18 +4245,18 @@ def editeFact(request,val):
             factAux.num = contNumFac
 
         contTypeIng = request.POST.get("contTypeIng")
-        typeAux = factType.objects.get(nombre=contTypeIng)
+        typeAux = factType.objects.get(id=contTypeIng)
         factAux.refType = typeAux
 
         contCatIng = request.POST.get("contCatIng")
-        catAux = factCategory.objects.filter(nombre=contCatIng)
+        catAux = factCategory.objects.filter(id=contCatIng)
         
         # Revisa si la categoria tiene limite
         for cat in catAux:
             if cat.limite == True:
                 factAux.pendiente = True
 
-        catAux = factCategory.objects.get(nombre=contCatIng)
+        catAux = factCategory.objects.get(id=contCatIng)
         factAux.refCategory = catAux
 
         if request.POST.get("contFechaTope") != "":
@@ -4370,6 +4391,7 @@ def editeFact(request,val):
             for ty in allTypes:
 
                 tableAuxType = mainTable()
+                tableAuxType.fecha = tod
                 tableAuxType.tabTipo = ty
                 tableAuxType.tabTotal = 0
 

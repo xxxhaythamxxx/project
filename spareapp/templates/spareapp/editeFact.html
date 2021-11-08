@@ -11,27 +11,27 @@
     <div class="container mt-3 col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label" for="searchDateFrom">Change date</label>
-                <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
-            </div>
+
             <div class="mb-3">
                 <label class="form-label" for="contFacType">Tipo de factura</label>
                 <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
                     <option value="">Seleccione tipo de factura</option>
                     {% if facAux.0.refCategory.ingreso == True %}
-                    <option value="entry" selected>Entry</option>
+                    <option value="entry" selected>Ingreso</option>
                     {% else %}
-                    <option value="entry">Entry</option>
+                    <option value="entry">Ingreso</option>
                     {% endif %}
                     {% if facAux.0.refCategory.egreso == True %}
-                    <option value="spending" selected>Spending</option>
+                    <option value="spending" selected>Gasto</option>
                     {% else %}
-                    <option value="spending">Spending</option>
+                    <option value="spending">Gasto</option>
                     {% endif %}
                 </select>
             </div>
-            
+            <div class="mb-3">
+                <label class="form-label" for="searchDateFrom">Cambiar fecha</label>
+                <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
+            </div>
             <div class="mb-3">
                 <div class="row">
                     <div class="col-lg-11">
@@ -64,19 +64,6 @@
                 <input value="{{facAux.0.num}}" class="form-control" id="contNumFac" type="text" name="contNumFac" required>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="contTypeIng">Tipo de pago</label>
-                <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
-                    <option value="">Seleccione tipo de pago</option>
-                    {% for type in allTypes %}
-                    {% if type.nombre == facAux.0.refType.nombre %}
-                    <option value="{{type.nombre}}" selected>{{type.nombre}}</option>
-                    {% else %}
-                    <option value="{{type.nombre}}">{{type.nombre}}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="mb-3">
                 <label class="form-label" for="contCatIng">Categoría</label>
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
                     <option value="">Seleccione categoría</option>
@@ -85,6 +72,19 @@
                     <option limit="{{category.limite}}" value="{{category.nombre}}" selected>{{category.nombre}}</option>
                     {% else %}
                     <option limit="{{category.limite}}" value="{{category.nombre}}">{{category.nombre}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="contTypeIng">Tipo de pago</label>
+                <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
+                    <option value="">Seleccione tipo de pago</option>
+                    {% for type in allTypes %}
+                    {% if type.nombre == facAux.0.refType.nombre %}
+                    <option value="{{type.nombre}}" selected>{{type.nombre}}</option>
+                    {% else %}
+                    <option value="{{type.nombre}}">{{type.nombre}}</option>
                     {% endif %}
                     {% endfor %}
                 </select>
@@ -119,22 +119,22 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="contNombreModallLabel">Add a customer</h5>
+                <h5 class="modal-title" id="contNombreModallLabel">Agrega un cliente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body"> 
                 <form id="formCust" method="POST" action="{% url 'contAddPerson' %}">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label class="form-label" for="custName">Name</label>
+                        <label class="form-label" for="custName">Nombre</label>
                         <input class="form-control" id="custName" type="text" name="custName" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="custId">Identification</label>
+                        <label class="form-label" for="custId">Identificación</label>
                         <input class="form-control" id="custId" type="text" name="custId" required>
                     </div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
                 
             </div>   
@@ -142,6 +142,24 @@
     </div>
 </div>  
 <script>
+
+CatSelected = ""
+typeSelected = ""
+
+$("#contTypeIng option").each(function(){
+    // alert($(this).text())
+    if ($(this).attr("selected")){
+        // alert($(this).text())
+        typeSelected=$(this).text()
+    }
+})
+
+$("#contCatIng option").each(function(){
+    if ($(this).attr("selected")){
+        // alert($(this).text())
+        CatSelected=$(this).text()
+    }
+})
 
 // Agregar modal Customer
 $("#formCust").submit(function(e){
@@ -163,12 +181,64 @@ $("#formCust").submit(function(e){
     })
 })
 
+$.ajax({
+    method: 'GET',
+    url: '/factTypeES',
+    data: {'val': "entry"},
+    success:function(data){
+
+        select = $("#contCatIng")
+        select2 = $("#contTypeIng")
+        select.empty()
+        select2.empty()
+        select.append("<option limit='false' value=''>Seleccione categoría</option>")
+        // select.append("<option limit='false' value='' selected>Seleccione categoría</option>")
+        select2.append("<option value='' selected>Seleccione tipo de pago</option>")
+        // select2.append("<option value=''>Seleccione tipo de pago</option>")
+
+        for(var i = 0; i<data.allTypes.length;i++){
+            if(data.allTypes[i].nombre==typeSelected){
+                select2.append("<option value="+data.allTypes[i].id+" selected>"+data.allTypes[i].nombre+"</option>")
+            }else{
+                select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
+            }
+        }
+
+        for(var i = 0; i<data.allCategories.length;i++){
+            if(data.allCategories[i].nombre==CatSelected){
+                select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+" selected>"+data.allCategories[i].nombre+"</option>")
+            }else{
+                select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre+"</option>")
+            }
+        }
+
+        $("#contCatIng").change(function(){
+            if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
+                $("#divFechaTope").show()
+                select2.empty()
+                select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre+"</option>")
+            }
+            else{
+                $("#divFechaTope").hide()
+                $("#contTypeIng option").each(function(){
+                    $(this).show()
+                    select2.empty()
+                    select2.append("<option value='' selected>Seleccione tipo de pago</option>")
+                    for(var i = 0; i<data.allTypes.length;i++){
+                        select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
+                    }
+                })
+            }
+        })
+    }
+});
+
 $("#contFacType").change(function(){
     if($(this).val()=="entry"){
         type="entry"
     }
     if($(this).val()=="spending"){
-        type="Spending"
+        type="spending"
     }
     $.ajax({
         method: 'GET',
@@ -180,8 +250,8 @@ $("#contFacType").change(function(){
             select2 = $("#contTypeIng")
             select.empty()
             select2.empty()
-            select.append("<option limit='false' value='' selected>Select category</option>")
-            select2.append("<option value='' selected>Select entry type</option>")
+            select.append("<option limit='false' value='' selected>Seleccione categoría</option>")
+            select2.append("<option value='' selected>Seleccione tipo de pago</option>")
 
             for(var i = 0; i<data.allTypes.length;i++){
                 select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
@@ -190,10 +260,28 @@ $("#contFacType").change(function(){
             for(var i = 0; i<data.allCategories.length;i++){
                 select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre+"</option>")
             }
+
+            $("#contCatIng").change(function(){
+                if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
+                    $("#divFechaTope").show()
+                    select2.empty()
+                    select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre+"</option>")
+                }
+                else{
+                    $("#divFechaTope").hide()
+                    $("#contTypeIng option").each(function(){
+                        $(this).show()
+                        select2.empty()
+                        select2.append("<option value='' selected>Seleccione tipo de pago</option>")
+                        for(var i = 0; i<data.allTypes.length;i++){
+                            select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
+                        }
+                    })
+                }
+            })
         }
     });
 })
-
 
 </script>
 {% endblock %}
