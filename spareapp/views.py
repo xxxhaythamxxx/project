@@ -3726,6 +3726,7 @@ def contCollectFac(request,val):
             aux.save()
 
         reciboCollect = factura()
+        reciboCollect.fechaCreado=factErase.fechaCreado
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
         # auxType = factType.objects.get(nombre="FACTURA COBRADO")
@@ -3782,6 +3783,7 @@ def contCollectFac(request,val):
             for ty in allTypes:
 
                 tableNew = mainTable()
+                tableNew.fecha = tod
                 tableNew.tabTipo = ty
 
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
@@ -3862,6 +3864,7 @@ def contPayFac(request,val):
             aux.save()
 
         reciboCollect = factura()
+        reciboCollect.fechaCreado = factErase.fechaCreado
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
         # auxType = factType.objects.get(nombre="MERCANCIA CREDITO PAGADO")
@@ -3914,6 +3917,7 @@ def contPayFac(request,val):
             for ty in allTypes:
 
                 tableNew = mainTable()
+                tableNew.fecha = tod
                 tableNew.tabTipo = ty
 
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
