@@ -2612,24 +2612,6 @@ def contDay(request):
 
     # Lleno los types basicos -------------------------------
 
-    typeAux = factType.objects.filter(nombre="CASH")
-    if typeAux:
-        pass
-    else:
-        typA = factType()
-        typA.nombre = "CASH"
-        typA.manual = False
-        # typA.include = True
-        # typA.manual = True
-        typA.save()
-    typeAux = factType.objects.filter(nombre="ACH")
-    if typeAux:
-        pass
-    else:
-        typA = factType()
-        typA.nombre = "ACH"
-        typA.manual = False
-        typA.save()
     typeAux = factType.objects.filter(nombre="TARJETA VISA")
     if typeAux:
         pass
@@ -2679,14 +2661,6 @@ def contDay(request):
         typA = factType()
         typA.nombre = "FACTURA COBRADO"
         # typA.include = False
-        typA.manual = False
-        typA.save()
-    typeAux = factType.objects.filter(nombre="AJUSTES")
-    if typeAux:
-        pass
-    else:
-        typA = factType()
-        typA.nombre = "AJUSTES"
         typA.manual = False
         typA.save()
 
@@ -3423,6 +3397,7 @@ def contAddType(request):
                     print("Hay tabla hoy")
 
                     tableNew = mainTable()
+                    tableNew.fecha=tod
                     typeAux = factType.objects.get(nombre=typeNombre)
                     tableNew.tabTipo=typeAux
                     tableNew.tabTotal=0
