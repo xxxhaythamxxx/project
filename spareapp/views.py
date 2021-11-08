@@ -2678,24 +2678,21 @@ def contDay(request):
     facturesToPay = len(allFacturesToCollect)
 
     contTotal = 0
+    noIncludeTotal = 0
 
     for tab in tableAux:
 
         if tab.tabTipo.include == True:
 
             contTotal = contTotal + tab.tabTotal
+
+        else:
+
+            noIncludeTotal = noIncludeTotal + tab.tabTotal
+        
+    print(noIncludeTotal)
             
-    facSpending = factura.objects.filter(fechaCreado__date=tod) | factura.objects.filter(fechaCobrado=tod)
-    
-    spendTotal = 0
-
-    for fac in facSpending:
-
-        if fac.refCategory.egreso and fac.refType.nombre != "MERCANCIA CREDITO POR PAGAR":
-
-            spendTotal = spendTotal + fac.total
-
-    dic = {"spendTotal":spendTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    dic = {"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
 
@@ -2988,24 +2985,19 @@ def contEntry(request):
             facturesToPay = len(allFacturesToCollect)
 
             contTotal = 0
+            noIncludeTotal = 0
 
             for tab in tableAux:
 
                 if tab.tabTipo.include == True:
 
                     contTotal = contTotal + tab.tabTotal
+                
+                else:
+
+                    noIncludeTotal = noIncludeTotal + tab.tabTotal
                     
-            facSpending = factura.objects.filter(fechaCreado__date=tod) | factura.objects.filter(fechaCobrado=tod)
-            
-            spendTotal = 0
-
-            for fac in facSpending:
-
-                if fac.refCategory.egreso and fac.refType.nombre != "MERCANCIA CREDITO POR PAGAR":
-
-                    spendTotal = spendTotal + fac.total
-
-            dic = {"spendTotal":spendTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+            dic = {"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
             return render(request,"spareapp/contDay.html",dic)
 
