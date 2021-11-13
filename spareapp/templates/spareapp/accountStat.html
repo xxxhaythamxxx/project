@@ -54,6 +54,37 @@
 </div>
 <div class="container mt-2">
 <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
+<div>
+    <a data-bs-toggle="modal" data-bs-target="#editName" style="text-decoration: none;color: rgb(136,12,12);" id="editNameId" class="btn btn-primary text-white" href="javascript:void(0);">
+        Editar cliente
+    </a>
+    <div tabindex="-1" id="editName" class="modal fade modal-dialog-scrollable" aria-labelledby="editNameLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editNameLabel">Editar cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <form id="formCust" method="POST" action="{% url 'contEditPerson' factureName.0.refPersona.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label" for="custName">Nombre</label>
+                            <input value="{{factureName.0.refPersona.nombre}}" class="form-control" id="custName" type="text" name="custName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="custId">Identificación</label>
+                            <input value="{{factureName.0.refPersona.documento}}" class="form-control" id="custId" type="text" name="custId">
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                    
+                </div>   
+            </div>
+        </div>
+    </div>  
+</div>
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
     <thead>
         <tr class="color text-white">
@@ -114,6 +145,26 @@
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
 $("#invoice").dragtable()
+
+// // Editar customer
+// $("#formCust").submit(function(e){
+//     e.preventDefault()
+
+//     cat = $("#custName").val()
+//     doc = $("#custId").val()
+
+//     $.ajax({
+//         url: $(this).attr("action"),
+//         type: $(this).attr("method"),
+//         data: $(this).serialize(),
+        
+//         success: function(data){
+//             console.log("Success")
+//             // $("#contNombre").append("<option value="+data.lastPerson[0].id+" selected>"+cat+" - "+doc+"</option>")
+//             $(".btn-close").click()
+//         }
+//     })
+// })
 </script>
 {% endif %}
 

@@ -129,6 +129,12 @@ class factType(models.Model):
     nombre = models.CharField(max_length=40, verbose_name="Tipo",default='Tipo')
     include = models.BooleanField(default=True,verbose_name="Include")
     manual = models.BooleanField(default=False,verbose_name="Manual")
+    mercPagada = models.BooleanField(default=False,verbose_name="Mercancia pagada")
+    mercPagar = models.BooleanField(default=False,verbose_name="Mercancia pagar")
+    facCobrar = models.BooleanField(default=False,verbose_name="Factura cobrar")
+    facCobrada = models.BooleanField(default=False,verbose_name="Factura cobrada")
+    visa = models.BooleanField(default=False,verbose_name="Tarjeta visa")
+    clave = models.BooleanField(default=False,verbose_name="Tarjeta clave")
     # models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
     def __str__(self):
         return str(self.nombre)

@@ -11,7 +11,6 @@
     <div class="container mt-3 col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
-
             <div class="mb-3">
                 <label class="form-label" for="contFacType">Tipo de factura</label>
                 <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
@@ -110,7 +109,7 @@
                 <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
             <input id="facId" name="facId" value="{{facAux.0.id}}" type="text" style="display: none;">
-            <button class="btn btn-primary" type="submit">Aceptar</button>
+            <button id="editButton" class="btn btn-primary" type="submit">Aceptar</button>
         </form>
     </div>
 </div>
@@ -180,7 +179,6 @@ $("#formCust").submit(function(e){
         }
     })
 })
-
 $.ajax({
     method: 'GET',
     url: '/factTypeES',

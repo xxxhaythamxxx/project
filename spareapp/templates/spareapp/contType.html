@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<input id="returnPath" value="{{request.path}}" style="display: none;" type="text">
+
 <div class="container mb-2 mt-5">
     <div>
         <div class="d-flex justify-content-center" style="font-weight: bold;color: rgb(136,12,12);" class="">Factures</div>
@@ -20,6 +22,7 @@
                 <th class="p-2"># Factura</th>
                 <th class="p-2">Nombre</th>
                 <th class="p-2">Categoría</th>
+                <th class="p-2">Nota</th>
                 <th class="p-2">Monto</th>
                 <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
@@ -33,10 +36,11 @@
                 <td class="p-2">{{fac.num}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory}}</td>
+                <td class="p-2">{{fac.note}}</td>
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
                 <td class="p-2">${{fac.iva|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
-                <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id %}">Editar</a>
+                <td class="p-2"><input id="pathId" value="{{fac.id}}" style="display: none;" type="text"><input id="returnPath" value="{{request.path}}" style="display: none;" type="text"><a id="editButton" style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id %}">Editar</a>
                     {% if fac.pendiente == True %}
                     {% if fac.refCategory.ingreso == True %}
 
@@ -104,6 +108,7 @@
                 <td class="p-2 color text-white">Total</td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
+                <td class="p-2"></td>
                 <td class="p-2">$ {{montoTotal|floatformat:2}}</td>
                 <td class="p-2">$ {{itbmTotal|floatformat:2}}</td>
                 <td class="p-2">$ {{totalTotal|floatformat:2}}</td>
@@ -113,7 +118,21 @@
         </tbody>
     </table>
 </div>
-
-
+<script>
+$("#editButton").on("submit",function(){
+    urlId = $("#pathId").val()
+    urlPath = $("#returnPath").val()
+    trueUrl = "/editeFact/"+urlId
+    $.ajax({
+        url: trueUrl,
+        type: "GET",
+        data: {"urlPath":urlPath},
+        
+        success: function(data){
+            console.log("Success")
+        }
+    })
+})
+</script>
 
 {% endblock %}

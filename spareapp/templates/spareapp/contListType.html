@@ -14,6 +14,12 @@
             <thead>
                 <tr class="color text-white">
                     <th class="p-2">Tipo de pago</th>
+                    <th class="p-2">Factura por cobrar</th>
+                    <th class="p-2">Factura cobrada</th>
+                    <th class="p-2">Mercancía por pagar</th>
+                    <th class="p-2">Mercancía pagada</th>
+                    <th class="p-2">Tarjeta Visa</th>
+                    <th class="p-2">Tarjeta Clave</th>
                     <th class="p-2">Incluir</th>
                     <th class="p-2">Opción</th>
                 </tr>
@@ -21,18 +27,24 @@
             <tbody>
                 {% for ty in allTypes %}
                 <tr>
-                    {% if ty.nombre != "FACTURA COBRADO" and ty.nombre != "FACTURA POR COBRAR" and ty.nombre != "MERCANCIA CREDITO PAGADO" and ty.nombre != "MERCANCIA CREDITO POR PAGAR" and ty.nombre != "TARJETA CLAVE" and ty.nombre != "TARJETA VISA" %}
                     <td class="p-2"><input name="typNom{{ty.id}}" value="{{ty.nombre}}" type="text"></td>
-                    {% else %}
-                    <td class="p-2">{{ty.nombre}}</td>
-                    {% endif %}
+
+                    <td class="p-2"><input name="facCobrar{{ty.id}}" type="checkbox" {% if ty.facCobrar == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="facCobrada{{ty.id}}" type="checkbox" {% if ty.facCobrada == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="mercPagar{{ty.id}}" type="checkbox" {% if ty.mercPagar == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="mercPagada{{ty.id}}" type="checkbox" {% if ty.mercPagada == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="visa{{ty.id}}" type="checkbox" {% if ty.visa == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="clave{{ty.id}}" type="checkbox" {% if ty.clave == True %} checked {% else %} '' {% endif %}></td>
+
                     <input value="{{ty.id}}" name="typId" type="text" style="display: none;">
                     <td class="p-2"><input name="typInclude{{ty.id}}" type="checkbox" {% if ty.include == True %} checked {% else %} '' {% endif %}></td>
-                    {% if ty.nombre != "FACTURA COBRADO" and ty.nombre != "FACTURA POR COBRAR" and ty.nombre != "MERCANCIA CREDITO PAGADO" and ty.nombre != "MERCANCIA CREDITO POR PAGAR" and ty.nombre != "TARJETA CLAVE" and ty.nombre != "TARJETA VISA" %}
-                    <td class="p-2"><button class="btn btn-success mx-1" type="submit">Actualizar</button><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
+
+                    {% if ty.facCobrada != True and ty.facCobrar != True and ty.mercPagada != True and ty.mercPagar != True and ty.visa != True and ty.clave != True %}
+                    <td class="p-2"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
                     {% else %}
-                    <td class="p-2"><button class="btn btn-success mx-1" type="submit">Actualizar</button></td>
+                    <td class="p-2"></td>
                     {% endif %}
+                    
                     <div class="modal fade" id="exampleModal{{ty.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{ty.id}}" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
@@ -54,6 +66,10 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="pt-2">
+            <button class="btn btn-success mx-1" type="submit">Actualizar</button>
+            <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+        </div>
         </form>
     </div>
 </div>

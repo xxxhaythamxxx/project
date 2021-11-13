@@ -20,6 +20,7 @@
                 <th class="p-2"># Factura</th>
                 <th class="p-2">Nombre</th>
                 <th class="p-2">Categoría</th>
+                <th class="p-2">Nota</th>
                 <th class="p-2">Monto</th>
                 <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
@@ -38,6 +39,7 @@
                 <td class="p-2">{{fac.num}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory}}</td>
+                <td class="p-2">{{fac.note}}</td>
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
                 <td class="p-2">${{fac.iva|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
@@ -51,6 +53,7 @@
             {% endfor %}
             <tr>
                 <td class="p-2 color text-white">Total</td>
+                <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2">$ {{montoTotal|floatformat:2}}</td>
