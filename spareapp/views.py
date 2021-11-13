@@ -4249,8 +4249,27 @@ def contThisMonth(request):
 
     return render(request,"spareapp/contByRange.html",dic)
 
-def editeFact(request,val):
+def editeFact(request,val,val2):
 
+    # http://localhost:8000/contType/CASH%3F2021-11-13
+
+    # contType/CASH%3F2021-11-13
+    # http://localhost:8000/editeFact/485/contTypeCASH%3F2021-11-13
+
+    # http://localhost:8000/editeFact/485/contTypeCASH%3F2021-11-13
+
+    urlFinal = ""
+    if val2.find("contType")>-1:
+        typeA = val2.replace("contType","")
+        urlFinal = "/contType/"+typeA
+    if val2.find("accountDay")>-1:
+        typeA = val2.replace("accountDay","")
+        urlFinal = "/accountDay"
+    if val2.find("accountStat")>-1:
+        fAux = factura.objects.get(id=val)
+        pAux = fAux.refPersona.id
+        typeA = val2.replace("accountStat","")
+        urlFinal = "/contIndividual/"+str(pAux)
     returnPath = ""
     check = False
     allCustomers = persona.objects.all()
@@ -4279,8 +4298,6 @@ def editeFact(request,val):
 
         # print(request.GET.get("urlPath"))
         returnPath = request.GET.get("urlPath")
-        print("Inicio")
-        print(returnPath)
 
     if request.method == "POST":
 
@@ -4773,20 +4790,11 @@ def editeFact(request,val):
 
         dic = {"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
-        # returnPath
-        print("FInal")
-        print(returnPath)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        # next = request.POST.get('next', '/')
-        # return redirect(request.META.get('HTTP_REFERER'))
-        # return render(request,"spareapp/editeFact.html",dic)
+        return redirect(urlFinal)
 
         # ---------------------------------------------------
     
-    print("Sin POST")
-    print(returnPath)
-    
-    dic = {"returnPath":returnPath,"actual":actual,"check":check,"allCategories":allCategories,"allTypes":allTypes,"allCustomers":allCustomers,"facAux":facAux}
+    dic = {"urlFinal":urlFinal,"actual":actual,"check":check,"allCategories":allCategories,"allTypes":allTypes,"allCustomers":allCustomers,"facAux":facAux}
 
     return render(request,"spareapp/editeFact.html",dic)
 

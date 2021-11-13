@@ -125,7 +125,7 @@
             {% endif %}
 
             <td class="p-2">${{value|floatformat:2}}</td>
-            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id %}">Editar</a>
+            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
         {% endif %}
         {% endfor %}

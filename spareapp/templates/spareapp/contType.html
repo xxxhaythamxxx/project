@@ -40,7 +40,7 @@
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
                 <td class="p-2">${{fac.iva|floatformat:2}}</td>
                 <td class="p-2">${{fac.total|floatformat:2}}</td>
-                <td class="p-2"><input id="pathId" value="{{fac.id}}" style="display: none;" type="text"><input id="returnPath" value="{{request.path}}" style="display: none;" type="text"><a id="editButton" style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id %}">Editar</a>
+                <td class="p-2"><input id="pathId" value="{{fac.id}}" style="display: none;" type="text"><input id="returnPath" value="{{request.path}}" style="display: none;" type="text"><a id="editButton" style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id request.get_full_path|cut:'/' %}">Editar</a>
                     {% if fac.pendiente == True %}
                     {% if fac.refCategory.ingreso == True %}
 
@@ -119,20 +119,20 @@
     </table>
 </div>
 <script>
-$("#editButton").on("submit",function(){
-    urlId = $("#pathId").val()
-    urlPath = $("#returnPath").val()
-    trueUrl = "/editeFact/"+urlId
-    $.ajax({
-        url: trueUrl,
-        type: "GET",
-        data: {"urlPath":urlPath},
+// $("#editButton").on("submit",function(){
+//     urlId = $("#pathId").val()
+//     urlPath = $("#returnPath").val()
+//     trueUrl = "/editeFact/"+urlId
+//     $.ajax({
+//         url: trueUrl,
+//         type: "GET",
+//         data: {"urlPath":urlPath},
         
-        success: function(data){
-            console.log("Success")
-        }
-    })
-})
+//         success: function(data){
+//             console.log("Success")
+//         }
+//     })
+// })
 </script>
 
 {% endblock %}
