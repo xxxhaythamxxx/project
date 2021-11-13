@@ -1,0 +1,63 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Day {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+{% if factureName %}
+
+<div class="d-flex justify-content-center mt-3" style="font-weight: bold;color: rgb(136,12,12);" class="">Estado del día</div>
+
+<div class="container mt-2">
+
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
+    <thead>
+        <tr class="color text-white">
+            <th class="p-2">Fact #</th>
+            <th class="p-2">Fecha</th>
+            <th class="p-2">Cliente</th>
+            <th class="p-2">Tipo de pago</th>
+            <th class="p-2">Nota</th>
+            <th class="p-2">Categoría</th>
+            <th class="p-2">Acción</th>
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        {% for fact in factureName %}
+        {% for key,value in balance.items %}
+        {% if key == fact.id %}
+        <tr>
+            <td class="p-2">{{fact.num}}</td>
+            <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
+            <td class="p-2"><a href="{% url 'contIndividual' fact.refPersona.id %}">{{fact.refPersona.nombre}}</a></td>
+            <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
+            <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
+            <td class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
+
+            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id %}">Editar</a>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<div class="container mb-5 table-bordered">
+<table>
+    <tr>
+        <td style="width: 80px;" class="p-2 color text-white">Total</td>
+        <td class="p-2">$ {{balanceTotal|floatformat:2}}</td>
+    </tr>
+</table>
+</div>
+
+<script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+<script>
+$("#invoice").dragtable()
+
+</script>
+{% endif %}
+
+{% endblock %}

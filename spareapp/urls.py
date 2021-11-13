@@ -89,6 +89,7 @@ urlpatterns = [
     path("contListByType/<str:val>",views.contListByType,name="contListByType"),
     path("contListByCategory/<str:val>",views.contListByCategory,name="contListByCategory"),
     path("contEditPerson/<str:val>",views.contEditPerson,name="contEditPerson"),
+    path("accountDay",views.accountDay,name="accountDay"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

@@ -5055,7 +5055,49 @@ def contEditPerson(request,val):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
+def accountDay(request):
 
+    tod = datetime.now().date()
+
+    factureName = factura.objects.filter(fechaCreado=tod).order_by("fechaCreado")
+    # factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado")
+    cont = 0
+    balance = {}
+    balanceTotal = 0
+    
+    for fac in factureName:
+
+        if fac.refCategory.ingreso:
+
+            cont = cont
+
+            if fac.refType.facCobrar==True:
+
+                cont = cont - fac.total
+            
+            if fac.refCategory.nombre=="Factura cobrada":
+
+                cont = cont + fac.total
+        
+        else:
+
+            cont = cont
+
+            if fac.refType.mercPagar==True:
+
+                cont = cont + fac.total
+            
+            if fac.refCategory.nombre=="Mercancia credito pagada":
+
+                cont = cont - fac.total
+
+        balance[fac.id] = cont
+
+    balanceTotal = cont
+
+    dic = {"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+
+    return render(request,"spareapp/accountDay.html",dic)
 
 
 
