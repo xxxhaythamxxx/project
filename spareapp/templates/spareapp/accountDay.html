@@ -6,11 +6,32 @@
 
 {% load static %}
 
-{% if factureName %}
+
 
 <div class="d-flex justify-content-center mt-3" style="font-weight: bold;color: rgb(136,12,12);" class="">Estado del día</div>
 
 <div class="container mt-2">
+<form action="" method="POST">
+    {% csrf_token %}    
+    <div class="mb-3">
+        <input value="hoy" class="form-check-input" id="searchToday" type="radio" name="search" checked>
+        <label class="form-check-label" for="search1">Hoy</label>
+        <input value="byDay" class="form-check-input" id="searchDay" type="radio" name="search">
+        <label class="form-check-label" for="search2">Por día</label>
+        <div class="mt-3 mb-3" id="formDay" style="display: none;">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label for="searchDateFrom">Día</label>
+                        <input name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Aceptar</button>
+    <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+</form>
 
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
     <thead>
@@ -21,9 +42,11 @@
             <th class="p-2">Tipo de pago</th>
             <th class="p-2">Nota</th>
             <th class="p-2">Categoría</th>
+            <th class="p-2">Total</th>
             <th class="p-2">Acción</th>
         </tr>
     </thead>
+    {% if factureName %}
     <tbody id="myTable">
         {% for fact in factureName %}
         {% for key,value in balance.items %}
@@ -35,6 +58,7 @@
             <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
+            <td class="p-2">{{fact.total|floatformat:2}}</td>
 
             <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>

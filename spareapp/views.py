@@ -5120,7 +5120,17 @@ def accountDay(request):
     tod = datetime.now().date()
 
     factureName = factura.objects.filter(fechaCreado=tod).order_by("fechaCreado")
-    # factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado")
+
+    if request.method == "POST":
+
+        if request.POST.get("search") == "byDay":
+
+            dayAux = request.POST.get("searchDateFrom")
+
+            print(dayAux)
+
+            factureName = factura.objects.filter(fechaCreado=dayAux).order_by("fechaCreado")
+
     cont = 0
     balance = {}
     balanceTotal = 0
