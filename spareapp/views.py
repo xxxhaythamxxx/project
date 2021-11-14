@@ -2781,28 +2781,18 @@ def contEntry(request):
 
             for ty in allTypes:
 
-                print(ty)
-
                 tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
-                print(tableAuxType)
-
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                print(allFacturesCash)
                 acum = 0
-                print("Va a entrar")
                 for fac in allFacturesCash:
-                    print(fac)
                     if fac.refCategory.ingreso == True:
-                        print("Ingreso")
                         acum = acum + fac.total
-                        print(acum)
                     else:
-                        print("Egreso")
                         acum = acum - fac.total
-                        print(acum)
-                tableAuxType.tabTotal = float(acum)
-                print("Total")
-                print(acum)
+                if acum<0:
+                    tableAuxType.tabTotal = float(acum*(-1))
+                else:
+                    tableAuxType.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
 
@@ -2903,7 +2893,11 @@ def contEntry(request):
                         acum = acum + fac.total
                     else:
                         acum = acum - fac.total
-                tableAuxType.tabTotal = float(acum)
+                if acum<0:
+                    tableAuxType.tabTotal = float(acum*(-1))
+                else:
+                    tableAuxType.tabTotal = float(acum)
+                # tableAuxType.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
 
@@ -3823,7 +3817,11 @@ def contCollectFac(request,val):
                         acum = acum + fac.total
                     else:
                         acum = acum - fac.total
-                aux.tabTotal = float(acum)
+                
+                if acum<0:
+                    aux.tabTotal = float(acum*(-1))
+                else:
+                    aux.tabTotal = float(acum)
 
                 if ty.facCobrada == True:
 
@@ -3858,7 +3856,12 @@ def contCollectFac(request,val):
                         acum = acum + fac.total
                     else:
                         acum = acum - fac.total
-                tableNew.tabTotal = float(acum)
+                
+                if acum<0:
+                    tableNew.tabTotal = float(acum*(-1))
+                else:
+                    tableNew.tabTotal = float(acum)
+                # tableNew.tabTotal = float(acum)
 
                 if ty.facCobrada == True:
 
@@ -3956,7 +3959,11 @@ def contPayFac(request,val):
                         acum = acum + fac.total
                     else:
                         acum = acum - fac.total
-                aux.tabTotal = float(acum)
+                if acum<0:
+                    aux.tabTotal = float(acum*(-1))
+                else:
+                    aux.tabTotal = float(acum)
+                # aux.tabTotal = float(acum)
 
                 if ty.mercPagada == True:
 
@@ -3991,9 +3998,13 @@ def contPayFac(request,val):
                         acum = acum + fac.total
                     else:
                         acum = acum - fac.total
-                tableNew.tabTotal = float(acum)
+                if acum<0:
+                    tableNew.tabTotal = float(acum*(-1))
+                else:
+                    tableNew.tabTotal = float(acum)
+                # tableNew.tabTotal = float(acum)
 
-                if ty.facPagada == True:
+                if ty.mercPagada == True:
 
                     tableNew.tabTotal = factErase.total
 
@@ -4009,7 +4020,7 @@ def contPayFac(request,val):
 
     for tab in tableAux:
 
-        if tab.tabTipo.facPagada != True:
+        if tab.tabTipo.mercPagada != True:
 
             contTotal = contTotal + tab.tabTotal
 
@@ -4400,8 +4411,13 @@ def editeFact(request,val,val2):
                     else:
 
                         acum = acum - fac.total
+                
+                if acum<0:
+                    tableAuxType.tabTotal = float(acum*(-1))
+                else:
+                    tableAuxType.tabTotal = float(acum)
 
-                tableAuxType.tabTotal = float(acum)
+                # tableAuxType.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
 
@@ -4500,8 +4516,13 @@ def editeFact(request,val,val2):
                     else:
 
                         acum = acum - fac.total
+
+                if acum<0:
+                    tableAuxType.tabTotal = float(acum*(-1))
+                else:
+                    tableAuxType.tabTotal = float(acum)
                     
-                tableAuxType.tabTotal = float(acum)
+                # tableAuxType.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
 
@@ -4615,7 +4636,12 @@ def editeFact(request,val,val2):
 
                         acum = acum - fac.total
 
-                tableAuxType.tabTotal = float(acum)
+                if acum<0:
+                    tableAuxType.tabTotal = float(acum*(-1))
+                else:
+                    tableAuxType.tabTotal = float(acum)
+
+                # tableAuxType.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
 
@@ -4725,8 +4751,13 @@ def editeFact(request,val,val2):
                     else:
 
                         acum = acum - fac.total
+
+                if acum<0:
+                    tableAuxType.tabTotal = float(acum*(-1))
+                else:
+                    tableAuxType.tabTotal = float(acum)
                     
-                tableAuxType.tabTotal = float(acum)
+                # tableAuxType.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
 
