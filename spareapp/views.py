@@ -4270,6 +4270,10 @@ def editeFact(request,val,val2):
         pAux = fAux.refPersona.id
         typeA = val2.replace("accountStat","")
         urlFinal = "/contIndividual/"+str(pAux)
+    if val2.find("contListByType")>-1:
+        fAux = factura.objects.get(id=val)
+        typeA = val2.replace("contListByType","")
+        urlFinal = "/contListByType/"+typeA
     returnPath = ""
     check = False
     allCustomers = persona.objects.all()
@@ -4999,7 +5003,7 @@ def contListByType(request,val):
 
         val = request.POST.get("contNombre")
 
-        factureName = factura.objects.filter(refType__id=val)
+        factureName = factura.objects.filter(refType__nombre=val)
 
         if request.POST.get("search") == "month":
 
