@@ -4276,6 +4276,9 @@ def editeFact(request,val,val2):
     if val2.find("contType")>-1:
         typeA = val2.replace("contType","")
         urlFinal = "/contType/"+typeA
+    if val2.find("contTypeTarjeta")>-1:
+        typeA = val2.replace("contTypeTarjeta","")
+        urlFinal = "/contTypeTarjeta/"+typeA
     if val2.find("accountDay")>-1:
         typeA = val2.replace("accountDay","")
         urlFinal = "/accountDay"
