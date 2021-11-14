@@ -2714,6 +2714,8 @@ def contEntry(request):
 
     if request.method == "POST":
 
+        print("Entra a POST")
+
         actualAux=datetime.now().date()
         actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
 
@@ -2779,16 +2781,28 @@ def contEntry(request):
 
             for ty in allTypes:
 
+                print(ty)
+
                 tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
+                print(tableAuxType)
 
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+                print(allFacturesCash)
                 acum = 0
+                print("Va a entrar")
                 for fac in allFacturesCash:
+                    print(fac)
                     if fac.refCategory.ingreso == True:
+                        print("Ingreso")
                         acum = acum + fac.total
+                        print(acum)
                     else:
+                        print("Egreso")
                         acum = acum - fac.total
+                        print(acum)
                 tableAuxType.tabTotal = float(acum)
+                print("Total")
+                print(acum)
 
                 if ty.facCobrar == True:
 

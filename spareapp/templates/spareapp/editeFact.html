@@ -179,10 +179,11 @@ $("#formCust").submit(function(e){
         }
     })
 })
+auxType=$("#contFacType").val()
 $.ajax({
     method: 'GET',
     url: '/factTypeES',
-    data: {'val': "entry"},
+    data: {'val': auxType},
     success:function(data){
 
         select = $("#contCatIng")
