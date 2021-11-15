@@ -3878,9 +3878,41 @@ def contCollectFac(request,val):
                 else:
                     aux.tabTotal = float(acum)
 
+                if ty.mercPagar == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    aux.tabTotal = totalFact
+                
+                if ty.mercPagada == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    aux.tabTotal = totalFact
+
                 if ty.facCobrada == True:
 
-                    aux.tabTotal = aux.tabTotal + reciboCollect.total
+                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+
+                    aux.tabTotal = totalFact
 
                 if ty.facCobrar == True:
 
@@ -3917,6 +3949,30 @@ def contCollectFac(request,val):
                 else:
                     tableNew.tabTotal = float(acum)
                 # tableNew.tabTotal = float(acum)
+
+                if ty.mercPagar == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    tableNew.tabTotal = totalFact
+                
+                if ty.mercPagada == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    tableNew.tabTotal = totalFact
 
                 if ty.facCobrada == True:
 
@@ -4022,9 +4078,41 @@ def contPayFac(request,val):
                     aux.tabTotal = float(acum)
                 # aux.tabTotal = float(acum)
 
+                if ty.facCobrar == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    aux.tabTotal = totalFact
+                
+                if ty.facCobrada == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    aux.tabTotal = totalFact
+
                 if ty.mercPagada == True:
 
-                    aux.tabTotal = aux.tabTotal + factErase.total
+                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+
+                    aux.tabTotal = totalFact
 
                 if ty.mercPagar == True:
 
@@ -4060,6 +4148,30 @@ def contPayFac(request,val):
                 else:
                     tableNew.tabTotal = float(acum)
                 # tableNew.tabTotal = float(acum)
+
+                if ty.facCobrar == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    tableNew.tabTotal = totalFact
+                
+                if ty.facCobrada == True:
+
+                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    totalFact = 0
+
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    tableNew.tabTotal = totalFact
 
                 if ty.mercPagada == True:
 
@@ -4405,7 +4517,11 @@ def editeFact(request,val,val2):
         nomAux = persona.objects.get(id=contNombre)
         factAux = factura.objects.get(id=request.POST.get("facId"))
         fechaAct = datetime.strptime(fechaAct,'%Y-%m-%d')
-        factAux.fechaCreado = fechaAct
+        if factAux.fechaCreado.date() != fechaAct.date():
+            print("Diferentes")
+            factAux.fechaCreado = fechaAct
+        else:
+            print("Iguales")
         factAux.refPersona = nomAux
 
         if request.POST.get("contNumFac"):
@@ -4420,9 +4536,9 @@ def editeFact(request,val,val2):
         catAux = factCategory.objects.filter(id=contCatIng)
         
         # Revisa si la categoria tiene limite
-        for cat in catAux:
-            if cat.limite == True:
-                factAux.pendiente = True
+        # for cat in catAux:
+        #     if cat.limite == True:
+        #         factAux.pendiente = True
 
         catAux = factCategory.objects.get(id=contCatIng)
         factAux.refCategory = catAux
