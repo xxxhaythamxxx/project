@@ -2818,6 +2818,34 @@ def contEntry(request):
                     
                     tableAuxType.tabTotal = float(acum2)
 
+                if ty.facCobrada == True:
+
+                    allFacturesPay = factura.objects.filter(pendiente=False,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+
+                    acum2 = 0
+
+                    for fac in allFacturesPay:
+
+                        acum2 = acum2 + fac.total
+                    
+                    tableAuxType.tabTotal = float(acum2)
+
+                if ty.mercPagada == True:
+
+                    print("Entra a mercancia pagada")
+
+                    allFacturesPay = factura.objects.filter(pendiente=False,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+
+                    print(allFacturesPay)
+
+                    acum2 = 0
+
+                    for fac in allFacturesPay:
+
+                        acum2 = acum2 + fac.total
+                    
+                    tableAuxType.tabTotal = float(acum2)
+
                 if ty.visa == True:
 
                     allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
