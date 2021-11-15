@@ -1,0 +1,12 @@
+{% block content %}
+
+{% load static %}
+
+<div class="container mt-5 col-lg-4 d-flex justify-content-center">
+    <a href="{% url 'accountDay' %}" style="font-size: small;" class="btn btn-success mx-1">Estado del día</a>
+    <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-success mx-1">Cliente</a>
+    <a href="{% url 'contListByTypeZero' %}" style="font-size: small;" class="btn btn-success mx-1">Tipo de pago</a>
+    <a href="{% url 'contListByCategoryZero' %}" style="font-size: small;" class="btn btn-success mx-1">Categoría</a>
+</div>
+
+{% endblock %}

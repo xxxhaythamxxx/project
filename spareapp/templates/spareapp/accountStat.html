@@ -6,7 +6,9 @@
 
 {% load static %}
 
-<div class="container mt-5 col-lg-4">
+{% include "spareapp/accountStatSuperior.html" %}
+
+<div class="container mt-2 col-lg-4">
 <form action="" method="POST">
     {% csrf_token %}
     <div class="mb-3">

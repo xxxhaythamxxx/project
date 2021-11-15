@@ -87,8 +87,9 @@ urlpatterns = [
     path("contIndividual/<str:val>",views.contIndividual,name="contIndividual"),
     path("factTypeES",views.factTypeES,name="factTypeES"),
     path("contListByType/<str:val>",views.contListByType,name="contListByType"),
+    path("contListByTypeZero",views.contListByTypeZero,name="contListByTypeZero"),
     re_path("contListByCategory/(?P<val>.*)$",views.contListByCategory,name="contListByCategory"),
-    # path("contListByCategory/<str:val>",views.contListByCategory,name="contListByCategory"),
+    path("contListByCategoryZero",views.contListByCategoryZero,name="contListByCategoryZero"),
     path("contEditPerson/<str:val>",views.contEditPerson,name="contEditPerson"),
     path("accountDay",views.accountDay,name="accountDay"),
 
