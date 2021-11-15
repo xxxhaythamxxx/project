@@ -26,6 +26,8 @@
             </thead>
             <tbody>
                 {% for ty in allTypes %}
+                {% for key,value in deleteAux.items %}
+                {% if key == ty.id %}
                 <tr>
                     <td class="p-2"><input name="typNom{{ty.id}}" value="{{ty.nombre}}" type="text"></td>
 
@@ -39,7 +41,7 @@
                     <input value="{{ty.id}}" name="typId" type="text" style="display: none;">
                     <td class="p-2"><input name="typInclude{{ty.id}}" type="checkbox" {% if ty.include == True %} checked {% else %} '' {% endif %}></td>
 
-                    {% if ty.facCobrada != True and ty.facCobrar != True and ty.mercPagada != True and ty.mercPagar != True and ty.visa != True and ty.clave != True %}
+                    {% if ty.facCobrada != True and ty.facCobrar != True and ty.mercPagada != True and ty.mercPagar != True and ty.visa != True and ty.clave != True and value == "off" %}
                     <td class="p-2"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
                     {% else %}
                     <td class="p-2"></td>
@@ -63,6 +65,8 @@
                         </div>
                     </div>
                 </tr>
+                {% endif %}
+                {% endfor %}
                 {% endfor %}
             </tbody>
         </table>

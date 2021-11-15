@@ -22,6 +22,8 @@
             </thead>
             <tbody>
                 {% for ty in allCategories %}
+                {% for key,value in deleteAux.items %}
+                {% if key == ty.id %}
                 <tr>
                     {% if ty.nombre != "Mercancia credito pagada" and ty.nombre != "Factura cobrada" %}
                     <td class="p-2"><input name="contNom{{ty.id}}" value="{{ty.nombre}}" type="text"></td>
@@ -32,7 +34,7 @@
                     <td class="p-2"><input name="catEntry{{ty.id}}" type="checkbox" {% if ty.ingreso == True %} checked {% else %} '' {% endif %}></td>
                     <td class="p-2"><input name="catSpending{{ty.id}}" type="checkbox" {% if ty.egreso == True %} checked {% else %} '' {% endif %}></td>
                     <td class="p-2"><input name="catExpiration{{ty.id}}" type="checkbox" {% if ty.limite == True %} checked {% else %} '' {% endif %}></td>
-                    {% if ty.nombre != "Mercancia credito pagada" and ty.nombre != "Factura cobrada" %}
+                    {% if ty.nombre != "Mercancia credito pagada" and ty.nombre != "Factura cobrada" and value == "off" %}
                     <td class="p-2"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
                     {% else %}
                     <td class="p-2"></td>
@@ -55,6 +57,8 @@
                         </div>
                     </div>
                 </tr>
+                {% endif %}
+                {% endfor %}
                 {% endfor %}
             </tbody>
         </table>

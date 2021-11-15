@@ -3444,10 +3444,18 @@ def contAddCategory(request):
 def contListType(request):
 
     allTypes = factType.objects.all().order_by("nombre")
+    facAux = ""
+    deleteAux = {}
+
+    for ty in allTypes:
+
+        facAux = factura.objects.filter(refType=ty)
+        if facAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
 
     if request.method == "POST":
-
-        allTypes = factType.objects.all().order_by("nombre")
 
         for cat in request.POST.getlist("typId"):
 
@@ -3515,14 +3523,25 @@ def contListType(request):
 
             singleType.save()
 
+    allTypes = factType.objects.all().order_by("nombre")
 
-    dic = {"allTypes":allTypes}
+    dic = {"deleteAux":deleteAux,"allTypes":allTypes}
 
     return render(request,"spareapp/contListType.html",dic)
 
 def contListCategory(request):
 
     allCategories = factCategory.objects.all().order_by("nombre")
+    deleteAux = {}
+    facAux = ""
+
+    for cat in allCategories:
+
+        facAux = factura.objects.filter(refCategory=cat)
+        if facAux:
+            deleteAux[cat.id] = "on"
+        else:
+            deleteAux[cat.id] = "off"
 
     if request.method == "POST":
 
@@ -3553,7 +3572,9 @@ def contListCategory(request):
             
             singleCategory.save()
 
-    dic = {"allCategories":allCategories}
+    # allCategories = factCategory.objects.all().order_by("nombre")
+
+    dic = {"deleteAux":deleteAux,"allCategories":allCategories}
 
     return render(request,"spareapp/contListCategory.html",dic)
 
