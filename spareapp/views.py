@@ -4248,7 +4248,7 @@ def accountStat(request):
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
-        factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado")
+        factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
         cont = 0
         
         for fac in factureName:
@@ -5084,7 +5084,7 @@ def contIndividual(request,val):
 
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
-    factureName = factura.objects.filter(refPersona=personaAux).order_by("fechaCreado")
+    factureName = factura.objects.filter(refPersona=personaAux).order_by("fechaCreado","id")
     balance = {}
     cont = 0
     balanceTotal = 0
@@ -5120,7 +5120,7 @@ def contIndividual(request,val):
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
-        factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado")
+        factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
         cont = 0
         
         for fac in factureName:
@@ -5170,7 +5170,7 @@ def contIndividual(request,val):
             if facActAux:
             
                 facAct = factura.objects.get(id=pos)
-                factureName = factura.objects.filter(fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado")
+                factureName = factura.objects.filter(fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado","id")
             
             else:
 
@@ -5180,7 +5180,7 @@ def contIndividual(request,val):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "range":
 
@@ -5189,7 +5189,7 @@ def contIndividual(request,val):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado","id")
 
         # ---------------------------------------------------------------
 
@@ -5264,7 +5264,7 @@ def contListByTypeZero(request):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "range":
 
@@ -5273,7 +5273,7 @@ def contListByTypeZero(request):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado","id")
 
 
     dic = {"factureName":factureName,"allTypes":allTypes}
@@ -5296,7 +5296,7 @@ def contListByType(request,val):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "range":
 
@@ -5305,7 +5305,7 @@ def contListByType(request,val):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado","id")
 
     dic = {"factureName":factureName,"allTypes":allTypes}
 
@@ -5327,7 +5327,7 @@ def contListByCategoryZero(request):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "range":
 
@@ -5336,7 +5336,7 @@ def contListByCategoryZero(request):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id")
 
 
     dic = {"factureName":factureName,"allCategorys":allCategorys}
@@ -5359,7 +5359,7 @@ def contListByCategory(request,val):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "range":
 
@@ -5368,7 +5368,7 @@ def contListByCategory(request,val):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id")
 
     dic = {"factureName":factureName,"allCategorys":allCategorys}
 
@@ -5390,7 +5390,7 @@ def accountDay(request):
 
     tod = datetime.now().date()
 
-    factureName = factura.objects.filter(fechaCreado=tod).order_by("fechaCreado")
+    factureName = factura.objects.filter(fechaCreado=tod).order_by("fechaCreado","id")
 
     if request.method == "POST":
 
@@ -5398,7 +5398,7 @@ def accountDay(request):
 
             dayAux = request.POST.get("searchDateFrom")
 
-            factureName = factura.objects.filter(fechaCreado=dayAux).order_by("fechaCreado")
+            factureName = factura.objects.filter(fechaCreado=dayAux).order_by("fechaCreado","id")
 
     cont = 0
     balance = {}
