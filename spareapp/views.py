@@ -3800,6 +3800,7 @@ def contCollectFac(request,val):
             if ty.facCobrar == True:
 
                 allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+                print(allFacturesToCollect)
 
                 totalFact = 0
 
@@ -3968,6 +3969,8 @@ def contPayFac(request,val):
         reciboCollect.fechaCobrado = tod
         reciboCollect.iva = factErase.iva
         reciboCollect.monto = factErase.monto
+        if request.POST.get("contNota"):
+            reciboCollect.note = request.POST.get("contNota")
         reciboCollect.total = factErase.total
         reciboCollect.pendiente = False
         reciboCollect.save()
@@ -4329,6 +4332,11 @@ def editeFact(request,val,val2):
         pAux = fAux.refPersona.id
         typeA = val2.replace("accountStat","")
         urlFinal = "/contIndividual/"+str(pAux)
+    if val2.find("contIndividual")>-1:
+        fAux = factura.objects.get(id=val)
+        pAux = fAux.refPersona.id
+        typeA = val2.replace("contIndividual","")
+        urlFinal = "/contIndividual/"+str(pAux)
     if val2.find("contListByType")>-1:
         fAux = factura.objects.get(id=val)
         typeA = val2.replace("contListByType","")
@@ -4336,7 +4344,6 @@ def editeFact(request,val,val2):
     if val2.find("contListByCategory")>-1:
         typeA = val2.replace("contListByCategory","")
         urlFinal = "/contListByCategory/"+typeA
-    returnPath = ""
     check = False
     allCustomers = persona.objects.all()
     allTypes = factType.objects.all()
@@ -4359,11 +4366,6 @@ def editeFact(request,val,val2):
     else:
 
         allCategories = factCategory.objects.filter(egreso=True)
-
-    if request.GET.get("urlPath"):
-
-        # print(request.GET.get("urlPath"))
-        returnPath = request.GET.get("urlPath")
 
     if request.method == "POST":
 
@@ -5056,16 +5058,23 @@ def contIndividual(request,val):
 def factTypeES(request):
 
     cobrarPagar = None
+    cate = None
 
-    cate = factCategory.objects.get(nombre=request.GET.get("cat"))
+    print("Entra en FactTypeES")
+    print(request.GET.get("cat"))
+
+    cateAux = factCategory.objects.filter(nombre=request.GET.get("cat"))
+
+    if cateAux:
+        cate = factCategory.objects.get(nombre=request.GET.get("cat"))
 
     if request.GET.get("val") == "entry":
 
-        if request.GET.get("cat") == "Factura cobrada":
+        if cateAux and request.GET.get("cat") == "Factura cobrada":
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
         else:
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
-        if cate.limite == True:
+        if cateAux and cate.limite == True:
             allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
         else:
             allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
@@ -5073,11 +5082,11 @@ def factTypeES(request):
     
     else:
 
-        if request.GET.get("cat") == "Mercancia credito pagada":
+        if cateAux and request.GET.get("cat") == "Mercancia credito pagada":
             allCategories = factCategory.objects.filter(egreso=True).order_by("nombre")
         else:
             allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
-        if cate.limite == True:
+        if cateAux and cate.limite == True:
             allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(facCobrar=True)
         else:
             allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)

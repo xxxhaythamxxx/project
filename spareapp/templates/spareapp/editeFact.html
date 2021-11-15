@@ -106,7 +106,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contNota">Nota</label>
-                <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota">{% if facAux.0.note != none %}{{facAux.0.note}}{% endif %}</textarea>
             </div>
             <input id="facId" name="facId" value="{{facAux.0.id}}" type="text" style="display: none;">
             <button id="editButton" class="btn btn-primary" type="submit">Aceptar</button>

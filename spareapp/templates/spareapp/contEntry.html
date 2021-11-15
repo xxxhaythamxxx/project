@@ -144,11 +144,11 @@ $("#formCust").submit(function(e){
         }
     })
 })
-
+auxCat=$("#contCatIng").val()
 $.ajax({
     method: 'GET',
     url: '/factTypeES',
-    data: {'val': "entry"},
+    data: {'val': "entry",'cat': auxCat},
     success:function(data){
 
         select = $("#contCatIng")
