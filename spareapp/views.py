@@ -4323,6 +4323,9 @@ def editeFact(request,val,val2):
         fAux = factura.objects.get(id=val)
         typeA = val2.replace("contListByType","")
         urlFinal = "/contListByType/"+typeA
+    if val2.find("contListByCategory")>-1:
+        typeA = val2.replace("contListByCategory","")
+        urlFinal = "/contListByCategory/"+typeA
     returnPath = ""
     check = False
     allCustomers = persona.objects.all()

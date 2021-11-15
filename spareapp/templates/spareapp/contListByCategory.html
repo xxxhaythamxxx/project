@@ -68,7 +68,7 @@
             <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
             <td class="p-2">{{fact.refCategory.nombre}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
-            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id %}">Editar</a>
+            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
         {% endfor %}
     </tbody>
