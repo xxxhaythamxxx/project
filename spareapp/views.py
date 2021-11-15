@@ -3729,6 +3729,7 @@ def contByRange(request):
             all.delete()
 
         contTotal = 0
+        noIncludeTotal = 0
 
         for typ in allTypes:
 
@@ -3748,6 +3749,10 @@ def contByRange(request):
 
                     contTotal = float(contTotal) + float(ta.tabTotal)
 
+                else:
+
+                    noIncludeTotal = noIncludeTotal + float(ta.tabTotal)
+
                 contSubTotal = float(contSubTotal) + float(ta.tabTotal)
 
             tableAuxGet.tabTotal = contSubTotal
@@ -3762,7 +3767,7 @@ def contByRange(request):
         facturesToCollect = len(allFacturesToPay)
         facturesToPay = len(allFacturesToCollect)
 
-        dic = {"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
+        dic = {"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
 
     return render(request,"spareapp/contByRange.html",dic)
 
@@ -4264,6 +4269,7 @@ def contThisMonth(request):
         all.delete()
 
     contTotal = 0
+    noIncludeTotal = 0
 
     for typ in allTypes:
 
@@ -4279,6 +4285,10 @@ def contThisMonth(request):
             if typ.include == True:
 
                 contTotal = contTotal + float(tab.tabTotal)
+            
+            else:
+
+                noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
 
         tableAuxGet.tabTotal = cont
         tableAuxGet.save()
@@ -4291,7 +4301,7 @@ def contThisMonth(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"editPrueba":editPrueba,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
+    dic = {"noIncludeTotal":noIncludeTotal,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"editPrueba":editPrueba,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
 
     return render(request,"spareapp/contByRange.html",dic)
 
@@ -5047,16 +5057,30 @@ def factTypeES(request):
 
     cobrarPagar = None
 
+    cate = factCategory.objects.get(nombre=request.GET.get("cat"))
+
     if request.GET.get("val") == "entry":
 
-        allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
-        allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
+        if request.GET.get("cat") == "Factura cobrada":
+            allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
+        else:
+            allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+        if cate.limite == True:
+            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
+        else:
+            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
         cobrarPagar = factType.objects.filter(facCobrar=True)
     
     else:
 
-        allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
-        allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
+        if request.GET.get("cat") == "Mercancia credito pagada":
+            allCategories = factCategory.objects.filter(egreso=True).order_by("nombre")
+        else:
+            allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+        if cate.limite == True:
+            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(facCobrar=True)
+        else:
+            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
         cobrarPagar = factType.objects.filter(mercPagar=True)
 
     allCategories = list(allCategories.values())
