@@ -60,16 +60,16 @@ document.getElementById("downloadexcel").addEventListener("click",function(){
 
 // Generar PDF desde HTML ----------------------------------------------------------------------------------------
 function generatePDF(){
-    var oldCss = {
-        "background-size": "80px 80px",
-        "width": "80px",
-        "height": "80px"
-    }
-    $("#myTable tr").each(function(){
-        $(this).find(".photo").each(function(){
-            $(this).css(oldCss);
-        })
-    })
+    // var oldCss = {
+    //     "background-size": "80px 80px",
+    //     "width": "80px",
+    //     "height": "80px"
+    // }
+    // $("#myTable tr").each(function(){
+    //     $(this).find(".photo").each(function(){
+    //         $(this).css(oldCss);
+    //     })
+    // })
     $('#invoice tr:first th').each(function() {
         var value = $(this).css("position", "static");
       });
@@ -78,7 +78,7 @@ function generatePDF(){
     $("table td:nth-child("+($("#check").index() + 1)+")").hide();
     
     var opt = {
-        margin:       1,
+        margin:       0.5,
         filename:     'report.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },

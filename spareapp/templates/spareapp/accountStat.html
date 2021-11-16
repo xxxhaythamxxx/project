@@ -99,7 +99,7 @@
             <th class="p-2">Credito</th>
             <th class="p-2">Balance</th>
             <th class="p-2">Nota</th>
-            <th class="p-2">Acción</th>
+            <th id="check" class="p-2">Acción</th>
         </tr>
     </thead>
     <tbody id="myTable">
@@ -110,8 +110,8 @@
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refPersona.nombre}}</td>
-            <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
-            <td class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
+            <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
+            <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
 
             {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" or fact.refType.nombre == "MERCANCIA CREDITO POR PAGAR" %}
             <td class="p-2">$0.00</td>
@@ -127,7 +127,26 @@
 
             <td class="p-2">${{value|floatformat:2}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
-            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
+            <td class=""><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
+                <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
+            </td>
+            <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="deleteFacLabel{{fact.id}}">Precaución</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Seguro/a que deseas eliminar la factura {{fact.num}}?
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a id="deleteFacture" class="btn btn-primary" href="{% url 'deleteFac' fact.id %}">Borrar</a>
+                        </div>
+                    </div>
+                    </div>
+            </div> 
         </tr>
         {% endif %}
         {% endfor %}

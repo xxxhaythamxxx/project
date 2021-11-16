@@ -2820,7 +2820,12 @@ def contEntry(request):
 
                 if ty.facCobrada == True:
 
-                    allFacturesPay = factura.objects.filter(pendiente=False,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+                    print("Entra a mercancia cobrada")
+                    print(tod)
+
+                    allFacturesPay = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+
+                    print(allFacturesPay)
 
                     acum2 = 0
 
@@ -2834,7 +2839,7 @@ def contEntry(request):
 
                     print("Entra a mercancia pagada")
 
-                    allFacturesPay = factura.objects.filter(pendiente=False,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+                    allFacturesPay = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
 
                     print(allFacturesPay)
 
@@ -3062,23 +3067,25 @@ def contType(request,val,val2):
             if s:
                 out = s.translate(str.maketrans('', '', '/'))
                 if val.upper()==out.upper():
+                    print("Entra")
+                    print(val.upper())
                     allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=s)
 
     if typeAux.facCobrada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod)
+        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada")
 
     if typeAux.mercPagada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod)
+        allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada")
 
     if typeAux.facCobrar == True:
 
-        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=tod,pendiente=True,refCategory__ingreso=True)
+        allFacturesVal = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True)
 
     if typeAux.mercPagar == True:
 
-        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=tod,pendiente=True,refCategory__egreso=True)
+        allFacturesVal = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True)
 
     itbm7 = {}
     
@@ -3176,6 +3183,7 @@ def contTypeTarjeta(request,val,val2):
 
 def contTypeRange(request,val,val2,val3):
 
+    allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
     tod = datetime.now().date()
     typeAux = factType.objects.get(nombre=val)
 
@@ -3199,19 +3207,19 @@ def contTypeRange(request,val,val2,val3):
 
     if typeAux.facCobrada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod)
+        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Factura cobrada")
 
     if typeAux.mercPagada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod)
+        allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Mercancia credito pagada")
 
     if typeAux.facCobrar == True:
 
-        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=tod,pendiente=True,refCategory__ingreso=True)
+        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__ingreso=True)
 
     if typeAux.mercPagar == True:
 
-        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=tod,pendiente=True,refCategory__egreso=True)
+        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__egreso=True)
 
 
     itbm7 = {}
@@ -3246,7 +3254,7 @@ def contTypeRange(request,val,val2,val3):
 
     typeDate = "From "+val2+", to "+val3
 
-    dic = {"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    dic = {"allTypes":allTypes,"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contType.html",dic)
 
@@ -3815,7 +3823,7 @@ def contCollectFac(request,val):
 
         factErase = factura.objects.get(id=val)
         factErase.pendiente = False
-        
+        factErase.fechaCobrado = tod
         factErase.save()
 
         tablePast = mainTable.objects.filter(fecha__date=factErase.fechaCreado)
@@ -3827,9 +3835,7 @@ def contCollectFac(request,val):
 
             if ty.facCobrar == True:
 
-                allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-                print(allFacturesToCollect)
-
+                allFacturesToCollect = factura.objects.filter(fechaCreado__date=factErase.fechaCreado,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
                 totalFact = 0
 
                 for fac in allFacturesToCollect:
@@ -3841,7 +3847,7 @@ def contCollectFac(request,val):
             aux.save()
 
         reciboCollect = factura()
-        reciboCollect.fechaCreado=factErase.fechaCreado
+        reciboCollect.fechaCreado=tod
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
         reciboCollect.refType = typeAux
@@ -3892,7 +3898,7 @@ def contCollectFac(request,val):
                 
                 if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     totalFact = 0
 
@@ -3904,7 +3910,7 @@ def contCollectFac(request,val):
 
                 if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
                     totalFact = 0
 
@@ -3964,7 +3970,7 @@ def contCollectFac(request,val):
                 
                 if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     totalFact = 0
 
@@ -3976,11 +3982,19 @@ def contCollectFac(request,val):
 
                 if ty.facCobrada == True:
 
-                    tableNew.tabTotal = factErase.total
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
-                else:
+                    totalFact = 0
 
-                    tableNew.tabTotal = 0
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    tableNew.tabTotal = totalFact
+
+                # else:
+
+                #     tableNew.tabTotal = 0
 
                 tableNew.save()
 
@@ -4022,6 +4036,7 @@ def contPayFac(request,val):
 
         factErase = factura.objects.get(id=val)
         factErase.pendiente = False
+        factErase.fechaCobrado = tod
         factErase.save()
 
         for ty in allTypes:
@@ -4043,7 +4058,7 @@ def contPayFac(request,val):
             aux.save()
 
         reciboCollect = factura()
-        reciboCollect.fechaCreado = factErase.fechaCreado
+        reciboCollect.fechaCreado = tod
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
         reciboCollect.refType = typeAux
@@ -4092,7 +4107,7 @@ def contPayFac(request,val):
                 
                 if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
                     totalFact = 0
 
@@ -4104,7 +4119,7 @@ def contPayFac(request,val):
 
                 if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     totalFact = 0
 
@@ -4163,7 +4178,7 @@ def contPayFac(request,val):
                 
                 if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
                     totalFact = 0
 
@@ -4175,11 +4190,15 @@ def contPayFac(request,val):
 
                 if ty.mercPagada == True:
 
-                    tableNew.tabTotal = factErase.total
+                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
-                else:
+                    totalFact = 0
 
-                    tableNew.tabTotal = 0
+                    for fac in allFacturesToCollect:
+
+                        totalFact = totalFact + float(fac.total)
+                    
+                    tableNew.tabTotal = totalFact
 
                 tableNew.save()
 
@@ -4355,6 +4374,7 @@ def contLastMonth(request):
         all.delete()
 
     contTotal = 0
+    noIncludeTotal = 0
 
     for typ in allTypes:
 
@@ -4370,6 +4390,10 @@ def contLastMonth(request):
             if typ.include == True:
 
                 contTotal = contTotal + float(tab.tabTotal)
+            
+            else:
+
+                noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
 
         tableAuxGet.tabTotal = cont
         tableAuxGet.save()
@@ -4384,7 +4408,7 @@ def contLastMonth(request):
 
     editPrueba = False
 
-    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"editPrueba":editPrueba,"contTotal":contTotal,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
+    dic = {"noIncludeTotal":noIncludeTotal,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"editPrueba":editPrueba,"contTotal":contTotal,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
 
     # return render(request,"spareapp/contDay.html",dic)
     return render(request,"spareapp/contByRange.html",dic)
@@ -4569,452 +4593,280 @@ def editeFact(request,val,val2):
         tod = factAux.fechaCreado.date()
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-        if  tableAux:
+# ---------------------------------------
 
-            print("Ya hay tabla nueva")
+        allTypes = factType.objects.all().order_by("nombre")
 
-            allTypes = factType.objects.all().order_by("nombre")
+        for ty in allTypes:
 
-            for ty in allTypes:
+            if  tableAux:
 
                 tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty)
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                acum = 0
-
-                for fac in allFacturesCash:
-
-                    if fac.refCategory.ingreso == True:
-
-                        acum = acum + fac.total
-                    
-                    else:
-
-                        acum = acum - fac.total
-                
-                if acum<0:
-                    tableAuxType.tabTotal = float(acum*(-1))
-                else:
-                    tableAuxType.tabTotal = float(acum)
-
-                # tableAuxType.tabTotal = float(acum)
-
-                if ty.facCobrar == True:
-
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
-
-                    acum2 = 0
-
-                    for fac in allFacturesPay:
-
-                        acum2 = acum2 + fac.total
-                    
-                    tableAuxType.tabTotal = float(acum2)
-                
-                if ty.mercPagar == True:
-
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
-
-                    acum2 = 0
-
-                    for fac in allFacturesPay:
-
-                        acum2 = acum2 + fac.total
-                    
-                    tableAuxType.tabTotal = float(acum2)
-
-                if ty.visa == True:
-
-                    allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesVisa:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.0225*1.07
-
-                        acum = acum + (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-                
-                if ty.clave == True:
-
-                    allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesClave:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.02*1.07
-
-                        acum = acum + (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-
-                tableAuxType.save()
-
-        else:
-
-            print("No hay tabla nueva")
-
-            allTypes = factType.objects.all().order_by("nombre")
-
-            for ty in allTypes:
+            else:
 
                 tableAuxType = mainTable()
                 tableAuxType.fecha = tod
                 tableAuxType.tabTipo = ty
                 tableAuxType.tabTotal = 0
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+            allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+            acum = 0
+
+            for fac in allFacturesCash:
+
+                if fac.refCategory.ingreso == True:
+
+                    acum = acum + fac.total
+                
+                else:
+
+                    acum = acum - fac.total
+            
+            if acum<0:
+                tableAuxType.tabTotal = float(acum*(-1))
+            else:
+                tableAuxType.tabTotal = float(acum)
+
+            if ty.facCobrar == True:
+
+                allFacturesPay = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+
+                tableAuxType.tabTotal = float(acum2)
+            
+            if ty.mercPagar == True:
+
+                allFacturesPay = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+                
+                tableAuxType.tabTotal = float(acum2)
+
+            if ty.facCobrada == True:
+
+                allFacturesPay = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+
+                tableAuxType.tabTotal = float(acum2)
+
+            if ty.mercPagada == True:
+
+                allFacturesPay = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+
+                tableAuxType.tabTotal = float(acum2)
+            
+            if ty.visa == True:
+
+                allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+
                 acum = 0
 
-                for fac in allFacturesCash:
+                for fac in allFacturesVisa:
 
-                    if fac.refCategory.ingreso == True:
+                    if fac.monto == fac.total:
 
-                        acum = acum + fac.total
-                    
+                        itbm = 0
+                        
                     else:
 
-                        acum = acum - fac.total
+                        itbm = fac.iva
 
-                if acum<0:
-                    tableAuxType.tabTotal = float(acum*(-1))
-                else:
-                    tableAuxType.tabTotal = float(acum)
-                    
-                # tableAuxType.tabTotal = float(acum)
+                    retencion = float(itbm/2)
+                    interes = float(fac.total)*0.0225*1.07
 
-                if ty.facCobrar == True:
+                    acum = acum + (fac.total)
 
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
-                    acum2 = 0
+                tableAuxType.tabTotal = float(acum)
+            
+            if ty.clave == True:
 
-                    for fac in allFacturesPay:
+                allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
 
-                        acum2 = acum2 + fac.total
+                acum = 0
 
-                    tableAuxType.tabTotal = float(acum2)
-                
-                if ty.mercPagar == True:
+                for fac in allFacturesClave:
 
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+                    if fac.monto == fac.total:
 
-                    acum2 = 0
+                        itbm = 0
+                        
+                    else:
 
-                    for fac in allFacturesPay:
+                        itbm = fac.iva
 
-                        acum2 = acum2 + fac.total
-                    
-                    tableAuxType.tabTotal = float(acum2)
+                    retencion = float(itbm/2)
+                    interes = float(fac.total)*0.02*1.07
 
-                if ty.visa == True:
+                    acum = acum + (fac.total)
 
-                    allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+                tableAuxType.tabTotal = float(acum)
 
-                    acum = 0
-
-                    for fac in allFacturesVisa:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.0225*1.07
-
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + (fac.total)
-                        else:
-                            acum = acum - (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-                
-                if ty.clave == True:
-
-                    allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty.nombre).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesClave:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.02*1.07
-
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + (fac.total)
-                        else:
-                            acum = acum - (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-                
-                tableAuxType.save()
-
-                # tableAux.save()
-                tableChange = mainTable.objects.get(id=tableAuxType.id)
-                tableChange.fecha=tod
-                tableChange.save()
-
-                # tableAuxType.fecha=tod
+            tableAuxType.save()
 
         # Fin fecha nueva ---------------------------------------------------------
 
         # Para la fecha vieja -----------------------------------------------------------
 
+# ------------------------------------        
+
         tod = todold
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+        allTypes = factType.objects.all().order_by("nombre")
 
-        if  tableAux:
+        for ty in allTypes:
 
-            allTypes = factType.objects.all().order_by("nombre")
-
-            for ty in allTypes:
+            if tableAux:
 
                 tableAuxType = mainTable.objects.get(fecha__date=tod,tabTipo__nombre=ty.nombre)
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                acum = 0
-
-                for fac in allFacturesCash:
-
-                    if fac.refCategory.ingreso == True:
-
-                        acum = acum + fac.total
-
-                    else:
-
-                        acum = acum - fac.total
-
-                if acum<0:
-                    tableAuxType.tabTotal = float(acum*(-1))
-                else:
-                    tableAuxType.tabTotal = float(acum)
-
-                # tableAuxType.tabTotal = float(acum)
-
-                if ty.facCobrar == True:
-
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
-
-                    acum2 = 0
-
-                    for fac in allFacturesPay:
-
-                        acum2 = acum2 + fac.total
-                    
-                    tableAuxType.tabTotal = float(acum2)
-                
-                if ty.mercPagar == True:
-
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
-
-                    acum2 = 0
-
-                    for fac in allFacturesPay:
-
-                        acum2 = acum2 + fac.total
-                    
-                    tableAuxType.tabTotal = float(acum2)
-
-                if ty.visa == True:
-
-                    allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesVisa:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.0225*1.07
-
-                        if fac.refCategory.ingreso == True:
-
-                            acum = acum + (fac.total)
-                        
-                        else:
-
-                            acum = acum - (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-                
-                if ty.clave == True:
-
-                    allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesClave:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.02*1.07
-
-                        if fac.refCategory.ingreso == True:
-
-                            acum = acum + (fac.total)
-                        
-                        else:
-
-                            acum = acum - (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-
-                tableAuxType.save()
-
-        else:
-
-            print("No hay tabla")
-
-            allTypes = factType.objects.all().order_by("nombre")
-
-            for ty in allTypes:
+            else:
 
                 tableAuxType = mainTable()
                 tableAuxType.tabTipo = ty
+                tableAuxType.fecha = tod
                 tableAuxType.tabTotal = 0
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+            allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+            acum = 0
+
+            for fac in allFacturesCash:
+
+                if fac.refCategory.ingreso == True:
+
+                    acum = acum + fac.total
+
+                else:
+
+                    acum = acum - fac.total
+
+            if acum<0:
+                tableAuxType.tabTotal = float(acum*(-1))
+            else:
+                tableAuxType.tabTotal = float(acum)
+
+            if ty.facCobrar == True:
+
+                allFacturesPay = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+                
+                tableAuxType.tabTotal = float(acum2)
+            
+            if ty.mercPagar == True:
+
+                allFacturesPay = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+                
+                tableAuxType.tabTotal = float(acum2)
+
+            if ty.facCobrada == True:
+
+                allFacturesPay = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+
+                tableAuxType.tabTotal = float(acum2)
+
+            if ty.mercPagada == True:
+
+                allFacturesPay = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+                acum2 = 0
+
+                for fac in allFacturesPay:
+
+                    acum2 = acum2 + fac.total
+
+                tableAuxType.tabTotal = float(acum2)
+
+            if ty.visa == True:
+
+                allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+
                 acum = 0
 
-                for fac in allFacturesCash:
+                for fac in allFacturesVisa:
+
+                    if fac.monto == fac.total:
+
+                        itbm = 0
+                        
+                    else:
+
+                        itbm = fac.iva
+
+                    retencion = float(itbm/2)
+                    interes = float(fac.total)*0.0225*1.07
 
                     if fac.refCategory.ingreso == True:
 
-                        acum = acum + fac.total
-
+                        acum = acum + (fac.total)
+                    
                     else:
 
-                        acum = acum - fac.total
+                        acum = acum - (fac.total)
 
-                if acum<0:
-                    tableAuxType.tabTotal = float(acum*(-1))
-                else:
-                    tableAuxType.tabTotal = float(acum)
+                tableAuxType.tabTotal = float(acum)
+            
+            if ty.clave == True:
+
+                allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
+
+                acum = 0
+
+                for fac in allFacturesClave:
+
+                    if fac.monto == fac.total:
+
+                        itbm = 0
+                        
+                    else:
+
+                        itbm = fac.iva
+
+                    retencion = float(itbm/2)
+                    interes = float(fac.total)*0.02*1.07
+
+                    if fac.refCategory.ingreso == True:
+
+                        acum = acum + (fac.total)
                     
-                # tableAuxType.tabTotal = float(acum)
+                    else:
 
-                if ty.facCobrar == True:
+                        acum = acum - (fac.total)
 
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
-                    acum2 = 0
+                tableAuxType.tabTotal = float(acum)
 
-                    for fac in allFacturesPay:
-
-                        acum2 = acum2 + fac.total
-
-                    tableAuxType.tabTotal = float(acum2)
-                
-                if ty.mercPagar == True:
-
-                    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
-
-                    acum2 = 0
-
-                    for fac in allFacturesPay:
-
-                        acum2 = acum2 + fac.total
-                    
-                    tableAuxType.tabTotal = float(acum2)
-
-                if ty.visa == True:
-
-                    allFacturesVisa = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesVisa:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.0225*1.07
-
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + (fac.total)
-                        else:
-                            acum = acum - (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-                
-                if ty.clave == True:
-
-                    allFacturesClave = factura.objects.filter(fechaCreado__date=tod,refType__nombre=ty).order_by("fechaCreado")
-
-                    acum = 0
-
-                    for fac in allFacturesClave:
-
-                        if fac.monto == fac.total:
-
-                            itbm = 0
-                            
-                        else:
-
-                            itbm = fac.iva
-
-                        retencion = float(itbm/2)
-                        interes = float(fac.total)*0.02*1.07
-
-                        if fac.refCategory.ingreso == True:
-                            acum = acum + (fac.total)
-                        else:
-                            acum = acum - (fac.total)
-
-                    tableAuxType.tabTotal = float(acum)
-                
-                tableAuxType.save()
+            tableAuxType.save()
 
         # Fin fecha vieja ---------------------------------------------------------
 
@@ -5438,6 +5290,136 @@ def accountDay(request):
 
     return render(request,"spareapp/accountDay.html",dic)
 
+def deleteFac(request,val):
+
+    print("Entra a eliminar")
+
+    allTypes = factType.objects.all()
+
+    facAux = factura.objects.get(id=val)
+
+    print(facAux.fechaCreado.date())
+
+    facBorrada = facAux.fechaCreado
+
+    facAux.delete()
+
+    for ty in allTypes:
+
+        tableAuxType = mainTable.objects.get(fecha=facBorrada,tabTipo=ty)
+
+        allFacturesCash = factura.objects.filter(fechaCreado=facBorrada,refType=ty).order_by("fechaCreado")
+        acum = 0
+
+        for fac in allFacturesCash:
+
+            if fac.refCategory.ingreso == True:
+
+                acum = acum + fac.total
+            
+            else:
+
+                acum = acum - fac.total
+        
+        if acum<0:
+            tableAuxType.tabTotal = float(acum*(-1))
+        else:
+            tableAuxType.tabTotal = float(acum)
+
+        if ty.facCobrar == True:
+
+            allFacturesPay = factura.objects.filter(fechaCreado=facBorrada,pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+            acum2 = 0
+
+            for fac in allFacturesPay:
+
+                acum2 = acum2 + fac.total
+
+            tableAuxType.tabTotal = float(acum2)
+        
+        if ty.mercPagar == True:
+
+            allFacturesPay = factura.objects.filter(fechaCreado=facBorrada,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+
+            acum2 = 0
+
+            for fac in allFacturesPay:
+
+                acum2 = acum2 + fac.total
+            
+            tableAuxType.tabTotal = float(acum2)
+
+        if ty.facCobrada == True:
+
+            allFacturesPay = factura.objects.filter(fechaCobrado=facBorrada.date(),pendiente=False,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+            acum2 = 0
+
+            for fac in allFacturesPay:
+
+                acum2 = acum2 + fac.total
+
+            tableAuxType.tabTotal = float(acum2)
+
+        if ty.mercPagada == True:
+
+            allFacturesPay = factura.objects.filter(fechaCobrado=facBorrada.date(),pendiente=False,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+            acum2 = 0
+
+            for fac in allFacturesPay:
+
+                acum2 = acum2 + fac.total
+
+            tableAuxType.tabTotal = float(acum2)
+        
+        if ty.visa == True:
+
+            allFacturesVisa = factura.objects.filter(fechaCreado=facBorrada,refType__nombre=ty).order_by("fechaCreado")
+
+            acum = 0
+
+            for fac in allFacturesVisa:
+
+                if fac.monto == fac.total:
+
+                    itbm = 0
+                    
+                else:
+
+                    itbm = fac.iva
+
+                retencion = float(itbm/2)
+                interes = float(fac.total)*0.0225*1.07
+
+                acum = acum + (fac.total)
+
+            tableAuxType.tabTotal = float(acum)
+        
+        if ty.clave == True:
+
+            allFacturesClave = factura.objects.filter(fechaCreado=facBorrada,refType__nombre=ty).order_by("fechaCreado")
+
+            acum = 0
+
+            for fac in allFacturesClave:
+
+                if fac.monto == fac.total:
+
+                    itbm = 0
+                    
+                else:
+
+                    itbm = fac.iva
+
+                retencion = float(itbm/2)
+                interes = float(fac.total)*0.02*1.07
+
+                acum = acum + (fac.total)
+
+            tableAuxType.tabTotal = float(acum)
+
+        tableAuxType.save()
+
+    return render(request,"spareapp/accountStat.html")
 
 
     # {% for tab in tableAux %}
