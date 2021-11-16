@@ -5419,7 +5419,8 @@ def deleteFac(request,val):
 
         tableAuxType.save()
 
-    return render(request,"spareapp/accountStat.html")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    # return render(request,"spareapp/accountStat.html")
 
 
     # {% for tab in tableAux %}
