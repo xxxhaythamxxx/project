@@ -2802,13 +2802,13 @@ def contEntry(request):
                     retencion = float(itbm/2)
                     interes = float(fac.total)*0.0225*1.07
 
-                    if fac.refCategory.ingreso == True:
+                    # if fac.refCategory.ingreso == True:
 
-                        acum = acum + (fac.total)
+                    acum = acum + (fac.total)
                     
-                    else:
+                    # else:
 
-                        acum = acum - (fac.total)
+                    #     acum = acum - (fac.total)
 
                 tableAuxType.tabTotal = float(acum)
             
@@ -2831,10 +2831,10 @@ def contEntry(request):
                     retencion = float(itbm/2)
                     interes = float(fac.total)*0.02*1.07
 
-                    if fac.refCategory.ingreso == True:
-                        acum = acum + (fac.total)
-                    else:
-                        acum = acum - (fac.total)
+                    # if fac.refCategory.ingreso == True:
+                    acum = acum + (fac.total)
+                    # else:
+                    #     acum = acum - (fac.total)
 
                 tableAuxType.tabTotal = float(acum)
 
