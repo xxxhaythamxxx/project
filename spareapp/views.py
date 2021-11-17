@@ -2802,14 +2802,8 @@ def contEntry(request):
                     retencion = float(itbm/2)
                     interes = float(fac.total)*0.0225*1.07
 
-                    # if fac.refCategory.ingreso == True:
-
                     acum = acum + (fac.total)
                     
-                    # else:
-
-                    #     acum = acum - (fac.total)
-
                 tableAuxType.tabTotal = float(acum)
             
             if ty.clave == True:
@@ -2831,10 +2825,7 @@ def contEntry(request):
                     retencion = float(itbm/2)
                     interes = float(fac.total)*0.02*1.07
 
-                    # if fac.refCategory.ingreso == True:
                     acum = acum + (fac.total)
-                    # else:
-                    #     acum = acum - (fac.total)
 
                 tableAuxType.tabTotal = float(acum)
 
@@ -2961,27 +2952,17 @@ def contTypeTarjeta(request,val,val2):
         if typeAux.visa == True:
 
             neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
             interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(itbmMonto),float(float(fac.total)*0.0225*1.07),float(float(itbmMonto)/2),float(neto)]
 
         else:
 
             neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
             interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(itbmMonto)/2),float(neto)]
 
     for fac in allFacturesVal:
@@ -2991,12 +2972,6 @@ def contTypeTarjeta(request,val,val2):
         montoTotal = montoTotal + fac.monto
         itbmTotal = itbmTotal + float(fac.iva)
         totalTotal = totalTotal + fac.total
-
-        # else:
-
-        #     montoTotal = montoTotal - fac.monto
-        #     itbmTotal = itbmTotal - float(fac.iva)
-        #     totalTotal = totalTotal - fac.total
 
     typeDate = val2
 
@@ -3099,32 +3074,20 @@ def contTypeRangeTarjeta(request,val,val2,val3):
         if typeAux.visa == True:
 
             neto = float((fac.total)-(float(fac.total)*0.0225*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
             interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.0225*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(itbmMonto),float(float(fac.total)*0.0225*1.07),float(float(itbmMonto)/2),float(neto)]
 
         else:
 
             neto = float((fac.total)-(float(fac.total)*0.02*1.07)-(float(itbmMonto)/2))
-            # if fac.refCategory.ingreso == True:
             interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
             retencionTotal = retencionTotal + float(itbmMonto/2)
             netoTotal = netoTotal + neto
-            # else:
-            #     interesTotal = interesTotal - float(float(fac.total)*0.02*1.07)
-            #     retencionTotal = retencionTotal - float(itbmMonto/2)
-            #     netoTotal = netoTotal - neto
             itbm7[fac.id] = [float(fac.monto)*0.07,float(float(fac.total)*0.02*1.07),float(float(itbmMonto)/2),float(neto)]
 
     for fac in allFacturesVal:
-
-        # if fac.refCategory.ingreso == True:
 
         montoTotal = montoTotal + fac.monto
         if fac.monto == fac.total:
@@ -3132,15 +3095,6 @@ def contTypeRangeTarjeta(request,val,val2,val3):
         else:
             itbmTotal = itbmTotal + float(fac.monto)*0.07
         totalTotal = totalTotal + fac.total
-        
-        # else:
-
-        #     montoTotal = montoTotal - fac.monto
-        #     if fac.monto == fac.total:
-        #         itbmTotal = itbmTotal - float(0)
-        #     else:
-        #         itbmTotal = itbmTotal -float(fac.monto)*0.07
-        #     totalTotal = totalTotal - fac.total
 
     typeDate = "From "+val2+", to "+val3
 
@@ -3556,7 +3510,6 @@ def contByRange(request):
 
     if request.method == "POST":
 
-        # Obtengo las fechas de inicio y fin de busqueda
         dateFrom = request.POST.get("searchDateFrom")
         dateTo = request.POST.get("searchDateTo")
         allTypes = factType.objects.all()
@@ -3564,14 +3517,11 @@ def contByRange(request):
         # Inicializo todas las facturas por el rango deseado
         allFacturesRange = ""
 
-        # Si existe el rango, obtengo todas las facturas en dicho rango
         if dateFrom and dateTo:
             allFacturesRange = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
 
-        # Obtengo todas las tablas auxiliares
         tableAux = mainTableAux.objects.all()
 
-        # Borro todas las tablas auxiliares
         for all in tableAux:
 
             all.delete()
@@ -3581,12 +3531,10 @@ def contByRange(request):
 
         for typ in allTypes:
 
-            # Creo una tabla auxiliar para cada type
             tableAuxGet = mainTableAux()
 
             tableAuxGet.tabTipo = typ  
 
-            # Obtengo las tablas de dicho rango de acuerdo a ese tipo
             tableAux = mainTable.objects.filter(fecha__date__gte=dateFrom,fecha__date__lte=dateTo,tabTipo=typ)
 
             contSubTotal = 0
@@ -3686,15 +3634,8 @@ def contCollectFac(request,val):
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
                 for fac in allFacturesCash:
-                    # if fac.refCategory.ingreso == True:
                     acum = acum + fac.total
-                    # else:
-                    #     acum = acum - fac.total
                 
-                # if acum<0:
-                #     aux.tabTotal = float(acum*(-1))
-                # else:
-                #     aux.tabTotal = float(acum)
                 aux.tabTotal = float(acum)
 
                 if ty.mercPagar == True:
@@ -3758,15 +3699,8 @@ def contCollectFac(request,val):
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
                 for fac in allFacturesCash:
-                    # if fac.refCategory.ingreso == True:
                     acum = acum + fac.total
-                    # else:
-                    #     acum = acum - fac.total
                 
-                # if acum<0:
-                #     tableNew.tabTotal = float(acum*(-1))
-                # else:
-                #     tableNew.tabTotal = float(acum)
                 tableNew.tabTotal = float(acum)
 
                 if ty.mercPagar == True:
@@ -3804,10 +3738,6 @@ def contCollectFac(request,val):
                         totalFact = totalFact + float(fac.total)
                     
                     tableNew.tabTotal = totalFact
-
-                # else:
-
-                #     tableNew.tabTotal = 0
 
                 tableNew.save()
 
@@ -3896,14 +3826,7 @@ def contPayFac(request,val):
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
                 for fac in allFacturesCash:
-                    # if fac.refCategory.ingreso == True:
                     acum = acum + fac.total
-                #     else:
-                #         acum = acum - fac.total
-                # if acum<0:
-                #     aux.tabTotal = float(acum*(-1))
-                # else:
-                #     aux.tabTotal = float(acum)
                 aux.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
@@ -3967,14 +3890,7 @@ def contPayFac(request,val):
                 allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
                 acum = 0
                 for fac in allFacturesCash:
-                    # if fac.refCategory.ingreso == True:
                     acum = acum + fac.total
-                #     else:
-                #         acum = acum - fac.total
-                # if acum<0:
-                #     tableNew.tabTotal = float(acum*(-1))
-                # else:
-                #     tableNew.tabTotal = float(acum)
                 tableNew.tabTotal = float(acum)
 
                 if ty.facCobrar == True:
@@ -4340,7 +4256,6 @@ def editeFact(request,val,val2):
         returnPath = request.POST.get("returnPath")
         # ---------------------------------------------------
         fechaAct = request.POST.get("searchDateFrom")
-        # print(fechaAct)
         contNombre = request.POST.get("contNombre")
         nomAux = persona.objects.get(id=contNombre)
         factAux = factura.objects.get(id=request.POST.get("facId"))
@@ -4416,17 +4331,7 @@ def editeFact(request,val,val2):
 
             for fac in allFacturesCash:
 
-                # if fac.refCategory.ingreso == True:
-
                 acum = acum + fac.total
-                
-                # else:
-
-                #     acum = acum - fac.total
-            
-            # if acum<0:
-            #     tableAuxType.tabTotal = float(acum*(-1))
-            # else:
             tableAuxType.tabTotal = float(acum)
 
             if ty.facCobrar == True:
@@ -4548,17 +4453,8 @@ def editeFact(request,val,val2):
 
             for fac in allFacturesCash:
 
-                # if fac.refCategory.ingreso == True:
-
                 acum = acum + fac.total
 
-            #     else:
-
-            #         acum = acum - fac.total
-
-            # if acum<0:
-            #     tableAuxType.tabTotal = float(acum*(-1))
-            # else:
             tableAuxType.tabTotal = float(acum)
 
             if ty.facCobrar == True:
@@ -5092,17 +4988,8 @@ def deleteFac(request,val):
 
         for fac in allFacturesCash:
 
-            # if fac.refCategory.ingreso == True:
-
             acum = acum + fac.total
             
-        #     else:
-
-        #         acum = acum - fac.total
-        
-        # if acum<0:
-        #     tableAuxType.tabTotal = float(acum*(-1))
-        # else:
         tableAuxType.tabTotal = float(acum)
 
         if ty.facCobrar == True:

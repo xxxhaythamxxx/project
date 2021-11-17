@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-lg-11">
                         <label class="form-label" for="contNombre">Cliente</label>
-                        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example">
+                        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
                             <option value="">Seleccione cliente</option>
                             {% for cust in allCustomers %}
                             {% if cust.nombre == facAux.0.refPersona.nombre %} 

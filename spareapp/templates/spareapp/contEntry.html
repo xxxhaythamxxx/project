@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-lg-11">
                         <label class="form-label" for="contNombre">Cliente</label>
-                        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example">
+                        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
                             <option value="" selected>Seleccione cliente</option>
                             {% for cust in allCustomers %}
                             <option value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
@@ -138,48 +138,6 @@ $("#formCust").submit(function(e){
         }
     })
 })
-// auxCat=$("#contCatIng").val()
-// $.ajax({
-//     method: 'GET',
-//     url: '/factTypeES',
-//     data: {'val': "entry",'cat': auxCat},
-//     success:function(data){
-
-//         select = $("#contCatIng")
-//         select2 = $("#contTypeIng")
-//         select.empty()
-//         select2.empty()
-//         select.append("<option limit='false' value='' selected>Seleccione categoría</option>")
-//         select2.append("<option value='' selected>Seleccione tipo de pago</option>")
-
-//         for(var i = 0; i<data.allTypes.length;i++){
-//             select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre.toUpperCase()+"</option>")
-//         }
-
-//         for(var i = 0; i<data.allCategories.length;i++){
-//             select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre.toUpperCase()+"</option>")
-//         }
-
-//         $("#contCatIng").change(function(){
-//             if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
-//                 $("#divFechaTope").show()
-//                 select2.empty()
-//                 select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre.toUpperCase()+"</option>")
-//             }
-//             else{
-//                 $("#divFechaTope").hide()
-//                 $("#contTypeIng option").each(function(){
-//                     $(this).show()
-//                     select2.empty()
-//                     select2.append("<option value='' selected>Seleccione tipo de pago</option>")
-//                     for(var i = 0; i<data.allTypes.length;i++){
-//                         select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre.toUpperCase()+"</option>")
-//                     }
-//                 })
-//             }
-//         })
-//     }
-// });
 
 $("#contFacType").change(function(){
     if($(this).val()=="entry"){
@@ -230,6 +188,20 @@ $("#contFacType").change(function(){
         }
     });
 })
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type=number]').forEach( node => node.addEventListener('keypress', e => {
+        if(e.keyCode == 13) {
+            e.preventDefault();
+        }
+    }))
+
+    document.querySelectorAll('input[type=text]').forEach( node => node.addEventListener('keypress', e => {
+        if(e.keyCode == 13) {
+            e.preventDefault();
+        }
+    }))
+});
 
 </script>
 {% endblock %}
