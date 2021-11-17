@@ -16,7 +16,7 @@
         <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
             <option value="" selected>Seleccionar categoría</option>
             {% for cust in allCategorys %}
-            <option value="{{cust.id}}">{{cust.nombre}}</option>
+            <option value="{{cust.id}}">{{cust.nombre|upper}}</option>
             {% endfor %}
         </select>
     </div>
@@ -67,8 +67,8 @@
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2"><a href="{% url 'contIndividual' fact.refPersona.id %}">{{fact.refPersona}}</a></td>
-            <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
-            <td class="p-2">{{fact.refCategory.nombre}}</td>
+            <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
+            <td class="p-2">{{fact.refCategory.nombre|upper}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
