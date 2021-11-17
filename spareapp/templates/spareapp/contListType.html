@@ -20,6 +20,8 @@
                     <th class="p-2">Mercancía pagada</th>
                     <th class="p-2">Tarjeta Visa</th>
                     <th class="p-2">Tarjeta Clave</th>
+                    <th class="p-2">Ingreso</th>
+                    <th class="p-2">Gasto</th>
                     <th class="p-2">Incluir</th>
                     <th class="p-2">Opción</th>
                 </tr>
@@ -37,6 +39,10 @@
                     <td class="p-2"><input name="mercPagada{{ty.id}}" type="checkbox" {% if ty.mercPagada == True %} checked {% else %} '' {% endif %}></td>
                     <td class="p-2"><input name="visa{{ty.id}}" type="checkbox" {% if ty.visa == True %} checked {% else %} '' {% endif %}></td>
                     <td class="p-2"><input name="clave{{ty.id}}" type="checkbox" {% if ty.clave == True %} checked {% else %} '' {% endif %}></td>
+
+                    <td class="p-2"><input name="ingreso{{ty.id}}" type="checkbox" {% if ty.ingreso == True %} checked {% else %} '' {% endif %}></td>
+                    <td class="p-2"><input name="gasto{{ty.id}}" type="checkbox"  {% if ty.gasto == True %} checked {% else %} '' {% endif %}></td>
+                    
 
                     <input value="{{ty.id}}" name="typId" type="text" style="display: none;">
                     <td class="p-2"><input name="typInclude{{ty.id}}" type="checkbox" {% if ty.include == True %} checked {% else %} '' {% endif %}></td>

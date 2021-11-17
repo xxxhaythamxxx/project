@@ -38,7 +38,7 @@
             <tr>
                 <td class="p-2">{{fac.num}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
-                <td class="p-2">{{fac.refCategory}}</td>
+                <td class="p-2">{{fac.refCategory|upper}}</td>
                 <td class="p-2">{{fac.note}}</td>
                 <td class="p-2">${{fac.monto|floatformat:2}}</td>
                 <td class="p-2">${{fac.iva|floatformat:2}}</td>

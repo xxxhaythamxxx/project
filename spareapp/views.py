@@ -2610,62 +2610,6 @@ def contDay(request):
         catA.egreso = True
         catA.save()
 
-    # # Lleno los types basicos -------------------------------
-
-    # typeAux = factType.objects.filter(nombre="TARJETA VISA")
-    # if typeAux:
-    #     pass
-    # else:
-    #     typA = factType()
-    #     typA.nombre = "TARJETA VISA"
-    #     typA.manual = False
-    #     typA.save()
-    # typeAux = factType.objects.filter(nombre="TARJETA CLAVE")
-    # if typeAux:
-    #     pass
-    # else:
-    #     typA = factType()
-    #     typA.nombre = "TARJETA CLAVE"
-    #     typA.manual = False
-    #     typA.save()
-    # typeAux = factType.objects.filter(nombre="MERCANCIA CREDITO PAGADO")
-    # if typeAux:
-    #     pass
-    # else:
-    #     typA = factType()
-    #     typA.nombre = "MERCANCIA CREDITO PAGADO"
-    #     typA.manual = False
-    #     typA.save()
-    # typeAux = factType.objects.filter(nombre="MERCANCIA CREDITO POR PAGAR")
-    # if typeAux:
-    #     pass
-    # else:
-    #     typA = factType()
-    #     typA.nombre = "MERCANCIA CREDITO POR PAGAR"
-    #     typA.include = False
-    #     typA.manual = False
-    #     typA.save()
-    # typeAux = factType.objects.filter(nombre="FACTURA POR COBRAR")
-    # if typeAux:
-    #     pass
-    # else:
-    #     typA = factType()
-    #     typA.nombre = "FACTURA POR COBRAR"
-    #     typA.include = False
-    #     typA.manual = False
-    #     typA.save()
-    # typeAux = factType.objects.filter(nombre="FACTURA COBRADO")
-    # if typeAux:
-    #     pass
-    # else:
-    #     typA = factType()
-    #     typA.nombre = "FACTURA COBRADO"
-    #     # typA.include = False
-    #     typA.manual = False
-    #     typA.save()
-
-    # # ----------------------------------------------------
-
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     editPrueba = False
@@ -2690,8 +2634,6 @@ def contDay(request):
 
             noIncludeTotal = noIncludeTotal + tab.tabTotal
         
-    print(noIncludeTotal)
-            
     dic = {"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
@@ -2706,15 +2648,12 @@ def contEntry(request):
     tod = datetime.now().date()
     actualAux=datetime.now().date()
     actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
-    # contFecha = datetime.now().date()
     deadlineDefault=(datetime.now()+timedelta(days=30)).date()
     actual=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
 
     dic = {"actualDay":actualDay,"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
 
     if request.method == "POST":
-
-        print("Entra a POST")
 
         actualAux=datetime.now().date()
         actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
@@ -2769,13 +2708,9 @@ def contEntry(request):
 
         factAux.save()
 
-        # tod = datetime.now().date()
-
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
         if  tableAux:
-
-            print("Hay table Aux")
 
             allTypes = factType.objects.all().order_by("nombre")
 
@@ -3557,6 +3492,16 @@ def contListType(request):
 
                 singleType.include = False
 
+            if request.POST.get("ingreso"+cat):
+
+                singleType.ingreso = True
+                singleType.gasto = False
+            
+            else:
+
+                singleType.ingreso = False
+                singleType.gasto = True
+                
             singleType.save()
 
     allTypes = factType.objects.all().order_by("nombre")
@@ -4593,8 +4538,6 @@ def editeFact(request,val,val2):
         tod = factAux.fechaCreado.date()
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-# ---------------------------------------
-
         allTypes = factType.objects.all().order_by("nombre")
 
         for ty in allTypes:
@@ -4724,8 +4667,6 @@ def editeFact(request,val,val2):
         # Fin fecha nueva ---------------------------------------------------------
 
         # Para la fecha vieja -----------------------------------------------------------
-
-# ------------------------------------        
 
         tod = todold
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
@@ -4977,7 +4918,6 @@ def contIndividual(request,val):
         
         for fac in factureName:
 
-        # ----------------------------------------------
             if fac.refCategory.ingreso:
 
                 cont = cont
@@ -5001,14 +4941,10 @@ def contIndividual(request,val):
                 if fac.refCategory.nombre=="Mercancia credito pagada":
 
                     cont = cont - fac.total
-        # ----------------------------------------------
-
 
             balance[fac.id] = cont
 
         balanceTotal = cont
-
-        # ---------------------------------------------------------------
 
         if request.POST.get("search") == "balance":
 
@@ -5043,8 +4979,6 @@ def contIndividual(request,val):
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado","id")
 
-        # ---------------------------------------------------------------
-
     balanceTotal = cont
 
     dic = {"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
@@ -5071,9 +5005,9 @@ def factTypeES(request):
         else:
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
         if cateAux and cate.limite == True:
-            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
+            allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
         else:
-            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
+            allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
         cobrarPagar = factType.objects.filter(facCobrar=True)
     
     else:
@@ -5083,9 +5017,9 @@ def factTypeES(request):
         else:
             allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
         if cateAux and cate.limite == True:
-            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(facCobrar=True)
+            allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(facCobrar=True)
         else:
-            allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
+            allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
         cobrarPagar = factType.objects.filter(mercPagar=True)
 
     allCategories = list(allCategories.values())
@@ -5102,15 +5036,9 @@ def contListByTypeZero(request):
 
     if request.method == "POST":
 
-        print("Entra a POST")
-
         val = request.POST.get("contNombre")
 
-        print(val)
-
         factureName = factura.objects.filter(refType__id=val)
-
-        print(factureName)
 
         if request.POST.get("search") == "month":
 
@@ -5292,13 +5220,9 @@ def accountDay(request):
 
 def deleteFac(request,val):
 
-    print("Entra a eliminar")
-
     allTypes = factType.objects.all()
 
     facAux = factura.objects.get(id=val)
-
-    print(facAux.fechaCreado.date())
 
     facBorrada = facAux.fechaCreado
 

@@ -15,6 +15,14 @@
                 <input class="form-control" id="typeNombre" type="text" name="typeNombre" required>
             </div>
             <div class="mb-3">
+                <label class="form-label" for="typeEntry">Tipo de factura</label>
+                <select name="typeEntry" id="typeEntry" class="form-select form-select-md" aria-label=".form-select-md example" required>
+                    <option value="">Seleccione tipo de factura</option>
+                    <option value="entry">Ingreso</option>
+                    <option value="spending">Gasto</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="typeInclude">Incluir</label>
                 <input id="typeInclude" name="typeInclude" type="checkbox">
             </div>

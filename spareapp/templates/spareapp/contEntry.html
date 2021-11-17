@@ -55,18 +55,12 @@
                 <label class="form-label" for="contCatIng">Categoría</label>
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
                     <option limit="false" value="" selected>Seleccione categoría</option>
-                    {% for category in allCategories %}
-                    <option limit="{{category.limite}}" value="{{category.id}}">{{category.nombre}}</option>
-                    {% endfor %}
                 </select>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contTypeIng">Tipo de pago</label>
                 <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
                     <option value="" selected>Seleccione tipo de pago</option>
-                    {% for type in allTypes %}
-                    <option value="{{type.id}}">{{type.nombre}}</option>
-                    {% endfor %}
                 </select>
             </div>
             
@@ -144,48 +138,48 @@ $("#formCust").submit(function(e){
         }
     })
 })
-auxCat=$("#contCatIng").val()
-$.ajax({
-    method: 'GET',
-    url: '/factTypeES',
-    data: {'val': "entry",'cat': auxCat},
-    success:function(data){
+// auxCat=$("#contCatIng").val()
+// $.ajax({
+//     method: 'GET',
+//     url: '/factTypeES',
+//     data: {'val': "entry",'cat': auxCat},
+//     success:function(data){
 
-        select = $("#contCatIng")
-        select2 = $("#contTypeIng")
-        select.empty()
-        select2.empty()
-        select.append("<option limit='false' value='' selected>Seleccione categoría</option>")
-        select2.append("<option value='' selected>Seleccione tipo de pago</option>")
+//         select = $("#contCatIng")
+//         select2 = $("#contTypeIng")
+//         select.empty()
+//         select2.empty()
+//         select.append("<option limit='false' value='' selected>Seleccione categoría</option>")
+//         select2.append("<option value='' selected>Seleccione tipo de pago</option>")
 
-        for(var i = 0; i<data.allTypes.length;i++){
-            select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
-        }
+//         for(var i = 0; i<data.allTypes.length;i++){
+//             select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre.toUpperCase()+"</option>")
+//         }
 
-        for(var i = 0; i<data.allCategories.length;i++){
-            select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre+"</option>")
-        }
+//         for(var i = 0; i<data.allCategories.length;i++){
+//             select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre.toUpperCase()+"</option>")
+//         }
 
-        $("#contCatIng").change(function(){
-            if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
-                $("#divFechaTope").show()
-                select2.empty()
-                select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre+"</option>")
-            }
-            else{
-                $("#divFechaTope").hide()
-                $("#contTypeIng option").each(function(){
-                    $(this).show()
-                    select2.empty()
-                    select2.append("<option value='' selected>Seleccione tipo de pago</option>")
-                    for(var i = 0; i<data.allTypes.length;i++){
-                        select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
-                    }
-                })
-            }
-        })
-    }
-});
+//         $("#contCatIng").change(function(){
+//             if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
+//                 $("#divFechaTope").show()
+//                 select2.empty()
+//                 select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre.toUpperCase()+"</option>")
+//             }
+//             else{
+//                 $("#divFechaTope").hide()
+//                 $("#contTypeIng option").each(function(){
+//                     $(this).show()
+//                     select2.empty()
+//                     select2.append("<option value='' selected>Seleccione tipo de pago</option>")
+//                     for(var i = 0; i<data.allTypes.length;i++){
+//                         select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre.toUpperCase()+"</option>")
+//                     }
+//                 })
+//             }
+//         })
+//     }
+// });
 
 $("#contFacType").change(function(){
     if($(this).val()=="entry"){
@@ -208,18 +202,18 @@ $("#contFacType").change(function(){
             select2.append("<option value='' selected>Seleccione tipo de pago</option>")
 
             for(var i = 0; i<data.allTypes.length;i++){
-                select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
+                select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre.toUpperCase()+"</option>")
             }
 
             for(var i = 0; i<data.allCategories.length;i++){
-                select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre+"</option>")
+                select.append("<option limit="+data.allCategories[i].limite+" value="+data.allCategories[i].id+">"+data.allCategories[i].nombre.toUpperCase()+"</option>")
             }
 
             $("#contCatIng").change(function(){
                 if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
                     $("#divFechaTope").show()
                     select2.empty()
-                    select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre+"</option>")
+                    select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre.toUpperCase()+"</option>")
                 }
                 else{
                     $("#divFechaTope").hide()
@@ -228,7 +222,7 @@ $("#contFacType").change(function(){
                         select2.empty()
                         select2.append("<option value='' selected>Seleccione tipo de pago</option>")
                         for(var i = 0; i<data.allTypes.length;i++){
-                            select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre+"</option>")
+                            select2.append("<option value="+data.allTypes[i].id+">"+data.allTypes[i].nombre.toUpperCase()+"</option>")
                         }
                     })
                 }

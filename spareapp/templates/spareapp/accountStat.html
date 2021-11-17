@@ -110,8 +110,8 @@
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refPersona.nombre}}</td>
-            <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
-            <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
+            <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
+            <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
 
             {% if fact.pendiente == True or fact.refType.nombre == "FACTURA POR COBRAR" or fact.refType.nombre == "MERCANCIA CREDITO POR PAGAR" %}
             <td class="p-2">$0.00</td>

@@ -135,6 +135,8 @@ class factType(models.Model):
     facCobrada = models.BooleanField(default=False,verbose_name="Factura cobrada")
     visa = models.BooleanField(default=False,verbose_name="Tarjeta visa")
     clave = models.BooleanField(default=False,verbose_name="Tarjeta clave")
+    ingreso = models.BooleanField(default=False,verbose_name="Ingreso")
+    gasto = models.BooleanField(default=False,verbose_name="Gasto")
     # models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
     def __str__(self):
         return str(self.nombre)
