@@ -11,7 +11,7 @@
         <thead>
             <tr class="color text-white">
                 <th class="p-2">Tipo de pago</th>
-                <th class="p-2">Total</th>
+                <th style="width: 350px;" class="p-2">Total contable</th>
             </tr>
         </thead>
 
@@ -25,9 +25,25 @@
             </tr>
             {% endfor %}
             <tr>
-                <td class="p-2 color text-white">Total</td>
+                <td class="p-2 color text-white">Total contable</td>
                 <td class="p-2">${{contTotal|floatformat:2}}</td>
             </tr>
+
+        </tbody>
+    </table>
+</div>
+
+
+<div class="container mt-2">
+    <table style="font-size: small;" class="table-bordered invoice">
+        <thead>
+            <tr class="color text-white">
+                <th class="p-2">Tipo de pago</th>
+                <th style="width: 350px;" class="p-2">Total no contable</th>
+            </tr>
+        </thead>
+
+        <tbody>
 
             {% for tab in tableAux %}
             <tr>
@@ -38,7 +54,7 @@
             </tr>
             {% endfor %}
             <tr>
-                <td class="p-2 color text-white">Total</td>
+                <td class="p-2 color text-white">Total no contable</td>
                 <td class="p-2">${{noIncludeTotal|floatformat:2}}</td>
             </tr>
             

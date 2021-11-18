@@ -5294,3 +5294,113 @@ def deleteFac(request,val):
 # </form>
 
 # {% endblock %}
+
+
+
+
+
+
+
+
+# <div class="container mt-2">
+#     <table style="font-size: small;" class="table-bordered invoice">
+#         <thead>
+#             <tr class="color text-white">
+#                 <th class="p-2">Tipo de pago</th>
+#                 <th style="min-width: 100px;" class="p-2">Total</th>
+#             </tr>
+#         </thead>
+
+#         <tbody>
+
+#             {% if tableAux %}
+
+#                 {% for tab in tableAux %}
+#                 <tr>
+#                     {% if tab.tabTipo.include == True %}
+#                     <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>{{tab.tabTipo}}</a></td>
+#                     <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+#                     {% endif %}
+#                 </tr>
+#                 {% endfor %}
+                
+#                 <tr>
+#                     <td class="p-2 color text-white">Total</td>
+#                     <td class="p-2">${{contTotal|floatformat:2}}</td>
+#                 </tr>
+
+#             {% else %}
+
+#                 {% for tab in allTypes %}
+#                 <tr>
+#                     {% if tab.include == True %}
+#                     <td class="p-2"><a href="">{{tab.nombre}}</a></td>
+#                     {% if tab.manual == True %}
+#                     <td class="p-2">$<input id="{{tab.nombre|cut:' '}}Total" name="{{tab.nombre|cut:' '}}Total" type="number"></td>
+#                     {% else %}
+#                     <td class="p-2">$ 0.00</td>
+#                     {% endif %}
+#                     {% endif %}
+#                 </tr>
+#                 {% endfor %}
+#                 <tr>
+#                     <td class="p-2 color text-white">Total</td>
+#                     <td class="p-2">$ 0.00</td>
+#                 </tr>
+#             {% endif %}
+#         </tbody>
+#     </table>
+# </div>
+
+
+# <div class="container mt-2">
+#     <table style="font-size: small;" class="table-bordered invoice">
+#         <thead>
+#             <tr class="color text-white">
+#                 <th class="p-2">Tipo de pago</th>
+#                 <th style="min-width: 100px;" class="p-2">Total</th>
+#             </tr>
+#         </thead>
+
+#         <tbody>
+
+#             {% if tableAux %}
+
+#                 {% for tab in tableAux %}
+#                 <tr>
+#                     {% if tab.tabTipo.include == False %}
+#                     <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+#                     <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+#                     {% endif %}
+#                 </tr>
+#                 {% endfor %}
+
+#                 <tr>
+#                     <td class="p-2 color text-white">Total</td>
+#                     <td class="p-2">${{noIncludeTotal|floatformat:2}}</td>
+#                 </tr>
+
+#             {% else %}
+                
+#                 {% for tab in allTypes %}
+#                 <tr>
+#                     {% if tab.include == False %}
+#                     <td class="p-2"><a href="">(  {{tab.nombre}}  )</a></td>
+#                     {% if tab.manual == True %}
+#                     <td class="p-2">$<input id="{{tab.nombre|cut:' '}}Total" name="{{tab.nombre|cut:' '}}Total" type="number"></td>
+#                     {% else %}
+#                     <td class="p-2">$ 0.00</td>
+#                     {% endif %}
+#                     {% endif %}
+#                 </tr>
+#                 {% endfor %}
+#                 <tr>
+#                     <td class="p-2 color text-white">Total</td>
+#                     <td class="p-2">$ 0.00</td>
+#                 </tr>
+
+#             {% endif %}
+
+#         </tbody>
+#     </table>
+# </div>

@@ -6,14 +6,12 @@
 
 {% include "spareapp/contSuperior.html" %}
 
-<form method="POST" action="">
-{% csrf_token %}
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
             <tr class="color text-white">
                 <th class="p-2">Tipo de pago</th>
-                <th class="p-2">Total</th>
+                <th style="width: 350px;" class="p-2">Total contable</th>
             </tr>
         </thead>
 
@@ -31,22 +29,8 @@
                 {% endfor %}
                 
                 <tr>
-                    <td class="p-2 color text-white">Total</td>
+                    <td class="p-2 color text-white">Total contable</td>
                     <td class="p-2">${{contTotal|floatformat:2}}</td>
-                </tr>
-
-                {% for tab in tableAux %}
-                <tr>
-                    {% if tab.tabTipo.include == False %}
-                    <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
-                    <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-
-                <tr>
-                    <td class="p-2 color text-white">Total</td>
-                    <td class="p-2">${{noIncludeTotal|floatformat:2}}</td>
                 </tr>
 
             {% else %}
@@ -64,9 +48,45 @@
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td class="p-2 color text-white">Total</td>
+                    <td class="p-2 color text-white">Total contable</td>
                     <td class="p-2">$ 0.00</td>
                 </tr>
+
+            {% endif %}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-2">
+    <table style="font-size: small;" class="table-bordered invoice">
+        <thead>
+            <tr class="color text-white">
+                <th class="p-2">Tipo de pago</th>
+                <th style="width: 350px;" class="p-2">Total no contable</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% if tableAux %}
+
+                {% for tab in tableAux %}
+                <tr>
+                    {% if tab.tabTipo.include == False %}
+                    <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                    <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td class="p-2 color text-white">Total no contable</td>
+                    <td class="p-2">${{noIncludeTotal|floatformat:2}}</td>
+                </tr>
+
+            {% else %}
+                
                 {% for tab in allTypes %}
                 <tr>
                     {% if tab.include == False %}
@@ -80,7 +100,7 @@
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td class="p-2 color text-white">Total</td>
+                    <td class="p-2 color text-white">Total no contable</td>
                     <td class="p-2">$ 0.00</td>
                 </tr>
 
@@ -89,8 +109,5 @@
         </tbody>
     </table>
 </div>
-
-
-</form>
 
 {% endblock %}
