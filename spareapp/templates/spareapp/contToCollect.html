@@ -45,24 +45,21 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modalCobrar{{facture.id}}Label">Tipo de pago</h5>
+                                <h5 class="modal-title" id="modalCobrar{{facture.id}}Label">Cobrar factura</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body"> 
                                 <form id="formCust" method="POST" action="{% url 'contCollectFac' facture.id %}">
                                     {% csrf_token %}
-                                    <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
-                                        <option value="" selected>Seleccione tipo de pago</option>
-                                        {% for type in allTypes %}
-                                        <option value="{{type.id}}">{{type.nombre}}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <div class="mb-3">
+                                        <div>¿Seguro que desea cobrar la factura número {{facture.num}}?</div>
+                                    </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="contNota">Nota</label>
                                         <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
                                     </div>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit" class="btn btn-primary">Cobrar</button>
                                 </form>
                                 
                             </div>   

@@ -3576,8 +3576,9 @@ def contCollectFac(request,val):
     factAux = factura.objects.filter(id=val)
     tableAux = mainTable.objects.filter(fecha__date=tod)
 
-    typeAux = request.POST.get("contTypeIng")
-    typeAux = factType.objects.get(id=typeAux)
+    # typeAux = request.POST.get("contTypeIng")
+    typeAux = factType.objects.get(facCobrada=True)
+    # typeAux = factType.objects.get(id=typeAux)
 
     if factAux:
 
@@ -3618,10 +3619,7 @@ def contCollectFac(request,val):
         reciboCollect.iva = factErase.iva
         reciboCollect.monto = factErase.monto
         reciboCollect.total = factErase.total
-        if request.POST.get("contNota"):
-            reciboCollect.note=request.POST.get("contNota")
-        else:
-            reciboCollect.note=factErase.note
+        reciboCollect.note=request.POST.get("contNota")
         reciboCollect.pendiente = False
         reciboCollect.save()
 
@@ -3811,8 +3809,7 @@ def contPayFac(request,val):
         reciboCollect.fechaCobrado = tod
         reciboCollect.iva = factErase.iva
         reciboCollect.monto = factErase.monto
-        if request.POST.get("contNota"):
-            reciboCollect.note = request.POST.get("contNota")
+        reciboCollect.note = request.POST.get("contNota")
         reciboCollect.total = factErase.total
         reciboCollect.pendiente = False
         reciboCollect.save()
@@ -3990,11 +3987,15 @@ def accountStat(request):
     balance = {}
     balanceTotal = 0
     factureName = None
+    dayFrom = ""
+    dayTo = ""
 
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
+        dayFrom = factureName[0].fechaCreado.date()
+        dayTo = factureName[len(factureName)-1].fechaCreado.date()
         cont = 0
         
         for fac in factureName:
@@ -4029,7 +4030,13 @@ def accountStat(request):
 
         if request.POST.get("search") == "balance":
 
+            print(balance)
+
             for key in balance:
+
+                print(balance[key])
+                print(key)
+                print("---")
 
                 if balance[key]==0:
                     pos = key
@@ -4039,7 +4046,8 @@ def accountStat(request):
             if facActAux:
             
                 facAct = factura.objects.get(id=pos)
-                factureName = factura.objects.filter(fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado")
+                print(facAct.num)
+                factureName = factura.objects.filter(id__gte=facAct.id,fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado","id")
             
             else:
 
@@ -4048,6 +4056,13 @@ def accountStat(request):
         if request.POST.get("search") == "month":
 
             mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+
+            mes = datetime.now().date().month
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
             anio = datetime.now().date().year
             factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado")
 
@@ -4056,11 +4071,17 @@ def accountStat(request):
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
 
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
 
-    dic = {"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
+    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -4301,7 +4322,6 @@ def editeFact(request,val,val2):
         contTotal = request.POST.get("contTotal")
         factAux.total = contTotal
 
-        # if request.POST.get("contNota"):
         factAux.note = request.POST.get("contNota")
 
         factAux.save()
