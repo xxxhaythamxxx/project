@@ -4030,13 +4030,8 @@ def accountStat(request):
 
         if request.POST.get("search") == "balance":
 
-            print(balance)
 
             for key in balance:
-
-                print(balance[key])
-                print(key)
-                print("---")
 
                 if balance[key]==0:
                     pos = key
@@ -4046,7 +4041,6 @@ def accountStat(request):
             if facActAux:
             
                 facAct = factura.objects.get(id=pos)
-                print(facAct.num)
                 factureName = factura.objects.filter(id__gte=facAct.id,fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado","id")
             
             else:
@@ -4684,6 +4678,9 @@ def contIndividual(request,val):
 
         balance[fac.id] = cont
 
+    dayFrom = factureName[0].fechaCreado.date()
+    dayTo = factureName[len(factureName)-1].fechaCreado.date()
+
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
@@ -4755,7 +4752,7 @@ def contIndividual(request,val):
 
     balanceTotal = cont
 
-    dic = {"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -4802,16 +4799,26 @@ def factTypeES(request):
 def contListByTypeZero(request):
 
     allTypes = factType.objects.all().order_by("nombre")
-
+    dayFrom = ""
+    dayTo = ""
     factureName = None
 
     if request.method == "POST":
 
         val = request.POST.get("contNombre")
-
-        factureName = factura.objects.filter(refType__id=val)
+        factureName = factura.objects.filter(refType__id=val).order_by("fechaCreado","id")
+        if factureName:
+            dayFrom = factureName[0].fechaCreado.date()
+            dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
         if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
@@ -4822,28 +4829,46 @@ def contListByTypeZero(request):
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
 
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado","id")
 
-
-    dic = {"factureName":factureName,"allTypes":allTypes}
+    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
 
     return render(request,"spareapp/contListByType.html",dic)
 
 def contListByType(request,val):
 
+    dayFrom = ""
+    dayTo = ""
     allTypes = factType.objects.all().order_by("nombre")
-
-    factureName = factura.objects.filter(refType__nombre=val)
+    factureName = factura.objects.filter(refType__nombre=val).order_by("fechaCreado","id")
+    if factureName:
+        dayFrom = factureName[0].fechaCreado.date()
+        dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
     if request.method == "POST":
 
         val = request.POST.get("contNombre")
-
-        factureName = factura.objects.filter(refType__nombre=val)
+        factureName = factura.objects.filter(refType__id=val).order_by("fechaCreado","id")
+        if factureName:
+            dayFrom = factureName[0].fechaCreado.date()
+            dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
         if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
@@ -4854,27 +4879,43 @@ def contListByType(request,val):
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
 
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado","id")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id")
 
-    dic = {"factureName":factureName,"allTypes":allTypes}
+    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
 
     return render(request,"spareapp/contListByType.html",dic)
 
 def contListByCategoryZero(request):
 
     allCategorys = factCategory.objects.all().order_by("nombre")
-    
+    dayFrom = ""
+    dayTo = ""
     factureName = None
 
     if request.method == "POST":
 
         val = request.POST.get("contNombre")
-
-        factureName = factura.objects.filter(refCategory__id=val)
+        factureName = factura.objects.filter(refCategory__id=val).order_by("fechaCreado","id")
+        if factureName:
+            dayFrom = factureName[0].fechaCreado.date()
+            dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
         if request.POST.get("search") == "month":
+
+            mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
@@ -4885,43 +4926,68 @@ def contListByCategoryZero(request):
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
 
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id")
 
-
-    dic = {"factureName":factureName,"allCategorys":allCategorys}
+    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
 
     return render(request,"spareapp/contListByCategory.html",dic)
 
 def contListByCategory(request,val):
 
+    dayFrom = ""
+    dayTo = ""
     allCategorys = factCategory.objects.all().order_by("nombre")
+    factureName = factura.objects.filter(refCategory__nombre=val).order_by("fechaCreado","id")
 
-    factureName = factura.objects.filter(refCategory__nombre=val)
+    if factureName:
+        dayFrom = factureName[0].fechaCreado.date()
+        dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
     if request.method == "POST":
 
         val = request.POST.get("contNombre")
-
-        factureName = factura.objects.filter(refCategory__id=val)
+        factureName = factura.objects.filter(refCategory__id=val).order_by("fechaCreado","id")
+        if factureName:
+            dayFrom = factureName[0].fechaCreado.date()
+            dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
         if request.POST.get("search") == "month":
 
             mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
+
+            mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado","id")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "range":
 
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
 
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id")
-
-    dic = {"factureName":factureName,"allCategorys":allCategorys}
+            
+    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
 
     return render(request,"spareapp/contListByCategory.html",dic)
 
