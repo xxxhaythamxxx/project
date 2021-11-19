@@ -4301,8 +4301,8 @@ def editeFact(request,val,val2):
         contTotal = request.POST.get("contTotal")
         factAux.total = contTotal
 
-        if request.POST.get("contNota"):
-            factAux.note = request.POST.get("contNota")
+        # if request.POST.get("contNota"):
+        factAux.note = request.POST.get("contNota")
 
         factAux.save()
 
