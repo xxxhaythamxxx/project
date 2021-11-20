@@ -44,20 +44,20 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Aceptar</button>
-    <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+    <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar</button>
+    <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
 </form>
 
 </div>
 {% if factureName %}
 <div class="container mt-2">
-<a href="#" id="downloadexcel" class="btn btn-success">Excel</a>
-<a href="#" onClick="generatePDF()" class="btn btn-success">PDF</a>
+<a style="font-size: small;" href="#" id="downloadexcel" class="btn btn-success">Excel</a>
+<a style="font-size: small;" href="#" onClick="generatePDF()" class="btn btn-success">PDF</a>
 </div>
 <div class="container mt-2">
 <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
 <div>
-    <a data-bs-toggle="modal" data-bs-target="#editName" type="button" id="editNameId" class="btn btn-primary text-white" href="javascript:void(0);">
+    <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#editName" type="button" id="editNameId" class="btn btn-primary text-white" href="javascript:void(0);">
         Editar cliente
     </a>
     <div tabindex="-1" id="editName" class="modal fade modal-dialog-scrollable" aria-labelledby="editNameLabel" aria-hidden="true">
@@ -107,14 +107,14 @@
     <tbody id="myTable">
         {% for fact in factureName %}
         {% for key,value in balance.items %}
-        {% if key == fact.id %}
+        {% if key == fact.id and fact.refType.visa != True and fact.refType.clave != True %}
         <tr>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refPersona.nombre}}</td>
             <td class="p-2">{{fact.num}}</td>
             <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
             <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
-            <td class="p-2">{{fact.total|floatformat:2}}</td>
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
             <td class="p-2">${{value|floatformat:2}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class=""><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>

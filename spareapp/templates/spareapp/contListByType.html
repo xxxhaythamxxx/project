@@ -42,8 +42,8 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Aceptar</button>
-    <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+    <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar</button>
+    <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
 </form>
 
 </div>
@@ -78,6 +78,9 @@
             <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
         {% endfor %}
+        <tr style="background-color: #E77C7C;" class="">
+            <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
+        </tr>
     </tbody>
 </table>
 </div>

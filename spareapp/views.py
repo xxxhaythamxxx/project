@@ -2623,6 +2623,7 @@ def contDay(request):
 
     contTotal = 0
     noIncludeTotal = 0
+    noIncludeTotalGasto = 0
 
     for tab in tableAux:
 
@@ -2632,9 +2633,15 @@ def contDay(request):
 
         else:
 
-            noIncludeTotal = noIncludeTotal + tab.tabTotal
+            if tab.tabTipo.ingreso == True:
+
+                noIncludeTotal = noIncludeTotal + tab.tabTotal
+
+            else:
+
+                noIncludeTotalGasto = noIncludeTotalGasto + tab.tabTotal
         
-    dic = {"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    dic = {"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
 
@@ -2650,6 +2657,8 @@ def contEntry(request):
     actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
     deadlineDefault=(datetime.now()+timedelta(days=30)).date()
     actual=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+    noIncludeTotal = 0
+    noIncludeTotalGasto = 0
 
     dic = {"actualDay":actualDay,"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
 
@@ -2849,6 +2858,7 @@ def contEntry(request):
 
             contTotal = 0
             noIncludeTotal = 0
+            noIncludeTotalGasto = 0
 
             for tab in tableAux:
 
@@ -2858,13 +2868,19 @@ def contEntry(request):
                 
                 else:
 
-                    noIncludeTotal = noIncludeTotal + tab.tabTotal
+                    if tab.tabTipo.ingreso == True:
+
+                        noIncludeTotal = noIncludeTotal + tab.tabTotal
+
+                    else:
+
+                        noIncludeTotalGasto = noIncludeTotalGasto + tab.tabTotal
                     
-            dic = {"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+            dic = {"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
             return render(request,"spareapp/contDay.html",dic)
 
-        dic = {"actualDay":actualDay,"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
+        dic = {"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
     return render(request,"spareapp/contEntry.html",dic)
 
@@ -3487,6 +3503,8 @@ def contByDay(request):
     tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
     contTotal = 0
+    noIncludeTotal = 0
+    noIncludeTotalGasto = 0
 
     for tab in tableAux:
 
@@ -3494,13 +3512,24 @@ def contByDay(request):
 
             contTotal = contTotal + tab.tabTotal
 
+        else:
+
+            if tab.tabTipo.ingreso == True:
+
+                noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
+
+            else:
+
+                noIncludeTotalGasto = noIncludeTotalGasto + float(tab.tabTotal)
+                
+
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"editPrueba":editPrueba,"contTotal":contTotal,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"editPrueba":editPrueba,"contTotal":contTotal,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/contByDay.html",dic)
 
@@ -3528,6 +3557,7 @@ def contByRange(request):
 
         contTotal = 0
         noIncludeTotal = 0
+        noIncludeTotalGasto = 0
 
         for typ in allTypes:
 
@@ -3547,7 +3577,13 @@ def contByRange(request):
 
                 else:
 
-                    noIncludeTotal = noIncludeTotal + float(ta.tabTotal)
+                    if typ.ingreso == True:
+
+                        noIncludeTotal = noIncludeTotal + float(ta.tabTotal)
+
+                    else:
+
+                        noIncludeTotalGasto = noIncludeTotalGasto + float(ta.tabTotal)
 
                 contSubTotal = float(contSubTotal) + float(ta.tabTotal)
 
@@ -3563,7 +3599,7 @@ def contByRange(request):
         facturesToCollect = len(allFacturesToPay)
         facturesToPay = len(allFacturesToCollect)
 
-        dic = {"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
+        dic = {"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
 
     return render(request,"spareapp/contByRange.html",dic)
 
@@ -4110,6 +4146,7 @@ def contLastMonth(request):
 
     contTotal = 0
     noIncludeTotal = 0
+    noIncludeTotalGasto = 0
 
     for typ in allTypes:
 
@@ -4128,7 +4165,13 @@ def contLastMonth(request):
             
             else:
 
-                noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
+                if typ.ingreso == True:
+
+                    noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
+
+                else:
+
+                    noIncludeTotalGasto = noIncludeTotalGasto + float(tab.tabTotal)
 
         tableAuxGet.tabTotal = cont
         tableAuxGet.save()
@@ -4143,7 +4186,7 @@ def contLastMonth(request):
 
     editPrueba = False
 
-    dic = {"noIncludeTotal":noIncludeTotal,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"editPrueba":editPrueba,"contTotal":contTotal,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
+    dic = {"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"editPrueba":editPrueba,"contTotal":contTotal,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
 
     # return render(request,"spareapp/contDay.html",dic)
     return render(request,"spareapp/contByRange.html",dic)
@@ -4172,6 +4215,7 @@ def contThisMonth(request):
 
     contTotal = 0
     noIncludeTotal = 0
+    noIncludeTotalGasto = 0
 
     for typ in allTypes:
 
@@ -4190,7 +4234,13 @@ def contThisMonth(request):
             
             else:
 
-                noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
+                if typ.ingreso == True:
+
+                    noIncludeTotal = noIncludeTotal + float(tab.tabTotal)
+
+                else:
+
+                    noIncludeTotalGasto = noIncludeTotalGasto + float(tab.tabTotal)
 
         tableAuxGet.tabTotal = cont
         tableAuxGet.save()
@@ -4203,7 +4253,7 @@ def contThisMonth(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"noIncludeTotal":noIncludeTotal,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"editPrueba":editPrueba,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
+    dic = {"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"editPrueba":editPrueba,"dateTo":dateTo,"dateFrom":dateFrom,"editPrueba":editPrueba,"tableAux":tableAux}
 
     return render(request,"spareapp/contByRange.html",dic)
 
@@ -4802,14 +4852,21 @@ def contListByTypeZero(request):
     dayFrom = ""
     dayTo = ""
     factureName = None
+    balanceTotal = 0
 
     if request.method == "POST":
 
         val = request.POST.get("contNombre")
-        factureName = factura.objects.filter(refType__id=val).order_by("fechaCreado","id")
+        factureName = factura.objects.filter(refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+        print(factureName)
         if factureName:
             dayFrom = factureName[0].fechaCreado.date()
             dayTo = factureName[len(factureName)-1].fechaCreado.date()
+
+        balanceTotal = 0
+
+        for fac in factureName:
+            balanceTotal = balanceTotal + fac.total
 
         if request.POST.get("search") == "month":
 
@@ -4822,7 +4879,7 @@ def contListByTypeZero(request):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
 
         if request.POST.get("search") == "range":
 
@@ -4837,9 +4894,9 @@ def contListByTypeZero(request):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado","id")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
 
-    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
+    dic = {"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
 
     return render(request,"spareapp/contListByType.html",dic)
 
@@ -4847,19 +4904,28 @@ def contListByType(request,val):
 
     dayFrom = ""
     dayTo = ""
+    balanceTotal = 0
     allTypes = factType.objects.all().order_by("nombre")
-    factureName = factura.objects.filter(refType__nombre=val).order_by("fechaCreado","id")
+    factureName = factura.objects.filter(refType__nombre=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
     if factureName:
         dayFrom = factureName[0].fechaCreado.date()
         dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
+    for fac in factureName:
+        balanceTotal = balanceTotal + fac.total
+
     if request.method == "POST":
 
         val = request.POST.get("contNombre")
-        factureName = factura.objects.filter(refType__id=val).order_by("fechaCreado","id")
+        factureName = factura.objects.filter(refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
         if factureName:
             dayFrom = factureName[0].fechaCreado.date()
             dayTo = factureName[len(factureName)-1].fechaCreado.date()
+
+        balanceTotal = 0
+        
+        for fac in factureName:
+            balanceTotal = balanceTotal + fac.total
 
         if request.POST.get("search") == "month":
 
@@ -4872,7 +4938,7 @@ def contListByType(request,val):
 
             mes = datetime.now().date().month
             anio = datetime.now().date().year
-            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id")
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
 
         if request.POST.get("search") == "range":
 
@@ -4887,9 +4953,9 @@ def contListByType(request,val):
 
             if dateFrom and dateTo:
                 
-                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id")
+                factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
 
-    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
+    dic = {"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
 
     return render(request,"spareapp/contListByType.html",dic)
 

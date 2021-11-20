@@ -14,7 +14,6 @@
                 <th style="width: 350px;" class="p-2">Total contable</th>
             </tr>
         </thead>
-
         <tbody>
             {% for tab in tableAux %}
             <tr>
@@ -39,7 +38,7 @@
         <thead>
             <tr class="color text-white">
                 <th class="p-2">Tipo de pago</th>
-                <th style="width: 350px;" class="p-2">Total no contable</th>
+                <th style="width: 350px;" class="p-2">Total no contable (Ingresos)</th>
             </tr>
         </thead>
 
@@ -47,15 +46,43 @@
 
             {% for tab in tableAux %}
             <tr>
-                {% if tab.tabTipo.include == False %}
+                {% if tab.tabTipo.include == False and tab.tabTipo.ingreso == True %}
                 <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
                 <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
                 {% endif %}
             </tr>
             {% endfor %}
             <tr>
-                <td class="p-2 color text-white">Total no contable</td>
+                <td class="p-2 color text-white">Total no contable (Ingresos)</td>
                 <td class="p-2">${{noIncludeTotal|floatformat:2}}</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-2">
+    <table style="font-size: small;" class="table-bordered invoice">
+        <thead>
+            <tr class="color text-white">
+                <th class="p-2">Tipo de pago</th>
+                <th style="width: 350px;" class="p-2">Total no contable (Gastos)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for tab in tableAux %}
+            <tr>
+                {% if tab.tabTipo.include == False and tab.tabTipo.gasto == True %}
+                <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tr>
+                <td class="p-2 color text-white">Total no contable (Gastos)</td>
+                <td class="p-2">${{noIncludeTotalGasto|floatformat:2}}</td>
             </tr>
             
         </tbody>
