@@ -4030,8 +4030,9 @@ def accountStat(request):
 
         auxNombre = request.POST.get("contNombre")
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
-        dayFrom = factureName[0].fechaCreado.date()
-        dayTo = factureName[len(factureName)-1].fechaCreado.date()
+        if factureName:
+            dayFrom = factureName[0].fechaCreado.date()
+            dayTo = factureName[len(factureName)-1].fechaCreado.date()
         cont = 0
         
         for fac in factureName:
@@ -4740,8 +4741,9 @@ def contIndividual(request,val):
 
         auxNombre = request.POST.get("contNombre")
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
-        dayFrom = factureName[0].fechaCreado.date()
-        dayTo = factureName[len(factureName)-1].fechaCreado.date()
+        if factureName:
+            dayFrom = factureName[0].fechaCreado.date()
+            dayTo = factureName[len(factureName)-1].fechaCreado.date()
         cont = 0
         
         for fac in factureName:
@@ -4780,6 +4782,7 @@ def contIndividual(request,val):
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "balance":
+
 
             for key in balance:
 
