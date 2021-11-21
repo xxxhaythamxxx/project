@@ -78,9 +78,18 @@
             <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
         {% endfor %}
+        {% if factureName.0.refType.visa == False and factureName.0.refType.clave == False %}
         <tr style="background-color: #E77C7C;" class="">
             <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
         </tr>
+        {% else %}
+            {% if factureName.0.refType.visa == True or factureName.0.refType.clave == True %}
+            <tr style="background-color: #E77C7C;" class="">
+                <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}  |  ITBM ${{itbmTotal|floatformat:2}}  |  INTERÉS ${{interesTotal|floatformat:2}}  |  RETENCIÓN ${{retencionTotal|floatformat:2}}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+        {% endif %}
     </tbody>
 </table>
 </div>

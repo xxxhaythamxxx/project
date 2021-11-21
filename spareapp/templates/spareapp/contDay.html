@@ -9,7 +9,10 @@
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
-            <tr class="color text-white">
+            <tr style="background-color: #F5F087" class="">
+                <th colspan="2" class="p-2">BALANCE DIARIO (Contable)  |  Día: {{tod}}</th>
+            </tr>
+            <tr style="background-color: #7C8FEC;">
                 <th class="p-2">Tipo de pago</th>
                 <th style="width: 350px;" class="p-2">Total contable</th>
             </tr>
@@ -27,10 +30,8 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-                
-                <tr>
-                    <td class="p-2 color text-white">Total contable</td>
-                    <td class="p-2">${{contTotal|floatformat:2}}</td>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL CONTABLE: ${{contTotal|floatformat:2}}</td>
                 </tr>
 
             {% else %}
@@ -47,9 +48,8 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td class="p-2 color text-white">Total contable</td>
-                    <td class="p-2">$ 0.00</td>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL CONTABLE: $0.00</td>
                 </tr>
 
             {% endif %}
@@ -61,7 +61,10 @@
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
-            <tr class="color text-white">
+            <tr style="background-color: #F5F087" class="">
+                <th colspan="2" class="p-2">BALANCE DIARIO (No contable - Ingresos)  |  Día: {{tod}}</th>
+            </tr>
+            <tr style="background-color: #7C8FEC;">
                 <th class="p-2">Tipo de pago</th>
                 <th style="width: 350px;" class="p-2">Total no contable (Ingresos)</th>
             </tr>
@@ -79,10 +82,8 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-
-                <tr>
-                    <td class="p-2 color text-white">Total no contable (Ingresos)</td>
-                    <td class="p-2">${{noIncludeTotal|floatformat:2}}</td>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL NO CONTABLE (Ingresos): ${{noIncludeTotal|floatformat:2}}</td>
                 </tr>
 
             {% else %}
@@ -99,9 +100,8 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td class="p-2 color text-white">Total no contable (Ingresos)</td>
-                    <td class="p-2">$ 0.00</td>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL NO CONTABLE (Ingresos): $0.00</td>
                 </tr>
 
             {% endif %}
@@ -110,10 +110,13 @@
     </table>
 </div>
 
-<div class="container mt-2">
+<div class="container mt-2 mb-4">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
-            <tr class="color text-white">
+            <tr style="background-color: #F5F087" class="">
+                <th colspan="2" class="p-2">BALANCE DIARIO (No contable - Gastos)  |  Día: {{tod}}</th>
+            </tr>
+            <tr style="background-color: #7C8FEC;">
                 <th class="p-2">Tipo de pago</th>
                 <th style="width: 350px;" class="p-2">Total no contable (Gastos)</th>
             </tr>
@@ -131,10 +134,8 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-
-                <tr>
-                    <td class="p-2 color text-white">Total no contable (Gastos)</td>
-                    <td class="p-2">${{noIncludeTotalGasto|floatformat:2}}</td>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL NO CONTABLE (Gastos): ${{noIncludeTotalGasto|floatformat:2}}</td>
                 </tr>
 
             {% else %}
@@ -151,9 +152,8 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td class="p-2 color text-white">Total no contable (Gastos)</td>
-                    <td class="p-2">$ 0.00</td>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL NO CONTABLE (Gastos): $0.00</td>
                 </tr>
 
             {% endif %}

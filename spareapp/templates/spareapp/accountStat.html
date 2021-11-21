@@ -87,6 +87,11 @@
         </div>
     </div>  
 </div>
+<div class="container mt-2">
+    <input id="entrySpending" name="entrySpending" type="checkbox">
+    <label for="entrySpending">Sólo facturas/mercancía por cobrar/pagar</label>
+</div>
+
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-4">
     <thead>
         <tr style="background-color: #F5F087" class="">
@@ -114,8 +119,8 @@
             <td class="p-2">{{fact.num}}</td>
             <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
             <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
-            <td class="p-2">${{fact.total|floatformat:2}}</td>
-            <td class="p-2">${{value|floatformat:2}}</td>
+            <td class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
+            <td class="p-2">${{value.0|floatformat:2}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class=""><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
@@ -150,6 +155,33 @@
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
+
+$("#entrySpending").change(function(){
+    if ($(this).is(':checked')){
+        $("tbody tr").each(function(){
+        var bol = false
+            $(this).find("td").each(function(){
+                $(this).find("div").each(function(){
+                    if ($(this).attr("style")=="font-weight: bold;"){
+                        bol = true
+                    }
+                })
+            })
+            if (bol == false){
+                $(this).hide()
+            }else{
+                $(this).show()
+            }
+        })
+    }
+    else{
+        $("tbody tr").each(function(){
+            $(this).show()
+        })
+    }
+    
+})
+
 $("#invoice").dragtable()
 
 </script>
