@@ -92,11 +92,16 @@
     <label for="entrySpending">Sólo facturas/mercancía por cobrar/pagar</label>
 </div>
 
-<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-4">
+<table id="" style="font-size: small;" class="table-bordered invoice mt-2">
     <thead>
         <tr style="background-color: #F5F087" class="">
-            <th colspan="10" class="p-2">{{factureName.0.refPersona.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
+            <th class="p-2">{{factureName.0.refPersona.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
         </tr>
+    </thead>
+</table>
+
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
+    <thead>
         <tr style="background-color: #7C8FEC;" class="">
             <th class="p-2">Fecha</th>
             <th class="p-2">Cliente</th>
@@ -146,11 +151,17 @@
         {% endif %}
         {% endfor %}
         {% endfor %}
+    </tbody>
+</table>
+
+<table id="" style="font-size: small;" class="table-bordered invoice mb-4">
+    <thead>
         <tr style="background-color: #E77C7C;" class="">
             <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
         </tr>
-    </tbody>
+    </thead>
 </table>
+
 </div>
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
