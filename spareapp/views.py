@@ -2712,8 +2712,7 @@ def contEntry(request):
         contTotal = request.POST.get("contTotal")
         factAux.total = contTotal
 
-        if request.POST.get("contNota"):
-            factAux.note = request.POST.get("contNota")
+        factAux.note = request.POST.get("contNota")
 
         factAux.save()
 
@@ -5192,6 +5191,28 @@ def deleteFac(request,val):
     allTypes = factType.objects.all()
 
     facAux = factura.objects.get(id=val)
+
+    if facAux.refCategory.nombre == "Factura cobrada":
+
+        facAnt = factura.objects.filter(num=facAux.num,refPersona=facAux.refPersona,fechaCobrado=facAux.fechaCreado.date()).exclude(refCategory__nombre="Factura cobrada")
+
+        if len(facAnt)==1:
+
+            facArreglar = factura.objects.exclude(refCategory__nombre="Factura cobrada").get(num=facAux.num,refPersona=facAux.refPersona,fechaCobrado=facAux.fechaCreado.date())
+            facArreglar.pendiente = True
+            facArreglar.fechaCobrado = None
+            facArreglar.save()
+    
+    if facAux.refCategory.nombre == "Mercancia credito pagada":
+
+        facAnt = factura.objects.filter(num=facAux.num,refPersona=facAux.refPersona,fechaCobrado=facAux.fechaCreado.date()).exclude(refCategory__nombre="Mercancia credito pagada")
+
+        if len(facAnt)==1:
+
+            facArreglar = factura.objects.exclude(refCategory__nombre="Mercancia credito pagada").get(num=facAux.num,refPersona=facAux.refPersona,fechaCobrado=facAux.fechaCreado.date())
+            facArreglar.pendiente = True
+            facArreglar.fechaCobrado = None
+            facArreglar.save()
 
     facBorrada = facAux.fechaCreado
 
