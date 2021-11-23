@@ -8,6 +8,7 @@
 
 {% include "spareapp/accountStatSuperior.html" %}
 
+<div id="">
 <div class="container mt-2">
 <form action="" method="POST">
     {% csrf_token %}    
@@ -27,6 +28,7 @@
             </div>
         </div>
     </div>
+    <a style="font-size: small;" href="#" onClick="generatePDF()" class="btn btn-danger">PDF</a>
     <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar</button>
     <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
 </form>
@@ -56,7 +58,7 @@
             <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
-            <td class="p-2">{{fact.total|floatformat:2}}</td>
+            <td class="p-2">${{fact.total|floatformat:2}}</td>
 
             <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
@@ -74,7 +76,7 @@
     </tr>
 </table>
 </div>
-
+</div>
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
 $("#invoice").dragtable()
