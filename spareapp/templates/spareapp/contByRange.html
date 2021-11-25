@@ -34,6 +34,35 @@
     </table>
 </div>
 
+<div class="container mt-2">
+    <table style="font-size: small;" class="table-bordered invoice">
+        <thead>
+            <tr style="background-color: #F5F087" class="">
+                <th colspan="2" class="p-2">BALANCE DIARIO (No contable - Gastos)  |  Desde: {{dateFrom}}, hasta: {{dateTo}}</th>
+            </tr>
+            <tr style="background-color: #7C8FEC;">
+                <th class="p-2">Tipo de pago</th>
+                <th style="width: 350px;" class="p-2">Total no contable (Gastos)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for tab in tableAux %}
+            <tr>
+                {% if tab.tabTipo.include == False and tab.tabTipo.gasto == True and tab.tabTipo.mercPagada == False %}
+                <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tr style="background-color: #E77C7C;" class="">
+                <td colspan="2" class="p-2">TOTAL NO CONTABLE (Gastos): ${{noIncludeTotalGasto|floatformat:2}}</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
 
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
@@ -65,35 +94,7 @@
     </table>
 </div>
 
-<div class="container mt-2">
-    <table style="font-size: small;" class="table-bordered invoice">
-        <thead>
-            <tr style="background-color: #F5F087" class="">
-                <th colspan="2" class="p-2">BALANCE DIARIO (No contable - Gastos)  |  Desde: {{dateFrom}}, hasta: {{dateTo}}</th>
-            </tr>
-            <tr style="background-color: #7C8FEC;">
-                <th class="p-2">Tipo de pago</th>
-                <th style="width: 350px;" class="p-2">Total no contable (Gastos)</th>
-            </tr>
-        </thead>
 
-        <tbody>
-
-            {% for tab in tableAux %}
-            <tr>
-                {% if tab.tabTipo.include == False and tab.tabTipo.gasto == True and tab.tabTipo.mercPagada == False %}
-                <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
-                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-            <tr style="background-color: #E77C7C;" class="">
-                <td colspan="2" class="p-2">TOTAL NO CONTABLE (Gastos): ${{noIncludeTotalGasto|floatformat:2}}</td>
-            </tr>
-            
-        </tbody>
-    </table>
-</div>
 
 <div class="container mt-2 mb-4">
     <table style="font-size: small;" class="table-bordered invoice">

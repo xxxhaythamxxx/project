@@ -3570,7 +3570,7 @@ def contByDay(request):
 
     dic = {"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"editPrueba":editPrueba,"contTotal":contTotal,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
-    return render(request,"spareapp/contByDay.html",dic)
+    return render(request,"spareapp/contDay.html",dic)
 
 def contByRange(request):
 
