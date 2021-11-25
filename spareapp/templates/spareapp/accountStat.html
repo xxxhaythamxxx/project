@@ -6,6 +6,8 @@
 
 {% load static %}
 
+{% include "spareapp/contSuperior.html" %}
+
 {% include "spareapp/accountStatSuperior.html" %}
 
 <div class="container mt-2 col-lg-4">
@@ -50,10 +52,10 @@
 
 </div>
 {% if factureName %}
-<div class="container mt-2">
+<!-- <div class="container mt-2">
 <a style="font-size: small;" href="#" id="downloadexcel" class="btn btn-success">Excel</a>
-<a style="font-size: small;" href="#" onClick="generatePDF()" class="btn btn-success">PDF</a>
-</div>
+<a style="font-size: small;" href="#" onClick="generatePDF2()" class="btn btn-success">PDF</a>
+</div> -->
 <div class="container mt-2">
 <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
 <div>
@@ -92,7 +94,7 @@
     <label for="entrySpending">Sólo facturas/mercancía por cobrar/pagar</label>
 </div>
 
-<div id="invoice">
+<div id="invoice2">
 <table id="" style="font-size: small;" class="table-bordered invoice mt-2">
     <thead>
         <tr style="background-color: #F5F087" class="">
@@ -196,6 +198,38 @@ $("#entrySpending").change(function(){
 
 $("#invoice").dragtable()
 
+
+function generatePDF2(){
+    
+    $('#invoice2 tr:first th').each(function() {
+        var value = $(this).css("position", "static");
+      });
+    const element = document.getElementById("invoice2");
+    $("#check").hide();
+    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+    
+    var opt = {
+        margin:       0.5,
+        filename:     'report.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        enableLinks:  false,
+        pagebreak:    {mode: "avoid-all"},
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+      };
+    html2pdf()
+    .set(opt)
+    .from(element)
+    .save();
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        $('#invoice2 tr:first th').each(function() {
+            var value = $(this).css("position", "sticky");
+            $("#check").show();
+            $("table td:nth-child("+($("#check").index() + 1)+")").show();
+            $("input:checkbox[name=check]").prop("checked",true);
+          });
+      });
+}
 </script>
 {% endif %}
 

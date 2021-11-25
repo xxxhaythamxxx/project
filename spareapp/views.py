@@ -4168,8 +4168,13 @@ def accountStat(request):
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
+    
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
 
-    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -4916,7 +4921,12 @@ def contIndividual(request,val):
 
     balanceTotal = cont
 
-    dic = {"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -5018,7 +5028,12 @@ def contListByTypeZero(request):
             if fac.refType.clave == True:
                 interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
 
-    dic = {"retencionTotal":retencionTotal,"interesTotal":interesTotal,"itbmTotal":itbmTotal,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"itbmTotal":itbmTotal,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
 
     return render(request,"spareapp/contListByType.html",dic)
 
@@ -5091,8 +5106,13 @@ def contListByType(request,val):
                 interesTotal = interesTotal + float(float(fac.total)*0.0225*1.07)
             if fac.refType.clave == True:
                 interesTotal = interesTotal + float(float(fac.total)*0.02*1.07)
+    
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
 
-    dic = {"retencionTotal":retencionTotal,"interesTotal":interesTotal,"itbmTotal":itbmTotal,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"itbmTotal":itbmTotal,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allTypes":allTypes}
 
     return render(request,"spareapp/contListByType.html",dic)
 
@@ -5144,8 +5164,13 @@ def contListByCategoryZero(request):
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+    
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
 
-    dic = {"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
+    dic = {"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
 
     return render(request,"spareapp/contListByCategory.html",dic)
 
@@ -5204,8 +5229,13 @@ def contListByCategory(request,val):
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refCategory__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+    
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
             
-    dic = {"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
 
     return render(request,"spareapp/contListByCategory.html",dic)
 
@@ -5253,7 +5283,12 @@ def accountDay(request):
 
     balanceTotal = cont
 
-    dic = {"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountDay.html",dic)
 

@@ -224,7 +224,7 @@ function generatePDF2(){
     .from(element)
     .save();
     html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        $('#invoice tr:first th').each(function() {
+        $('#invoice2 tr:first th').each(function() {
             var value = $(this).css("position", "sticky");
             $("#check").show();
             $("table td:nth-child("+($("#check").index() + 1)+")").show();
