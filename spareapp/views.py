@@ -4077,6 +4077,7 @@ def accountStat(request):
     factureName = None
     dayFrom = ""
     dayTo = ""
+    balanceFacMerc = 0
 
     if request.method == "POST":
 
@@ -4096,6 +4097,8 @@ def accountStat(request):
                 if fac.refType.facCobrar==True:
 
                     cont = cont + fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc + fac.total
                 
                 if fac.refCategory.nombre=="Factura cobrada":
 
@@ -4108,6 +4111,8 @@ def accountStat(request):
                 if fac.refType.mercPagar==True:
 
                     cont = cont - fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc - fac.total
                 
                 if fac.refCategory.nombre=="Mercancia credito pagada":
 
@@ -4174,7 +4179,7 @@ def accountStat(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
+    dic = {"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 

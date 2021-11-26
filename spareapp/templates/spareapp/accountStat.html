@@ -127,8 +127,8 @@
             <td class="p-2">{{fact.num}}</td>
             <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
             <td style="max-width: 50px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
-            <td class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
-            <td class="p-2">${{value.0|floatformat:2}}</td>
+            <td id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
+            <td id="auxBalance" class="p-2">${{value.0|floatformat:2}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class=""><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
@@ -160,7 +160,8 @@
 <table id="" style="font-size: small;" class="table-bordered invoice mb-4">
     <thead>
         <tr style="background-color: #E77C7C;" class="">
-            <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
+            <td id="balanceTotal" class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
+            <td id="balanceTotalFacMerc" style="display: none;" class="p-2" colspan="10">BALANCE ${{balanceFacMerc|floatformat:2}}</td>
         </tr>
     </thead>
 </table>
@@ -169,12 +170,32 @@
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
-
+var vec = []
+var i = 0
+$("tbody tr").each(function(){
+    $(this).find("td").each(function(){
+        if($(this).attr("id")=="auxBalance"){
+            vec[i] = $(this).text()
+            i = i + 1
+        }
+    })
+})
+var auxMonto = $("#auxMonto").text()
+var auxBalance = $("#auxBalance").text()
 $("#entrySpending").change(function(){
     if ($(this).is(':checked')){
         $("tbody tr").each(function(){
         var bol = false
+        
             $(this).find("td").each(function(){
+                if ($(this).attr("id") == "auxMonto"){
+                    auxMonto = $(this).text()
+                }
+                if ($(this).attr("id") == "auxBalance"){
+                    auxBalance = $(this).text()
+                    $(this).html(auxMonto)
+                }
+                
                 $(this).find("div").each(function(){
                     if ($(this).attr("style")=="font-weight: bold;"){
                         bol = true
@@ -187,11 +208,22 @@ $("#entrySpending").change(function(){
                 $(this).show()
             }
         })
+        $("#balanceTotal").hide()
+        $("#balanceTotalFacMerc").show()
     }
     else{
+        
         $("tbody tr").each(function(){
             $(this).show()
+
+            $(this).find("td").each(function(){
+                if ($(this).attr("id") == "auxBalance"){
+                    $(this).html(vec[$(this).parent().index()])
+                }
+            })
         })
+        $("#balanceTotalFacMerc").hide()
+        $("#balanceTotal").show()
     }
     
 })
