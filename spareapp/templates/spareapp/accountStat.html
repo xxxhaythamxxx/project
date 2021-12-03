@@ -120,7 +120,7 @@
     <tbody id="myTable">
         {% for fact in factureName %}
         {% for key,value in balance.items %}
-        {% if key == fact.id and fact.refType.visa != True and fact.refType.clave != True %}
+        {% if key == fact.id %}
         <tr>
             <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
             <td class="p-2">{{fact.refPersona.nombre}}</td>

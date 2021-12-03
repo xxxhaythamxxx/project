@@ -4118,7 +4118,7 @@ def accountStat(request):
 
                     cont = cont + fac.total
 
-            if fac.pendiente == True and  fac.refType.gasto == True:
+            if fac.pendiente == True and fac.refType.gasto == True:
                 balance[fac.id] = [cont,fac.total*(-1)]
             else:
                 balance[fac.id] = [cont,fac.total]
