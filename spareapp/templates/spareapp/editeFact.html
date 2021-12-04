@@ -141,6 +141,21 @@
     </div>
 </div>  
 <script>
+
+$("#searchDateFrom").change(function(){
+    $.ajax({
+        method: 'GET',
+        url: '/factTypeES',
+        data: {'fecha': 'change','creado':$("#searchDateFrom").val()},
+        success:function(data){
+
+            $("#contFechaTope").val(data.actual)
+
+        }
+    });
+})
+
+
 if($("#contCatIng").find("option:selected").attr("limit").toLowerCase() == "true"){
     $("#divFechaTope").show()
     // select2.empty()
