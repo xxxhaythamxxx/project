@@ -52,10 +52,6 @@
 
 </div>
 {% if factureName %}
-<!-- <div class="container mt-2">
-<a style="font-size: small;" href="#" id="downloadexcel" class="btn btn-success">Excel</a>
-<a style="font-size: small;" href="#" onClick="generatePDF2()" class="btn btn-success">PDF</a>
-</div> -->
 <div class="container mt-2">
 <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
 <div>
@@ -96,7 +92,7 @@
 
 <div id="invoice2">
 <table id="" style="font-size: small;" class="table-bordered invoice mt-2">
-    <thead>
+    <thead id="hSup">
         <tr style="background-color: #F5F087;" class="">
             <th class="p-2">{{factureName.0.refPersona.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
         </tr>
@@ -104,7 +100,7 @@
 </table>
 
 <table id="" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
-    <thead>
+    <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
             <th style="position: sticky;top: 70;" class="p-2">Fecha</th>
             <th style="position: sticky;top: 70;" class="p-2">Cliente</th>
@@ -158,7 +154,7 @@
 </table>
 
 <table id="" style="font-size: small;" class="table-bordered invoice mb-4">
-    <thead>
+    <thead id="hInf">
         <tr style="background-color: #E77C7C;" class="">
             <td id="balanceTotal" class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
             <td id="balanceTotalFacMerc" style="display: none;" class="p-2" colspan="10">BALANCE ${{balanceFacMerc|floatformat:2}}</td>
@@ -239,7 +235,11 @@ function generatePDF2(){
     const element = document.getElementById("invoice2");
     $("#check").hide();
     $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-    
+    $("#hMain tr").attr("style","background-color: #7C8FEC;position: static")
+    $("#hMain tr").find("th").each(function(){
+        $(this).attr("style","position: static")
+    })
+
     var opt = {
         margin:       0.5,
         filename:     'report.pdf',
