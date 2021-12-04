@@ -156,10 +156,13 @@
 <table id="" style="font-size: small;" class="table-bordered invoice mb-4">
     <thead id="hInf">
         <tr style="background-color: #E77C7C;" class="">
-            <td id="balanceTotal" class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
-            <td id="balanceTotalFacMerc" style="display: none;" class="p-2" colspan="10">BALANCE ${{balanceFacMerc|floatformat:2}}</td>
+            <th id="balanceTotal" class="p-2">BALANCE ${{balanceTotal|floatformat:2}}</th>
+            <th id="balanceTotalFacMerc" style="display: none;" class="p-2">BALANCE ${{balanceFacMerc|floatformat:2}}</th>
         </tr>
     </thead>
+    <tbody>
+        
+    </tbody>
 </table>
 </div>
 </div>
@@ -226,19 +229,19 @@ $("#entrySpending").change(function(){
 
 $("#invoice").dragtable()
 
-
 function generatePDF2(){
-    
+
     $('#invoice2 tr:first th').each(function() {
         var value = $(this).css("position", "static");
       });
     const element = document.getElementById("invoice2");
-    $("#check").hide();
-    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+    
     $("#hMain tr").attr("style","background-color: #7C8FEC;position: static")
     $("#hMain tr").find("th").each(function(){
         $(this).attr("style","position: static")
     })
+    $("#check").hide();
+    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
 
     var opt = {
         margin:       0.5,
