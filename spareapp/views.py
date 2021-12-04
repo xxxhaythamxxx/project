@@ -4394,6 +4394,9 @@ def editeFact(request,val,val2):
     facAux = factura.objects.filter(id=val)
     facTotal = 0
     auxFacGet = factura.objects.get(id=val)
+    tope=""
+    if auxFacGet.pendiente == True:
+        tope=str(auxFacGet.fechaTope.year)+"-"+str('%02d' % auxFacGet.fechaTope.month)+"-"+str('%02d' % auxFacGet.fechaTope.day)
     todold = auxFacGet.fechaCreado.date()
     actual=str(auxFacGet.fechaCreado.date().year)+"-"+str('%02d' % auxFacGet.fechaCreado.date().month)+"-"+str('%02d' % auxFacGet.fechaCreado.date().day)
     # actual=auxFacGet.fechaCreado.date()
@@ -4731,7 +4734,7 @@ def editeFact(request,val,val2):
 
         # ---------------------------------------------------
     
-    dic = {"urlFinal":urlFinal,"actual":actual,"check":check,"allCategories":allCategories,"allTypes":allTypes,"allCustomers":allCustomers,"facAux":facAux}
+    dic = {"tope":tope,"urlFinal":urlFinal,"actual":actual,"check":check,"allCategories":allCategories,"allTypes":allTypes,"allCustomers":allCustomers,"facAux":facAux}
 
     return render(request,"spareapp/editeFact.html",dic)
 
@@ -4939,6 +4942,18 @@ def factTypeES(request):
 
     cobrarPagar = None
     cate = None
+
+    if request.GET.get("fecha") == "change":
+
+        creado = request.GET.get("creado")
+        creadoAux = datetime.strptime(creado,"%Y-%m-%d")
+        deadlineDefault=(creadoAux+timedelta(days=30)).date()
+        actualAux=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+
+        actual = actualAux
+
+        return JsonResponse({'actual':actual})
+
 
     cateAux = factCategory.objects.filter(nombre=request.GET.get("cat"))
 

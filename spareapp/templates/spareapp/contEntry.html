@@ -119,6 +119,19 @@
 </div>  
 <script>
 
+$("#contFechaCreado").change(function(){
+    $.ajax({
+        method: 'GET',
+        url: '/factTypeES',
+        data: {'fecha': 'change','creado':$("#contFechaCreado").val()},
+        success:function(data){
+
+            $("#contFechaTope").val(data.actual)
+
+        }
+    });
+})
+
 // Agregar modal Customer
 $("#formCust").submit(function(e){
     e.preventDefault()

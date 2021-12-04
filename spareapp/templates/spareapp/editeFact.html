@@ -68,9 +68,9 @@
                     <option value="">Seleccione categoría</option>
                     {% for category in allCategories %}
                     {% if category.nombre == facAux.0.refCategory.nombre or facAux.0.refCategory.nombre == "Factura cobrada" or facAux.0.refCategory.nombre == "Mercancia credito pagada" %}
-                    <option limit="{{facAux.0.limite}}" value="{{facAux.0.refCategory.nombre}}" selected>{{facAux.0.refCategory.nombre}}</option>
+                    <option limit="{{facAux.0.refCategory.limite}}" value="{{facAux.0.refCategory.nombre}}" selected>{{facAux.0.refCategory.nombre}}</option>
                     {% else %}
-                    <option limit="{{facAux.0.limite}}" value="{{facAux.0.refCategory.nombre}}">{{facAux.0.refCategory.nombre}}</option>
+                    <option limit="{{facAux.0.refCategory.limite}}" value="{{facAux.0.refCategory.nombre}}">{{facAux.0.refCategory.nombre}}</option>
                     {% endif %}
                     {% endfor %}
                 </select>
@@ -90,7 +90,7 @@
             </div>
             <div id="divFechaTope" class="mb-3" style="display: none;">
                 <label class="form-label" for="contFechaTope">Fecha límite</label>
-                <input class="form-control" id="contFechaTope" type="date" name="contFechaTope">
+                <input value="{{tope}}" class="form-control" id="contFechaTope" type="date" name="contFechaTope">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contMonto">Sub total</label>
@@ -141,6 +141,11 @@
     </div>
 </div>  
 <script>
+if($("#contCatIng").find("option:selected").attr("limit").toLowerCase() == "true"){
+    $("#divFechaTope").show()
+    // select2.empty()
+    // select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre.toUpperCase()+"</option>")
+}
 
 CatSelected = ""
 typeSelected = ""
