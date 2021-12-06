@@ -5769,3 +5769,83 @@ def deleteFac(request,val):
 #         </tbody>
 #     </table>
 # </div>
+
+
+
+# tfoot para footer de tabla
+# caption para header superior
+
+
+
+# // function generatePDF2() {
+
+# //   var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+# //   var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+# //   var tableDataAsRows = tableRowCells.reduce((rows, cellData, index) => {
+# //     if (index % 4 === 0) {
+# //       rows.push([]);
+# //     }
+# //     rows[rows.length - 1].push(cellData);
+# //     return rows;
+# //   }, []);
+    
+
+# //   var docDefinition = {
+# //     // header: { text: 'MLB World Series Winners', alignment: 'center' },
+# //     // footer: function(currentPage, pageCount) { return ({ text: `Page ${currentPage} of ${pageCount}`, alignment: 'center' }); },
+# //     content: [
+# //       {
+# //         style: 'tableExample',
+# //         table: {
+# //           headerRows: 1,
+# //           body: [
+# //             tableHeaderText,
+# //             ...tableDataAsRows,
+# //           ]
+# //         },
+# //         layout: {
+# //           fillColor: function(rowIndex) {
+# //             if (rowIndex === 0) {
+# //               return '#0f4871';
+# //             }
+# //             return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+# //           }
+# //         },
+# //       },
+# //     ],
+# //     styles: {
+# //       tableExample: {
+# //         margin: [0, 20, 0, 80],
+# //       },
+# //       tableHeader: {
+# //         margin: 12,
+# //         color: 'white',
+# //       },
+# //       tableData: {
+# //         margin: 12,
+# //       },
+# //     },
+# //   };
+# // //   pdfMake.createPdf(docDefinition).download('Table.pdf');
+# //   pdfMake.createPdf(docDefinition).download('MLB World Series Winners');
+# // }
+
+# // const area = $("#invoice")[0].getBoundingClientRect()
+# // function generatePDF2(){
+# //     html2canvas($("#invoice")[0],{
+# //         onrendered:function(canvas){
+# //             var data=canvas.toDataURL();
+# //             var docDefinition={
+# //                 content:[{
+# //                     image:data,
+# //                     // scrollX: 0,
+# //                     // scrollY: 0,
+# //                     // width: area.width
+# //                     // height: area.height
+# //                     width:500
+# //                 }]
+# //             };
+# //             pdfMake.createPdf(docDefinition).download("Table.pdf");
+# //         }
+# //     })
+# // }
