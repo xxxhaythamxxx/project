@@ -261,6 +261,10 @@ function generatePDF2(){
     html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
         $('#invoice2 tr:first th').each(function() {
             var value = $(this).css("position", "sticky");
+            $("#hMain tr").attr("style","background-color: #7C8FEC;position: sticky;top: 70;")
+            $("#hMain tr").find("th").each(function(){
+                $(this).attr("style","position: sticky;top: 70;")
+            })
             $("#check").show();
             $("table td:nth-child("+($("#check").index() + 1)+")").show();
             $("input:checkbox[name=check]").prop("checked",true);
