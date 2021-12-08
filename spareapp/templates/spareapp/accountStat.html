@@ -99,7 +99,7 @@
     </thead>
 </table>
 
-<table id="" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
     <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
             <th style="position: sticky;top: 70;" class="p-2">Fecha</th>
@@ -110,7 +110,7 @@
             <th style="position: sticky;top: 70;" class="p-2">Monto</th>
             <th style="position: sticky;top: 70;" class="p-2">Balance</th>
             <th style="position: sticky;top: 70;" class="p-2">Nota</th>
-            <th style="position: sticky;top: 70;" id="check" class="p-2">Acción</th>
+            <th style="position: sticky;top: 70;" id="check" class="p-2 exclude">Acción</th>
         </tr>
     </thead>
     <tbody id="myTable">
@@ -126,7 +126,7 @@
             <td id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
             <td id="auxBalance" class="p-2">${{value.0|floatformat:2}}</td>
             <td style="max-width: 100px;" class="p-2">{{fact.note}}</td>
-            <td class=""><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
+            <td class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
             </td>
             <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
@@ -167,8 +167,164 @@
 </table>
 </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
+
+<script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'spareapp/pdfmake.min.js' %}"></script> -->
+
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
+
+function generatePDF2(){
+
+// $("#check").hide();
+// $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+
+// var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+
+// var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+// var tableDataAsRows = tableRowCells.reduce((rows, cellData, index) => {
+//   if (index % 4 === 0) {
+//     rows.push([]);
+//   }
+//   rows[rows.length - 1].push(cellData);
+//     return rows;
+// }, []);
+
+// var docDefinition = {
+//     // header: { text: 'MLB World Series Winners', alignment: 'center' },
+//     // footer: function(currentPage, pageCount) { return ({ text: `Page ${currentPage} of ${pageCount}`, alignment: 'center' }); },
+//     content: [
+//       {
+//         style: 'tableExample',
+//         table: {
+//           headerRows: 1,
+//           body: [
+//             tableHeaderText,
+//             ...tableDataAsRows,
+//           ]
+//         },
+//         layout: {
+//           fillColor: function(rowIndex) {
+//             if (rowIndex === 0) {
+//               return '#0f4871';
+//             }
+//             return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+//           }
+//         },
+//       },
+//     ],
+//     styles: {
+//       tableExample: {
+//         margin: [0, 20, 0, 80],
+//       },
+//       tableHeader: {
+//         margin: 12,
+//         color: 'white',
+//       },
+//       tableData: {
+//         margin: 12,
+//       },
+//     },
+//   };
+// pdfMake.createPdf(docDefinition).download();
+
+
+// ------------------------------------------------------------------
+// $("#check").hide();
+// $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+
+var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+// alert(tableHeaderText)
+var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+// alert(tableRowCells)
+var rows = []
+var fila = []
+for (n in tableRowCells){
+    if (n % (tableHeaderText.length) == 0 && n>0){
+        rows.push(fila)
+        fila = []
+    }
+    fila.push(tableRowCells[n].text)
+    
+}
+// for (n in rows){
+//     text: rows[n], fontSize: 10
+// }
+
+var docDefinition = {
+  content: [
+    {
+      layout: 'lightHorizontalLines', // optional
+      style: 'tableExample',
+      table: {
+        headerRows: 1,
+        // widths: [ '*', 'auto', 150, '*' ],
+
+        body: [
+        tableHeaderText,
+        ...rows,
+        ]
+      },
+      layout: {
+          fillColor: function(rowIndex) {
+            if (rowIndex === 0) {
+              return '#7C8FEC';
+            }
+            return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+          }
+        },
+    },
+  ],
+    styles: {
+        tableExample: {
+            // margin: [0, 20, 0, 80],
+            margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeader: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableData: {
+            margin: 1,
+            // fontSize: 10,
+        },
+        fuente: {
+            margin: 1,
+            fontSize: 8,
+        },
+    },
+};
+
+pdfMake.createPdf(docDefinition).download();
+
+// $("#check").show();
+// $("table td:nth-child("+($("#check").index() + 1)+")").show();
+// $("input:checkbox[name=check]").prop("checked",true);
+// ------------------------------------------------------------------
+// html2canvas($("#invoice")[0],{
+//     onrendered:function(canvas){
+//         var data=canvas.toDataURL();
+//         var docDefinition={
+//             content:[{
+//                 image:data,
+//                 width:500,
+//             }]
+//         };
+//         pdfMake.createPdf(docDefinition).download("Table.pdf");
+//     }
+// })
+
+}
 
 var vec = []
 var i = 0
@@ -231,46 +387,46 @@ $("#entrySpending").change(function(){
 $("#invoice").dragtable()
 
 
-function generatePDF2(){
+// function generatePDF2(){
 
-    $('#invoice2 tr:first th').each(function() {
-        var value = $(this).css("position", "static");
-      });
-    const element = document.getElementById("invoice2");
+//     $('#invoice2 tr:first th').each(function() {
+//         var value = $(this).css("position", "static");
+//       });
+//     const element = document.getElementById("invoice2");
     
-    $("#hMain tr").attr("style","background-color: #7C8FEC;position: static")
-    $("#hMain tr").find("th").each(function(){
-        $(this).attr("style","position: static")
-    })
-    $("#check").hide();
-    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+//     $("#hMain tr").attr("style","background-color: #7C8FEC;position: static")
+//     $("#hMain tr").find("th").each(function(){
+//         $(this).attr("style","position: static")
+//     })
+//     $("#check").hide();
+//     $("table td:nth-child("+($("#check").index() + 1)+")").hide();
 
-    var opt = {
-        margin:       0.5,
-        filename:     'report.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        enableLinks:  false,
-        pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
-      };
-    html2pdf()
-    .set(opt)
-    .from(element)
-    .save();
-    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        $('#invoice2 tr:first th').each(function() {
-            var value = $(this).css("position", "sticky");
-            $("#hMain tr").attr("style","background-color: #7C8FEC;position: sticky;top: 70;")
-            $("#hMain tr").find("th").each(function(){
-                $(this).attr("style","position: sticky;top: 70;")
-            })
-            $("#check").show();
-            $("table td:nth-child("+($("#check").index() + 1)+")").show();
-            $("input:checkbox[name=check]").prop("checked",true);
-          });
-      });
-}
+//     var opt = {
+//         margin:       0.5,
+//         filename:     'report.pdf',
+//         image:        { type: 'jpeg', quality: 0.98 },
+//         html2canvas:  { scale: 2 },
+//         enableLinks:  false,
+//         pagebreak:    {mode: "avoid-all"},
+//         jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+//       };
+//     html2pdf()
+//     .set(opt)
+//     .from(element)
+//     .save();
+//     html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+//         $('#invoice2 tr:first th').each(function() {
+//             var value = $(this).css("position", "sticky");
+//             $("#hMain tr").attr("style","background-color: #7C8FEC;position: sticky;top: 70;")
+//             $("#hMain tr").find("th").each(function(){
+//                 $(this).attr("style","position: sticky;top: 70;")
+//             })
+//             $("#check").show();
+//             $("table td:nth-child("+($("#check").index() + 1)+")").show();
+//             $("input:checkbox[name=check]").prop("checked",true);
+//           });
+//       });
+// }
 </script>
 {% endif %}
 
