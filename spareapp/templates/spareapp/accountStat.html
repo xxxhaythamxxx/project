@@ -99,7 +99,7 @@
     </thead>
 </table>
 
-<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mb-4">
     <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
             <th style="position: sticky;top: 70;" class="p-2">Fecha</th>
@@ -151,10 +151,15 @@
         {% endfor %}
         {% endfor %}
     </tbody>
-    
+    <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
+        <tr style="background-color: #E77C7C;" class="">
+            <th colspan=9 id="balanceTotal" class="p-2">BALANCE ${{balanceTotal|floatformat:2}}</th>
+            <!-- <th colspan=9 id="balanceTotalFacMerc" style="display: none;" class="p-2">BALANCE ${{balanceFacMerc|floatformat:2}}</th> -->
+        </tr>
+    </tfoot>
 </table>
 
-<table id="" style="font-size: small;" class="table-bordered invoice mb-4">
+<!-- <table id="" style="font-size: small;" class="table-bordered invoice mb-4">
     <thead id="hInf">
         <tr style="background-color: #E77C7C;" class="">
             <th id="balanceTotal" class="p-2">BALANCE ${{balanceTotal|floatformat:2}}</th>
@@ -164,7 +169,7 @@
     <tbody>
         
     </tbody>
-</table>
+</table> -->
 </div>
 </div>
 
@@ -242,22 +247,30 @@ function generatePDF2(){
 // $("table td:nth-child("+($("#check").index() + 1)+")").hide();
 
 var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
-// alert(tableHeaderText)
+// alert(tableHeaderText.length)
 var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
-// alert(tableRowCells)
+// alert(tableRowCells.length)
+var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+// alert(tableFooterCells.length)
 var rows = []
 var fila = []
+var cont = 0
 for (n in tableRowCells){
-    if (n % (tableHeaderText.length) == 0 && n>0){
+    fila.push(tableRowCells[n].text)
+    cont = cont + 1
+    if ((cont==tableHeaderText.length) && n>0){
         rows.push(fila)
         fila = []
+        cont = 0
     }
-    fila.push(tableRowCells[n].text)
     
 }
-// for (n in rows){
-//     text: rows[n], fontSize: 10
-// }
+var aux = ""
+for (m in tableFooterCells){
+    // alert(tableFooterCells[m].text)
+    aux = tableFooterCells[m].text
+}
+
 
 var docDefinition = {
   content: [
@@ -265,15 +278,29 @@ var docDefinition = {
       layout: 'lightHorizontalLines', // optional
       style: 'tableExample',
       table: {
+        // width: "auto",
         headerRows: 1,
-        // widths: [ '*', 'auto', 150, '*' ],
-
+        // widths: [ 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto' ],
         body: [
         tableHeaderText,
         ...rows,
-        ]
+        // aux,
+        [aux,"","","","","","",""],
+        ],
+        // alignment: "center",
       },
       layout: {
+
+        // hLineWidth: function (i, node) {
+        //     if (i === 0 || i === node.table.body.length) {
+        //         return 0;
+        //     }
+        //     return (i === node.table.headerRows) ? 2 : 1;
+        // },
+        // vLineWidth: function (i) {
+        //     return 0;
+        // },
+
           fillColor: function(rowIndex) {
             if (rowIndex === 0) {
               return '#7C8FEC';
@@ -299,6 +326,10 @@ var docDefinition = {
             // fontSize: 10,
         },
         fuente: {
+            margin: 1,
+            fontSize: 8,
+        },
+        tableFooter: {
             margin: 1,
             fontSize: 8,
         },

@@ -5011,6 +5011,13 @@ def contListByTypeZero(request):
 
         balanceTotal = 0
 
+        if request.POST.get("search") == "year":
+
+            mes = datetime.now().date().year
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+
+
         if request.POST.get("search") == "month":
 
             mes = datetime.now().date().month
@@ -5090,6 +5097,23 @@ def contListByType(request,val):
 
         balanceTotal = 0
 
+# ----------------------------------------------
+
+        if request.POST.get("search") == "year":
+
+            mes = datetime.now().date().year
+            # date_today = datetime.now()
+            # dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            # dateFrom = dateFrom.date()
+            # dayFrom = dateFrom
+            # dayTo = datetime.now().date()
+
+            # mes = datetime.now().date().month
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__year=anio,refType__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+
+# ----------------------------------------------
+
         if request.POST.get("search") == "month":
 
             mes = datetime.now().date().month
@@ -5157,6 +5181,13 @@ def contListByCategoryZero(request):
         for fac in factureName:
             balanceTotal = balanceTotal + fac.total
 
+        if request.POST.get("search") == "year":
+
+            mes = datetime.now().date().year
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+
+
         if request.POST.get("search") == "month":
 
             mes = datetime.now().date().month
@@ -5221,6 +5252,13 @@ def contListByCategory(request,val):
         
         for fac in factureName:
             balanceTotal = balanceTotal + fac.total
+
+        if request.POST.get("search") == "year":
+
+            mes = datetime.now().date().year
+            anio = datetime.now().date().year
+            factureName = factura.objects.filter(fechaCreado__year=anio,refCategory__id=val).order_by("fechaCreado","id").exclude(refType__facCobrar=True,pendiente=False).exclude(refType__mercPagar=True,pendiente=False)
+
 
         if request.POST.get("search") == "month":
 

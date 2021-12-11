@@ -15,10 +15,11 @@
                 <th class="p-2"># Factura</th>
                 <th class="p-2">Nombre</th>
                 <th class="p-2">Categoría</th>
+                <th class="p-2">Nota</th>
                 <th class="p-2">Fecha de registro</th>
                 <th class="p-2">Límite</th>
-                <th class="p-2">Sub total</th>
-                <th class="p-2">IVA</th>
+                <th class="p-2">Monto</th>
+                <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
                 <th class="p-2">Acción</th>
             </tr>
@@ -30,6 +31,7 @@
                 <td class="p-2">{{facture.num}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' facture.refPersona.id %}">{{facture.refPersona}}</a></td>
                 <td class="p-2">{{facture.refCategory}}</td>
+                <td class="p-2">{{facture.note}}</td>
                 <td class="p-2">{{facture.fechaCreado|date:"M d, Y"}}</td>
                 {% for key,value in deadlineDic.items %}
                     {% if key == facture.id %}
@@ -73,6 +75,7 @@
             
             <tr>
                 <td class="p-2 color text-white">Total</td>
+                <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
