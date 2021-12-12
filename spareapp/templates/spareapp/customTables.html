@@ -1,0 +1,87 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Day {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contSuperior.html" %}
+
+{% for n in cantAux %}
+
+<div class="mb-3" id="invoice2">
+<div class="container mt-2">
+    <table style="font-size: small;" class="table-bordered invoice">
+        <thead>
+            <tr style="background-color: #F5F087" class="">
+                <th colspan="2" class="p-2">{{n.tabNombre}}</th>
+            </tr>
+            <tr style="background-color: #7C8FEC;">
+                <th class="p-2">Tipo de pago</th>
+                <th style="width: 350px;" class="p-2">Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% if tableAux %}
+
+                {% for tab in tableAux %}
+                {% if tab.tabNombre == n.tabNombre %}
+                <tr>
+                    <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>{{tab.tabTipo}}</a></td>
+                    <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% for key,value in totalParcial.items %}
+                {% if key == n.tabNombre %}
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+
+        </tbody>
+    </table>
+</div>
+
+</div>
+
+
+{% endfor %}
+
+<script>
+function generatePDF2(){
+    
+    $('#invoice2 tr:first th').each(function() {
+        var value = $(this).css("position", "static");
+      });
+    const element = document.getElementById("invoice2");
+    $("#check").hide();
+    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+    
+    var opt = {
+        margin:       0.5,
+        filename:     'report.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        enableLinks:  false,
+        pagebreak:    {mode: "avoid-all"},
+        jsPDF:        { unit: 'in', format: 'letter' }
+      };
+    html2pdf()
+    .set(opt)
+    .from(element)
+    .save();
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+        $('#invoice2 tr:first th').each(function() {
+            var value = $(this).css("position", "sticky");
+            $("#check").show();
+            $("table td:nth-child("+($("#check").index() + 1)+")").show();
+            $("input:checkbox[name=check]").prop("checked",true);
+          });
+      });
+}
+</script>
+{% endblock %}

@@ -2857,6 +2857,29 @@ def contEntry(request):
 
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
+        # ------------------------------------------------------------------------
+        # Para las tablas custom
+        print("Entra a custom")
+        toddy = datetime.now().date()
+        # customAux = customTable.objects.all()
+        allTypesCustom = factType.objects.all()
+        custAcum = 0
+        for ty in allTypesCustom:
+            print(ty)
+            facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+            for fac in facAuxAll:
+                custAcum = custAcum + fac.total
+            customType = customTable.objects.filter(tabTipo=ty)
+            for cus in customType:
+                print(cus)
+                costomInd = customTable.objects.get(id=cus.id)
+                print(costomInd.tabTotal)
+                costomInd.tabTotal = custAcum
+                print(costomInd.tabTotal)
+                costomInd.save()
+            custAcum = 0
+        # ------------------------------------------------------------------------
+
         if request.POST.get("entryOption")=="otro":
 
             tod = datetime.now().date()
@@ -2905,6 +2928,8 @@ def contEntry(request):
             dic = {"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
             return render(request,"spareapp/contDay.html",dic)
+
+
 
         dic = {"contPagadoCobrado":contPagadoCobrado,"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
@@ -4793,14 +4818,11 @@ def contIndividual(request,val):
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
     factureName = factura.objects.filter(refPersona=personaAux).order_by("fechaCreado","id")
-    print(factureName)
     balance = {}
     cont = 0
     balanceTotal = 0
 
     for fac in factureName:
-
-        print(fac)
 
         if fac.refCategory.ingreso:
 
@@ -5489,6 +5511,102 @@ def deleteFac(request,val):
         tableAuxType.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+def contAddTable(request):
+
+    tod = datetime.now().date()
+    acum = 0
+
+    allTypes=factType.objects.all()
+
+    if request.method == "POST":
+
+        lista=request.POST.getlist("type")
+        searchTable = customTable.objects.filter(tabNombre=request.POST.get("tabNombre"))
+
+        if searchTable:
+
+            print("Ya existe")
+
+        else:
+
+            for val in lista:
+
+                tableAux = customTable()
+                tableAux.tabNombre = request.POST.get("tabNombre")
+                typeAux = factType.objects.get(id=val)
+                facAux = factura.objects.filter(fechaCreado__date=tod,refType=typeAux)
+                for fac in facAux:
+                    acum = acum + fac.total
+                tableAux.tabTipo = typeAux
+                tableAux.tabTotal = acum
+                acum = 0
+                tableAux.save()
+
+    dic={"allTypes":allTypes}
+
+    return render(request,"spareapp/contAddTable.html",dic)
+
+def customTables(request):
+
+    cantAux = customTable.objects.all().values("tabNombre").distinct()
+    print(cantAux)
+    # print(len(cantAux))
+    cant = len(cantAux)
+    totalParcial = {}
+    acum = 0
+
+    allTypes=factType.objects.all()
+    tableAux = customTable.objects.all()
+    tod = datetime.now().date()
+
+    for nom in cantAux:
+
+        # print(nom)
+        # print(nom["tabNombre"])
+        # print(nom.tabNombre)
+
+        aux = customTable.objects.filter(tabNombre=nom["tabNombre"])
+
+        for a in aux:
+
+            acum = acum + a.tabTotal
+        
+        totalParcial[nom["tabNombre"]] = acum
+
+        acum = 0
+
+    # print(totalParcial)
+
+    # for tab in tableAux:
+
+    #     acum = acum + tab.tabTotal
+
+    #     totalParcial[tab.id] = tab.tabTotal
+    #     print(tab.id)
+    #     print(tab.tabTotal)
+
+
+
+
+
+
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic={"totalParcial":totalParcial,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"cantAux":cantAux,"cant":cant,"tod":tod,"tableAux":tableAux,"allTypes":allTypes}
+
+    return render(request,"spareapp/customTables.html",dic)
+
+
+
+
+
+
+
+
     # return render(request,"spareapp/accountStat.html")
 
 
