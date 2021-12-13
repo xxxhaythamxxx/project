@@ -5573,7 +5573,6 @@ def contAddTable(request):
 def customTables(request):
 
     cantAux = customTable.objects.all().values("tabNombre").distinct()
-    print(cantAux)
     cant = len(cantAux)
     totalParcial = {}
     acum = 0
@@ -5622,8 +5621,32 @@ def customTables(request):
 
 def contListCustomTables(request):
 
-    allTables = customTable.objects.all()
-    allTablesNombres = customTable.objects.all().values("tabNombre").distinct()
+    allTables = customTable.objects.all().order_by("tabNombre")
+    allTablesNombres = customTable.objects.all().values("tabNombre").distinct().order_by("tabNombre")
+
+    if request.method == "POST":
+
+        typeA = ""
+
+        for val in request.POST:
+            
+            if val.find("nombre")>-1:
+
+                typeA = val.replace("nombre","")
+
+                if typeA == request.POST.get(val):
+
+                    print("Son iguales")
+                
+                else:
+
+                    auxChange = customTable.objects.filter(tabNombre=typeA)
+                    for a in auxChange:
+                        aux = customTable.objects.get(id=a.id)
+                        aux.tabNombre = request.POST.get(val)
+                        aux.save()
+
+            typeA = ""
 
     dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
 

@@ -21,7 +21,7 @@
             <tbody>
                 {% for ty in allTablesNombres %}
                 <tr>
-                    <td class="p-2"><input name="nombre{{ty.id}}" value="{{ty.tabNombre}}" type="text"></td>
+                    <td class="p-2"><input name="nombre{{ty.tabNombre}}" value="{{ty.tabNombre}}" type="text"></td>
                     <td class="p-2"><input name="principal{{ty.id}}" type="checkbox" {% if ty.principal == True %} checked {% else %} '' {% endif %}></td>
                     <td class="p-2"><a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeCustomTable' ty.tabNombre %}">Editar</a><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.tabNombre}}" class="btn btn-danger mx-1">Borrar</a></td>
                     <div class="modal fade" id="exampleModal{{ty.tabNombre}}" tabindex="-1" aria-labelledby="exampleModalLabel{{ty.tabNombre}}" aria-hidden="true">
