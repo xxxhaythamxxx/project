@@ -95,6 +95,9 @@ urlpatterns = [
     path("deleteFac/<str:val>",views.deleteFac,name="deleteFac"),
     path("contAddTable",views.contAddTable,name="contAddTable"),
     path("customTables",views.customTables,name="customTables"),
+    path("contListCustomTables",views.contListCustomTables,name="contListCustomTables"),
+    path("editeCustomTable/<str:val>",views.editeCustomTable,name="editeCustomTable"),
+    path("deleteCustom/<str:val>",views.deleteCustom,name="deleteCustom"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

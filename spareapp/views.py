@@ -4753,6 +4753,29 @@ def editeFact(request,val,val2):
 
         tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
+        # ------------------------------------------------------------------------
+        # Para las tablas custom
+        print("Entra a custom")
+        toddy = datetime.now().date()
+        # customAux = customTable.objects.all()
+        allTypesCustom = factType.objects.all()
+        custAcum = 0
+        for ty in allTypesCustom:
+            print(ty)
+            facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+            for fac in facAuxAll:
+                custAcum = custAcum + fac.total
+            customType = customTable.objects.filter(tabTipo=ty)
+            for cus in customType:
+                print(cus)
+                costomInd = customTable.objects.get(id=cus.id)
+                print(costomInd.tabTotal)
+                costomInd.tabTotal = custAcum
+                print(costomInd.tabTotal)
+                costomInd.save()
+            custAcum = 0
+        # ------------------------------------------------------------------------
+
         dic = {"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
         return redirect(urlFinal)
@@ -5551,20 +5574,32 @@ def customTables(request):
 
     cantAux = customTable.objects.all().values("tabNombre").distinct()
     print(cantAux)
-    # print(len(cantAux))
     cant = len(cantAux)
     totalParcial = {}
     acum = 0
+
+    # ------------------------------------------------------------------------
+    # Para las tablas custom
+    toddy = datetime.now().date()
+    allTypesCustom = factType.objects.all()
+    custAcum = 0
+    for ty in allTypesCustom:
+        facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+        for fac in facAuxAll:
+            custAcum = custAcum + fac.total
+        customType = customTable.objects.filter(tabTipo=ty)
+        for cus in customType:
+            costomInd = customTable.objects.get(id=cus.id)
+            costomInd.tabTotal = custAcum
+            costomInd.save()
+        custAcum = 0
+    # ------------------------------------------------------------------------
 
     allTypes=factType.objects.all()
     tableAux = customTable.objects.all()
     tod = datetime.now().date()
 
     for nom in cantAux:
-
-        # print(nom)
-        # print(nom["tabNombre"])
-        # print(nom.tabNombre)
 
         aux = customTable.objects.filter(tabNombre=nom["tabNombre"])
 
@@ -5576,21 +5611,6 @@ def customTables(request):
 
         acum = 0
 
-    # print(totalParcial)
-
-    # for tab in tableAux:
-
-    #     acum = acum + tab.tabTotal
-
-    #     totalParcial[tab.id] = tab.tabTotal
-    #     print(tab.id)
-    #     print(tab.tabTotal)
-
-
-
-
-
-
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     facturesToCollect = len(allFacturesToPay)
@@ -5600,9 +5620,124 @@ def customTables(request):
 
     return render(request,"spareapp/customTables.html",dic)
 
+def contListCustomTables(request):
 
+    allTables = customTable.objects.all()
+    allTablesNombres = customTable.objects.all().values("tabNombre").distinct()
 
+    dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
 
+    return render(request,"spareapp/contListCustomTables.html",dic)
+
+def editeCustomTable(request,val):
+
+    tod = datetime.now().date()
+    customNombre = val
+    allTypes = factType.objects.all().order_by("nombre")
+    customAux = customTable.objects.filter(tabNombre=val)
+
+    if request.method == "POST":
+
+        allTypes = factType.objects.all()
+        lista=request.POST.getlist("type")
+        bandType = 0
+        auxType = 0
+        bandType2 = 0
+        auxtype2 = 0
+
+        if lista:
+
+            for ty in allTypes:
+
+                tableAntes = customTable.objects.filter(tabTipo=ty,tabNombre=val)
+
+                for valor in lista:
+
+                    if tableAntes:
+
+                        if str(ty.id) == str(valor):
+
+                            bandType = 1
+
+                        else:
+
+                            auxType = ty.id
+
+                    else:
+
+                        if str(ty.id) == str(valor):
+                            
+                            bandType2 = 1
+                            auxType2 = valor
+
+                if bandType == 0 and tableAntes:
+                            
+                    typeAux = factType.objects.get(id=auxType)
+                    tableChange = customTable.objects.get(tabTipo=typeAux,tabNombre=val)
+                    tableChange.delete()
+
+                if bandType2 == 1 and not(tableAntes):
+
+                    typeAux = factType.objects.get(id=auxType2)
+                    tableChange = customTable()
+                    tableChange.tabNombre = val
+                    tableChange.tabTipo = typeAux
+                    tableChange.tabTotal = 0
+                    tableChange.save()
+
+                bandType = 0
+                bandType2 = 0
+
+            # ------------------------------------------------------------------------
+            # Para las tablas custom
+            toddy = datetime.now().date()
+            allTypesCustom = factType.objects.all()
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+                for fac in facAuxAll:
+                    custAcum = custAcum + fac.total
+                customType = customTable.objects.filter(tabTipo=ty)
+                for cus in customType:
+                    costomInd = customTable.objects.get(id=cus.id)
+                    costomInd.tabTotal = custAcum
+                    costomInd.save()
+                custAcum = 0
+            # ------------------------------------------------------------------------
+
+        else:
+
+            customAux = customTable.objects.filter(tabNombre=val)
+
+            for cust in customAux:
+
+                aux = customTable.objects.get(id=cust.id)
+                aux.delete()
+
+            allTables = customTable.objects.all()
+            allTablesNombres = customTable.objects.all().values("tabNombre").distinct()
+
+            dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
+
+            return render(request,"spareapp/contListCustomTables.html",dic)
+
+    dic = {"customNombre":customNombre,"customAux":customAux,"allTypes":allTypes,"val":val}
+
+    return render(request,"spareapp/editeCustomTable.html",dic)
+
+def deleteCustom(request,val):
+
+    print(val)
+
+    customErase = customTable.objects.filter(tabNombre=val)
+    customErase.delete()
+
+    allTables = customTable.objects.all()
+    allTablesNombres = customTable.objects.all().values("tabNombre").distinct()
+
+    dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
+
+    return render(request,"spareapp/contListCustomTables.html",dic)
 
 
 

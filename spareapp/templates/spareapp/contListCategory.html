@@ -35,7 +35,7 @@
                     <td class="p-2"><input name="catSpending{{ty.id}}" type="checkbox" {% if ty.egreso == True %} checked {% else %} '' {% endif %}></td>
                     <td class="p-2"><input name="catExpiration{{ty.id}}" type="checkbox" {% if ty.limite == True %} checked {% else %} '' {% endif %}></td>
                     {% if ty.nombre != "Mercancia credito pagada" and ty.nombre != "Factura cobrada" and value == "off" %}
-                    <td class="p-2"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
+                    <td class="p-2"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a></td>
                     {% else %}
                     <td class="p-2"></td>
                     {% endif %}
@@ -51,7 +51,7 @@
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a id="deleteType" class="btn btn-primary" href="{% url 'contDeleteCategory' ty.id %}">Borrar</a>
+                            <a style="font-size: small;" id="deleteType" class="btn btn-primary" href="{% url 'contDeleteCategory' ty.id %}">Borrar</a>
                             </div>
                         </div>
                         </div>
@@ -63,8 +63,8 @@
             </tbody>
         </table>
         <div class="pt-2">
-            <button class="btn btn-success mx-1" type="submit">Actualizar</button>
-            <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+            <button style="font-size: small;" class="btn btn-success mx-1" type="submit">Actualizar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </div>
         </form>
     </div>

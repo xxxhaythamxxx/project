@@ -65,7 +65,7 @@
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a id="deleteType" class="btn btn-primary" href="{% url 'contDeleteType' ty.id %}">Delete</a>
+                            <a style="font-size: small;" id="deleteType" class="btn btn-primary" href="{% url 'contDeleteType' ty.id %}">Delete</a>
                             </div>
                         </div>
                         </div>
@@ -77,8 +77,8 @@
             </tbody>
         </table>
         <div class="pt-2">
-            <button class="btn btn-success mx-1" type="submit">Actualizar</button>
-            <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+            <button style="font-size: small;" class="btn btn-success mx-1" type="submit">Actualizar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </div>
         </form>
     </div>

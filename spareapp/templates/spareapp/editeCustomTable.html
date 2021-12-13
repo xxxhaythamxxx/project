@@ -1,0 +1,37 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Category {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="d-flex justify-content-center">
+    <div class="container  mt-5 col-lg-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="tabNombre">Nombre de la tabla</label>
+                <input value="{{customNombre}}" class="form-control" id="tabNombre" type="text" name="tabNombre" required>
+            </div>
+            <div class="mb-3">
+                <input id="tabPrincipal" name="tabPrincipal" type="checkbox">
+                <label for="tabPrincipal">Principal</label>
+            </div>
+            <label class="mb-3" for="">Selecciona los tipos de pago para la tabla</label>
+            <div class="mb-3">
+            {% for ty in allTypes %}
+            <div class="">
+                <input value="{{ty.id}}" id="{{ty.id}}" name="type" type="checkbox" {% for aux in customAux %} {% if ty == aux.tabTipo %} checked {% else %} '' {% endif %} {% endfor %}>
+                <label for="{{ty.id}}">{{ty.nombre}}</label>
+            </div>
+            {% endfor %}
+            </div>
+
+            <button class="btn btn-primary" type="submit">Actualizar</button>
+            <a href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
