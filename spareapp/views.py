@@ -3178,7 +3178,7 @@ def contToCollect(request):
 
     for all in allFacturesPay:
 
-        deadline = all.fechaTope - all.fechaCreado.date()
+        deadline = datetime.now().date() - all.fechaCreado.date()
         deadline = deadline.days
         deadlineDic[all.id] = deadline
 
@@ -3205,7 +3205,7 @@ def contToPay(request):
 
     for all in allFacturesPay:
 
-        deadline = all.fechaTope - all.fechaCreado.date()
+        deadline = datetime.now().date() - all.fechaCreado.date()
         deadline = deadline.days
         deadlineDic[all.id] = deadline
 
@@ -3596,6 +3596,95 @@ def contByDay(request):
     dic = {"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"editPrueba":editPrueba,"contTotal":contTotal,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/contDay.html",dic)
+
+def contByDayCustom(request):
+
+    tod = request.POST.get("searchDate")
+
+    cantAux = customTable.objects.all().values("tabNombre").distinct()
+    totalParcial = {}
+    acum = 0
+    
+    tableAux = customTable.objects.all()
+
+    for nom in cantAux:
+
+        aux = customTable.objects.filter(tabNombre=nom["tabNombre"])
+        aux2 = mainTable.objects.filter(fecha__date=tod)
+
+        for a in aux:
+
+            for b in aux2:
+
+                if a.tabTipo == b.tabTipo:
+
+                    moment = customTable.objects.get(tabNombre=a.tabNombre,tabTipo=a.tabTipo)
+                    moment.tabTotal = b.tabTotal
+                    moment.save()
+
+                    acum = acum + b.tabTotal
+        
+        totalParcial[nom["tabNombre"]] = acum
+
+        acum = 0
+
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"totalParcial":totalParcial,"cantAux":cantAux,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+
+    return render(request,"spareapp/customTables.html",dic)
+
+def contByRangeCustom(request):
+
+    dateFrom = request.POST.get("searchDateFrom")
+    dateTo = request.POST.get("searchDateTo")
+
+    tod = request.POST.get("searchDate")
+
+    cantAux = customTable.objects.all().values("tabNombre").distinct()
+    totalParcial = {}
+    acum = 0
+    acum2 = 0
+    
+    tableAux = customTable.objects.all()
+
+    for nom in cantAux:
+
+        aux = customTable.objects.filter(tabNombre=nom["tabNombre"])
+        aux2 = mainTable.objects.filter(fecha__date__gte=dateFrom,fecha__date__lte=dateTo)
+
+        for a in aux:
+
+            for b in aux2:
+
+                if a.tabTipo == b.tabTipo:
+
+                    moment = customTable.objects.get(tabNombre=a.tabNombre,tabTipo=a.tabTipo)
+                    acum2 = acum2 + b.tabTotal
+                    moment.tabTotal = acum2
+                    moment.save()
+
+                    acum = acum + b.tabTotal
+
+            acum2 = 0
+        
+        totalParcial[nom["tabNombre"]] = acum
+
+        acum = 0
+
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"dateTo":dateTo,"dateFrom":dateFrom,"totalParcial":totalParcial,"cantAux":cantAux,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+
+    return render(request,"spareapp/customTables.html",dic)
 
 def contByRange(request):
 
@@ -5556,6 +5645,7 @@ def contAddTable(request):
             for val in lista:
 
                 tableAux = customTable()
+                tableAux.fecha = tod
                 tableAux.tabNombre = request.POST.get("tabNombre")
                 typeAux = factType.objects.get(id=val)
                 facAux = factura.objects.filter(fechaCreado__date=tod,refType=typeAux)
@@ -5737,12 +5827,19 @@ def editeCustomTable(request,val):
                 aux = customTable.objects.get(id=cust.id)
                 aux.delete()
 
-            allTables = customTable.objects.all()
-            allTablesNombres = customTable.objects.all().values("tabNombre").distinct()
+            allTables = customTable.objects.all().order_by("tabNombre")
+            allTablesNombres = customTable.objects.all().values("tabNombre").distinct().order_by("tabNombre")
 
             dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
 
             return render(request,"spareapp/contListCustomTables.html",dic)
+
+        allTables = customTable.objects.all().order_by("tabNombre")
+        allTablesNombres = customTable.objects.all().values("tabNombre").distinct().order_by("tabNombre")
+
+        dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
+
+        return render(request,"spareapp/contListCustomTables.html",dic)
 
     dic = {"customNombre":customNombre,"customAux":customAux,"allTypes":allTypes,"val":val}
 

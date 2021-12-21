@@ -159,17 +159,6 @@
     </tfoot>
 </table>
 
-<!-- <table id="" style="font-size: small;" class="table-bordered invoice mb-4">
-    <thead id="hInf">
-        <tr style="background-color: #E77C7C;" class="">
-            <th id="balanceTotal" class="p-2">BALANCE ${{balanceTotal|floatformat:2}}</th>
-            <th id="balanceTotalFacMerc" style="display: none;" class="p-2">BALANCE ${{balanceFacMerc|floatformat:2}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-</table> -->
 </div>
 </div>
 
@@ -182,76 +171,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
 
 <script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
-<!-- <script type="text/javascript" src="{% static 'spareapp/pdfmake.min.js' %}"></script> -->
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
 
 function generatePDF2(){
 
-// $("#check").hide();
-// $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-
-// var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
-
-// var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
-// var tableDataAsRows = tableRowCells.reduce((rows, cellData, index) => {
-//   if (index % 4 === 0) {
-//     rows.push([]);
-//   }
-//   rows[rows.length - 1].push(cellData);
-//     return rows;
-// }, []);
-
-// var docDefinition = {
-//     // header: { text: 'MLB World Series Winners', alignment: 'center' },
-//     // footer: function(currentPage, pageCount) { return ({ text: `Page ${currentPage} of ${pageCount}`, alignment: 'center' }); },
-//     content: [
-//       {
-//         style: 'tableExample',
-//         table: {
-//           headerRows: 1,
-//           body: [
-//             tableHeaderText,
-//             ...tableDataAsRows,
-//           ]
-//         },
-//         layout: {
-//           fillColor: function(rowIndex) {
-//             if (rowIndex === 0) {
-//               return '#0f4871';
-//             }
-//             return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
-//           }
-//         },
-//       },
-//     ],
-//     styles: {
-//       tableExample: {
-//         margin: [0, 20, 0, 80],
-//       },
-//       tableHeader: {
-//         margin: 12,
-//         color: 'white',
-//       },
-//       tableData: {
-//         margin: 12,
-//       },
-//     },
-//   };
-// pdfMake.createPdf(docDefinition).download();
-
-
-// ------------------------------------------------------------------
-// $("#check").hide();
-// $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-
 var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
-// alert(tableHeaderText.length)
 var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
-// alert(tableRowCells.length)
 var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
-// alert(tableFooterCells.length)
 var rows = []
 var fila = []
 var cont = 0
@@ -267,7 +195,6 @@ for (n in tableRowCells){
 }
 var aux = ""
 for (m in tableFooterCells){
-    // alert(tableFooterCells[m].text)
     aux = tableFooterCells[m].text
 }
 
@@ -278,28 +205,14 @@ var docDefinition = {
       layout: 'lightHorizontalLines', // optional
       style: 'tableExample',
       table: {
-        // width: "auto",
         headerRows: 1,
-        // widths: [ 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto' ],
         body: [
         tableHeaderText,
         ...rows,
-        // aux,
         [aux,"","","","","","",""],
         ],
-        // alignment: "center",
       },
       layout: {
-
-        // hLineWidth: function (i, node) {
-        //     if (i === 0 || i === node.table.body.length) {
-        //         return 0;
-        //     }
-        //     return (i === node.table.headerRows) ? 2 : 1;
-        // },
-        // vLineWidth: function (i) {
-        //     return 0;
-        // },
 
           fillColor: function(rowIndex) {
             if (rowIndex === 0) {
@@ -337,23 +250,6 @@ var docDefinition = {
 };
 
 pdfMake.createPdf(docDefinition).download();
-
-// $("#check").show();
-// $("table td:nth-child("+($("#check").index() + 1)+")").show();
-// $("input:checkbox[name=check]").prop("checked",true);
-// ------------------------------------------------------------------
-// html2canvas($("#invoice")[0],{
-//     onrendered:function(canvas){
-//         var data=canvas.toDataURL();
-//         var docDefinition={
-//             content:[{
-//                 image:data,
-//                 width:500,
-//             }]
-//         };
-//         pdfMake.createPdf(docDefinition).download("Table.pdf");
-//     }
-// })
 
 }
 
@@ -418,46 +314,6 @@ $("#entrySpending").change(function(){
 $("#invoice").dragtable()
 
 
-// function generatePDF2(){
-
-//     $('#invoice2 tr:first th').each(function() {
-//         var value = $(this).css("position", "static");
-//       });
-//     const element = document.getElementById("invoice2");
-    
-//     $("#hMain tr").attr("style","background-color: #7C8FEC;position: static")
-//     $("#hMain tr").find("th").each(function(){
-//         $(this).attr("style","position: static")
-//     })
-//     $("#check").hide();
-//     $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-
-//     var opt = {
-//         margin:       0.5,
-//         filename:     'report.pdf',
-//         image:        { type: 'jpeg', quality: 0.98 },
-//         html2canvas:  { scale: 2 },
-//         enableLinks:  false,
-//         pagebreak:    {mode: "avoid-all"},
-//         jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
-//       };
-//     html2pdf()
-//     .set(opt)
-//     .from(element)
-//     .save();
-//     html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-//         $('#invoice2 tr:first th').each(function() {
-//             var value = $(this).css("position", "sticky");
-//             $("#hMain tr").attr("style","background-color: #7C8FEC;position: sticky;top: 70;")
-//             $("#hMain tr").find("th").each(function(){
-//                 $(this).attr("style","position: sticky;top: 70;")
-//             })
-//             $("#check").show();
-//             $("table td:nth-child("+($("#check").index() + 1)+")").show();
-//             $("input:checkbox[name=check]").prop("checked",true);
-//           });
-//       });
-// }
 </script>
 {% endif %}
 

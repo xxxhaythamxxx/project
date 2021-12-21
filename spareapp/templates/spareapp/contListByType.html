@@ -25,10 +25,6 @@
     <div class="mb-3">
         <input value="all" class="form-check-input" id="search1" type="radio" name="search" checked>
         <label class="form-check-label" for="search1">Todos</label>
-        <input value="month" class="form-check-input" id="search2" type="radio" name="search">
-        <label class="form-check-label" for="search2">Éste mes</label>
-        <input value="year" class="form-check-input" id="search3" type="radio" name="search">
-        <label class="form-check-label" for="search3">Éste año</label>
         <input value="range" class="form-check-input" id="search4" type="radio" name="search">
         <label class="form-check-label" for="search4">Rango</label>
     </div>
@@ -58,7 +54,7 @@
         <tr style="background-color: #F5F087" class="">
             <th colspan="10" class="p-2">{{factureName.0.refType.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
         </tr>
-        <tr style="background-color: #7C8FEC;" class="">
+        <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
             <th class="p-2">Fecha</th>
             <th class="p-2">Cliente</th>
             <th class="p-2">Fact #</th>

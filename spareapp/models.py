@@ -1,6 +1,9 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from smart_selects.db_fields import ChainedManyToManyField, ChainedForeignKey
+from django.utils.timezone import now
+from datetime import datetime, timezone
+from datetime import timedelta
 import os
 from django.db import models
 from django.contrib.auth.models import User
@@ -191,7 +194,7 @@ class mainTableAux(models.Model):
         return '%s' %(self.tabTotal)
 
 class customTable(models.Model):
-
+    
     tabNombre = models.CharField(max_length=20,verbose_name="Nombre de tabla",default='Principal')
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     tabTotal = models.FloatField(verbose_name="Total")
