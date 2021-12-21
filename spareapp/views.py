@@ -5847,8 +5847,6 @@ def editeCustomTable(request,val):
 
 def deleteCustom(request,val):
 
-    print(val)
-
     customErase = customTable.objects.filter(tabNombre=val)
     customErase.delete()
 
@@ -5859,7 +5857,78 @@ def deleteCustom(request,val):
 
     return render(request,"spareapp/contListCustomTables.html",dic)
 
+def comparar(request):
 
+    tod = datetime.now().date()
+    allTypes = factType.objects.all().order_by("nombre")
+    editPrueba = False
+    contTotal = 0
+    tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+    allFactures = factura.objects.filter(fechaCreado__date=tod) | factura.objects.filter(fechaCobrado=tod)
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    contTotal = 0
+    noIncludeTotal = 0
+    noIncludeTotalGasto = 0
+    contPagadoCobrado = 0
+
+    for tab in tableAux:
+
+        if tab.tabTipo.include == True:
+
+            if  tab.tabTipo.facCobrada == False and tab.tabTipo.mercPagada == False:
+
+                contTotal = contTotal + tab.tabTotal
+
+        else:
+
+            if  tab.tabTipo.facCobrada == False and tab.tabTipo.mercPagada == False:
+
+                if tab.tabTipo.ingreso == True:
+
+                    noIncludeTotal = noIncludeTotal + tab.tabTotal
+
+                else:
+
+                    noIncludeTotalGasto = noIncludeTotalGasto + tab.tabTotal
+
+        if tab.tabTipo.facCobrada == True:
+
+            contPagadoCobrado = contPagadoCobrado + tab.tabTotal
+
+        if tab.tabTipo.mercPagada == True:
+
+            contPagadoCobrado = contPagadoCobrado - tab.tabTotal
+
+    # -----------Custom----------------------
+
+    cantAux = customTable.objects.all().values("tabNombre").distinct()
+    cant = len(cantAux)
+    totalParcial = {}
+    acum = 0
+
+    allTypes=factType.objects.all()
+    tableAux2 = customTable.objects.all()
+    tod = datetime.now().date()
+
+    for nom in cantAux:
+
+        aux = customTable.objects.filter(tabNombre=nom["tabNombre"])
+
+        for a in aux:
+
+            acum = acum + a.tabTotal
+        
+        totalParcial[nom["tabNombre"]] = acum
+
+        acum = 0
+
+    dic = {"tableAux2":tableAux2,"cant":cant,"cantAux":cantAux,"totalParcial":totalParcial,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+
+    return render(request,"spareapp/comparar.html",dic)
 
 
     # return render(request,"spareapp/accountStat.html")

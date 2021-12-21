@@ -98,6 +98,7 @@ urlpatterns = [
     path("contAddTable",views.contAddTable,name="contAddTable"),
     path("customTables",views.customTables,name="customTables"),
     path("contListCustomTables",views.contListCustomTables,name="contListCustomTables"),
+    path("comparar",views.comparar,name="comparar"),
     path("editeCustomTable/<str:val>",views.editeCustomTable,name="editeCustomTable"),
     path("deleteCustom/<str:val>",views.deleteCustom,name="deleteCustom"),
 
