@@ -7,7 +7,7 @@
 {% include "spareapp/contSuperiorCustom.html" %}
 
 {% for n in cantAux %}
-
+{% if n.principal == False %}
 <div class="mb-3" id="invoice2">
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
@@ -48,7 +48,7 @@
 
 </div>
 
-
+{% endif %}
 {% endfor %}
 
 <script>

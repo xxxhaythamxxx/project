@@ -15,7 +15,7 @@
                 <input value="{{customNombre}}" class="form-control" id="tabNombre" type="text" name="tabNombre" required>
             </div>
             <div class="mb-3">
-                <input id="tabPrincipal" name="tabPrincipal" type="checkbox">
+                <input id="tabPrincipal" name="tabPrincipal" type="checkbox" value={{customAux.0.principal}} {% if customAux.0.principal == True %} checked {% else %} '' {% endif %}>
                 <label for="tabPrincipal">Principal</label>
             </div>
             <label class="mb-3" for="">Selecciona los tipos de pago para la tabla</label>

@@ -126,4 +126,50 @@
     </table>
 </div>
 
+
+{% for n in cantAux %}
+{% if n.principal == True %}
+
+<div class="mb-3" id="invoice2">
+<div class="container mt-2">
+    <table style="font-size: small;" class="table-bordered invoice">
+        <thead>
+            <tr style="background-color: #F5F087" class="">
+                <th colspan="2" class="p-2">{{n.tabNombre}}</th>
+            </tr>
+            <tr style="background-color: #7C8FEC;">
+                <th class="p-2">Tipo de pago</th>
+                <th style="width: 350px;" class="p-2">Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% if tableAux2 %}
+
+                {% for tab in tableAux2 %}
+                {% if tab.tabNombre == n.tabNombre %}
+                <tr>
+                <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' tab.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{tab.tabTipo}} )</a></td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                {% for key,value in totalParcial.items %}
+                {% if key == n.tabNombre %}
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+
+        </tbody>
+    </table>
+</div>
+</div>
+
+{% endif %}
+{% endfor %}
+
 {% endblock %}
