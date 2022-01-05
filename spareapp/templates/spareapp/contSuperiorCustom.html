@@ -64,6 +64,12 @@
                     <a style="font-size: small;" href="{% url 'customTablesRange' dateFrom dateTo %}" class="btn btn-primary">Custom tables</a>
                     <a style="font-size: small;" href="{% url 'contDayBackRange' dateFrom dateTo %}" class="btn btn-primary">Main tables</a>
                     {% endif %}
+                    <form action="{% url 'searchTable' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-lg-5 mt-3">
+                        <input placeholder="Ingrese valor de busqueda" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
+                    </div>
+                    </form>
                 </div>
                 <div class="col-lg-4 d-flex justify-content-end">
                     <div>

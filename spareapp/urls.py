@@ -106,7 +106,8 @@ urlpatterns = [
     path("customTablesRange/<str:val>?<str:val2>",views.customTablesRange,name="customTablesRange"),
     path("contDayBack/<str:val>",views.contDayBack,name="contDayBack"),
     path("contDayBackRange/<str:val>?<str:val2>",views.contDayBackRange,name="contDayBackRange"),
-    path("operacionesTablas",views.operacionesTablas,name="operacionesTablas"),
+    # path("operacionesTablas",views.operacionesTablas,name="operacionesTablas"),
+    path("searchTable",views.searchTable,name="searchTable"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

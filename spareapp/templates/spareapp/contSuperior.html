@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </form>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <a href="{% url 'contAdmin' %}" style="font-size: small;" class="btn btn-secondary">Admin</a>
                     <a href="{% url 'contEntry' %}" style="font-size: small;" class="btn btn-primary">Agregar</a>
                     <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-primary">Estado de cuenta</a>
@@ -62,8 +62,15 @@
                     {% else %}
                     <a style="font-size: small;" href="{% url 'customTablesRange' dateFrom dateTo %}" class="btn btn-primary">Custom tables</a>
                     {% endif %}
+                    <form action="{% url 'searchTable' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-lg-5 mt-3">
+                        <input placeholder="Ingrese valor de busqueda" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
+                    </div>
+                    <!-- <input id="Tsearch" name="Tsearch" class="col-lg-3" style="font-size: small;" type="text"> -->
+                    </form>
                 </div>
-                <div class="col-lg-6 d-flex justify-content-end">
+                <div class="col-lg-4 d-flex justify-content-end">
                     <div>
                         <a href="{% url 'contToCollect' %}" style="font-size: small;" type="button" class="btn btn-primary">
                             Facturas por cobrar<span class="badge bg-secondary">{{facturesToCollect}}</span>
