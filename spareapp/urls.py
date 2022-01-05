@@ -99,8 +99,14 @@ urlpatterns = [
     path("customTables/<str:val>",views.customTables,name="customTables"),
     # path("customTables",views.customTables,name="customTables"),
     path("contListCustomTables",views.contListCustomTables,name="contListCustomTables"),
-    path("editeCustomTable/<str:val>",views.editeCustomTable,name="editeCustomTable"),
-    path("deleteCustom/<str:val>",views.deleteCustom,name="deleteCustom"),
+    # path("editeCustomTable/<str:val>",views.editeCustomTable,name="editeCustomTable"),
+    re_path("editeCustomTable/(?P<val>.*)$",views.editeCustomTable,name="editeCustomTable"),
+    # path("deleteCustom/<str:val>",views.deleteCustom,name="deleteCustom"),
+    re_path("deleteCustom/(?P<val>.*)$",views.deleteCustom,name="deleteCustom"),
+    path("customTablesRange/<str:val>?<str:val2>",views.customTablesRange,name="customTablesRange"),
+    path("contDayBack/<str:val>",views.contDayBack,name="contDayBack"),
+    path("contDayBackRange/<str:val>?<str:val2>",views.contDayBackRange,name="contDayBackRange"),
+    path("operacionesTablas",views.operacionesTablas,name="operacionesTablas"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

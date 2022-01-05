@@ -1,5 +1,5 @@
 $("#search4").click(function(){
-    $("#formByRange").show()
+    $("#formByRange2").show()
 })
 $("#search1").click(function(){
     $("#formByRange").hide()

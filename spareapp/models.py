@@ -175,7 +175,7 @@ class factura(models.Model):
 class mainTable(models.Model):
 
     fecha = models.DateTimeField(auto_now_add=False,verbose_name="Fecha")
-    tabNombre = models.CharField(max_length=20,verbose_name="Nombre de tabla",default='Principal')
+    tabNombre = models.CharField(max_length=80,verbose_name="Nombre de tabla",default='Principal')
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     principal = models.BooleanField(default=False,verbose_name="Principal",blank=True,null=True)
     # tabPagos = models.FloatField(verbose_name="Pagos")
@@ -198,7 +198,7 @@ class mainTableAux(models.Model):
 class customTable(models.Model):
 
     fecha = models.DateTimeField(auto_now_add=False,verbose_name="Fecha",default=now)
-    tabNombre = models.CharField(max_length=20,verbose_name="Nombre de tabla",default='Principal')
+    tabNombre = models.CharField(max_length=80,verbose_name="Nombre de tabla",default='Principal')
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     principal = models.BooleanField(default=False,verbose_name="Principal",blank=True,null=True)
     tabTotal = models.FloatField(verbose_name="Total")
@@ -208,7 +208,7 @@ class customTable(models.Model):
 
 class customAux(models.Model):
 
-    tabNombre = models.CharField(max_length=20,verbose_name="Nombre de tabla",default='Principal')
+    tabNombre = models.CharField(max_length=80,verbose_name="Nombre de tabla",default='Principal')
     tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
     principal = models.BooleanField(default=False,verbose_name="Principal",blank=True,null=True)
     tabTotal = models.FloatField(verbose_name="Total")

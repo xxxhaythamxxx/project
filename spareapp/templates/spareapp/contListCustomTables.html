@@ -23,12 +23,12 @@
                 <tr>
                     <td class="p-2"><input name="nombre{{ty.tabNombre}}" value="{{ty.tabNombre}}" type="text"></td>
                     <td class="p-2"><input name="principal{{ty.id}}" type="checkbox" {% if ty.principal == True %} checked {% else %} '' {% endif %}></td>
-                    <td class="p-2"><a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeCustomTable' ty.tabNombre %}">Editar</a><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.tabNombre}}" class="btn btn-danger mx-1">Borrar</a></td>
-                    <div class="modal fade" id="exampleModal{{ty.tabNombre}}" tabindex="-1" aria-labelledby="exampleModalLabel{{ty.tabNombre}}" aria-hidden="true">
+                    <td class="p-2"><a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeCustomTable' ty.tabNombre %}">Editar</a><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.tabNombre|cut:' '}}" class="btn btn-danger mx-1">Borrar</a></td>
+                    <div class="modal fade" id="exampleModal{{ty.tabNombre|cut:' '}}" tabindex="-1" aria-labelledby="exampleModalLabel{{ty.tabNombre|cut:' '}}" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel{{ty.tabNombre}}">Precaución</h5>
+                            <h5 class="modal-title" id="exampleModalLabel{{ty.tabNombre|cut:' '}}">Precaución</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">

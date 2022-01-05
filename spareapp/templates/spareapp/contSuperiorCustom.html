@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </form>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <a href="{% url 'contAdmin' %}" style="font-size: small;" class="btn btn-secondary">Admin</a>
                     <a href="{% url 'contEntry' %}" style="font-size: small;" class="btn btn-primary">Agregar</a>
                     <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-primary">Estado de cuenta</a>
@@ -57,9 +57,15 @@
                         <li><a onClick="functionByDay()" id="byDay" class="dropdown-item" href="#">Por día</a></li>
                         <li><a onClick="functionByRange()" id="byRange" class="dropdown-item" href="#">Por rango</a></li>
                     </ul>
+                    {% if tod %}
                     <a style="font-size: small;" href="{% url 'customTables' tod %}" class="btn btn-primary">Custom tables</a>
+                    <a style="font-size: small;" href="{% url 'contDayBack' tod %}" class="btn btn-primary">Main tables</a>
+                    {% else %}
+                    <a style="font-size: small;" href="{% url 'customTablesRange' dateFrom dateTo %}" class="btn btn-primary">Custom tables</a>
+                    <a style="font-size: small;" href="{% url 'contDayBackRange' dateFrom dateTo %}" class="btn btn-primary">Main tables</a>
+                    {% endif %}
                 </div>
-                <div class="col-lg-6 d-flex justify-content-end">
+                <div class="col-lg-4 d-flex justify-content-end">
                     <div>
                         <a href="{% url 'contToCollect' %}" style="font-size: small;" type="button" class="btn btn-primary">
                             Facturas por cobrar<span class="badge bg-secondary">{{facturesToCollect}}</span>

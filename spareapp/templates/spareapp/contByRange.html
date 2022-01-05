@@ -5,7 +5,7 @@
 {% block content %}
 
 {% include "spareapp/contSuperior.html" %}
-
+<!-- 
 <div class="container mt-2">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
@@ -124,7 +124,7 @@
             
         </tbody>
     </table>
-</div>
+</div> -->
 
 
 {% for n in cantAux %}
@@ -135,7 +135,7 @@
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
             <tr style="background-color: #F5F087" class="">
-                <th colspan="2" class="p-2">{{n.tabNombre}}</th>
+                <th colspan="2" class="p-2">{{n.tabNombre}}  |  Desde: {{dateFrom}}, hasta: {{dateTo}}</th>
             </tr>
             <tr style="background-color: #7C8FEC;">
                 <th class="p-2">Tipo de pago</th>

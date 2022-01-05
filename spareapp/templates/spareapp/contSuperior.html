@@ -57,7 +57,11 @@
                         <li><a onClick="functionByDay()" id="byDay" class="dropdown-item" href="#">Por día</a></li>
                         <li><a onClick="functionByRange()" id="byRange" class="dropdown-item" href="#">Por rango</a></li>
                     </ul>
+                    {% if tod %}
                     <a style="font-size: small;" href="{% url 'customTables' tod %}" class="btn btn-primary">Custom tables</a>
+                    {% else %}
+                    <a style="font-size: small;" href="{% url 'customTablesRange' dateFrom dateTo %}" class="btn btn-primary">Custom tables</a>
+                    {% endif %}
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div>

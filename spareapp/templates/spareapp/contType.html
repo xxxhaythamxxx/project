@@ -27,6 +27,7 @@
         <thead>
             <tr style="background-color: #7C8FEC">
                 <th class="p-2"># Factura</th>
+                <th class="p-2">Fecha</th>
                 <th class="p-2">Nombre</th>
                 <th class="p-2">Categoría</th>
                 <th class="p-2">Nota</th>
@@ -41,6 +42,7 @@
             {% for fac in allFacturesVal %}
             <tr>
                 <td class="p-2">{{fac.num}}</td>
+                <td class="p-2">{{fac.fechaCreado|date:'Y-m-d'}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory|upper}}</td>
                 <td class="p-2">{{fac.note}}</td>
@@ -114,6 +116,7 @@
             {% endfor %}
             <tr style="background-color: #E77C7C;">
                 <td class="p-2">Total</td>
+                <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
