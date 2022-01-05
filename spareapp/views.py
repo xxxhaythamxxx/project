@@ -4141,10 +4141,12 @@ def contByDayCustom(request):
         factureAux = factura.objects.filter(fechaCreado__date=tod)
         allTypesCustom = factType.objects.all()
         totalParcial = {}
+        totalParcial2 = {}
         acum = 0
         sumaLista = ""
         restaLista = ""
         sumaRestaTotal = 0
+        borrarAux = ""
         
         tableAux2 = customTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
@@ -4277,7 +4279,60 @@ def contByDayCustom(request):
         sumaLista = request.POST.getlist("TsumaVal")
         restaLista = request.POST.getlist("TrestaVal")
 
-    dic = {"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+        # Tabla suma resta
+
+        bandera = False
+
+        acum = 0
+
+        borrarAux = customAux.objects.all()
+        borrarAux.delete()
+
+        for ty in allTypesCustom:
+
+            for sum in request.POST.getlist("TsumaVal"):
+
+                tableAuxAux = customTable.objects.filter(fecha__date=tod,tabNombre=sum)
+
+                for table in tableAuxAux:
+
+                    if table.tabTipo == ty:
+
+                        bandera = True
+
+                        acum = acum + table.tabTotal
+
+                        totalParcial2[ty.nombre] = acum
+
+            for res in request.POST.getlist("TrestaVal"):
+
+                tableAuxAux = customTable.objects.filter(fecha__date=tod,tabNombre=res)
+
+                for table in tableAuxAux:
+
+                    if table.tabTipo == ty:
+
+                        bandera = True
+
+                        acum = acum - table.tabTotal
+
+                        totalParcial2[ty.nombre] = acum
+
+            acum = 0
+
+            if bandera == True:
+
+                borrarAux = customAux()
+                borrarAux.tabNombre = "Suma-Resta"
+                borrarAux.tabTipo = ty
+                borrarAux.tabTotal = totalParcial2[ty.nombre]
+                borrarAux.save()
+
+            bandera = False
+
+        borrarAux = customAux.objects.all()
+
+    dic = {"borrarAux":borrarAux,"totalParcial2":totalParcial2,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/customTables.html",dic)
 
@@ -4460,7 +4515,63 @@ def contByRangeCustom(request):
         sumaLista = request.POST.getlist("TsumaVal")
         restaLista = request.POST.getlist("TrestaVal")
 
-        dic = {"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
+        # Tabla suma resta
+
+        totalParcial2 = {}
+
+        bandera = False
+
+        acum = 0
+
+        # borrarAux = customAux.objects.all()
+        # borrarAux.delete()
+
+        for ty in allTypesCustom:
+
+            for sum in request.POST.getlist("TsumaVal"):
+
+                tableAuxAux = customAux.objects.filter(tabNombre=sum)
+                # tableAuxAux = customTable.objects.filter(fecha__date=tod,tabNombre=sum)
+
+                for table in tableAuxAux:
+
+                    if table.tabTipo == ty:
+
+                        bandera = True
+
+                        acum = acum + table.tabTotal
+
+                        totalParcial2[ty.nombre] = acum
+
+            for res in request.POST.getlist("TrestaVal"):
+
+                tableAuxAux = customAux.objects.filter(tabNombre=res)
+
+                for table in tableAuxAux:
+
+                    if table.tabTipo == ty:
+
+                        bandera = True
+
+                        acum = acum - table.tabTotal
+
+                        totalParcial2[ty.nombre] = acum
+
+            acum = 0
+
+            if bandera == True:
+
+                borrarAux = customAux()
+                borrarAux.tabNombre = "Suma-Resta"
+                borrarAux.tabTipo = ty
+                borrarAux.tabTotal = totalParcial2[ty.nombre]
+                borrarAux.save()
+
+            bandera = False
+
+        borrarAux = customAux.objects.filter(tabNombre="Suma-Resta")
+
+        dic = {"totalParcial2":totalParcial2,"borrarAux":borrarAux,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
 
     return render(request,"spareapp/customTables.html",dic)
 
@@ -6570,9 +6681,14 @@ def customTables(request,val):
 
     print("Entra antes del POST")
 
+    tableAuxAux = ""
+    borrarAux = ""
+    bandera = False
+
     cantAux = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
     cant = len(cantAux)
     totalParcial = {}
+    totalParcial2 = {}
     acum = 0
     sumaLista = ""
     restaLista = ""
@@ -6628,32 +6744,83 @@ def customTables(request,val):
 
         for sum in request.POST.getlist("TsumaVal"):
 
-            print(sum)
+            # print(sum)
 
             for tab in tableAux:
 
                 if tab.tabNombre == sum:
 
-                    print(tab.tabTipo)
-                    print(tab.tabTotal)
+                    # print(tab.tabTipo)
+                    # print(tab.tabTotal)
                     sumaRestaTotal = sumaRestaTotal + tab.tabTotal
 
         for res in request.POST.getlist("TrestaVal"):
 
-            print(res)
+            # print(res)
 
             for tab in tableAux:
 
                 if tab.tabNombre == res:
 
-                    print(tab.tabTipo)
-                    print(tab.tabTotal)
+                    # print(tab.tabTipo)
+                    # print(tab.tabTotal)
                     sumaRestaTotal = sumaRestaTotal - tab.tabTotal
 
         sumaLista = request.POST.getlist("TsumaVal")
         restaLista = request.POST.getlist("TrestaVal")
 
-    dic={"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"cantAux":cantAux,"cant":cant,"tod":tod,"tableAux":tableAux,"allTypes":allTypes}
+        # Tabla suma resta
+
+        acum = 0
+
+        borrarAux = customAux.objects.all()
+        borrarAux.delete()
+
+        for ty in allTypes:
+
+            for sum in request.POST.getlist("TsumaVal"):
+
+                tableAuxAux = customTable.objects.filter(fecha__date=val,tabNombre=sum)
+
+                for table in tableAuxAux:
+
+                    if table.tabTipo == ty:
+
+                        bandera = True
+
+                        acum = acum + table.tabTotal
+
+                        totalParcial2[ty.nombre] = acum
+
+            for res in request.POST.getlist("TrestaVal"):
+
+                tableAuxAux = customTable.objects.filter(fecha__date=val,tabNombre=res)
+
+                for table in tableAuxAux:
+
+                    if table.tabTipo == ty:
+
+                        bandera = True
+
+                        acum = acum - table.tabTotal
+
+                        totalParcial2[ty.nombre] = acum
+
+            acum = 0
+
+            if bandera == True:
+
+                borrarAux = customAux()
+                borrarAux.tabNombre = "Suma-Resta"
+                borrarAux.tabTipo = ty
+                borrarAux.tabTotal = totalParcial2[ty.nombre]
+                borrarAux.save()
+
+            bandera = False
+
+        borrarAux = customAux.objects.all()
+
+    dic={"borrarAux":borrarAux,"totalParcial2":totalParcial2,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"cantAux":cantAux,"cant":cant,"tod":tod,"tableAux":tableAux,"allTypes":allTypes}
 
     return render(request,"spareapp/customTables.html",dic)
 

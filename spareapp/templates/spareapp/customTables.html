@@ -49,21 +49,46 @@
 
 <div class="container">
 
-<div class="text-white bg-danger p-2">
+<table style="font-size: small;" class="table-bordered invoice">
+    <thead>
+        <tr style="background-color: #F5F087" class="">
+            <th colspan="2" class="p-2">
+                {% for sum in sumaLista %}
+                    {% if sum == sumaLista.0 %}
+                        {{sum}}
+                    {% else %}
+                        + {{sum}}
+                    {% endif %}
+                {% endfor %}
+                {% for res in restaLista %}
+                    - {{res}}
+                {% endfor %}
+            </th>
+        </tr>
+        <tr style="background-color: #7C8FEC;">
+            <th class="p-2">Tipo de pago</th>
+            <th style="width: 350px;" class="p-2">Total</th>
+        </tr>
+    </thead>
 
-{% for sum in sumaLista %}
-    {% if sum == sumaLista.0 %}
-        {{sum}}
-    {% else %}
-        + {{sum}}
-    {% endif %}
-{% endfor %}
-{% for res in restaLista %}
-    - {{res}}
-{% endfor %}
-= ${{sumaRestaTotal|floatformat:2}}
+    <tbody>
 
-</div>
+        {% if borrarAux %}
+
+            {% for tab in borrarAux %}
+            <tr>
+                <td class="p-2"><a {% if tab.tabTipo.visa == True or tab.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' tab.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' tab.tabTipo|cut:'/' tod %}" {% endif %}>{{tab.tabTipo}}</a></td>
+                <td class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+            </tr>
+            {% endfor %}
+            <tr style="background-color: #E77C7C;" class="">
+                <td colspan="2" class="p-2">TOTAL: ${{sumaRestaTotal|floatformat:2}}</td>
+            </tr>
+        {% endif %}
+
+    </tbody>
+</table>
+
 
 </div>
 {% endif %}
