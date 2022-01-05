@@ -5659,6 +5659,8 @@ def contTotalDay(request):
 
 def contIndividual(request,val):
 
+    tod = datetime.now().date()
+
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
     factureName = factura.objects.filter(refPersona=personaAux).order_by("fechaCreado","id")
@@ -5800,7 +5802,7 @@ def contIndividual(request,val):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 

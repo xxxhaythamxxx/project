@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% load static %}
+
 {% include "spareapp/contSuperior.html" %}
 
 <div class="container d-flex justify-content-center container mt-2 col-lg-4">
@@ -11,7 +13,7 @@
 </div>
 
 <div class="container mt-2">
-    <table style="font-size: small;" class="table-bordered invoice">
+    <table id="invoice2" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
         <thead>
             <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
                 <th class="p-2"># Factura</th>
@@ -27,7 +29,7 @@
             </tr>
         </thead>
 
-        <tbody>
+        <tbody id="myTable">
             {% for facture in allFacturesPay %}
             <tr>
                 <td class="p-2">{{facture.num}}</td>
@@ -91,8 +93,11 @@
         </tbody>
     </table>
 </div>
+<script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 
-
+<script>
+$("#invoice").dragtable()
+</script>
 
 
 {% endblock %}
