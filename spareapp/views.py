@@ -2657,6 +2657,7 @@ def contDay(request):
     # --------- Custom ------------
 
     toddy = datetime.now().date()
+    cantAuxEmpty = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre").distinct()
     cantAux = customTable.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct().order_by("tabNombre")
     cant = len(cantAux)
     totalParcial = {}
@@ -2680,6 +2681,7 @@ def contDay(request):
 
     allTypes=factType.objects.all().order_by("nombre")
     tableAux2 = customTable.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
+    tableAux2Empty = customTable.objects.all().values("tabNombre","tabTipo__nombre","principal").order_by("tabTipo__nombre").distinct()
     tod = datetime.now().date()
 
     for nom in cantAux:
@@ -2694,7 +2696,7 @@ def contDay(request):
 
         acum = 0
 
-    dic = {"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    dic = {"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"tableAux":tableAux,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
 
@@ -7006,7 +7008,7 @@ def contAddTable(request):
     tod = datetime.now().date()
     acum = 0
 
-    allTypes=factType.objects.all()
+    allTypes=factType.objects.all().order_by("nombre")
 
     if request.method == "POST":
 
@@ -8066,7 +8068,7 @@ def searchTable(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"personaVarios":personaVarios,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"busqueda":busqueda,"personaVarios":personaVarios,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 

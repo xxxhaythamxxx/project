@@ -65,7 +65,11 @@
                     <form action="{% url 'searchTable' %}" method="POST">
                     {% csrf_token %}
                     <div class="col-lg-5 mt-3">
-                        <input placeholder="Ingrese valor de busqueda" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
+                        {% if busqueda %}
+                        <input value="{{busqueda}}" placeholder="Search" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
+                        {% else %}
+                        <input placeholder="Search" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
+                        {% endif %}
                     </div>
                     <!-- <input id="Tsearch" name="Tsearch" class="col-lg-3" style="font-size: small;" type="text"> -->
                     </form>
