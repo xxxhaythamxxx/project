@@ -8,12 +8,18 @@
 
 {% include "spareapp/contSuperior.html" %}
 
-<div class="container d-flex justify-content-center container mt-2 col-lg-4">
-    <label for=""><span style="font-weight: bold;">Por cobrar</span></label>
+<div class="container mt-2">
+<table class="table-bordered invoice">
+    <tr style="background-color: #F5F087">
+        <th colspan="2" class="p-2">
+            <span style="font-weight: bold;">Por cobrar</span>
+        </th>
+    </tr>
+</table>
 </div>
 
-<div class="container mt-2">
-    <table id="invoice2" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
+<div class="container mb-2">
+    <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
         <thead>
             <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
                 <th class="p-2"># Factura</th>
@@ -25,7 +31,7 @@
                 <th class="p-2">Monto</th>
                 <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
-                <th class="p-2">Acción</th>
+                <th class="p-2 exclude">Acción</th>
             </tr>
         </thead>
 
@@ -45,7 +51,7 @@
                 <td class="p-2">${{facture.monto|floatformat:2}}</td>
                 <td class="p-2">{{facture.iva|floatformat:2}}</td>
                 <td class="p-2">${{facture.total|floatformat:2}}</td>
-                <td class="p-2"><a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a></td>
+                <td class="p-2 exclude"><a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a></td>
 
                 <div tabindex="-1" id="modalCobrar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{facture.id}}Label" aria-hidden="true">
                     <div class="modal-dialog">
@@ -93,11 +99,101 @@
         </tbody>
     </table>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
+
+<script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
-
 <script>
-$("#invoice").dragtable()
-</script>
 
+function generatePDF2(){
+
+var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+// var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+// alert(tableFooterCells)
+var rows = []
+var fila = []
+var cont = 0
+for (n in tableRowCells){
+    fila.push(tableRowCells[n].text)
+    cont = cont + 1
+    if ((cont==tableHeaderText.length) && n>0){
+        rows.push(fila)
+        fila = []
+        cont = 0
+    }
+    
+}
+var aux = ""
+// for (m in tableFooterCells){
+//     aux = tableFooterCells[m].text
+// }
+
+
+var docDefinition = {
+  content: [
+    {
+      layout: 'lightHorizontalLines', // optional
+      style: 'tableExample',
+      table: {
+        headerRows: 1,
+        body: [
+        tableHeaderText,
+        ...rows,
+        // [aux,"","","","","","",""],
+        ],
+      },
+      layout: {
+
+          fillColor: function(rowIndex) {
+            if (rowIndex === 0) {
+              return '#7C8FEC';
+            }
+            return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+          }
+        },
+    },
+  ],
+    styles: {
+        tableExample: {
+            // margin: [0, 20, 0, 80],
+            margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeader: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableData: {
+            margin: 1,
+            // fontSize: 10,
+        },
+        fuente: {
+            margin: 1,
+            fontSize: 8,
+        },
+        tableFooter: {
+            margin: 1,
+            fontSize: 8,
+        },
+    },
+};
+
+pdfMake.createPdf(docDefinition).download();
+
+}
+
+$("#invoice").dragtable()
+
+</script>
 
 {% endblock %}
