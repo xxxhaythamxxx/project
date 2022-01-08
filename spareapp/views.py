@@ -6473,13 +6473,21 @@ def factTypeES(request):
     if request.GET.get("val") == "entry":
 
         if cateAux and request.GET.get("cat") == "Factura cobrada":
+            print("Existe factura y es factura cobrada")
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
         else:
+            print("No existe factura o no es factura cobrada")
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
         if cateAux and cate.limite == True:
+            print("Existe factura y la categoria limite es True")
             allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
         else:
-            allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
+            if cateAux and cate.limite == False:
+                print("Existe factura y la categoría limite es False")
+                allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
+            else:
+                print("No existe factura o la categoria limite es False")
+                allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
         cobrarPagar = factType.objects.filter(facCobrar=True)
     
     else:
@@ -6740,6 +6748,7 @@ def contListByCategoryZero(request):
 
 def contListByCategory(request,val):
 
+    tod = datetime.now().date()
     dayFrom = ""
     dayTo = ""
     balanceTotal = 0
@@ -6806,7 +6815,7 @@ def contListByCategory(request,val):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
             
-    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
+    dic = {"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"balanceTotal":balanceTotal,"dayFrom":dayFrom,"dayTo":dayTo,"factureName":factureName,"allCategorys":allCategorys}
 
     return render(request,"spareapp/contListByCategory.html",dic)
 
