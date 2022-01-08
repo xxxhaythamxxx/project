@@ -201,11 +201,13 @@
 </div>
 </div> -->
 
+<div id="invoice2">
+
 {% if cantAux %}
 {% for n in cantAux %}
 {% if n.principal == True %}
 
-<div class="mb-3" id="invoice2">
+<div class="mb-3" id="">
 <div class="container">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
@@ -251,7 +253,7 @@
 {% for n in cantAuxEmpty %}
 {% if n.principal == True %}
 
-<div class="mb-3" id="invoice2">
+<div class="mb-3" id="">
 <div class="container">
     <table style="font-size: small;" class="table-bordered invoice">
         <thead>
@@ -290,6 +292,8 @@
 {% endfor %}
 
 {% endif %}
+
+</div>
 
 <script>
 function generatePDF2(){
