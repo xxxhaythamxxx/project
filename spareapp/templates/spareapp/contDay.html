@@ -37,6 +37,11 @@
                 </tr>
                 {% endif %}
                 {% endfor %}
+                {% if cantAuxEmpty %}
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL: $0.00</td>
+                </tr>
+                {% else %}
                 {% for key,value in totalParcial.items %}
                 {% if key == n.tabNombre %}
                 <tr style="background-color: #E77C7C;" class="">
@@ -44,6 +49,7 @@
                 </tr>
                 {% endif %}
                 {% endfor %}
+                {% endif %}
             {% endif %}
 
         </tbody>
