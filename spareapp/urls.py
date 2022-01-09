@@ -108,6 +108,10 @@ urlpatterns = [
     path("contDayBackRange/<str:val>?<str:val2>",views.contDayBackRange,name="contDayBackRange"),
     # path("operacionesTablas",views.operacionesTablas,name="operacionesTablas"),
     path("searchTable",views.searchTable,name="searchTable"),
+    path("contAddCliente",views.contAddCliente,name="contAddCliente"),
+    path("contListClienteTables",views.contListClienteTables,name="contListClienteTables"),
+    path("editeClienteTable/<str:val>",views.editeClienteTable,name="editeClienteTable"),
+    path("deleteClienteTable/<str:val>",views.deleteClienteTable,name="deleteClienteTable"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

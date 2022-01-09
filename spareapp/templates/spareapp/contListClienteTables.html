@@ -1,0 +1,56 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Category {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="row mb-3">
+    <div class="container mt-5 col-lg-6 d-flex justify-content-center">
+        <form method="POST" action="">
+        {% csrf_token %}
+        <table style="font-size: small;" class="table-bordered ">
+            <thead>
+                <tr class="color text-white">
+                    <th class="p-2">Nombre</th>
+                    <th class="p-2">Identificación</th>
+                    <th class="p-2">Opcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ty in allTablesNombres %}
+                <tr>
+                    <td class="p-2"><input name="nombre{{ty.id}}" value="{{ty.nombre}}" type="text"></td>
+                    <td class="p-2"><input name="identificacion{{ty.id}}" value="{{ty.documento}}" type="text"></td>
+                    <td class="p-2"><a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeClienteTable' ty.id %}">Editar</a>{% for key in borrar %}{% if key == ty.id %}<a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ty.id}}" class="btn btn-danger mx-1">Borrar</a>{% endif %}{% endfor %}</td>
+                    <div class="modal fade" id="exampleModal{{ty.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{ty.id}}" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel{{ty.id}}">Precaución</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Seguro/a que deseas eliminar el cliente {{ty.nombre}}?
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a id="deleteType" class="btn btn-primary" href="{% url 'deleteClienteTable' ty.id %}">Borrar</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pt-2">
+            <button style="font-size: small;" class="btn btn-success mx-1" type="submit">Actualizar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
