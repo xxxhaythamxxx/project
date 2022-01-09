@@ -5926,6 +5926,11 @@ def editeFact(request,val,val2):
             contFechaTope = request.POST.get("contFechaTope")
             factAux.fechaTope = contFechaTope
 
+        if factAux.refCategory.limite == True:
+            factAux.pendiente = True
+        else:
+            factAux.pendiente = False
+
         contMonto = request.POST.get("contMonto")
         factAux.monto = contMonto
 
