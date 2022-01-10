@@ -4450,7 +4450,7 @@ def contCollectFac(request,val):
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     factAux = factura.objects.filter(id=val)
-    tableAux = mainTable.objects.filter(fecha__date=tod)
+    # tableAux = mainTable.objects.filter(fecha__date=tod)
 
     # typeAux = request.POST.get("contTypeIng")
     typeAux = factType.objects.get(facCobrada=True)
@@ -4463,25 +4463,25 @@ def contCollectFac(request,val):
         factErase.fechaCobrado = tod
         factErase.save()
 
-        tablePast = mainTable.objects.filter(fecha__date=factErase.fechaCreado)
+        # tablePast = mainTable.objects.filter(fecha__date=factErase.fechaCreado)
 
         # Borro la factura pendiente en el pasado
-        for ty in allTypes:
+        # for ty in allTypes:
 
-            aux = mainTable.objects.get(tabTipo=ty,fecha__date=factErase.fechaCreado)
+        #     aux = mainTable.objects.get(tabTipo=ty,fecha__date=factErase.fechaCreado)
 
-            if ty.facCobrar == True:
+        #     if ty.facCobrar == True:
 
-                allFacturesToCollect = factura.objects.filter(fechaCreado__date=factErase.fechaCreado,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-                totalFact = 0
+        #         allFacturesToCollect = factura.objects.filter(fechaCreado__date=factErase.fechaCreado,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+        #         totalFact = 0
 
-                for fac in allFacturesToCollect:
+        #         for fac in allFacturesToCollect:
 
-                    totalFact = totalFact + float(fac.total)
+        #             totalFact = totalFact + float(fac.total)
 
-                aux.tabTotal = totalFact
+        #         aux.tabTotal = totalFact
 
-            aux.save()
+        #     aux.save()
 
         reciboCollect = factura()
         reciboCollect.fechaCreado=tod
@@ -4499,131 +4499,131 @@ def contCollectFac(request,val):
         reciboCollect.pendiente = False
         reciboCollect.save()
 
-        if tableAux:
+        # if tableAux:
 
-            for ty in allTypes:
+        #     for ty in allTypes:
 
-                aux = mainTable.objects.get(tabTipo=ty,fecha__date=tod)
+        #         aux = mainTable.objects.get(tabTipo=ty,fecha__date=tod)
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                acum = 0
-                for fac in allFacturesCash:
-                    acum = acum + fac.total
+        #         allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+        #         acum = 0
+        #         for fac in allFacturesCash:
+        #             acum = acum + fac.total
                 
-                aux.tabTotal = float(acum)
+        #         aux.tabTotal = float(acum)
 
-                if ty.mercPagar == True:
+        #         if ty.mercPagar == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
                 
-                if ty.mercPagada == True:
+        #         if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
 
-                if ty.facCobrada == True:
+        #         if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
 
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
 
-                if ty.facCobrar == True:
+        #         if ty.facCobrar == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
 
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
 
-                aux.save()
+        #         aux.save()
 
-        else:
+        # else:
 
-            for ty in allTypes:
+        #     for ty in allTypes:
 
-                tableNew = mainTable()
-                tableNew.fecha = tod
-                tableNew.tabTipo = ty
+        #         tableNew = mainTable()
+        #         tableNew.fecha = tod
+        #         tableNew.tabTipo = ty
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                acum = 0
-                for fac in allFacturesCash:
-                    acum = acum + fac.total
+        #         allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+        #         acum = 0
+        #         for fac in allFacturesCash:
+        #             acum = acum + fac.total
                 
-                tableNew.tabTotal = float(acum)
+        #         tableNew.tabTotal = float(acum)
 
-                if ty.mercPagar == True:
+        #         if ty.mercPagar == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    tableNew.tabTotal = totalFact
+        #             tableNew.tabTotal = totalFact
                 
-                if ty.mercPagada == True:
+        #         if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    tableNew.tabTotal = totalFact
+        #             tableNew.tabTotal = totalFact
 
-                if ty.facCobrada == True:
+        #         if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    tableNew.tabTotal = totalFact
+        #             tableNew.tabTotal = totalFact
 
-                tableNew.save()
+        #         tableNew.save()
 
-    tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo")
+    # tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo")
 
     contTotal = 0
 
-    for tab in tableAux:
+    # for tab in tableAux:
 
-        if tab.tabTipo.facCobrada != True:
+    #     if tab.tabTipo.facCobrada != True:
 
-            contTotal = contTotal + tab.tabTotal
+    #         contTotal = contTotal + tab.tabTotal
 
     # ----------Custom-------------------------
     tod = datetime.now().date()
@@ -4757,7 +4757,7 @@ def contCollectFac(request,val):
 
     editPrueba = False
 
-    dic = {"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -4768,7 +4768,7 @@ def contPayFac(request,val):
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     factAux = factura.objects.filter(id=val)
-    tableAux = mainTable.objects.filter(fecha__date=tod)
+    # tableAux = mainTable.objects.filter(fecha__date=tod)
 
     typeAux = request.POST.get("contTypeIng")
     typeAux = factType.objects.get(id=typeAux)
@@ -4780,23 +4780,23 @@ def contPayFac(request,val):
         factErase.fechaCobrado = tod
         factErase.save()
 
-        for ty in allTypes:
+        # for ty in allTypes:
 
-            aux = mainTable.objects.get(tabTipo=ty,fecha__date=factErase.fechaCreado)
+        #     aux = mainTable.objects.get(tabTipo=ty,fecha__date=factErase.fechaCreado)
 
-            if ty.mercPagar == True:
+        #     if ty.mercPagar == True:
 
-                allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+        #         allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
 
-                totalFact = 0
+        #         totalFact = 0
 
-                for fac in allFacturesToCollect:
+        #         for fac in allFacturesToCollect:
 
-                    totalFact = totalFact + float(fac.total)
+        #             totalFact = totalFact + float(fac.total)
 
-                aux.tabTotal = totalFact
+        #         aux.tabTotal = totalFact
 
-            aux.save()
+        #     aux.save()
 
         reciboCollect = factura()
         reciboCollect.fechaCreado = tod
@@ -4814,129 +4814,129 @@ def contPayFac(request,val):
         reciboCollect.pendiente = False
         reciboCollect.save()
 
-        if tableAux:
+        # if tableAux:
 
-            for ty in allTypes:
+        #     for ty in allTypes:
 
-                aux = mainTable.objects.get(tabTipo=ty,fecha__date=tod)
+        #         aux = mainTable.objects.get(tabTipo=ty,fecha__date=tod)
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                acum = 0
-                for fac in allFacturesCash:
-                    acum = acum + fac.total
-                aux.tabTotal = float(acum)
+        #         allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+        #         acum = 0
+        #         for fac in allFacturesCash:
+        #             acum = acum + fac.total
+        #         aux.tabTotal = float(acum)
 
-                if ty.facCobrar == True:
+        #         if ty.facCobrar == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
                 
-                if ty.facCobrada == True:
+        #         if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
 
-                if ty.mercPagada == True:
+        #         if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
 
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
 
-                if ty.mercPagar == True:
+        #         if ty.mercPagar == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
 
-                    aux.tabTotal = totalFact
+        #             aux.tabTotal = totalFact
 
-                aux.save()
+        #         aux.save()
 
-        else:
+        # else:
 
-            for ty in allTypes:
+        #     for ty in allTypes:
 
-                tableNew = mainTable()
-                tableNew.fecha = tod
-                tableNew.tabTipo = ty
+        #         tableNew = mainTable()
+        #         tableNew.fecha = tod
+        #         tableNew.tabTipo = ty
 
-                allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
-                acum = 0
-                for fac in allFacturesCash:
-                    acum = acum + fac.total
-                tableNew.tabTotal = float(acum)
+        #         allFacturesCash = factura.objects.filter(fechaCreado__date=tod,refType=ty).order_by("fechaCreado")
+        #         acum = 0
+        #         for fac in allFacturesCash:
+        #             acum = acum + fac.total
+        #         tableNew.tabTotal = float(acum)
 
-                if ty.facCobrar == True:
+        #         if ty.facCobrar == True:
 
-                    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    tableNew.tabTotal = totalFact
+        #             tableNew.tabTotal = totalFact
                 
-                if ty.facCobrada == True:
+        #         if ty.facCobrada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    tableNew.tabTotal = totalFact
+        #             tableNew.tabTotal = totalFact
 
-                if ty.mercPagada == True:
+        #         if ty.mercPagada == True:
 
-                    allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+        #             allFacturesToCollect = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
-                    totalFact = 0
+        #             totalFact = 0
 
-                    for fac in allFacturesToCollect:
+        #             for fac in allFacturesToCollect:
 
-                        totalFact = totalFact + float(fac.total)
+        #                 totalFact = totalFact + float(fac.total)
                     
-                    tableNew.tabTotal = totalFact
+        #             tableNew.tabTotal = totalFact
 
-                tableNew.save()
+        #         tableNew.save()
 
-    tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo")
+    # tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo")
 
     contTotal = 0
 
-    for tab in tableAux:
+    # for tab in tableAux:
 
-        if tab.tabTipo.mercPagada != True:
+    #     if tab.tabTipo.mercPagada != True:
 
-            contTotal = contTotal + tab.tabTotal
+    #         contTotal = contTotal + tab.tabTotal
 
     # ----------Custom-------------------------
     tod = datetime.now().date()
@@ -5070,7 +5070,7 @@ def contPayFac(request,val):
 
     editPrueba = False
 
-    dic = {"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -5809,7 +5809,7 @@ def editeFact(request,val,val2):
             custAcum = 0
         # ------------------------------------------------------------------------
 
-        dic = {"actual":actual,"tableAux":tableAux,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
+        dic = {"actual":actual,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
         return redirect(urlFinal)
 
