@@ -7591,8 +7591,8 @@ def searchTable(request):
                 if personaAuxAux:
                     print("Es una persona")
                     print(personaAuxAux)
-                    personaAux = persona.objects.get(nombre__icontains=busqueda)
-                    factureName = factura.objects.filter(refPersona=personaAux).order_by("fechaCreado","id")
+                    # personaAux = persona.objects.get(nombre__icontains=busqueda)
+                    factureName = factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id")
                 else:
                     if notaAuxAux:
                         print("Es una nota")
