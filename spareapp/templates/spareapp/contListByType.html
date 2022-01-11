@@ -49,20 +49,27 @@
 </div>
 {% if factureName %}
 <div class="container mt-2">
-<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
+
+<div id="invoice2">
+    <table id="" style="font-size: small;" class="table-bordered invoice mt-2">
+        <thead id="hSup">
+            <tr style="background-color: #F5F087" class="excludeFooter">
+                <th colspan="10" class="p-2">{{factureName.0.refType.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
+            </tr>
+        </thead>
+    </table>
+
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mb-2">
     <thead>
-        <tr style="background-color: #F5F087" class="">
-            <th colspan="10" class="p-2">{{factureName.0.refType.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
-        </tr>
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
-            <th class="p-2">Fecha</th>
-            <th class="p-2">Cliente</th>
-            <th class="p-2">Fact #</th>
-            <th class="p-2">Categoría</th>
-            <th class="p-2">Tipo de pago</th>
-            <th class="p-2">Monto</th>
-            <th class="p-2">Nota</th>
-            <th class="p-2">Acción</th>
+            <th class="p-2 include">Fecha</th>
+            <th class="p-2 include">Cliente</th>
+            <th class="p-2 include">Fact #</th>
+            <th class="p-2 include">Categoría</th>
+            <th class="p-2 include">Tipo de pago</th>
+            <th class="p-2 include">Monto</th>
+            <th class="p-2 include">Nota</th>
+            <th class="p-2 exclude">Acción</th>
         </tr>
     </thead>
     <tbody id="myTable">
@@ -75,27 +82,213 @@
             <td class="p-2">{{fact.refType.nombre|upper}}</td>
             <td class="p-2">{{fact.total|floatformat:2}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
-            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
+            <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
         {% endfor %}
-        {% if factureName.0.refType.visa == False and factureName.0.refType.clave == False %}
-        <tr style="background-color: #E77C7C;" class="">
-            <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
-        </tr>
-        {% else %}
-            {% if factureName.0.refType.visa == True or factureName.0.refType.clave == True %}
-            <tr style="background-color: #E77C7C;" class="">
-                <td class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}  |  ITBM ${{itbmTotal|floatformat:2}}  |  INTERÉS ${{interesTotal|floatformat:2}}  |  RETENCIÓN ${{retencionTotal|floatformat:2}}</td>
-            </tr>
-            {% else %}
-            {% endif %}
-        {% endif %}
     </tbody>
+    {% if factureName.0.refType.visa == False and factureName.0.refType.clave == False %}
+    <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
+        <tr style="background-color: #E77C7C;" class="">
+            <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
+        </tr>
+    </tfoot>
+    {% else %}
+        {% if factureName.0.refType.visa == True or factureName.0.refType.clave == True %}
+        <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
+            <tr style="background-color: #E77C7C;" class="">
+                <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}  |  ITBM ${{itbmTotal|floatformat:2}}  |  INTERÉS ${{interesTotal|floatformat:2}}  |  RETENCIÓN ${{retencionTotal|floatformat:2}}</td>
+            </tr>
+        </tfoot>
+        {% endif %}
+    {% endif %}
 </table>
 </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
+
+<script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 <script>
+
+function generatePDF2(){
+
+var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
+var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+var rows = []
+var fila = []
+var footerFooter = []
+var footerAux = []
+var cont = 0
+for (n in tableRowCells){
+    fila.push(tableRowCells[n].text)
+    cont = cont + 1
+    if ((cont==tableHeaderText.length) && n>0){
+        rows.push(fila)
+        fila = []
+        cont = 0
+    }
+}
+
+var aux = ""
+for (m in tableFooterCells){
+    aux = tableFooterCells[m].text
+}
+var separar = aux.split("$")
+
+for (m in tableHeaderText){
+
+    if (m == 0){
+        footerAux.push("BALANCE")
+    }
+    else{
+        if (tableHeaderText[m].text === "Monto"){
+            footerAux.push("$"+separar[1])
+        }
+        else{
+            footerAux.push("")
+        }
+    }
+    
+}
+footerFooter.push(footerAux)
+
+var docDefinition = {
+  content: [
+    {
+      layout: 'lightHorizontalLines', // optional
+      style: 'tableExample',
+      table: {
+        headerRows: 2,
+        body: [
+        [{text: tableHeaderTextSup[0].text, colSpan: 7},"","","","","",""],
+        tableHeaderText,
+        ...rows,
+        ...footerFooter,
+        ],
+      },
+      layout: {
+
+          fillColor: function(rowIndex) {
+            if (rowIndex === 0) {
+              return '#F5F087';
+            }
+            if (rowIndex === 1) {
+              return '#7C8FEC';
+            }
+            if (rowIndex === (rows.length + 2)) {
+                return '#E77C7C';
+            }
+            return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+          }
+        },
+    },
+  ],
+    styles: {
+        tableExample: {
+            // margin: [0, 20, 0, 80],
+            margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeaderSup: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableHeader: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableData: {
+            margin: 1,
+            // fontSize: 10,
+        },
+        fuente: {
+            margin: 1,
+            fontSize: 8,
+        },
+        tableFooter: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+    },
+};
+
+pdfMake.createPdf(docDefinition).download();
+
+}
+
+var vec = []
+var i = 0
+$("tbody tr").each(function(){
+    $(this).find("td").each(function(){
+        if($(this).attr("id")=="auxBalance"){
+            vec[i] = $(this).text()
+            i = i + 1
+        }
+    })
+})
+var auxMonto = $("#auxMonto").text()
+var auxBalance = $("#auxBalance").text()
+$("#entrySpending").change(function(){
+    if ($(this).is(':checked')){
+        $("tbody tr").each(function(){
+        var bol = false
+        
+            $(this).find("td").each(function(){
+                if ($(this).attr("id") == "auxMonto"){
+                    auxMonto = $(this).text()
+                }
+                if ($(this).attr("id") == "auxBalance"){
+                    auxBalance = $(this).text()
+                    $(this).html(auxMonto)
+                }
+                
+                $(this).find("div").each(function(){
+                    if ($(this).attr("style")=="font-weight: bold;"){
+                        bol = true
+                    }
+                })
+            })
+            if (bol == false){
+                $(this).hide()
+            }else{
+                $(this).show()
+            }
+        })
+        $("#balanceTotal").hide()
+        $("#balanceTotalFacMerc").show()
+    }
+    else{
+        
+        $("tbody tr").each(function(){
+            $(this).show()
+
+            $(this).find("td").each(function(){
+                if ($(this).attr("id") == "auxBalance"){
+                    $(this).html(vec[$(this).parent().index()])
+                }
+            })
+        })
+        $("#balanceTotalFacMerc").hide()
+        $("#balanceTotal").show()
+    }
+    
+})
+
 $("#invoice").dragtable()
+
+
 </script>
 {% endif %}
 

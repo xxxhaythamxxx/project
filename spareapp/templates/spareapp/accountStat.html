@@ -97,7 +97,7 @@
 <div id="invoice2">
 <table id="" style="font-size: small;" class="table-bordered invoice mt-2">
     <thead id="hSup">
-        <tr style="background-color: #F5F087;" class="">
+        <tr style="background-color: #F5F087;" class="excludeFooter">
             <th class="p-2">{{factureName.0.refPersona.nombre|upper}}: Desde {{dayFrom}} hasta {{dayTo}}</th>
         </tr>
     </thead>
@@ -106,14 +106,14 @@
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mb-4">
     <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
-            <th style="position: sticky;top: 70;" class="p-2">Fecha</th>
-            <th style="position: sticky;top: 70;" class="p-2">Cliente</th>
-            <th style="position: sticky;top: 70;" class="p-2">Fact #</th>
-            <th style="position: sticky;top: 70;" class="p-2">Categoría</th>
-            <th style="position: sticky;top: 70;" class="p-2">Tipo de pago</th>
-            <th style="position: sticky;top: 70;" class="p-2">Monto</th>
-            <th style="position: sticky;top: 70;" class="p-2">Balance</th>
-            <th style="position: sticky;top: 70;" class="p-2">Nota</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Fecha</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Cliente</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Fact #</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Categoría</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Tipo de pago</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Monto</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Balance</th>
+            <th style="position: sticky;top: 70;" class="p-2 include">Nota</th>
             <th style="position: sticky;top: 70;" id="check" class="p-2 exclude">Acción</th>
         </tr>
     </thead>
@@ -181,11 +181,14 @@
 
 function generatePDF2(){
 
+var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
 var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
 var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
 var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
 var rows = []
 var fila = []
+var footerFooter = []
+var footerAux = []
 var cont = 0
 for (n in tableRowCells){
     fila.push(tableRowCells[n].text)
@@ -195,13 +198,30 @@ for (n in tableRowCells){
         fila = []
         cont = 0
     }
-    
 }
+
 var aux = ""
 for (m in tableFooterCells){
     aux = tableFooterCells[m].text
 }
+var separar = aux.split("$")
 
+for (m in tableHeaderText){
+
+    if (m == 0){
+        footerAux.push("BALANCE")
+    }
+    else{
+        if (tableHeaderText[m].text === "Balance"){
+            footerAux.push("$"+separar[1])
+        }
+        else{
+            footerAux.push("")
+        }
+    }
+    
+}
+footerFooter.push(footerAux)
 
 var docDefinition = {
   content: [
@@ -209,18 +229,25 @@ var docDefinition = {
       layout: 'lightHorizontalLines', // optional
       style: 'tableExample',
       table: {
-        headerRows: 1,
+        headerRows: 2,
         body: [
+        [{text: tableHeaderTextSup[0].text, colSpan: 8},"","","","","","",""],
         tableHeaderText,
         ...rows,
-        [aux,"","","","","","",""],
+        ...footerFooter,
         ],
       },
       layout: {
 
           fillColor: function(rowIndex) {
             if (rowIndex === 0) {
+              return '#F5F087';
+            }
+            if (rowIndex === 1) {
               return '#7C8FEC';
+            }
+            if (rowIndex === (rows.length + 2)) {
+                return '#E77C7C';
             }
             return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
           }
@@ -231,6 +258,11 @@ var docDefinition = {
         tableExample: {
             // margin: [0, 20, 0, 80],
             margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeaderSup: {
+            margin: 1,
+            color: 'black',
             fontSize: 8,
         },
         tableHeader: {
@@ -248,6 +280,7 @@ var docDefinition = {
         },
         tableFooter: {
             margin: 1,
+            color: 'black',
             fontSize: 8,
         },
     },
