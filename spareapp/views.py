@@ -5225,6 +5225,45 @@ def accountStat(request):
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
     
+        cont = 0
+
+        for fac in factureName:
+
+            if fac.refCategory.ingreso:
+
+                cont = cont
+
+                if fac.refType.facCobrar==True:
+
+                    cont = cont + fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc + fac.total
+                
+                if fac.refCategory.nombre=="Factura cobrada":
+
+                    cont = cont - fac.total
+            
+            else:
+
+                cont = cont
+
+                if fac.refType.mercPagar==True:
+
+                    cont = cont - fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc - fac.total
+                
+                if fac.refCategory.nombre=="Mercancia credito pagada":
+
+                    cont = cont + fac.total
+
+            if fac.pendiente == True and fac.refType.gasto == True:
+                balance[fac.id] = [cont,fac.total*(-1)]
+            else:
+                balance[fac.id] = [cont,fac.total]
+
+        balanceTotal = cont
+
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     facturesToCollect = len(allFacturesToPay)

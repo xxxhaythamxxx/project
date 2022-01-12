@@ -2,16 +2,16 @@ $("#search4").click(function(){
     $("#formByRange2").show()
 })
 $("#search1").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#search2").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#search3").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#search5").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#searchToday").click(function(){
     $("#formDay").hide()
