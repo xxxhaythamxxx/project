@@ -16,11 +16,13 @@
 
 <div class="container mt-2">
 <table class="table-bordered invoice">
-    <tr style="background-color: #F5F087">
-        <th colspan="2" class="p-2">
-            <span style="font-weight: bold;">Por cobrar</span>
-        </th>
-    </tr>
+    <thead id="hSup">
+        <tr class="excludeFooter" style="background-color: #F5F087">
+            <th colspan="2" class="p-2">
+                <span style="font-weight: bold;">Por cobrar</span>
+            </th>
+        </tr>
+    </thead>
 </table>
 </div>
 
@@ -34,9 +36,9 @@
                 <th class="p-2">Nota</th>
                 <th class="p-2">Fecha de registro</th>
                 <th class="p-2">Límite</th>
-                <th class="p-2">Monto</th>
+                <th id="facMonto" class="p-2">Monto</th>
                 <th class="p-2">ITBM</th>
-                <th class="p-2">Total</th>
+                <th id="facTotal" class="p-2">Total</th>
                 <th class="p-2 exclude">Acción</th>
             </tr>
         </thead>
@@ -89,7 +91,7 @@
             
             {% endfor %}
             
-            <tr style="background-color: #E77C7C;">
+            <tr class="tfoot" style="background-color: #E77C7C;">
                 <td class="p-2">Total</td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
@@ -122,9 +124,54 @@
 
     $("#cod").on("keyup",function(){                                // Cuando se teclea algo
         var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+        var sumarMonto = 0
+        var auxMonto = 0
+        var totalMonto = 0
+        var sumarTotal = 0
+        var auxTotal = 0
+        var totalTotal = 0
+
         $(".invoice tbody tr").filter(function(){                             // 
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         })
+
+        $(".tfoot").hide()
+
+        $("#invoice tbody tr").each(function(){
+            $(this).find("td").each(function(){
+                if ($(this).index() == $("#facTotal").index()) {
+                    if ($(this).is(":visible")){
+                        sumarTotal = $(this).text()
+                        auxTotal = sumarTotal.split("$")[1]
+                    }
+                    else{
+                        auxTotal = 0
+                    }
+                    
+                }
+                if ($(this).index() == $("#facMonto").index()) {
+                    if ($(this).is(":visible")){
+                        sumarMonto = $(this).text()
+                        auxMonto = sumarMonto.split("$")[1]
+                    }
+                    else{
+                        auxMonto = 0
+                    }
+                    
+                }
+            })
+            
+            totalMonto = totalMonto + parseFloat(auxMonto)
+            totalTotal = totalTotal + parseFloat(auxTotal)
+        })
+
+        $(".erase").remove()
+        $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2'></td></tr>")
+
+        if(value==""){
+            $(".erase").remove()
+            $(".tfoot").show()
+        }
     })
 </script>
 

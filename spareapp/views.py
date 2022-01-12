@@ -3046,7 +3046,12 @@ def contTypeTarjeta(request,val,val2):
 
     typeDate = val2
 
-    dic = {"netoTotal":netoTotal,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"netoTotal":netoTotal,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contTypeTarjeta.html",dic)
 
@@ -3177,7 +3182,15 @@ def contTypeRangeTarjeta(request,val,val2,val3):
 
     typeDate = "From "+val2+", to "+val3
 
-    dic = {"netoTotal":netoTotal,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    dateFrom = val2
+    dateTo = val3
+
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"dateTo":dateTo,"dateFrom":dateFrom,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"netoTotal":netoTotal,"retencionTotal":retencionTotal,"interesTotal":interesTotal,"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contTypeTarjeta.html",dic)
 

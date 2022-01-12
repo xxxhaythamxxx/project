@@ -137,7 +137,7 @@ table {
     font-size: x-large;
 }
 /* Table sorteable */
-.table-sortable th {
+/* .table-sortable th {
     cursor: pointer;
   }
   
@@ -157,7 +157,7 @@ table {
   .table-sortable .th-sort-asc,
   .table-sortable .th-sort-desc {
     background: rgba(0, 0, 0, 0.1);
-  }
+  } */
 /* Fin de Table sorteable   */
 
 th {

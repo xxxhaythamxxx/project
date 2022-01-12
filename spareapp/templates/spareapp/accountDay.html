@@ -30,22 +30,36 @@
             </div>
         </div>
     </div>
-    <!-- <a style="font-size: small;" href="#" onClick="generatePDF2()" class="btn btn-danger">PDF</a> -->
     <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar</button>
     <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
 </form>
 
-<table id="invoice2" style="font-size: small;" class="table-bordered invoice draggable table-sortable mt-2 mb-2">
-    <thead>
-        <tr style="position: sticky;top: 70;" class="color text-white">
-            <th class="p-2">Fact #</th>
-            <th class="p-2">Fecha</th>
-            <th class="p-2">Cliente</th>
-            <th class="p-2">Tipo de pago</th>
-            <th class="p-2">Nota</th>
-            <th class="p-2">Categoría</th>
-            <th class="p-2">Total</th>
-            <th id="check" class="p-2">Acción</th>
+<div class="">
+    <div class="col-lg-5">
+        <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
+    </div>
+</div>
+
+<div id="invoice2">
+    <table id="" style="font-size: small;" class="table-bordered invoice mt-2">
+        <thead id="hSup">
+            <tr style="background-color: #F5F087;" class="excludeFooter">
+                <th class="p-2">ESTADO DEL DÍA: {{tod}}</th>
+            </tr>
+        </thead>
+    </table>
+
+<table id="invoice" style="font-size: small;" class="table-bordered invoice draggable">
+    <thead id="">
+        <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
+            <th class="p-2 include">Fact #</th>
+            <th class="p-2 include">Fecha</th>
+            <th class="p-2 include">Cliente</th>
+            <th class="p-2 include">Tipo de pago</th>
+            <th class="p-2 include">Nota</th>
+            <th class="p-2 include">Categoría</th>
+            <th id="facTotal" class="p-2 include">Total</th>
+            <th id="check" class="p-2 exclude">Acción</th>
         </tr>
     </thead>
     {% if factureName %}
@@ -62,56 +76,188 @@
             <td class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
             <td class="p-2">${{fact.total|floatformat:2}}</td>
 
-            <td class="p-2"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
+            <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
         {% endif %}
         {% endfor %}
         {% endfor %}
     </tbody>
 </table>
-</div>
-<div class="container mb-5 table-bordered">
-<table>
-    <tr>
-        <td style="width: 80px;" class="p-2 color text-white">Total</td>
-        <td class="p-2">$ {{balanceTotal|floatformat:2}}</td>
-    </tr>
+<table class="table-bordered invoice mb-2 tfoot" style="font-size: small;" id="hInf">
+    <head>
+        <tr style="background-color: #E77C7C;" class="">
+            <th colspan=8 id="balanceTotal" class="p-2">TOTAL ${{balanceTotal|floatformat:2}}</th>
+        </tr>
+    </head>
 </table>
 </div>
 </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
+
+<script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+
+<script>
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    var sumar = 0
+    var aux = 0
+    var total = 0
+    $(".invoice tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+    $("#invoice tbody tr").each(function(){
+        $(this).find("td").each(function(){
+            if ($(this).index() == $("#facTotal").index()) {
+                if ($(this).is(":visible")){
+                    sumar = $(this).text()
+                    aux = sumar.split("$")[1]
+                }
+                else{
+                    aux = 0
+                }
+                
+            }
+        })
+        
+        total = total + parseFloat(aux)
+    })
+    
+    $(".tfoot").hide()
+    $(".erase").remove()
+    $("#invoice2").append("<table class='table-bordered invoice tfoot erase' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+total.toFixed(2)+"</th></tr></head></table>")
+
+    total = 0
+    
+    if(value==""){
+        $(".erase").remove()
+        $(".tfoot").show()
+    }
+})
+
+</script>
+
 <script>
 
 function generatePDF2(){
+
+var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
+var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+var tableFooterCells = [...document.querySelectorAll('.tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+var rows = []
+var fila = []
+var footerFooter = []
+var footerAux = []
+var cont = 0
+for (n in tableRowCells){
+    fila.push(tableRowCells[n].text)
+    cont = cont + 1
+    if ((cont==tableHeaderText.length) && n>0){
+        rows.push(fila)
+        fila = []
+        cont = 0
+    }
+}
+
+var aux = ""
+for (m in tableFooterCells){
+    aux = tableFooterCells[m].text
+}
+var separar = aux.split("$")
+
+for (m in tableHeaderText){
+
+    if (m == 0){
+        footerAux.push("TOTAL")
+    }
+    else{
+        if (tableHeaderText[m].text === "Total"){
+            footerAux.push("$"+separar[1])
+        }
+        else{
+            footerAux.push("")
+        }
+    }
     
-    $('#invoice2 tr:first th').each(function() {
-        var value = $(this).css("position", "static");
-      });
-    const element = document.getElementById("invoice2");
-    $("#check").hide();
-    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-    
-    var opt = {
-        margin:       0.5,
-        filename:     'report.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        enableLinks:  false,
-        pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
-      };
-    html2pdf()
-    .set(opt)
-    .from(element)
-    .save();
-    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        $('#invoice2 tr:first th').each(function() {
-            var value = $(this).css("position", "sticky");
-            $("#check").show();
-            $("table td:nth-child("+($("#check").index() + 1)+")").show();
-            $("input:checkbox[name=check]").prop("checked",true);
-          });
-      });
+}
+footerFooter.push(footerAux)
+
+var docDefinition = {
+  content: [
+    {
+      layout: 'lightHorizontalLines', // optional
+      style: 'tableExample',
+      table: {
+        headerRows: 2,
+        body: [
+        [{text: tableHeaderTextSup[0].text, colSpan: 7},"","","","","",""],
+        tableHeaderText,
+        ...rows,
+        ...footerFooter,
+        ],
+      },
+      layout: {
+
+          fillColor: function(rowIndex) {
+            if (rowIndex === 0) {
+              return '#F5F087';
+            }
+            if (rowIndex === 1) {
+              return '#7C8FEC';
+            }
+            if (rowIndex === (rows.length + 2)) {
+                return '#E77C7C';
+            }
+            return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+          }
+        },
+    },
+  ],
+    styles: {
+        tableExample: {
+            // margin: [0, 20, 0, 80],
+            margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeaderSup: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableHeader: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableData: {
+            margin: 1,
+            // fontSize: 10,
+        },
+        fuente: {
+            margin: 1,
+            fontSize: 8,
+        },
+        tableFooter: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+    },
+};
+
+pdfMake.createPdf(docDefinition).download();
+
 }
 
 $("#invoice").dragtable()
