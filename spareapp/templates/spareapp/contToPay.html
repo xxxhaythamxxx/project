@@ -103,7 +103,7 @@
                 <td class="p-2">${{montoTotal|floatformat:2}}</td>
                 <td class="p-2"></td>
                 <td class="p-2">${{totalTotal|floatformat:2}}</td>
-                <td class="p-2"></td>
+                <td class="p-2 exclude"></td>
             </tr>
             
         </tbody>
@@ -168,7 +168,7 @@
         })
         
         $(".erase").remove()
-        $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2'></td></tr>")
+        $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
 
         if(value==""){
             $(".erase").remove()
@@ -181,28 +181,40 @@
 
 function generatePDF2(){
 
+if($("#cod").val()){
+    var tableFooterCells = [...document.querySelectorAll('.erase td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+}else{
+    var tableFooterCells = [...document.querySelectorAll('.tfoot td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+}
+
+var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
 var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
-var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+var tableRowCells = [...document.querySelectorAll('#invoice tbody tr:not(.tfoot) td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
 // var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
 // alert(tableFooterCells)
 var rows = []
 var fila = []
+var footerFooter = []
+var footerAux = []
 var cont = 0
-for (n in tableRowCells){
-    fila.push(tableRowCells[n].text)
-    cont = cont + 1
-    if ((cont==tableHeaderText.length) && n>0){
-        rows.push(fila)
-        fila = []
-        cont = 0
-    }
-    
-}
-var aux = ""
-// for (m in tableFooterCells){
-//     aux = tableFooterCells[m].text
-// }
 
+$("#myTable tr:not(.tfoot").each(function(){
+    if ($(this).is(":visible")){
+        $(this).find("td:not(.exclude)").each(function(){
+            fila.push($(this).text())
+            cont = cont + 1
+        })
+        if ((cont==tableHeaderText.length)){
+            rows.push(fila)
+            fila = []
+            cont = 0
+        }
+    }
+})
+
+var aux = ""
+
+footerFooter.push(tableFooterCells)
 
 var docDefinition = {
   content: [
@@ -212,8 +224,10 @@ var docDefinition = {
       table: {
         headerRows: 1,
         body: [
+        [{text: tableHeaderTextSup[0].text, colSpan: 9},"","","","","","","",""],
         tableHeaderText,
         ...rows,
+        ...footerFooter,
         // [aux,"","","","","","",""],
         ],
       },
@@ -221,7 +235,13 @@ var docDefinition = {
 
           fillColor: function(rowIndex) {
             if (rowIndex === 0) {
+              return '#F5F087';
+            }
+            if (rowIndex === 1) {
               return '#7C8FEC';
+            }
+            if (rowIndex === (rows.length + 2)) {
+                return '#E77C7C';
             }
             return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
           }
@@ -232,6 +252,11 @@ var docDefinition = {
         tableExample: {
             // margin: [0, 20, 0, 80],
             margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeaderSup: {
+            margin: 1,
+            color: 'black',
             fontSize: 8,
         },
         tableHeader: {
