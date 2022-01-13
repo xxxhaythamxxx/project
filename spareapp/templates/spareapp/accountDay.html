@@ -160,15 +160,20 @@ var fila = []
 var footerFooter = []
 var footerAux = []
 var cont = 0
-for (n in tableRowCells){
-    fila.push(tableRowCells[n].text)
-    cont = cont + 1
-    if ((cont==tableHeaderText.length) && n>0){
-        rows.push(fila)
-        fila = []
-        cont = 0
+
+$("#myTable tr:not(.tfoot").each(function(){
+    if ($(this).is(":visible")){
+        $(this).find("td:not(.exclude)").each(function(){
+            fila.push($(this).text())
+            cont = cont + 1
+        })
+        if ((cont==tableHeaderText.length)){
+            rows.push(fila)
+            fila = []
+            cont = 0
+        }
     }
-}
+})
 
 var aux = ""
 for (m in tableFooterCells){
@@ -256,7 +261,7 @@ var docDefinition = {
     },
 };
 
-pdfMake.createPdf(docDefinition).download();
+pdfMake.createPdf(docDefinition).download("EstadoDia");
 
 }
 

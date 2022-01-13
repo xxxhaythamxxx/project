@@ -217,6 +217,9 @@ var aux = ""
 footerFooter.push(tableFooterCells)
 
 var docDefinition = {
+    info: {
+	title: 'Facturas por cobrar',
+    },
   content: [
     {
       layout: 'lightHorizontalLines', // optional
@@ -230,6 +233,9 @@ var docDefinition = {
         ...footerFooter,
         // [aux,"","","","","","",""],
         ],
+        // extend: 'pdf',
+        // title: 'Customized PDF Title',
+        // filename: 'customized_pdf_file_name'
       },
       layout: {
 
@@ -279,7 +285,8 @@ var docDefinition = {
     },
 };
 
-pdfMake.createPdf(docDefinition).download();
+// pdfMake.createPdf(docDefinition).download();
+pdfMake.createPdf(docDefinition).download("FacturasCobrar");
 
 }
 

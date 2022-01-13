@@ -6478,6 +6478,8 @@ def accountDay(request):
 
             dayAux = request.POST.get("searchDateFrom")
 
+            tod = dayAux
+
             factureName = factura.objects.filter(fechaCreado=dayAux).order_by("refType__nombre","refCategory__nombre","total")
 
     cont = 0
