@@ -55,9 +55,9 @@
 <div class="container mt-2">
 
 {% if personaVarios %}
-<label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{personaVarios}}</label>
+<label id="nombrePersona" for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{personaVarios}}</label>
 {% else %}
-<label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
+<label id="nombrePersona" for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{factureName.0.refPersona.nombre}}</label>
 {% endif %}
 <div>
     <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#editName" type="button" id="editNameId" class="btn btn-primary text-white" href="javascript:void(0);">
@@ -354,7 +354,9 @@ var docDefinition = {
     },
 };
 
-pdfMake.createPdf(docDefinition).download();
+var nombrePersona = $("#nombrePersona").text()
+
+pdfMake.createPdf(docDefinition).download(nombrePersona);
 
 }
 
