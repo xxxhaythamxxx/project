@@ -112,6 +112,10 @@ urlpatterns = [
     path("contListClienteTables",views.contListClienteTables,name="contListClienteTables"),
     path("editeClienteTable/<str:val>",views.editeClienteTable,name="editeClienteTable"),
     path("deleteClienteTable/<str:val>",views.deleteClienteTable,name="deleteClienteTable"),
+    path("contAddOperacion",views.contAddOperacion,name="contAddOperacion"),
+    path("contListCustomTablesOp",views.contListCustomTablesOp,name="contListCustomTablesOp"),
+    re_path("editeCustomTableOp/(?P<val>.*)$",views.editeCustomTableOp,name="editeCustomTableOp"),
+    re_path("deleteCustomOp/(?P<val>.*)$",views.deleteCustomOp,name="deleteCustomOp"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]
