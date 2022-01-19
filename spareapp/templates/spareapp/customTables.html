@@ -25,7 +25,7 @@
             <tr>
                 <td class="p-2"><a {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo}}</a></td>
                 <!-- <td class="p-2">{{table.tabTipo}}</td> -->
-                <td class="p-2">${{table.tabTotal}}</td>
+                <td class="p-2">${{table.tabTotal|floatformat:2}}</td>
             </tr>
             {% endif %}
             {% endfor %}
