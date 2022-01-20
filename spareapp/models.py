@@ -228,3 +228,15 @@ class tableOperacion(models.Model):
 
     def __str__(self):
         return '%s' %(self.tabNombre)
+
+class tableOperacionAux(models.Model):
+
+    tabNombre = models.CharField(max_length=80,verbose_name="Nombre de tabla",default='Principal')
+    tabTipo = models.ForeignKey(factType,on_delete=CASCADE,verbose_name="Tipo",default='Tipo')
+    principal = models.BooleanField(default=False,verbose_name="Principal",blank=True,null=True)
+    suma = models.BooleanField(default=True,verbose_name="Suma")
+    resta = models.BooleanField(default=False,verbose_name="Resta")
+    tabTotal = models.FloatField(verbose_name="Total")
+
+    def __str__(self):
+        return '%s' %(self.tabNombre)
