@@ -61,46 +61,6 @@
 {% endfor %}
 {% else %}
 
-{% for n in cantAuxEmpty %}
-{% if n.principal == True %}
-
-<div class="mb-3" id="">
-<div class="container">
-    <table style="font-size: small;" class="table-bordered invoice">
-        <thead>
-            <tr style="background-color: #F5F087" class="">
-                <th colspan="2" class="p-2">{{n.tabNombre}}  |  Día: {{tod}}</th>
-            </tr>
-            <tr style="background-color: #7C8FEC;">
-                <th class="p-2">Tipo de pago</th>
-                <th style="width: 350px;" class="p-2">Total</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            {% if tableAux2Empty %}
-
-                {% for tab in tableAux2Empty %}
-                {% if tab.tabNombre == n.tabNombre %}
-                <tr>
-                    <td class="p-2"><a>{{tab.tabTipo__nombre}}</a></td>
-                    <td class="p-2">$0.00</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-                <tr style="background-color: #E77C7C;" class="">
-                    <td colspan="2" class="p-2">TOTAL: $0.00</td>
-                </tr>
-            {% endif %}
-
-        </tbody>
-    </table>
-</div>
-</div>
-
-{% endif %}
-{% endfor %}
 
 {% endif %}
 
