@@ -2658,32 +2658,32 @@ def contDay(request):
 
     # Operacion --------------------------------------------
 
-    # acum = 0
-    # totalParcialOp = {}
-    # cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct()
+    acum = 0
+    totalParcialOp = {}
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct()
 
-    # for nom in cantAuxOp:
+    for nom in cantAuxOp:
 
-    #     aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
+        aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
 
-    #     for a in aux:
+        for a in aux:
 
-    #         if a.suma == True:
+            if a.suma == True:
 
-    #             acum = acum + a.tabTotal
+                acum = acum + a.tabTotal
 
-    #         else:
+            else:
 
-    #             acum = acum - a.tabTotal
+                acum = acum - a.tabTotal
         
-    #     totalParcialOp[nom["tabNombre"]] = acum
+        totalParcialOp[nom["tabNombre"]] = acum
 
-    #     acum = 0
+        acum = 0
 
-    # tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-    dic = {"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
-    # dic = {"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    # dic = {"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    dic = {"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
 
