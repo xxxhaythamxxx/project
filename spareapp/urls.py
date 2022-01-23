@@ -116,6 +116,8 @@ urlpatterns = [
     path("contListCustomTablesOp",views.contListCustomTablesOp,name="contListCustomTablesOp"),
     re_path("editeCustomTableOp/(?P<val>.*)$",views.editeCustomTableOp,name="editeCustomTableOp"),
     re_path("deleteCustomOp/(?P<val>.*)$",views.deleteCustomOp,name="deleteCustomOp"),
+    path("editeFactAccount/<str:val>/<str:val1>/<str:val2>",views.editeFactAccount,name="editeFactAccount"),
+
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

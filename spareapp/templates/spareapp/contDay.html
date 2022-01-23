@@ -85,6 +85,18 @@
                 {% endif %}
                 {% endfor %}
                 {% endif %}
+            {% else %}
+                {% for tabA in tableAux2Empty %}
+                {% if n.tabNombre == tabA.tabNombre %}
+                <tr>
+                    <td class="p-2"><a>{{n.tabTipo.nombre}}</a></td>
+                    <td class="p-2">$0.00</td>
+                </tr>
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL: $0.00</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
             {% endif %}
 
         </tbody>
