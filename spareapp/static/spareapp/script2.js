@@ -13,6 +13,7 @@ $("#search3").click(function(){
 $("#search5").click(function(){
     $("#formByRange2").hide()
 })
+
 $("#searchToday").click(function(){
     $("#formDay").hide()
 })
