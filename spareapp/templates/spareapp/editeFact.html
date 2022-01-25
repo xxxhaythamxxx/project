@@ -94,22 +94,23 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contMonto">Sub total</label>
-                <input value="{{facAux.0.monto}}" class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
+                <input value="{{facAux.0.monto}}" class="form-control" id="contMonto" name="contMonto" step="0.001" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contItbm">ITBM</label>
-                <input value="{{facAux.0.iva}}" class="form-control" id="contItbm" type="number" name="contItbm" step="0.001">
+                <input value="{{facAux.0.iva}}" class="form-control" id="contItbm" name="contItbm" step="0.001">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contTotal">Total</label>
-                <input value="{{facAux.0.total}}" class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
+                <input value="{{facAux.0.total}}" class="form-control" id="contTotal" name="contTotal" step="0.001" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contNota">Nota</label>
                 <textarea value="{{facAux.0.note}}" class="form-control" id="contNota" type="textarea" name="contNota">{% if facAux.0.note != none %}{{facAux.0.note}}{% endif %}</textarea>
             </div>
             <input id="facId" name="facId" value="{{facAux.0.id}}" type="text" style="display: none;">
-            <button id="editButton" class="btn btn-primary" type="submit">Aceptar</button>
+            <button style="font-size: small;" id="editButton" class="btn btn-primary" type="submit">Aceptar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>
 </div>

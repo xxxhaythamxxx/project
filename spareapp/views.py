@@ -6045,6 +6045,7 @@ def editeFact(request,val,val2):
     allTypes = factType.objects.all()
     # DEPENDE DEL TYPE SALEN UNOS U OTROS
     facAux = factura.objects.filter(id=val)
+    print(facAux)
     facTotal = 0
     auxFacGet = factura.objects.get(id=val)
     tope=""
@@ -8997,6 +8998,7 @@ def searchTable(request):
             factureName = ""
             personaAux = ""
             personaVarios = None
+            banderaNombre = False
 
             personaAuxAux = persona.objects.filter(nombre__icontains=busqueda)
             numFacAuxAux = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id")
@@ -9004,27 +9006,29 @@ def searchTable(request):
 
             if numFacAuxAux:
                 print("Es un numero de factura")
-                print(numFacAuxAux)
-                factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id")
                 facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct()
-                print(facPersona)
                 if len(facPersona)>1:
+                    banderaNombre = True
                     personaVarios = "Varios"
-            else:
-                if personaAuxAux:
-                    print("Es una persona")
-                    print(personaAuxAux)
-                    # personaAux = persona.objects.get(nombre__icontains=busqueda)
-                    factureName = factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id")
-                else:
-                    if notaAuxAux:
-                        print("Es una nota")
-                        print(notaAuxAux)
-                        factureName = factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
-                        facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct()
-                        print(facPersona)
-                        if len(facPersona)>1:
-                            personaVarios = "Varios"
+            if personaAuxAux:
+                print("Es una persona")
+                facPersona = factura.objects.filter(refPersona__nombre__icontains=busqueda).values("refPersona").distinct()
+                if len(facPersona)>1:
+                    banderaNombre = True
+                    personaVarios = "Varios"
+            if notaAuxAux:
+                print("Es una nota")
+                facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct()
+                if len(facPersona)>1:
+                    banderaNombre = True
+                    personaVarios = "Varios"
+
+            if banderaNombre == True:
+                personaVarios = "Varios"
+            banderaNombre = False
+                    
+            factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
+
             if factureName:
 
                 for fac in factureName:
@@ -9639,25 +9643,37 @@ def editeFactAccount(request,val,val1,val2):
             factureName = ""
             personaAux = ""
             personaVarios = None
+            banderaNombre = False
 
             personaAuxAux = persona.objects.filter(nombre__icontains=busqueda)
             numFacAuxAux = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id")
             notaAuxAux = factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
 
             if numFacAuxAux:
-                factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id")
+                print("Es un numero de factura")
                 facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct()
                 if len(facPersona)>1:
+                    banderaNombre = True
                     personaVarios = "Varios"
-            else:
-                if personaAuxAux:
-                    factureName = factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id")
-                else:
-                    if notaAuxAux:
-                        factureName = factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
-                        facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct()
-                        if len(facPersona)>1:
-                            personaVarios = "Varios"
+            if personaAuxAux:
+                print("Es una persona")
+                facPersona = factura.objects.filter(refPersona__nombre__icontains=busqueda).values("refPersona").distinct()
+                if len(facPersona)>1:
+                    banderaNombre = True
+                    personaVarios = "Varios"
+            if notaAuxAux:
+                print("Es una nota")
+                facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct()
+                if len(facPersona)>1:
+                    banderaNombre = True
+                    personaVarios = "Varios"
+
+            if banderaNombre == True:
+                personaVarios = "Varios"
+            banderaNombre = False
+                    
+            factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
+
             if factureName:
 
                 for fac in factureName:
