@@ -1,18 +1,19 @@
 $("#search4").click(function(){
-    $("#formByRange").show()
+    $("#formByRange2").show()
 })
 $("#search1").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#search2").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#search3").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
 $("#search5").click(function(){
-    $("#formByRange").hide()
+    $("#formByRange2").hide()
 })
+
 $("#searchToday").click(function(){
     $("#formDay").hide()
 })
@@ -102,12 +103,26 @@ function generatePDF(){
 
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
-$('th').click(function(){
+$('th').not("#check").click(function(){
     var table = $(this).parents('table').eq(0)
     var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
     this.asc = !this.asc
     if (!this.asc){rows = rows.reverse()}
     for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+
+    var i = 1;
+    $("tbody tr").each(function(){
+        $(this).find("td").each(function(){
+            if($(this).index()==$("#detail-id").index()){
+                if($(this).parent().is(":visible")){
+                    $(this).text(i)
+                    i=i+1;
+                }
+            }
+            
+        })
+    });
+
 })
 function comparer(index) {
     return function(a, b) {
@@ -116,4 +131,19 @@ function comparer(index) {
     }
 }
 function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+// $('th').click(function(){
+//     alert("CLick")
+//     var table = $(this).parents('table').eq(0)
+//     var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+//     this.asc = !this.asc
+//     if (!this.asc){rows = rows.reverse()}
+//     for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+// })
+// function comparer(index) {
+//     return function(a, b) {
+//         var valA = getCellValue(a, index), valB = getCellValue(b, index)
+//         return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+//     }
+// }
+// function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 
