@@ -2684,13 +2684,7 @@ def contDay(request):
 
     tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-    if tableAuxOp:
-
-        print("Hay tabla del día")
-
-    else:
-
-        tableAuxOpEmpty = tableOperacion.objects.all().values("tabNombre","tabTipo__nombre").distinct().order_by("tabTipo__nombre")
+    tableAuxOpEmpty = tableOperacion.objects.all().values("tabNombre","tabTipo__nombre").distinct().order_by("tabTipo__nombre")
 
     # dic = {"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
     dic = {"tableAuxOpEmpty":tableAuxOpEmpty,"tableAux2Empty":tableAux2Empty,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
