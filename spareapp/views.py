@@ -5732,6 +5732,7 @@ def accountStat(request):
 
         if request.POST.get("search") == "balance":
 
+            print("Entra en balance")
 
             for key in balance:
 
@@ -5764,10 +5765,10 @@ def accountStat(request):
 
         if request.POST.get("search") == "range":
 
+            print("Entra en range")
+
             dateFrom = request.POST.get("searchDateFrom")
-            print(dateFrom)
             dateTo = request.POST.get("searchDateTo")
-            print(dateTo)
 
             fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
             fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
@@ -5781,40 +5782,42 @@ def accountStat(request):
     
         cont = 0
 
-        for fac in factureName:
+        if factureName:
 
-            if fac.refCategory.ingreso:
+            for fac in factureName:
 
-                cont = cont
+                if fac.refCategory.ingreso:
 
-                if fac.refType.facCobrar==True:
+                    cont = cont
 
-                    cont = cont + fac.total
-                    if fac.pendiente == True:
-                        balanceFacMerc = balanceFacMerc + fac.total
+                    if fac.refType.facCobrar==True:
+
+                        cont = cont + fac.total
+                        if fac.pendiente == True:
+                            balanceFacMerc = balanceFacMerc + fac.total
+                    
+                    if fac.refCategory.nombre=="Factura cobrada":
+
+                        cont = cont - fac.total
                 
-                if fac.refCategory.nombre=="Factura cobrada":
+                else:
 
-                    cont = cont - fac.total
-            
-            else:
+                    cont = cont
 
-                cont = cont
+                    if fac.refType.mercPagar==True:
 
-                if fac.refType.mercPagar==True:
+                        cont = cont - fac.total
+                        if fac.pendiente == True:
+                            balanceFacMerc = balanceFacMerc - fac.total
+                    
+                    if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                    cont = cont - fac.total
-                    if fac.pendiente == True:
-                        balanceFacMerc = balanceFacMerc - fac.total
-                
-                if fac.refCategory.nombre=="Mercancia credito pagada":
+                        cont = cont + fac.total
 
-                    cont = cont + fac.total
-
-            if fac.pendiente == True and fac.refType.gasto == True:
-                balance[fac.id] = [cont,fac.total*(-1)]
-            else:
-                balance[fac.id] = [cont,fac.total]
+                if fac.pendiente == True and fac.refType.gasto == True:
+                    balance[fac.id] = [cont,fac.total*(-1)]
+                else:
+                    balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
