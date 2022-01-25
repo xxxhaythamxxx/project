@@ -9300,7 +9300,6 @@ def editeCustomTableOp(request,val):
     if request.method == "POST":
 
         allTypes = factType.objects.all()
-        lista=request.POST.getlist("type")
         bandType = 0
         auxType = 0
         bandType2 = 0
@@ -9319,6 +9318,8 @@ def editeCustomTableOp(request,val):
         else:
 
             nombreTabla = request.POST.get("tabNombre")
+
+        # lista = tableOperacion.objects.values("tabTipo__nombre").filter(tabNombre=nombreTabla).distinct()
 
         print(lista)
 
@@ -9396,165 +9397,59 @@ def editeCustomTableOp(request,val):
 
         print("---------------------------")
 
-        for li in lista:
+        bandRevisar == False
+        lista2 = tableOperacion.objects.all().filter(tabNombre=val)
+
+        for li in lista2:
+
+            print("Li: "+str(li.tabTipo.nombre))
 
             for sum in sumas:
 
-                if li["tabTipo__nombre"] == sum:
+                print("sum: "+str(sum))
 
-                    bandRevisar = True
-
-            for res in restas:
-
-                if li["tabTipo__nombre"] == res:
+                if li.tabTipo.nombre == sum and li.suma == True:
 
                     bandRevisar = True
 
             if bandRevisar == False:
 
-                print("No existe: "+str(li["tabTipo__nombre"]))
-                eliminar = tableOperacion.objects.filter(tabTipo__nombre=li["tabTipo__nombre"])
-                eliminar.delete()
+                print("No existe: "+str(li.tabTipo.nombre))
+                eliminar = tableOperacion.objects.filter(tabNombre=val,tabTipo__nombre=li.tabTipo.nombre,suma=True)
+                if eliminar:
+                    eliminar.delete()
+
+            else:
+
+                print("Posee ese type en el form")
+
+            bandRevisar = False
+
+            for res in restas:
+
+                print("res: "+str(res))
+
+                if li.tabTipo.nombre == res:
+
+                    bandRevisar = True
+
+            if bandRevisar == False:
+
+                print("No existe: "+str(li.tabTipo.nombre))
+                eliminar = tableOperacion.objects.filter(tabNombre=val,tabTipo__nombre=li.tabTipo.nombre,resta=True)
+                if eliminar:
+                    eliminar.delete()
+
+            else:
+
+                print("Posee ese type en el form")
 
             bandRevisar = False
 
         allTables = tableOperacion.objects.all().order_by("tabNombre")
         allTablesNombres = tableOperacion.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
 
-
-        # for li in lista:
-
-        #     print(li["tabTipo__nombre"])
-
-        #     for sum in sumas:
-
-        #         if li["tabTipo__nombre"] == sum:
-
-        #             print("Es igual suma")
-
-        #             bandOriginal = True
-
-        #     for res in restas:
-
-        #         if li["tabTipo__nombre"] == res:
-
-        #             print("Es igual resta")
-
-        #             bandOriginal = True
-
-        # if bandOriginal == True:
-
-        #     print("Consigue")
-
-        # else:
-
-        #     print("No consigue")
-
-        # bandOriginal = False
-
-        # if lista:
-
-        #     for ty in allTypes:
-
-        #         tableAntes = tableOperacion.objects.filter(tabTipo=ty,tabNombre=val)
-
-        #         for valor in lista:
-
-        #             if tableAntes:
-
-        #                 if str(ty.id) == str(valor):
-
-        #                     bandType = 1
-
-        #                 else:
-
-        #                     auxType = ty.id
-
-        #             else:
-
-        #                 if str(ty.id) == str(valor):
-                            
-        #                     bandType2 = 1
-        #                     auxType2 = valor
-
-        #         if bandType == 0 and tableAntes:
-                            
-        #             typeAux = factType.objects.get(id=auxType)
-        #             tableChange = tableOperacion.objects.filter(tabTipo=typeAux,tabNombre=val)
-        #             tableChange.delete()
-
-        #         if bandType2 == 1 and not(tableAntes):
-
-        #             typeAux = factType.objects.get(id=auxType2)
-        #             tableChange = tableOperacion()
-        #             tableChange.tabNombre = val
-        #             tableChange.tabTipo = typeAux
-        #             if request.POST.get("tabPrincipal"):
-        #                 tableChange.principal = True
-        #             else:
-        #                 tableChange.principal = False
-        #             tableChange.tabTotal = 0
-        #             tableChange.save()
-
-        #         bandType = 0
-        #         bandType2 = 0
-
-        #     # ------------------------------------------------------------------------
-        #     # Para las tablas custom
-        #     toddy = datetime.now().date()
-        #     allTypesCustom = factType.objects.all()
-        #     custAcum = 0
-        #     for ty in allTypesCustom:
-        #         facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
-
-        #         if ty.facCobrar == True:
-        #             facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-        #         if ty.mercPagar == True:
-        #             facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-        #         if ty.mercPagada == True:
-        #             facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-        #         if ty.facCobrada == True:
-        #             facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-        #         for fac in facAuxAll:
-        #             custAcum = custAcum + fac.total
-        #         customType = tableOperacion.objects.filter(tabTipo=ty,tabNombre=val)
-        #         for cus in customType:
-        #             costomInd = tableOperacion.objects.get(id=cus.id)
-        #             if request.POST.get("tabPrincipal"):
-        #                 costomInd.principal = True
-        #             else:
-        #                 costomInd.principal = False
-        #             costomInd.tabTotal = custAcum
-        #             costomInd.save()
-        #         custAcum = 0
-        #     # ------------------------------------------------------------------------
-
-        # else:
-
-        #     customAux = tableOperacion.objects.filter(tabNombre=val)
-
-        #     for cust in customAux:
-
-        #         aux = tableOperacion.objects.get(id=cust.id)
-        #         aux.delete()
-
-        #     allTables = tableOperacion.objects.all().order_by("tabNombre")
-        #     allTablesNombres = tableOperacion.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
-
-        #     dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
-
-        #     return render(request,"spareapp/contListCustomTablesOp.html",dic)
-
-        # allTables = tableOperacion.objects.all().order_by("tabNombre")
-        # allTablesNombres = tableOperacion.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
-
         dic = {"allTables":allTables,"allTablesNombres":allTablesNombres,"allTypes":allTypes}
-        # dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
-
         return render(request,"spareapp/contListCustomTablesOp.html",dic)
 
     dic = {"customNombre":customNombre,"customAux":customAux,"allTypes":allTypes,"val":val}
