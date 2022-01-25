@@ -137,7 +137,7 @@
             <td id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
             <td auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|floatformat:2}}</td>
             <td style="max-width: 100px;" class="p-2">{{fact.note}}</td>
-            <td class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" {% if busqueda %} href="{% url 'editeFactAccount' fact.id busqueda request.get_full_path|cut:'/' %}" {% else %} href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}" {% endif %}>Editar</a>
+            <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" {% if busqueda %} href="{% url 'editeFactAccount' fact.id busqueda request.get_full_path|cut:'/' %}" {% else %} href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}" {% endif %}>Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
             </td>
             <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
@@ -184,6 +184,56 @@
 <script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+
+<script>
+$("#search4").click(function(){
+    $("#formByRange2").show()
+})
+</script>
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+
+<script>
+function Export() {
+    $("#invoice").table2excel({
+    filename: "file.xls"
+    });
+}
+</script> -->
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", type="text/javascript">
+    function Export() {
+        alert("Entra")
+      $("#invoice").table2excel({
+        filename: "file.xls"
+      });
+    }
+</script> -->
+
+<!-- <script type="text/javascript">
+    function exportReportToExcel() {
+      let table = $("#invoice")
+    //   let table = document.getElementsByID("invoice");
+      TableToExcel.convert(table[0], { 
+        name: `file.xlsx`,
+        sheet: {
+          name: 'Sheet 1'
+        }
+      });
+    }
+  </script> -->
+
+<!-- <script>
+// boton para exportar a Excel -------------------------------------------------------------------------------------
+document.getElementById("downloadexcela").addEventListener("click",function(){
+    $("#check").hide();
+    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+    var table2excel = new Table2Excel();
+    table2excel.export(document.querySelectorAll("#invoice"));
+    $("#check").show();
+    $("table td:nth-child("+($("#check").index() + 1)+")").show();
+})
+</script> -->
 
 <script>
 

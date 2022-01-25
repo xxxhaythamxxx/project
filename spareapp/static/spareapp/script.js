@@ -1091,6 +1091,9 @@ document.getElementById("downloadexcel").addEventListener("click",function(){
     $("table td:nth-child("+($("#photo").index() + 1)+")").hide();
     var table2excel = new Table2Excel();
     table2excel.export(document.querySelectorAll("#invoice"));
+    // if(table2excel){
+    //     $("#check").show();
+    // }
     // $("#check").show();
     // $("table td:nth-child("+($("#check").index() + 1)+")").show();
     $("input:checkbox[name=check]").prop("checked",false);

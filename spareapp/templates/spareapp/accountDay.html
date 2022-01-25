@@ -106,6 +106,18 @@
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 
 <script>
+    // boton para exportar a Excel -------------------------------------------------------------------------------------
+    document.getElementById("downloadexcela").addEventListener("click",function(){
+        $("#check").hide();
+        $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+        var table2excel = new Table2Excel();
+        table2excel.export(document.querySelectorAll("#invoice"));
+        $("#check").show();
+        $("table td:nth-child("+($("#check").index() + 1)+")").show();
+    })
+</script>
+
+<script>
 
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
