@@ -127,9 +127,11 @@
         var sumarMonto = 0
         var auxMonto = 0
         var totalMonto = 0
+        // totalMonto = parseFloat(totalMonto)
         var sumarTotal = 0
         var auxTotal = 0
         var totalTotal = 0
+        // totalTotal = parseFloat(totalTotal)
 
         $(".invoice tbody tr").filter(function(){                             // 
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
@@ -141,6 +143,7 @@
             $(this).find("td").each(function(){
                 if ($(this).index() == $("#facTotal").index()) {
                     if ($(this).is(":visible")){
+                        // alert($(this).text())
                         sumarTotal = $(this).text()
                         auxTotal = sumarTotal.split("$")[1]
                     }
@@ -151,6 +154,7 @@
                 }
                 if ($(this).index() == $("#facMonto").index()) {
                     if ($(this).is(":visible")){
+                        // alert($(this).text())
                         sumarMonto = $(this).text()
                         auxMonto = sumarMonto.split("$")[1]
                     }
@@ -160,9 +164,23 @@
                     
                 }
             })
-            
+
+            var auxMontoFull = auxMonto
+            String(auxMontoFull)
+            if (String(auxMontoFull).indexOf(",")>-1){
+                auxMontoFull.replace(',', '.')
+                auxMonto = auxMontoFull.replace(',', '.')
+            }
             totalMonto = totalMonto + parseFloat(auxMonto)
+
+            var auxTotalFull = auxTotal
+            String(auxTotalFull)
+            if (String(auxTotalFull).indexOf(",")>-1){
+                auxTotalFull.replace(',', '.')
+                auxTotal = auxTotalFull.replace(',', '.')
+            }
             totalTotal = totalTotal + parseFloat(auxTotal)
+
         })
 
         $(".erase").remove()

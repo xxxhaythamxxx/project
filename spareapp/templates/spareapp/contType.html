@@ -212,8 +212,28 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
                 }
             })
             
-            totalMonto = totalMonto + parseFloat(auxMonto)
+            var auxItbmFull = auxItbm
+            String(auxItbmFull)
+            if (String(auxItbmFull).indexOf(",")>-1){
+                auxItbmFull.replace(',', '.')
+                auxItbm = auxItbmFull.replace(',', '.')
+            }
             totalItbm = totalItbm + parseFloat(auxItbm)
+
+            var auxMontoFull = auxMonto
+            String(auxMontoFull)
+            if (String(auxMontoFull).indexOf(",")>-1){
+                auxMontoFull.replace(',', '.')
+                auxMonto = auxMontoFull.replace(',', '.')
+            }
+            totalMonto = totalMonto + parseFloat(auxMonto)
+
+            var auxTotalFull = auxTotal
+            String(auxTotalFull)
+            if (String(auxTotalFull).indexOf(",")>-1){
+                auxTotalFull.replace(',', '.')
+                auxTotal = auxTotalFull.replace(',', '.')
+            }
             totalTotal = totalTotal + parseFloat(auxTotal)
         })
 

@@ -198,12 +198,45 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
                 }
             })
             
-            totalMonto = totalMonto + parseFloat(auxMonto)
-            totalItbm = totalItbm + parseFloat(auxItbm)
-            totalTotal = totalTotal + parseFloat(auxTotal)
-            totalInteres = totalInteres + parseFloat(auxInteres)
+            var auxRetencionFull = auxRetencion
+            String(auxRetencionFull)
+            if (String(auxRetencionFull).indexOf(",")>-1){
+                auxRetencionFull.replace(',', '.')
+                auxRetencion = auxRetencionFull.replace(',', '.')
+            }
             totalRetencion = totalRetencion + parseFloat(auxRetencion)
+
+            var auxNetoFull = auxNeto
+            String(auxNetoFull)
+            if (String(auxNetoFull).indexOf(",")>-1){
+                auxNetoFull.replace(',', '.')
+                auxNeto = auxNetoFull.replace(',', '.')
+            }
             totalNeto = totalNeto + parseFloat(auxNeto)
+
+            var auxItbmFull = auxItbm
+            String(auxItbmFull)
+            if (String(auxItbmFull).indexOf(",")>-1){
+                auxItbmFull.replace(',', '.')
+                auxItbm = auxItbmFull.replace(',', '.')
+            }
+            totalItbm = totalItbm + parseFloat(auxItbm)
+
+            var auxMontoFull = auxMonto
+            String(auxMontoFull)
+            if (String(auxMontoFull).indexOf(",")>-1){
+                auxMontoFull.replace(',', '.')
+                auxMonto = auxMontoFull.replace(',', '.')
+            }
+            totalMonto = totalMonto + parseFloat(auxMonto)
+
+            var auxTotalFull = auxTotal
+            String(auxTotalFull)
+            if (String(auxTotalFull).indexOf(",")>-1){
+                auxTotalFull.replace(',', '.')
+                auxTotal = auxTotalFull.replace(',', '.')
+            }
+            totalTotal = totalTotal + parseFloat(auxTotal)
         })
 
         $(".erase").remove()
