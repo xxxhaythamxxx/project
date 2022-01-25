@@ -9027,7 +9027,7 @@ def searchTable(request):
                 personaVarios = "Varios"
             banderaNombre = False
                     
-            factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
+            factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=busqueda).order_by("fechaCreado","id")
 
             if factureName:
 
@@ -9672,8 +9672,8 @@ def editeFactAccount(request,val,val1,val2):
                 personaVarios = "Varios"
             banderaNombre = False
                     
-            factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id")
-
+            factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=busqueda).order_by("fechaCreado","id")
+            
             if factureName:
 
                 for fac in factureName:
