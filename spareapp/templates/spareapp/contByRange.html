@@ -23,8 +23,8 @@
             {% for table in tableAuxOp %}
             {% if table.tabNombre == tab.tabNombre %}
             <tr>
-                <td class="p-2"><a {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' table.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' table.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>( {{table.tabTipo}} )</a></td>
-                <td class="p-2">${{table.tabTotal|floatformat:2}}</td>
+                <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' table.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' table.tabTipo|cut:'/' dateFrom dateTo %}" {% endif %}>{{table.tabTipo}}</a></td>
+                <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|floatformat:2}}</td>
             </tr>
             {% endif %}
             {% endfor %}
