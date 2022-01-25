@@ -20,21 +20,35 @@
             </tr>
         </thead>
         <tbody>
-            {% for table in tableAuxOp %}
-            {% if table.tabNombre == tab.tabNombre %}
-            <tr>
-                <td class="p-2"><a {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo}}</a></td>
-                <td class="p-2">${{table.tabTotal|floatformat:2}}</td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% for key,value in totalParcialOp.items %}
-                {% if key == tab.tabNombre %}
-                <tr style="background-color: #E77C7C;" class="">
-                    <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+            {% if tableAuxOp %}
+                {% for table in tableAuxOp %}
+                {% if table.tabNombre == tab.tabNombre %}
+                <tr>
+                    <td class="p-2"><a {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo}}</a></td>
+                    <td class="p-2">${{table.tabTotal|floatformat:2}}</td>
                 </tr>
                 {% endif %}
-            {% endfor %}
+                {% endfor %}
+                {% for key,value in totalParcialOp.items %}
+                    {% if key == tab.tabNombre %}
+                    <tr style="background-color: #E77C7C;" class="">
+                        <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for table in tableAuxOpEmpty %}
+                {% if table.tabNombre == tab.tabNombre %}
+                <tr>
+                    <td class="p-2"><a>{{table.tabTipo__nombre}}</a></td>
+                    <td class="p-2">$0.00</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL: $0.00</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
@@ -89,14 +103,15 @@
                 {% for tabA in tableAux2Empty %}
                 {% if n.tabNombre == tabA.tabNombre %}
                 <tr>
-                    <td class="p-2"><a>{{n.tabTipo.nombre}}</a></td>
+                    <td class="p-2"><a>{{tabA.tabTipo__nombre}}</a></td>
                     <td class="p-2">$0.00</td>
                 </tr>
+                
+                {% endif %}
+                {% endfor %}
                 <tr style="background-color: #E77C7C;" class="">
                     <td colspan="2" class="p-2">TOTAL: $0.00</td>
                 </tr>
-                {% endif %}
-                {% endfor %}
             {% endif %}
 
         </tbody>
