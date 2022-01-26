@@ -2915,7 +2915,7 @@ def contEntry(request):
 
             acum = 0
 
-        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct()
+        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAux2Op = tableOperacion.objects.filter(fecha__date=tod)
         tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
 
