@@ -2662,7 +2662,7 @@ def contDay(request):
     tableAuxOpEmpty = None
     acum = 0
     totalParcialOp = {}
-    cantAuxOp = tableOperacion.objects.all().values("tabNombre","principal").distinct()
+    cantAuxOp = tableOperacion.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
 
     for nom in cantAuxOp:
 
