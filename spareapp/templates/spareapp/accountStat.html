@@ -129,14 +129,14 @@
         {% for key,value in balance.items %}
         {% if key == fact.id %}
         <tr>
-            <td class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
-            <td class="p-2">{{fact.refPersona.nombre}}</td>
-            <td class="p-2">{{fact.num}}</td>
-            <td style="max-width: 100px;" class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
-            <td style="max-width: 100px;" class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
-            <td id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
-            <td auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|floatformat:2}}</td>
-            <td style="max-width: 100px;" class="p-2">{{fact.note}}</td>
+            <td {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
+            <td {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">{{fact.refPersona.nombre}}</td>
+            <td {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">{{fact.num}}</td>
+            <td style="max-width: 100px;" class="p-2"><a {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
+            <td style="max-width: 100px;" class="p-2"><a {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
+            <td {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|floatformat:2}}</div></td>
+            <td {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|floatformat:2}}</td>
+            <td {% if fact.refType.ingreso == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} style="max-width: 100px;" class="p-2">{{fact.note}}</td>
             <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" {% if busqueda %} href="{% url 'editeFactAccount' fact.id busqueda request.get_full_path|cut:'/' %}" {% else %} href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}" {% endif %}>Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
             </td>
@@ -166,7 +166,8 @@
 <table class="table-bordered invoice mb-2 tfoot" style="font-size: small;" id="hInf">
     <thead>
         <tr style="background-color: #E77C7C;" class="">
-            <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{balanceTotal|floatformat:2}}</th>
+            <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{acumTotal|floatformat:2}}</th>
+            <!-- <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{balanceTotal|floatformat:2}}</th> -->
         </tr>
     </thead>
 </table>

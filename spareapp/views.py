@@ -5683,6 +5683,7 @@ def accountStat(request):
     dayFrom = ""
     dayTo = ""
     balanceFacMerc = 0
+    acumTotal = 0
 
     if request.method == "POST":
 
@@ -5823,6 +5824,18 @@ def accountStat(request):
 
         balanceTotal = cont
 
+        acumTotal = 0
+
+        for facT in factureName:
+
+            if facT.refType.ingreso == True:
+
+                acumTotal = acumTotal + facT.total
+            
+            else:
+
+                acumTotal = acumTotal - facT.total
+
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     facturesToCollect = len(allFacturesToPay)
@@ -5830,7 +5843,7 @@ def accountStat(request):
 
     tod = datetime.now().date()
 
-    dic = {"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
+    dic = {"acumTotal":acumTotal,"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
