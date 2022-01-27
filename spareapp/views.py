@@ -6113,16 +6113,16 @@ def editeFact(request,val,val2):
             factAux.pendiente = False
 
         contMonto = request.POST.get("contMonto")
-        factAux.monto = contMonto
+        factAux.monto = contMonto.replace(',','.')
 
         if request.POST.get("contItbm") == "":
             contIva = float(0)
         else:
             contIva = request.POST.get("contItbm")
-        factAux.iva = contIva
+        factAux.iva = contIva.replace(',','.')
 
         contTotal = request.POST.get("contTotal")
-        factAux.total = contTotal
+        factAux.total = contTotal.replace(',','.')
 
         factAux.note = request.POST.get("contNota")
 
