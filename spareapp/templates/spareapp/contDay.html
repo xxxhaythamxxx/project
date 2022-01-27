@@ -20,35 +20,22 @@
             </tr>
         </thead>
         <tbody>
-            {% if tableAux2 %}
-                {% for table in tableAuxOp %}
-                {% if table.tabNombre == tab.tabNombre %}
-                <tr>
-                    <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo}}</a></td>
-                    <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|floatformat:2}}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-                {% for key,value in totalParcialOp.items %}
-                    {% if key == tab.tabNombre %}
-                    <tr style="background-color: #E77C7C;" class="">
-                        <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
-                    </tr>
-                    {% endif %}
-                {% endfor %}
-            {% else %}
-                {% for table in tableAuxOpEmpty %}
-                {% if table.tabNombre == tab.tabNombre %}
-                <tr>
-                    <td class="p-2"><a>{{table.tabTipo__nombre}}</a></td>
-                    <td class="p-2">$0.00</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-                <tr style="background-color: #E77C7C;" class="">
-                    <td colspan="2" class="p-2">TOTAL: $0.00</td>
-                </tr>
+            {% for table in tableAuxOp %}
+            {% if table.tabNombre == tab.tabNombre %}
+            <tr>
+                <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo}}</a></td>
+                <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|floatformat:2}}</td>
+            </tr>
             {% endif %}
+            {% endfor %}
+            {% for key,value in totalParcialOp.items %}
+                {% if key == tab.tabNombre %}
+                <tr style="background-color: #E77C7C;" class="">
+                    <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+            
         </tbody>
     </table>
 </div>

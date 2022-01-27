@@ -3965,6 +3965,7 @@ def contByDay(request):
     tableAux2 = customTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
     # ----------- Operacion -------------------
+    print("ENtra en operacion")
 
     # tod = datetime.now().date()
     # tod = toddy
@@ -4045,6 +4046,7 @@ def contByDay(request):
     else:
 
         print("No hay tabla")
+        print(toddy)
 
         custAcum = 0
         for ty in allTypesCustom:
@@ -10370,3 +10372,7 @@ def editeFactAccount(request,val,val1,val2):
 
 # {% endif %}
 # {% endfor %}
+
+
+
+
