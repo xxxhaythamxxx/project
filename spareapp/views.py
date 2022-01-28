@@ -3537,11 +3537,18 @@ def contListType(request):
         else:
             deleteAux[ty.id] = "off"
 
+    print("......")
+
     if request.method == "POST":
 
         for cat in request.POST.getlist("typId"):
 
+            bandAntes2 = False
+
             singleType = factType.objects.get(id=cat)
+
+            if singleType.facCobrar == True:
+                bandAntes2 = True
 
             if request.POST.get("typNom"+cat):
 
@@ -3549,7 +3556,19 @@ def contListType(request):
 
             if request.POST.get("facCobrar"+cat):
 
+                bandAntes = False
+                if singleType.facCobrar == False:
+                    bandAntes = True
+
                 singleType.facCobrar = True
+                if bandAntes == True and singleType.facCobrar == True:
+                    print(singleType.nombre)
+                    print("Antes era contado y ahora es crédito, por cobrar")
+                    facturaCambiar = factura.objects.filter(refType=singleType)
+                    # for fac in facturaCambiar:
+                        
+                    print(facturaCambiar)
+                bandAntes = False
             
             else:
 
@@ -3612,6 +3631,12 @@ def contListType(request):
 
                 singleType.ingreso = False
                 singleType.gasto = True
+
+            if bandAntes2 == True and singleType.facCobrar == False:
+                print(singleType.nombre)
+                print("Antes era credito y ahora es contado")
+
+            bandAntes2 = False
                 
             singleType.save()
 
@@ -9890,16 +9915,16 @@ def editeFactAccount(request,val,val1,val2):
             factAux.pendiente = False
 
         contMonto = request.POST.get("contMonto")
-        factAux.monto = contMonto
+        factAux.monto = contMonto.replace(',','.')
 
         if request.POST.get("contItbm") == "":
             contIva = float(0)
         else:
             contIva = request.POST.get("contItbm")
-        factAux.iva = contIva
+        factAux.iva = contIva.replace(',','.')
 
         contTotal = request.POST.get("contTotal")
-        factAux.total = contTotal
+        factAux.total = contTotal.replace(',','.')
 
         factAux.note = request.POST.get("contNota")
 
