@@ -284,7 +284,9 @@ $("#contFacType").change(function(){
                 if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
                     $("#divFechaTope").show()
                     select2.empty()
-                    select2.append("<option value="+data.cobrarPagar[0].id+">"+data.cobrarPagar[0].nombre.toUpperCase()+"</option>")
+                    for(var i = 0;i<data.cobrarPagar.length;i++){
+                        select2.append("<option value="+data.cobrarPagar[i].id+">"+data.cobrarPagar[i].nombre.toUpperCase()+"</option>")
+                    }
                 }
                 else{
                     $("#divFechaTope").hide()
