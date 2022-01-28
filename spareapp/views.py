@@ -3549,14 +3549,21 @@ def contListType(request):
             bandAntesCobrar2 = False
             # Si antes era un tipo de factura cobrada
             bandAntesCobrada2 = False
+            # Si ahora es un tipo de factura por pagar
+            bandAntesPagar = False
+            # Si antes era un tipo de factura por pagar
+            bandAntesPagar2 = False
 
             singleType = factType.objects.get(id=cat)
 
             if singleType.facCobrar == True:
                 bandAntesCobrar2 = True
 
-            if singleType.facCobrada == True:
-                bandAntesCobrada2 = True
+            if singleType.mercPagar == True:
+                bandAntesPagar2 = True
+
+            # if singleType.facCobrada == True:
+            #     bandAntesCobrada2 = True
 
             if request.POST.get("typNom"+cat):
 
@@ -3588,7 +3595,7 @@ def contListType(request):
                         facCamb.refType.gasto = False
                         facCamb.fechaTope = actual
                         facCamb.save()
-                    bandAntesCobrar = False
+                    # bandAntesCobrar = False
             
             else:
 
@@ -3629,7 +3636,33 @@ def contListType(request):
 
             if request.POST.get("mercPagar"+cat):
 
+                bandAntesPagar = False
+                if singleType.mercPagar == False:
+                    bandAntesPagar = True
+
                 singleType.mercPagar = True
+                if bandAntesPagar == True and singleType.mercPagar == True:
+                    print("Antes era debito y ahora es credito por pagar")
+                    facturaCambiar = factura.objects.filter(refType=singleType)
+                    for fac in facturaCambiar:
+                        auxCat = factCategory.objects.filter(limite=True,egreso=True)
+                        facCamb = factura.objects.get(id=fac.id)
+                        facCamb.refCategory=auxCat[0]
+                        facCamb.pendiente = True
+                        creado = facCamb.fechaCreado
+                        creadoAux = datetime.strptime(str(creado.date()),"%Y-%m-%d")
+                        deadlineDefault=(creadoAux+timedelta(days=30)).date()
+                        actualAux=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+                        actual = actualAux
+                        singleType.ingreso = False
+                        singleType.gasto = True
+                        facCamb.refType.ingreso = False
+                        facCamb.refType.gasto = True
+                        facCamb.fechaTope = actual
+                        facCamb.save()
+                    # bandAntesPagar = False
+
+                # singleType.mercPagar = True
             
             else:
 
@@ -3669,13 +3702,13 @@ def contListType(request):
 
             if request.POST.get("ingreso"+cat):
 
-                if bandAntesCobrar == False:
+                if bandAntesCobrar == False and bandAntesPagar == False:
                     singleType.ingreso = True
                     singleType.gasto = False
             
             else:
 
-                if bandAntesCobrar == False:
+                if bandAntesCobrar == False and bandAntesPagar == False:
                     singleType.ingreso = False
                     singleType.gasto = True
 
@@ -3684,7 +3717,7 @@ def contListType(request):
                 print("Antes era credito por cobrar y ahora es contado")
                 facturaCambiar = factura.objects.filter(refType=singleType)
                 for fac in facturaCambiar:
-                    auxCat = factCategory.objects.filter(limite=False)
+                    auxCat = factCategory.objects.filter(limite=False,ingreso=True)
                     facCamb = factura.objects.get(id=fac.id)
                     facCamb.refCategory=auxCat[0]
                     facCamb.pendiente = False
@@ -3695,6 +3728,23 @@ def contListType(request):
                     facCambCob = factura.objects.filter(num=facCamb.num,refPersona=facCamb.refPersona,pendiente=False).exclude(fechaCobrado=None)
                     for e in facCambCob:
                         e.delete()
+
+            if bandAntesPagar2 == True and singleType.mercPagar == False:
+                print(singleType.nombre)
+                print("Antes era credito por pagar y ahora es contado")
+                facturaCambiar = factura.objects.filter(refType=singleType)
+                for fac in facturaCambiar:
+                    auxCat = factCategory.objects.filter(limite=False,egreso=True)
+                    facCamb = factura.objects.get(id=fac.id)
+                    facCamb.refCategory=auxCat[0]
+                    facCamb.pendiente = False
+                    facCamb.fechaTope = None
+                    facCamb.fechaCobrado = None
+                    facCamb.save()
+                    
+                    # facCambCob = factura.objects.filter(num=facCamb.num,refPersona=facCamb.refPersona,pendiente=False).exclude(fechaCobrado=None)
+                    # for e in facCambCob:
+                    #     e.delete()
 
             singleType.save()
 
