@@ -2614,7 +2614,6 @@ def contDay(request):
     allTypes = factType.objects.all().order_by("nombre")
     editPrueba = False
     contTotal = 0
-    # tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
     allFactures = factura.objects.filter(fechaCreado__date=tod) | factura.objects.filter(fechaCobrado=tod)
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -2706,7 +2705,6 @@ def contEntry(request):
     noIncludeTotal = 0
     noIncludeTotalGasto = 0
     contPagadoCobrado = 0
-    suma = 0
     acum = 0
 
     dic = {"actualDay":actualDay,"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
@@ -2765,8 +2763,6 @@ def contEntry(request):
 
         factAux.save()
 
-        # allTypes = factType.objects.all().order_by("nombre")
-
         allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
         # ----------- Operacion -------------------
@@ -2788,8 +2784,6 @@ def contEntry(request):
             if tableAuxOp:
 
                 print("Hay tabla")
-                # ------------------------------------------------------------------------
-                # Para las tablas custom
                 toddy = datetime.now().date()
                 allTypesCustom = factType.objects.all()
                 custAcum = 0
@@ -2816,9 +2810,8 @@ def contEntry(request):
                     for nom in lista:
 
                         prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
-                        # print(principalAux[0]["principal"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                         if prob:
 
                             prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
@@ -2847,8 +2840,6 @@ def contEntry(request):
                                 costomInd.save()
                         
                     custAcum = 0
-                # ------------------------------------------------------------------------
-
             else:
 
                 print("No hay tabla")
@@ -2875,8 +2866,8 @@ def contEntry(request):
                     lista = tableOperacion.objects.all().values("tabNombre").distinct()
                     for nom in lista:
                         prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
                             costomInd.fecha = tod
@@ -2919,162 +2910,11 @@ def contEntry(request):
         tableAux2Op = tableOperacion.objects.filter(fecha__date=tod)
         tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
 
-
-        # ----------Custom-------------------------
-        tod = datetime.now().date()
-        cantAux = customTable.objects.filter(fecha__date=tod).values("tabNombre").distinct()
-        factureAux = factura.objects.filter(fechaCreado__date=tod)
-        allTypesCustom = factType.objects.all()
-        totalParcial = {}
-        acum = 0
-        
-        tableAux2 = customTable.objects.filter(fecha__date=tod)
-
-        if factureAux:
-
-            print("Hay facturas")
-
-            if tableAux2:
-
-                print("Hay tabla")
-                # ------------------------------------------------------------------------
-                # Para las tablas custom
-                toddy = datetime.now().date()
-                allTypesCustom = factType.objects.all()
-                custAcum = 0
-                for ty in allTypesCustom:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
-
-                    if ty.facCobrar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-                    if ty.mercPagar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.mercPagada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-                    for fac in facAuxAll:
-                        custAcum = custAcum + fac.total
-                    customType = customTable.objects.filter(fecha__date=toddy,tabTipo=ty)
-
-                    lista = customTable.objects.all().values("tabNombre").distinct()
-                    for nom in lista:
-
-                        prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                        # print(principalAux[0]["principal"])
-                        if prob:
-
-                            prob2 = customTable.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-
-                            if prob2:
-
-                                costomInd = customTable.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                                costomInd.tabTotal = custAcum
-                                costomInd.save()
-
-                            else:
-
-                                costomInd = customTable()
-                                costomInd.fecha = toddy
-                                costomInd.tabNombre = nom["tabNombre"]
-                                typeAux = factType.objects.get(nombre=ty)
-                                costomInd.tabTipo = typeAux
-                                costomInd.principal = principalAux[0]["principal"]
-                                costomInd.tabTotal = custAcum
-                                costomInd.save()
-                        
-                    custAcum = 0
-                # ------------------------------------------------------------------------
-
-            else:
-
-                print("No hay tabla")
-
-                custAcum = 0
-                for ty in allTypesCustom:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty)
-
-                    if ty.facCobrar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-                    if ty.mercPagar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.mercPagada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-
-                    for fac in facAuxAll:
-                        custAcum = custAcum + fac.total
-                    lista = customTable.objects.all().values("tabNombre").distinct()
-                    for nom in lista:
-                        prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                        if prob:
-                            costomInd = customTable()
-                            costomInd.fecha = tod
-                            costomInd.tabNombre = nom["tabNombre"]
-                            typeAux = factType.objects.get(nombre=ty)
-                            costomInd.tabTipo = typeAux
-                            costomInd.principal = principalAux[0]["principal"]
-                            costomInd.tabTotal = custAcum
-                            costomInd.save()
-                    
-                    custAcum = 0
-
-        for nom in cantAux:
-
-            aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
-
-            for a in aux:
-
-                acum = acum + a.tabTotal
-            
-            totalParcial[nom["tabNombre"]] = acum
-
-            acum = 0
-
-        cantAux = customTable.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct()
-        tableAux2 = customTable.objects.filter(fecha__date=tod)
-
-        # CONTDAY -------------------------------------------------------------------------
-        toddy = datetime.now().date()
-        cantAux = customTable.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct().order_by("tabNombre")
-        cant = len(cantAux)
-        totalParcial = {}
-        acum = 0
-
-        allTypes=factType.objects.all().order_by("nombre")
-        tableAux2 = customTable.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
-        tod = datetime.now().date()
-
-        for nom in cantAux:
-
-            aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=toddy).order_by("tabNombre")
-
-            for a in aux:
-
-                acum = acum + a.tabTotal
-            
-            totalParcial[nom["tabNombre"]] = acum
-
-            acum = 0
-        # ---------------------------------------------------------------------------------
-
         if request.POST.get("entryOption")=="otro":
 
             tod = datetime.now().date()
             allTypes = factType.objects.all().order_by("nombre")
             contTotal = 0
-            # tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
             allFactures = factura.objects.filter(fechaCreado__date=tod) | factura.objects.filter(fechaCobrado=tod)
             allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
             allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -3086,35 +2926,11 @@ def contEntry(request):
             noIncludeTotalGasto = 0
             contPagadoCobrado = 0
 
-            # --------- Custom ------------
-
-            toddy = datetime.now().date()
-            cantAux = customTable.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct().order_by("tabNombre")
-            cant = len(cantAux)
-            totalParcial = {}
-            acum = 0
-
-            allTypes=factType.objects.all().order_by("nombre")
-            tableAux2 = customTable.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
-            tod = datetime.now().date()
-
-            for nom in cantAux:
-
-                aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=toddy).order_by("tabNombre")
-
-                for a in aux:
-
-                    acum = acum + a.tabTotal
-                
-                totalParcial[nom["tabNombre"]] = acum
-
-                acum = 0
-
-            dic = {"totalParcialOp":totalParcialOp,"tableAuxOp":tableAux2Op,"cantAuxOp":cantAuxOp,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+            dic = {"totalParcialOp":totalParcialOp,"tableAuxOp":tableAux2Op,"cantAuxOp":cantAuxOp,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
             return render(request,"spareapp/contDay.html",dic)
 
-        dic = {"totalParcial":totalParcial,"cantAux":cantAux,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
+        dic = {"contPagadoCobrado":contPagadoCobrado,"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
     return render(request,"spareapp/contEntry.html",dic)
 
@@ -3222,8 +3038,6 @@ def contTypeTarjeta(request,val,val2):
 
     for fac in allFacturesVal:
 
-        # if fac.refCategory.ingreso == True:
-
         montoTotal = montoTotal + fac.monto
         itbmTotal = itbmTotal + float(fac.iva)
         totalTotal = totalTotal + fac.total
@@ -3256,24 +3070,24 @@ def contTypeRange(request,val,val2,val3):
             if s:
                 out = s.translate(str.maketrans('', '', '/'))
                 if val.upper()==out.upper():
-                    allFacturesVal = factura.objects.filter(refType__nombre=s,fechaCreado__date__gte=val2,fechaCreado__date__lte=val3)
+                    allFacturesVal = factura.objects.filter(refType__nombre=s,fechaCreado__date__gte=val2,fechaCreado__date__lte=val3).order_by("fechaCreado","id")
 
     if typeAux.facCobrada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Factura cobrada")
+        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
 
     if typeAux.mercPagada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Mercancia credito pagada")
+        allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
 
     if typeAux.facCobrar == True:
 
-        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__ingreso=True)
+        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
         allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
     if typeAux.mercPagar == True:
 
-        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__egreso=True)
+        allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
         allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
 
@@ -3406,8 +3220,6 @@ def contToCollect(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    # tod = datetime.now()
-
     dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
 
     return render(request,"spareapp/contToCollect.html",dic)
@@ -3439,8 +3251,6 @@ def contToPay(request):
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
-
-    # tod = datetime.now()
 
     dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
 
@@ -3603,32 +3413,7 @@ def contListType(request):
 
             if request.POST.get("facCobrada"+cat):
 
-                # bandAntesCobrada = False
-                # if singleType.facCobrada == False:
-                #     bandAntesCobrada = True
-
                 singleType.facCobrada = True
-
-                # if bandAntesCobrada == True and singleType.facCobrada == True:
-                #     print("Antes era debito y ahora es credito cobrada")
-                #     facturaCambiar = factura.objects.filter(refType=singleType)
-                #     for fac in facturaCambiar:
-                #         auxCat = factCategory.objects.filter(limite=True,ingreso=True)
-                #         facCamb = factura.objects.get(id=fac.id)
-                #         facCamb.refCategory=auxCat[0]
-                #         facCamb.pendiente = True
-                #         creado = facCamb.fechaCreado
-                #         creadoAux = datetime.strptime(str(creado.date()),"%Y-%m-%d")
-                #         deadlineDefault=(creadoAux+timedelta(days=30)).date()
-                #         actualAux=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
-                #         actual = actualAux
-                #         singleType.ingreso = True
-                #         singleType.gasto = False
-                #         facCamb.refType.ingreso = True
-                #         facCamb.refType.gasto = False
-                #         facCamb.fechaTope = actual
-                #         facCamb.save()
-                #     bandAntesCobrada = False
             
             else:
 
@@ -3784,7 +3569,7 @@ def contListType(request):
             for nom in lista:
 
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
 
@@ -3840,7 +3625,7 @@ def contListType(request):
             lista = tableOperacion.objects.all().values("tabNombre").distinct()
             for nom in lista:
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
                     costomInd = tableOperacion()
@@ -3995,65 +3780,13 @@ def contEditCategory(request,val):
 
 def contByDay(request):
 
-    editPrueba = False
-
     toddy = request.POST.get("searchDate")
-
     tod = request.POST.get("searchDate")
-
-    if request.POST.get("adjustButton"):
-
-        editPrueba = True
-
-    if request.POST.get("acceptButton"):
-
-        allTypes = factType.objects.all().order_by("nombre")
-
-    #     for ty in allTypes:
-
-    #         tableAuxTy = mainTable.objects.get(fecha__date=tod,tabTipo=ty)
-
-    #         if tableAuxTy.tabTipo.manual == True:
-
-    #             tableAuxTy.tabTotal = request.POST.get(str(ty).replace(" ", "")+"Total")
-            
-    #         tableAuxTy.save()
-
-    # tableAux = mainTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
     contTotal = 0
     noIncludeTotal = 0
     noIncludeTotalGasto = 0
     contPagadoCobrado = 0
-
-    # for tab in tableAux:
-
-    #     if tab.tabTipo.include == True:
-
-    #         if  tab.tabTipo.facCobrada == False and tab.tabTipo.mercPagada == False:
-
-    #             contTotal = contTotal + tab.tabTotal
-
-    #     else:
-
-    #         if  tab.tabTipo.facCobrada == False and tab.tabTipo.mercPagada == False:
-
-    #             if tab.tabTipo.ingreso == True:
-
-    #                 noIncludeTotal = noIncludeTotal + tab.tabTotal
-
-    #             else:
-
-    #                 noIncludeTotalGasto = noIncludeTotalGasto + tab.tabTotal
-
-    #     if tab.tabTipo.facCobrada == True:
-
-    #         contPagadoCobrado = contPagadoCobrado + tab.tabTotal
-
-    #     if tab.tabTipo.mercPagada == True:
-
-    #         contPagadoCobrado = contPagadoCobrado - tab.tabTotal
-                
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -4061,168 +3794,14 @@ def contByDay(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    # ----------Custom-------------------------
-    tod = request.POST.get("searchDate")
-    cantAuxEmpty = None
-    tableAux2Empty = None
-    cantAux = customTable.objects.filter(fecha__date=tod).values("tabNombre","tabTipo__nombre").distinct()
-    factureAux = factura.objects.filter(fechaCreado__date=tod)
-    allTypesCustom = factType.objects.all()
-    totalParcial = {}
-    acum = 0
-    
-    tableAux2 = customTable.objects.filter(fecha__date=tod)
-
-    if factureAux:
-
-        print("Hay facturas")
-
-        if tableAux2:
-
-            print("Hay tabla")
-            # ------------------------------------------------------------------------
-            # Para las tablas custom
-            toddy = request.POST.get("searchDate")
-            allTypesCustom = factType.objects.all()
-            custAcum = 0
-            for ty in allTypesCustom:
-                facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
-
-                if ty.facCobrar == True:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-                if ty.mercPagar == True:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-                if ty.mercPagada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-                if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-                for fac in facAuxAll:
-                    custAcum = custAcum + fac.total
-                customType = customTable.objects.filter(fecha__date=toddy,tabTipo=ty)
-
-                lista = customTable.objects.all().values("tabNombre").distinct()
-                for nom in lista:
-
-                    prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    if prob:
-
-                        prob2 = customTable.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-
-                        if prob2:
-
-                            costomInd = customTable.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                            costomInd.tabTotal = custAcum
-                            costomInd.save()
-
-                        else:
-
-                            costomInd = customTable()
-                            costomInd.fecha = toddy
-                            costomInd.tabNombre = nom["tabNombre"]
-                            typeAux = factType.objects.get(nombre=ty)
-                            costomInd.tabTipo = typeAux
-                            costomInd.principal = principalAux[0]["principal"]
-                            costomInd.tabTotal = custAcum
-                            costomInd.save()
-                    
-                custAcum = 0
-            # ------------------------------------------------------------------------
-
-        else:
-
-            custAcum = 0
-            for ty in allTypesCustom:
-                facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty)
-
-                if ty.facCobrar == True:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-                if ty.mercPagar == True:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-                if ty.mercPagada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-                if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-                for fac in facAuxAll:
-                    custAcum = custAcum + fac.total
-                lista = customTable.objects.all().values("tabNombre").distinct()
-                for nom in lista:
-                    prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    if prob:
-                        costomInd = customTable()
-                        costomInd.fecha = tod
-                        costomInd.tabNombre = nom["tabNombre"]
-                        typeAux = factType.objects.get(nombre=ty)
-                        costomInd.tabTipo = typeAux
-                        costomInd.principal = principalAux[0]["principal"]
-                        costomInd.tabTotal = custAcum
-                        costomInd.save()
-                
-                custAcum = 0
-
-        for nom in cantAux:
-
-            aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
-
-            for a in aux:
-
-                acum = acum + a.tabTotal
-            
-            totalParcial[nom["tabNombre"]] = acum
-
-            acum = 0
-    else:
-        print("No hay facturas")
-        for ty in allTypesCustom:
-            lista = customTable.objects.all().values("tabNombre").distinct()
-            for nom in lista:
-                prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                if prob:
-                    if customTable.objects.filter(fecha__date=tod,tabNombre=nom["tabNombre"],tabTipo__nombre=ty):
-                        print("Ya existe tabla")
-                        costomInd=customTable.objects.get(fecha__date=tod,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    else:
-                        print("No existe tabla")
-                        costomInd = customTable()
-                    costomInd.fecha = tod
-                    costomInd.tabNombre = nom["tabNombre"]
-                    typeAux = factType.objects.get(nombre=ty)
-                    costomInd.tabTipo = typeAux
-                    costomInd.principal = principalAux[0]["principal"]
-                    costomInd.tabTotal = 0
-                    costomInd.save()
-        cantAuxEmpty = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre").distinct()
-        tableAux2Empty = customTable.objects.all().values("tabNombre","tabTipo__nombre","principal").order_by("tabTipo__nombre").distinct()
-
-    cantAux = customTable.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct().order_by("tabNombre")
-    tableAux2 = customTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
-
     # ----------- Operacion -------------------
     print("ENtra en operacion")
 
-    # tod = datetime.now().date()
-    # tod = toddy
     acum = 0
     cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").distinct()
-    factureAuxOp = factura.objects.filter(fechaCreado__date=toddy)
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
-    
     tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy)
-
-    # if factureAuxOp:
-
-    #     print("Hay facturas")
 
     if tableAuxOp:
 
@@ -4253,9 +3832,8 @@ def contByDay(request):
             for nom in lista:
 
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
-                # print(principalAux[0]["principal"])
                 if prob:
 
                     prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
@@ -4289,7 +3867,6 @@ def contByDay(request):
     else:
 
         print("No hay tabla")
-        print(toddy)
 
         custAcum = 0
         for ty in allTypesCustom:
@@ -4313,7 +3890,7 @@ def contByDay(request):
             lista = tableOperacion.objects.all().values("tabNombre").distinct()
             for nom in lista:
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
                     costomInd = tableOperacion()
@@ -4335,28 +3912,18 @@ def contByDay(request):
 
     for nom in cantAuxOp:
 
-        # print("Tabla")
-        # print(nom["tabNombre"])
-
         aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=toddy)
 
         for a in aux:
 
-            # print(a.tabTipo.nombre)
-            # print(a.tabTotal)
-
             if a.suma == True:
-                # print("Suma")
 
                 acum = acum + a.tabTotal
 
             else:
-                # print("Resta")
 
                 acum = acum - a.tabTotal
 
-            # print(acum)
-        
         totalParcialOp[nom["tabNombre"]] = acum
 
         acum = 0
@@ -4367,7 +3934,7 @@ def contByDay(request):
     cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct()
     tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
 
-    dic = {"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"editPrueba":editPrueba,"contTotal":contTotal,"tod":tod,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"contTotal":contTotal,"tod":tod,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/contDay.html",dic)
 
@@ -4381,7 +3948,6 @@ def contByDayCustom(request):
         print("Entra en el contbyDay custom del POST")
 
         tod = request.POST.get("searchDate")
-
         tods = request.POST.get("fecha")
 
         if tods:
@@ -4389,7 +3955,6 @@ def contByDayCustom(request):
             tod = tods
 
         cantAux = customTable.objects.filter(fecha__date=tod).values("tabNombre").distinct()
-        factureAux = factura.objects.filter(fechaCreado__date=tod)
         allTypesCustom = factType.objects.all()
         totalParcial = {}
         totalParcial2 = {}
@@ -4398,161 +3963,15 @@ def contByDayCustom(request):
         restaLista = ""
         sumaRestaTotal = 0
         borrarAux = ""
-        
-        tableAux2 = customTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
-        if factureAux:
-
-            print("Hay facturas")
-
-            if tableAux2:
-
-                print("Hay tabla")
-                toddy = request.POST.get("searchDate")
-                if tods:
-
-                    toddy = tods
-                allTypesCustom = factType.objects.all()
-                custAcum = 0
-                for ty in allTypesCustom:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
-
-                    if ty.facCobrar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-                    if ty.mercPagar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.mercPagada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-                    for fac in facAuxAll:
-                        custAcum = custAcum + fac.total
-                    customType = customTable.objects.filter(fecha__date=toddy,tabTipo=ty)
-
-                    lista = customTable.objects.all().values("tabNombre").distinct()
-                    for nom in lista:
-
-                        prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                        if prob:
-
-                            prob2 = customTable.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-
-                            if prob2:
-
-                                costomInd = customTable.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                                costomInd.tabTotal = custAcum
-                                costomInd.save()
-
-                            else:
-
-                                costomInd = customTable()
-                                costomInd.fecha = toddy
-                                costomInd.tabNombre = nom["tabNombre"]
-                                typeAux = factType.objects.get(nombre=ty)
-                                costomInd.tabTipo = typeAux
-                                costomInd.principal = principalAux[0]["principal"]
-                                costomInd.tabTotal = custAcum
-                                costomInd.save()
-                        
-                    custAcum = 0
-            else:
-
-                print("No hay tabla")
-
-                custAcum = 0
-                for ty in allTypesCustom:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty)
-
-                    if ty.facCobrar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-
-                    if ty.mercPagar == True:
-                        facAuxAll = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.mercPagada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
-
-                    if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
-
-                    for fac in facAuxAll:
-                        custAcum = custAcum + fac.total
-                    lista = customTable.objects.all().values("tabNombre").distinct()
-                    for nom in lista:
-                        prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                        if prob:
-                            costomInd = customTable()
-                            costomInd.fecha = tod
-                            costomInd.tabNombre = nom["tabNombre"]
-                            typeAux = factType.objects.get(nombre=ty)
-                            costomInd.tabTipo = typeAux
-                            costomInd.principal = principalAux[0]["principal"]
-                            costomInd.tabTotal = custAcum
-                            costomInd.save()
-                    
-                    custAcum = 0
-
-            for nom in cantAux:
-
-                aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
-
-                for a in aux:
-
-                    acum = acum + a.tabTotal
-                
-                totalParcial[nom["tabNombre"]] = acum
-
-                acum = 0
-
-        else:
-            print("No hay facturas")
-            for ty in allTypesCustom:
-                lista = customTable.objects.all().values("tabNombre").distinct()
-                for nom in lista:
-                    prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    if prob:
-                        if customTable.objects.filter(fecha__date=tod,tabNombre=nom["tabNombre"],tabTipo__nombre=ty):
-                            print("Ya existe tabla")
-                            costomInd=customTable.objects.get(fecha__date=tod,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        else:
-                            print("No existe tabla")
-                            costomInd = customTable()
-                        costomInd.fecha = tod
-                        costomInd.tabNombre = nom["tabNombre"]
-                        typeAux = factType.objects.get(nombre=ty)
-                        costomInd.tabTipo = typeAux
-                        costomInd.principal = principalAux[0]["principal"]
-                        costomInd.tabTotal = 0
-                        costomInd.save()
-            cantAuxEmpty = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre").distinct()
-            tableAux2Empty = customTable.objects.all().values("tabNombre","tabTipo__nombre","principal").order_by("tabTipo__nombre").distinct()
-
-        cantAux = customTable.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct()
-        tableAux = customTable.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
-        
         allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
         allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
         
         facturesToCollect = len(allFacturesToPay)
         facturesToPay = len(allFacturesToCollect)
 
-        borrarAux = customAux.objects.all()
-
-        # Operacion ----------------------------------------------------------
-
-        print(tods)
-        print(tod)
-
         # ----------- Operacion -------------------
 
-        # tod = datetime.now().date()
         acum = 0
         cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").distinct()
         factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
@@ -4569,8 +3988,6 @@ def contByDayCustom(request):
             if tableAuxOp:
 
                 print("Hay tabla")
-                # ------------------------------------------------------------------------
-                # Para las tablas custom
                 toddy = datetime.now().date()
                 allTypesCustom = factType.objects.all()
                 custAcum = 0
@@ -4597,9 +4014,8 @@ def contByDayCustom(request):
                     for nom in lista:
 
                         prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                         sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
-                        # print(principalAux[0]["principal"])
                         if prob:
 
                             prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
@@ -4628,7 +4044,6 @@ def contByDayCustom(request):
                                 costomInd.save()
                         
                     custAcum = 0
-                # ------------------------------------------------------------------------
 
             else:
 
@@ -4656,7 +4071,7 @@ def contByDayCustom(request):
                     lista = tableOperacion.objects.all().values("tabNombre").distinct()
                     for nom in lista:
                         prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                         sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
@@ -4702,7 +4117,7 @@ def contByDayCustom(request):
         todDate = datetime.strptime(tod, '%Y-%m-%d')
         tod = todDate.date()
 
-    dic = {"totalParcialOp":totalParcialOp,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"borrarAux":borrarAux,"totalParcial2":totalParcial2,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"tod":tod,"tableAux":tableAux,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"totalParcialOp":totalParcialOp,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"borrarAux":borrarAux,"totalParcial2":totalParcial2,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"tod":tod,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/customTables.html",dic)
 
@@ -4732,11 +4147,6 @@ def contByRangeCustom(request):
             dateFrom = tod1
             dateTo = tod2
 
-        allTypes = factType.objects.all()
-
-        # Inicializo todas las facturas por el rango deseado
-        allFacturesRange = ""
-
         if dateFrom and dateTo:
             allFacturesRange = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
 
@@ -4758,74 +4168,74 @@ def contByRangeCustom(request):
         facturesToPay = len(allFacturesToCollect)
 
         # ------Custom--------------------------------------
-        tableAuxCustom = customAux.objects.all().order_by("tabTipo__nombre")
-        for all in tableAuxCustom:
+        # tableAuxCustom = customAux.objects.all().order_by("tabTipo__nombre")
+        # for all in tableAuxCustom:
 
-            all.delete()
-        cantAux = customTable.objects.all().values("tabNombre").distinct()
-        allTypesCustom = factType.objects.all()
-        totalParcial = {}
-        acum = 0
+        #     all.delete()
+        # cantAux = customTable.objects.all().values("tabNombre").distinct()
+        # allTypesCustom = factType.objects.all()
+        # totalParcial = {}
+        # acum = 0
         
-        factureAux = False
-        if dateFrom and dateTo:
-            factureAux = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
+        # factureAux = False
+        # if dateFrom and dateTo:
+        #     factureAux = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
 
         custAcum = 0
-        for ty in allTypesCustom:
-            facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType=ty).exclude(pendiente=False,refType__facCobrar=True)
-            if ty.facCobrar == True:
-                facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+        # for ty in allTypesCustom:
+        #     facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType=ty).exclude(pendiente=False,refType__facCobrar=True)
+        #     if ty.facCobrar == True:
+        #         facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
 
-            if ty.mercPagar == True:
-                facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
+        #     if ty.mercPagar == True:
+        #         facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
 
-            if ty.mercPagada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+        #     if ty.mercPagada == True:
+        #         facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
-            if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+        #     if ty.facCobrada == True:
+        #         facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
-            for fac in facAuxAll:
-                custAcum = custAcum + fac.total
-            lista = customTable.objects.all().values("tabNombre").distinct()
-            for nom in lista:
-                prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                if prob:
-                    costomInd = customAux()
-                    # costomInd.fecha = tod
-                    costomInd.tabNombre = nom["tabNombre"]
-                    typeAux = factType.objects.get(nombre=ty)
-                    costomInd.tabTipo = typeAux
-                    costomInd.principal = principalAux[0]["principal"]
-                    costomInd.tabTotal = custAcum
-                    costomInd.save()
+        #     for fac in facAuxAll:
+        #         custAcum = custAcum + fac.total
+        #     lista = customTable.objects.all().values("tabNombre").distinct()
+        #     for nom in lista:
+        #         prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+        #         principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+        #         if prob:
+        #             costomInd = customAux()
+        #             # costomInd.fecha = tod
+        #             costomInd.tabNombre = nom["tabNombre"]
+        #             typeAux = factType.objects.get(nombre=ty)
+        #             costomInd.tabTipo = typeAux
+        #             costomInd.principal = principalAux[0]["principal"]
+        #             costomInd.tabTotal = custAcum
+        #             costomInd.save()
             
-            custAcum = 0
+        #     custAcum = 0
 
-        for nom in cantAux:
+        # for nom in cantAux:
 
-            aux1 = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("tabNombre","tabTipo__nombre").distinct()
-            # print(aux1)
-            aux2 = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo).exclude(pendiente=False,refType__facCobrar=True)
+        #     aux1 = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("tabNombre","tabTipo__nombre").distinct()
+        #     # print(aux1)
+        #     aux2 = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo).exclude(pendiente=False,refType__facCobrar=True)
 
-            for a in aux1:
+        #     for a in aux1:
 
-                # print(a["tabNombre"])
+        #         # print(a["tabNombre"])
 
-                for b in aux2:
+        #         for b in aux2:
 
-                    if a["tabTipo__nombre"] == b.refType.nombre:
+        #             if a["tabTipo__nombre"] == b.refType.nombre:
                         
-                        acum = acum + b.total
+        #                 acum = acum + b.total
                     
-                    totalParcial[nom["tabNombre"]] = acum
+        #             totalParcial[nom["tabNombre"]] = acum
 
-            acum = 0
+        #     acum = 0
 
-        cantAux = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
-        tableAux = customAux.objects.all().order_by("tabTipo__nombre")
+        # cantAux = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
+        # tableAux = customAux.objects.all().order_by("tabTipo__nombre")
 
         # BUSQUEDA 2
 
@@ -4863,7 +4273,7 @@ def contByRangeCustom(request):
             for nom in lista:
 
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
 
@@ -4926,7 +4336,7 @@ def contByRangeCustom(request):
         todTo = datetime.strptime(dateTo, '%Y-%m-%d')
         dateTo = todTo.date()
 
-        dic = {"tableAuxOp":tableAuxOp,"tableAuxOpAux":tableAuxOpAux,"totalParcialOp":totalParcialOp,"cantAuxOp":cantAuxOp,"cantAuxEmpty":cantAuxEmpty,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"totalParcial":totalParcial,"cantAux":cantAux,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
+        dic = {"tableAuxOp":tableAuxOp,"tableAuxOpAux":tableAuxOpAux,"totalParcialOp":totalParcialOp,"cantAuxOp":cantAuxOp,"cantAuxEmpty":cantAuxEmpty,"sumaRestaTotal":sumaRestaTotal,"restaLista":restaLista,"sumaLista":sumaLista,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"tod":tod,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"contTotal":contTotal,"tableAux":tableAux,"tod":tod}
 
     return render(request,"spareapp/customTables.html",dic)
 
@@ -5105,7 +4515,7 @@ def contByRange(request):
             lista = customTable.objects.all().values("tabNombre").distinct()
             for nom in lista:
                 prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 if prob:
                     costomInd = customAux()
                     # costomInd.fecha = tod
@@ -5176,7 +4586,7 @@ def contByRange(request):
             for nom in lista:
 
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
 
@@ -5482,7 +4892,7 @@ def contCollectFac(request,val):
                 for nom in lista:
 
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -5533,7 +4943,7 @@ def contCollectFac(request,val):
                 lista = customTable.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     if prob:
                         costomInd = customTable()
                         costomInd.fecha = tod
@@ -5607,8 +5017,8 @@ def contCollectFac(request,val):
                 for nom in lista:
 
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -5666,8 +5076,8 @@ def contCollectFac(request,val):
                 lista = tableOperacion.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = tod
@@ -5943,7 +5353,7 @@ def contPayFac(request,val):
                 for nom in lista:
 
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -5994,7 +5404,7 @@ def contPayFac(request,val):
                 lista = customTable.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     if prob:
                         costomInd = customTable()
                         costomInd.fecha = tod
@@ -6068,8 +5478,8 @@ def contPayFac(request,val):
                 for nom in lista:
 
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -6127,8 +5537,8 @@ def contPayFac(request,val):
                 lista = tableOperacion.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = tod
@@ -7917,7 +7327,7 @@ def deleteFac(request,val):
                 for nom in lista:
 
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -7969,7 +7379,7 @@ def deleteFac(request,val):
                 lista = customTable.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     if prob:
                         costomInd = customTable()
                         costomInd.fecha = tod
@@ -8031,7 +7441,7 @@ def deleteFac(request,val):
             for nom in lista:
 
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
 
@@ -8087,7 +7497,7 @@ def deleteFac(request,val):
             lista = tableOperacion.objects.all().values("tabNombre").distinct()
             for nom in lista:
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                 sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                 if prob:
                     costomInd = tableOperacion()
@@ -8268,8 +7678,8 @@ def customTables(request,val):
                 for nom in lista:
 
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -8327,8 +7737,8 @@ def customTables(request,val):
                 lista = tableOperacion.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("suma").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = toddy
@@ -8794,7 +8204,7 @@ def customTablesRange(request,val,val2):
         lista = customTable.objects.all().values("tabNombre").distinct()
         for nom in lista:
             prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-            principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+            principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
             if prob:
                 costomInd = customAux()
                 # costomInd.fecha = tod
@@ -8863,7 +8273,7 @@ def customTablesRange(request,val,val2):
         for nom in lista:
 
             prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
             sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
             if prob:
 
@@ -9041,7 +8451,7 @@ def contDayBack(request,val):
                 for nom in lista:
 
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     # print(principalAux[0]["principal"])
                     if prob:
 
@@ -9092,7 +8502,7 @@ def contDayBack(request,val):
                 lista = customTable.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     if prob:
                         costomInd = customTable()
                         costomInd.fecha = tod
@@ -9163,7 +8573,7 @@ def contDayBack(request,val):
                 for nom in lista:
 
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     if prob:
 
@@ -9221,7 +8631,7 @@ def contDayBack(request,val):
                 lista = tableOperacion.objects.all().values("tabNombre").distinct()
                 for nom in lista:
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                     sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
@@ -9381,7 +8791,7 @@ def contDayBackRange(request,val,val2):
         lista = customTable.objects.all().values("tabNombre").distinct()
         for nom in lista:
             prob = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-            principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+            principalAux = customTable.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
             if prob:
                 costomInd = customAux()
                 # costomInd.fecha = tod
@@ -9449,7 +8859,7 @@ def contDayBackRange(request,val,val2):
         for nom in lista:
 
             prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
             sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
             if prob:
 
@@ -10415,7 +9825,7 @@ def editeFactAccount(request,val,val1,val2):
                     for nom in lista:
 
                         prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                         sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                         if prob:
 
@@ -10470,7 +9880,7 @@ def editeFactAccount(request,val,val1,val2):
                     lista = tableOperacion.objects.all().values("tabNombre").distinct()
                     for nom in lista:
                         prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("principal").distinct()
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
                         sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
