@@ -2628,34 +2628,34 @@ def contDay(request):
 
     # --------- Custom ------------
 
-    tableAux2Empty = None
-    toddy = datetime.now().date()
-    cantAuxEmpty = False
-    if factura.objects.filter(fechaCreado=toddy):
-        pass
-    else:
-        cantAuxEmpty = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre").distinct()
-    cantAux = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
-    cant = len(cantAux)
-    totalParcial = {}
-    acum = 0
+    # tableAux2Empty = None
+    # toddy = datetime.now().date()
+    # cantAuxEmpty = False
+    # if factura.objects.filter(fechaCreado=toddy):
+    #     pass
+    # else:
+    #     cantAuxEmpty = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre").distinct()
+    # cantAux = customTable.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
+    # cant = len(cantAux)
+    # totalParcial = {}
+    # acum = 0
 
-    allTypes=factType.objects.all().order_by("nombre")
-    tableAux2 = customTable.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
-    tableAux2Empty = customTable.objects.all().values("tabNombre","tabTipo__nombre","principal").order_by("tabTipo__nombre").distinct()
-    tod = datetime.now().date()
+    # allTypes=factType.objects.all().order_by("nombre")
+    # tableAux2 = customTable.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
+    # tableAux2Empty = customTable.objects.all().values("tabNombre","tabTipo__nombre","principal").order_by("tabTipo__nombre").distinct()
+    # tod = datetime.now().date()
 
-    for nom in cantAux:
+    # for nom in cantAux:
 
-        aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=toddy).order_by("tabNombre")
+    #     aux = customTable.objects.filter(tabNombre=nom["tabNombre"],fecha__date=toddy).order_by("tabNombre")
 
-        for a in aux:
+    #     for a in aux:
 
-            acum = acum + a.tabTotal
+    #         acum = acum + a.tabTotal
         
-        totalParcial[nom["tabNombre"]] = acum
+    #     totalParcial[nom["tabNombre"]] = acum
 
-        acum = 0
+    #     acum = 0
 
     # Operacion --------------------------------------------
 
@@ -2686,8 +2686,8 @@ def contDay(request):
 
     tableAuxOpEmpty = tableOperacion.objects.all().values("tabNombre","tabTipo__nombre").distinct().order_by("tabTipo__nombre")
 
-    # dic = {"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
-    dic = {"tableAuxOpEmpty":tableAuxOpEmpty,"tableAux2Empty":tableAux2Empty,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    dic = {"tableAuxOpEmpty":tableAuxOpEmpty,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+    # dic = {"tableAuxOpEmpty":tableAuxOpEmpty,"tableAux2Empty":tableAux2Empty,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"totalParcialOp":totalParcialOp,"tableAux2Empty":tableAux2Empty,"cantAuxEmpty":cantAuxEmpty,"totalParcial":totalParcial,"cantAux":cantAux,"cant":cant,"tableAux2":tableAux2,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"editPrueba":editPrueba,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
     return render(request,"spareapp/contDay.html",dic)
 
@@ -6367,7 +6367,7 @@ def accountStat(request):
 
         for facT in factureName:
 
-            if facT.refType.ingreso == True:
+            if facT.refType.ingreso == True and facT.refType.facCobrar == False or facT.refType.mercPagar == True:
 
                 acumTotal = acumTotal + facT.total
             
@@ -7239,7 +7239,7 @@ def contIndividual(request,val):
 
     for facT in factureName:
 
-        if facT.refType.ingreso == True:
+        if facT.refType.ingreso == True and facT.refType.facCobrar == False or facT.refType.mercPagar == True:
 
             acumTotal = acumTotal + facT.total
         
@@ -7392,7 +7392,7 @@ def contIndividual(request,val):
 
         for facT in factureName:
 
-            if facT.refType.ingreso == True:
+            if facT.refType.ingreso == True and facT.refType.facCobrar == False or facT.refType.mercPagar == True:
 
                 acumTotal = acumTotal + facT.total
             
@@ -9716,7 +9716,7 @@ def searchTable(request):
 
     for facT in factureName:
 
-        if facT.refType.ingreso == True:
+        if facT.refType.ingreso == True and facT.refType.facCobrar == False or facT.refType.mercPagar == True:
 
             acumTotal = acumTotal + facT.total
         
