@@ -5243,7 +5243,7 @@ def contByRange(request):
             # acum = 0
             
 
-        cantAuxOp = tableOperacionAux.objects.all().values("tabNombre","principal").distinct()
+        cantAuxOp = tableOperacionAux.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAuxOp = tableOperacionAux.objects.all().order_by("tabTipo__nombre")
 
         todFrom = datetime.strptime(dateFrom, '%Y-%m-%d')
