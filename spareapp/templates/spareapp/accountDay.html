@@ -73,7 +73,7 @@
             <td class="p-2"><a {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
             <td class="p-2"><a {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contIndividual' fact.refPersona.id %}">{{fact.refPersona.nombre}}</a></td>
             <td {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">{{fact.num}}</td>
-            <td auxIngreso="{{fact.refType.ingreso}}" {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{fact.total|floatformat:2}}</td>
+            <td auxPagar="{{fact.refType.mercPagar}}" auxCobrar="{{fact.refType.facCobrar}}" auxIngreso="{{fact.refType.ingreso}}" {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{fact.total|floatformat:2}}</td>
             <td {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
@@ -131,16 +131,13 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         $(this).find("td").each(function(){
             if ($(this).index() == $("#facTotal").index()) {
                 if ($(this).is(":visible")){
-                    if($(this).attr("auxIngreso")=="True"){
-
-                    }
                     sumar = $(this).text()
                     aux = sumar.split("$")[1].replace(',', '.')
                 }
                 else{
                     aux = 0
                 }
-                if($(this).attr("auxIngreso")=="True"){
+                if($(this).attr("auxIngreso")=="True" && $(this).attr("auxCobrar")=="False" || $(this).attr("auxPagar")=="True"){
                     total = total + parseFloat(aux)
                 }else{
                     total = total - parseFloat(aux)

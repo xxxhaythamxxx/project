@@ -7811,30 +7811,25 @@ def accountDay(request):
             factureName = factura.objects.filter(fechaCreado=dayAux).order_by("refType__nombre","refCategory__nombre","total")
 
     cont = 0
+    cont2 = 0
     balance = {}
     balanceTotal = 0
     
     for fac in factureName:
 
-        # print(fac)
-        # print(fac.total)
-        # print(str(fac.total).replace(",","."))
-        # print(float(str(fac.total).replace(",",".")))
-
-        if fac.refCategory.ingreso:
+        if (fac.refType.ingreso == True and fac.refType.facCobrar == False) or fac.refType.mercPagar == True:
 
             cont = cont + float(str(fac.total).replace(",","."))
+            cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
 
         else:
 
             cont = cont - float(str(fac.total).replace(",","."))
+            cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
         
-        # print(cont)
-
         balance[fac.id] = cont
 
-    balanceTotal = cont
-    print(balanceTotal)
+    balanceTotal = cont2
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
