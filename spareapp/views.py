@@ -7741,17 +7741,25 @@ def accountDay(request):
     
     for fac in factureName:
 
+        # print(fac)
+        # print(fac.total)
+        # print(str(fac.total).replace(",","."))
+        # print(float(str(fac.total).replace(",",".")))
+
         if fac.refCategory.ingreso:
 
-            cont = cont + fac.total
+            cont = cont + float(str(fac.total).replace(",","."))
 
         else:
 
-            cont = cont - fac.total
+            cont = cont - float(str(fac.total).replace(",","."))
+        
+        # print(cont)
 
         balance[fac.id] = cont
 
     balanceTotal = cont
+    print(balanceTotal)
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
