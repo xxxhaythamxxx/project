@@ -3742,9 +3742,9 @@ def contListType(request):
                     facCamb.fechaCobrado = None
                     facCamb.save()
                     
-                    # facCambCob = factura.objects.filter(num=facCamb.num,refPersona=facCamb.refPersona,pendiente=False).exclude(fechaCobrado=None)
-                    # for e in facCambCob:
-                    #     e.delete()
+                    facCambCob = factura.objects.filter(num=facCamb.num,refPersona=facCamb.refPersona,pendiente=False).exclude(fechaCobrado=None)
+                    for e in facCambCob:
+                        e.delete()
 
             singleType.save()
 
@@ -6665,16 +6665,16 @@ def editeFact(request,val,val2):
             factAux.pendiente = False
 
         contMonto = request.POST.get("contMonto")
-        factAux.monto = contMonto.replace(',','.')
+        factAux.monto = str(contMonto).replace(',','.')
 
         if request.POST.get("contItbm") == "":
             contIva = float(0)
         else:
             contIva = request.POST.get("contItbm")
-        factAux.iva = contIva.replace(',','.')
+        factAux.iva = str(contIva).replace(',','.')
 
         contTotal = request.POST.get("contTotal")
-        factAux.total = contTotal.replace(',','.')
+        factAux.total = str(contTotal).replace(',','.')
 
         factAux.note = request.POST.get("contNota")
 
@@ -9629,6 +9629,18 @@ def searchTable(request):
                 dayFrom = factureName[0].fechaCreado.date()
                 dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
+    acumTotal = 0
+
+    for facT in factureName:
+
+        if facT.refType.ingreso == True:
+
+            acumTotal = acumTotal + facT.total
+        
+        else:
+
+            acumTotal = acumTotal - facT.total
+
     balanceTotal = cont
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
@@ -9636,7 +9648,7 @@ def searchTable(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"busqueda":busqueda,"personaVarios":personaVarios,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"acumTotal":acumTotal,"busqueda":busqueda,"personaVarios":personaVarios,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -10137,16 +10149,16 @@ def editeFactAccount(request,val,val1,val2):
             factAux.pendiente = False
 
         contMonto = request.POST.get("contMonto")
-        factAux.monto = contMonto.replace(',','.')
+        factAux.monto = str(contMonto).replace(',','.')
 
         if request.POST.get("contItbm") == "":
             contIva = float(0)
         else:
             contIva = request.POST.get("contItbm")
-        factAux.iva = contIva.replace(',','.')
+        factAux.iva = str(contIva).replace(',','.')
 
         contTotal = request.POST.get("contTotal")
-        factAux.total = contTotal.replace(',','.')
+        factAux.total = str(contTotal).replace(',','.')
 
         factAux.note = request.POST.get("contNota")
 

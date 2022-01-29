@@ -218,7 +218,7 @@ function Export() {
     }
   </script> -->
 
-<!-- <script>
+<script>
 // boton para exportar a Excel -------------------------------------------------------------------------------------
 document.getElementById("downloadexcela").addEventListener("click",function(){
     $("#check").hide();
@@ -228,10 +228,9 @@ document.getElementById("downloadexcela").addEventListener("click",function(){
     $("#check").show();
     $("table td:nth-child("+($("#check").index() + 1)+")").show();
 })
-</script> -->
+</script>
 
 <script>
-
 
     $("#cod").on("keyup",function(){                                // Cuando se teclea algo
         var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
@@ -240,6 +239,7 @@ document.getElementById("downloadexcela").addEventListener("click",function(){
         })
 
         var cont2 = 0
+        var totalTotal = 0
         balanc = []
 
         $("#myTable tr:not(.tfoot)").each(function(){
@@ -247,6 +247,7 @@ document.getElementById("downloadexcela").addEventListener("click",function(){
                 $(this).find("td:not(.exclude)").each(function(){
                     if ($(this).index() == $("#thBalance").index()) {
                         if($(this).attr("auxIngreso")=="True"){
+                            totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
                             cont2 = cont2
                             if($(this).attr("auxCobrar")=="True"){
                                 cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal")))
@@ -256,6 +257,7 @@ document.getElementById("downloadexcela").addEventListener("click",function(){
                             }
                         }
                         else{
+                            totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
                             cont2 = cont2
                             if($(this).attr("auxPagar")=="True"){
                                 cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal")))
@@ -274,7 +276,7 @@ document.getElementById("downloadexcela").addEventListener("click",function(){
 
         $(".tfoot").hide()
         $(".erase").remove()
-        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+cont2.toFixed(2)+"</th></tr></head></table>")
+        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
 
         total = 0
         
@@ -463,13 +465,15 @@ $("#entrySpending").change(function(){
     }
 
     var cont2 = 0
-        balanc = []
+    balanc = []
+    var totalTotal = 0
 
         $("#myTable tr:not(.tfoot)").each(function(){
             if ($(this).is(":visible")){
                 $(this).find("td:not(.exclude)").each(function(){
                     if ($(this).index() == $("#thBalance").index()) {
                         if($(this).attr("auxIngreso")=="True"){
+                            totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
                             cont2 = cont2
                             if($(this).attr("auxCobrar")=="True"){
                                 cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal")))
@@ -479,6 +483,7 @@ $("#entrySpending").change(function(){
                             }
                         }
                         else{
+                            totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
                             cont2 = cont2
                             if($(this).attr("auxPagar")=="True"){
                                 cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal")))
@@ -497,7 +502,7 @@ $("#entrySpending").change(function(){
 
         $(".tfoot").hide()
         $(".erase").remove()
-        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+cont2.toFixed(2)+"</th></tr></head></table>")
+        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
 
         total = 0
         
