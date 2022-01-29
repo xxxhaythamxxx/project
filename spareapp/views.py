@@ -7190,6 +7190,7 @@ def contTotalDay(request):
 def contIndividual(request,val):
 
     tod = datetime.now().date()
+    acumTotal = 0
 
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
@@ -7234,6 +7235,18 @@ def contIndividual(request,val):
     dayFrom = factureName[0].fechaCreado.date()
     dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
+    acumTotal = 0
+
+    for facT in factureName:
+
+        if facT.refType.ingreso == True:
+
+            acumTotal = acumTotal + facT.total
+        
+        else:
+
+            acumTotal = acumTotal - facT.total
+
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
@@ -7252,6 +7265,8 @@ def contIndividual(request,val):
                 if fac.refType.facCobrar==True:
 
                     cont = cont + fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc + fac.total
                 
                 if fac.refCategory.nombre=="Factura cobrada":
 
@@ -7264,22 +7279,27 @@ def contIndividual(request,val):
                 if fac.refType.mercPagar==True:
 
                     cont = cont - fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc - fac.total
                 
                 if fac.refCategory.nombre=="Mercancia credito pagada":
 
                     cont = cont + fac.total
 
-            if fac.pendiente == True and  fac.refType.gasto == True:
+            if fac.pendiente == True and fac.refType.gasto == True:
                 balance[fac.id] = [cont,fac.total*(-1)]
             else:
                 balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
+        
+
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
 
         if request.POST.get("search") == "balance":
 
+            print("Entra en balance")
 
             for key in balance:
 
@@ -7312,6 +7332,8 @@ def contIndividual(request,val):
 
         if request.POST.get("search") == "range":
 
+            print("Entra en range")
+
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
 
@@ -7324,6 +7346,59 @@ def contIndividual(request,val):
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
+    
+        cont = 0
+
+        if factureName:
+
+            for fac in factureName:
+
+                if fac.refCategory.ingreso:
+
+                    cont = cont
+
+                    if fac.refType.facCobrar==True:
+
+                        cont = cont + fac.total
+                        if fac.pendiente == True:
+                            balanceFacMerc = balanceFacMerc + fac.total
+                    
+                    if fac.refCategory.nombre=="Factura cobrada":
+
+                        cont = cont - fac.total
+                
+                else:
+
+                    cont = cont
+
+                    if fac.refType.mercPagar==True:
+
+                        cont = cont - fac.total
+                        if fac.pendiente == True:
+                            balanceFacMerc = balanceFacMerc - fac.total
+                    
+                    if fac.refCategory.nombre=="Mercancia credito pagada":
+
+                        cont = cont + fac.total
+
+                if fac.pendiente == True and fac.refType.gasto == True:
+                    balance[fac.id] = [cont,fac.total*(-1)]
+                else:
+                    balance[fac.id] = [cont,fac.total]
+
+        balanceTotal = cont
+
+        acumTotal = 0
+
+        for facT in factureName:
+
+            if facT.refType.ingreso == True:
+
+                acumTotal = acumTotal + facT.total
+            
+            else:
+
+                acumTotal = acumTotal - facT.total
 
     balanceTotal = cont
 
@@ -7332,7 +7407,7 @@ def contIndividual(request,val):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"acumTotal":acumTotal,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
