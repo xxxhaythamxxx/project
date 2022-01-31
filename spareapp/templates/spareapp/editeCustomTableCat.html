@@ -1,0 +1,47 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Category {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="d-flex justify-content-center">
+    <div class="container  mt-5 col-lg-4">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="tabNombre">Nombre de la tabla</label>
+                <input value="{{customNombre}}" class="form-control" id="tabNombre" type="text" name="tabNombre" required>
+            </div>
+            <div class="mb-3">
+                <input id="tabPrincipal" name="tabPrincipal" type="checkbox" value={{customAux.0.principal}} {% if customAux.0.principal == True %} checked {% else %} '' {% endif %}>
+                <label for="tabPrincipal">Principal</label>
+            </div>
+
+            <div style="display: inline-block;" class="">
+                <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="Tsuma" data-toggle="dropdown" href="#">Sumar</a>
+                <ul style="font-size: small;" id="TsumaList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="Tsuma">            
+                {% for n in allTypes %}
+                    <li style="margin:auto;" class="mx-2"><input value="{{n.nombre}}" name="TsumaVal" class="mx-2" type="checkbox" {% for aux in customAux %} {% if n == aux.tabCat and aux.suma == True %} checked {% else %} '' {% endif %} {% endfor %}><label class="ml-1">{{n.nombre}}</label></li>
+                {% endfor %}
+                </ul>
+                <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="Tresta" data-toggle="dropdown" href="#">Restar</a>
+                    <ul style="font-size: small;" id="TrestaList" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="Tresta">            
+                    {% for n in allTypes %}
+                        <li style="margin:auto;" class="mx-2"><input value="{{n.nombre}}" name="TrestaVal" class="mx-2" type="checkbox" {% for aux in customAux %} {% if n == aux.tabCat and aux.resta == True %} checked {% else %} '' {% endif %} {% endfor %}><label class="ml-1">{{n.nombre}}</label></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-2">
+            <button style="font-size: small;" class="btn btn-primary" type="submit">Actualizar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

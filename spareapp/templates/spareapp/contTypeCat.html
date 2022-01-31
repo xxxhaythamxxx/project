@@ -1,0 +1,364 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Type {% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+{% include "spareapp/contSuperior.html" %}
+
+<input id="returnPath" value="{{request.path}}" style="display: none;" type="text">
+
+<div class="container">
+    <div class="col-lg-5">
+        <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
+    </div>
+</div>
+
+<div class="container mb-2">
+    <div>
+        <div class="d-flex justify-content-center" style="font-weight: bold;" class="">Facturas</div>
+    </div>
+</div>
+
+</div>
+<div class="container">
+<table id="" style="font-size: small;" class="table-bordered invoice">
+    <thead id="">
+        <tr style="background-color: #F5F087;" class="excludeFooter">
+            <th class="p-2">Categoria: {{val}} | {{typeDate}}</th>
+        </tr>
+    </thead>
+</table>
+</div>
+<div class="container mb-3">
+    <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable mb-4">
+        <thead>
+            <tr style="background-color: #7C8FEC">
+                <th class="p-2"># Factura</th>
+                <th class="p-2">Fecha</th>
+                <th class="p-2">Nombre</th>
+                <th class="p-2">Categoría</th>
+                <th class="p-2">Nota</th>
+                <th class="p-2">Monto</th>
+                <th class="p-2">ITBM</th>
+                <th class="p-2">Total</th>
+                <th class="p-2 exclude">Option</th>
+            </tr>
+        </thead>
+
+        <tbody id="myTable">
+            {% for fac in allFacturesVal %}
+            <tr>
+                <td class="p-2">{{fac.num}}</td>
+                <td class="p-2">{{fac.fechaCreado|date:'Y-m-d'}}</td>
+                <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
+                <td class="p-2">{{fac.refCategory|upper}}</td>
+                <td class="p-2">{{fac.note}}</td>
+                <td id="auxMonto" class="p-2">${{fac.monto|floatformat:2}}</td>
+                <td id="auxItbm" class="p-2">${{fac.iva|floatformat:2}}</td>
+                <td id="auxTotal" class="p-2">${{fac.total|floatformat:2}}</td>
+                <td class="p-2 exclude"><input id="pathId" value="{{fac.id}}" style="display: none;" type="text"><input id="returnPath" value="{{request.path}}" style="display: none;" type="text"><a id="editButton" style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id request.get_full_path|cut:'/' %}">Editar</a>
+                    {% if fac.pendiente == True %}
+                    {% if fac.refCategory.ingreso == True %}
+
+                    <a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{fac.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{fac.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a>
+                    <div tabindex="-1" id="modalCobrar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{fac.id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalCobrar{{fac.id}}Label">Tipo de pago</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body"> 
+                                    <form id="formCust" method="POST" action="{% url 'contCollectFac' fac.id %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <div>¿Seguro que desea cobrar la factura número {{fac.num}}?</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="contNota">Nota</label>
+                                            <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Cobrar</button>
+                                    </form>
+                                    
+                                </div>   
+                            </div>
+                        </div>
+                    </div> 
+                    {% else %}
+
+                    <a data-bs-toggle="modal" type="button" data-bs-target="#modalPagar{{fac.id}}" style="font-size: small;color: aliceblue;" id="modalPagar{{fac.id}}Id" class="btn btn-danger" href="javascript:void(0);">Pagar</a>
+                    <div tabindex="-1" id="modalPagar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{fac.id}}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPagar{{fac.id}}Label">Tipo de pago</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body"> 
+                                    <form id="formCust" method="POST" action="{% url 'contPayFac' fac.id %}">
+                                        {% csrf_token %}
+                                        <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
+                                            <option value="" selected>Seleccione tipo de pago</option>
+                                            {% for type in allTypes %}
+                                            <option value="{{type.id}}">{{type.nombre}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="contNota">Nota</label>
+                                            <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                    
+                                </div>   
+                            </div>
+                        </div>
+                    </div> 
+                    {% endif %}
+                    {% endif %}
+            </tr>
+            {% endfor %}
+            
+            
+            
+        </tbody>
+        <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
+            <tr style="background-color: #E77C7C;">
+                <th class="p-2">Total</th>
+                <th class="p-2"></th>
+                <th class="p-2"></th>
+                <th class="p-2"></th>
+                <th class="p-2"></th>
+                <th class="p-2">$ {{montoTotal|floatformat:2}}</th>
+                <th class="p-2">$ {{itbmTotal|floatformat:2}}</th>
+                <th class="p-2">$ {{totalTotal|floatformat:2}}</th>
+                <th class="p-2 exclude"></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
+
+<script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+
+<script>
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    var sumarMonto = 0
+    var auxMonto = 0
+    var sumarItbm = 0
+    var auxItbm = 0
+    var sumarTotal = 0
+    var auxTotal = 0
+    var totalMonto = 0
+    var totalItbm = 0
+    var totalTotal = 0
+
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $(".invoice tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+
+    $("tfoot").hide()
+
+    $("#invoice tbody tr").each(function(){
+            $(this).find("td").each(function(){
+                if ($(this).index() == $("#auxMonto").index()) {
+                    if ($(this).is(":visible")){
+                        sumarMonto = $(this).text()
+                        auxMonto = sumarMonto.split("$")[1]
+                    }
+                    else{
+                        auxMonto = 0
+                    }
+                    
+                }
+                if ($(this).index() == $("#auxItbm").index()) {
+                    if ($(this).is(":visible")){
+                        sumarItbm = $(this).text()
+                        auxItbm = sumarItbm.split("$")[1]
+                    }
+                    else{
+                        auxItbm = 0
+                    }
+                    
+                }
+                if ($(this).index() == $("#auxTotal").index()) {
+                    if ($(this).is(":visible")){
+                        sumarTotal = $(this).text()
+                        auxTotal = sumarTotal.split("$")[1]
+                    }
+                    else{
+                        auxTotal = 0
+                    }
+                    
+                }
+            })
+            
+            var auxItbmFull = auxItbm
+            String(auxItbmFull)
+            if (String(auxItbmFull).indexOf(",")>-1){
+                auxItbmFull.replace(',', '.')
+                auxItbm = auxItbmFull.replace(',', '.')
+            }
+            totalItbm = totalItbm + parseFloat(auxItbm)
+
+            var auxMontoFull = auxMonto
+            String(auxMontoFull)
+            if (String(auxMontoFull).indexOf(",")>-1){
+                auxMontoFull.replace(',', '.')
+                auxMonto = auxMontoFull.replace(',', '.')
+            }
+            totalMonto = totalMonto + parseFloat(auxMonto)
+
+            var auxTotalFull = auxTotal
+            String(auxTotalFull)
+            if (String(auxTotalFull).indexOf(",")>-1){
+                auxTotalFull.replace(',', '.')
+                auxTotal = auxTotalFull.replace(',', '.')
+            }
+            totalTotal = totalTotal + parseFloat(auxTotal)
+        })
+
+        $(".erase").remove()
+
+        $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
+
+        if(value==""){
+            $(".erase").remove()
+            $("tfoot").show()
+        }
+})
+    
+</script>
+
+<script>
+
+function generatePDF2(){
+
+var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
+var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+
+if($("#cod").val()){
+    var tableFooterCells = [...document.querySelectorAll('.erase th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+}else{
+    var tableFooterCells = [...document.querySelectorAll('tfoot th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+}
+
+var rows = []
+var fila = []
+var footerFooter = []
+var footerAux = []
+var cont = 0
+
+$("#myTable tr:not(.tfoot").each(function(){
+    if ($(this).is(":visible")){
+        $(this).find("td:not(.exclude)").each(function(){
+            fila.push($(this).text())
+            cont = cont + 1
+        })
+        if ((cont==tableHeaderText.length)){
+            rows.push(fila)
+            fila = []
+            cont = 0
+        }
+    }
+})
+
+var aux = ""
+var separar = aux.split("$")
+
+footerFooter.push(tableFooterCells)
+
+var docDefinition = {
+  content: [
+    {
+      layout: 'lightHorizontalLines', // optional
+      style: 'tableExample',
+      table: {
+        headerRows: 2,
+        body: [
+        [{text: tableHeaderTextSup[0].text, colSpan: 8},"","","","","","",""],
+        tableHeaderText,
+        ...rows,
+        ...footerFooter,
+        // tableFooterCells,
+        ],
+      },
+      layout: {
+
+          fillColor: function(rowIndex) {
+            if (rowIndex === 0) {
+              return '#F5F087';
+            }
+            if (rowIndex === 1) {
+              return '#7C8FEC';
+            }
+            if (rowIndex === (rows.length + 2)) {
+                return '#E77C7C';
+            }
+            return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+          }
+        },
+    },
+  ],
+    styles: {
+        tableExample: {
+            // margin: [0, 20, 0, 80],
+            margin: [0, 1, 0, 1],
+            fontSize: 8,
+        },
+        tableHeaderSup: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableHeader: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+        tableData: {
+            margin: 1,
+            // fontSize: 10,
+        },
+        fuente: {
+            margin: 1,
+            fontSize: 8,
+        },
+        tableFooter: {
+            margin: 1,
+            color: 'black',
+            fontSize: 8,
+        },
+    },
+};
+
+pdfMake.createPdf(docDefinition).download();
+
+}
+
+$("#invoice").dragtable()
+
+</script>
+
+{% endblock %}

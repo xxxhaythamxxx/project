@@ -69,8 +69,8 @@ urlpatterns = [
     path("contListType",views.contListType,name="contListType"),
     path("contDeleteCategory/<str:val>",views.contDeleteCategory,name="contDeleteCategory"),
     path("contDeleteType/<str:val>",views.contDeleteType,name="contDeleteType"),
-    path("contEditType/<str:val>",views.contEditType,name="contEditType"),
-    path("contEditCategory/<str:val>",views.contEditCategory,name="contEditCategory"),
+    # path("contEditType/<str:val>",views.contEditType,name="contEditType"),
+    # path("contEditCategory/<str:val>",views.contEditCategory,name="contEditCategory"),
     path("contByDay",views.contByDay,name="contByDay"),
     path("contByDayCustom",views.contByDayCustom,name="contByDayCustom"),
     path("contByRange",views.contByRange,name="contByRange"),
@@ -116,8 +116,16 @@ urlpatterns = [
     path("contListCustomTablesOp",views.contListCustomTablesOp,name="contListCustomTablesOp"),
     re_path("editeCustomTableOp/(?P<val>.*)$",views.editeCustomTableOp,name="editeCustomTableOp"),
     re_path("deleteCustomOp/(?P<val>.*)$",views.deleteCustomOp,name="deleteCustomOp"),
+    re_path("deleteCustomOpCat/(?P<val>.*)$",views.deleteCustomOpCat,name="deleteCustomOpCat"),
     path("editeFactAccount/<str:val>/<str:val1>/<str:val2>",views.editeFactAccount,name="editeFactAccount"),
-
+    path("contAddOperacionCat",views.contAddOperacionCat,name="contAddOperacionCat"),
+    path("contListCustomTablesCat",views.contListCustomTablesCat,name="contListCustomTablesCat"),
+    re_path("editeCustomTableCat/(?P<val>.*)$",views.editeCustomTableCat,name="editeCustomTableCat"),
+    # re_path("deleteCustomCat/(?P<val>.*)$",views.deleteCustomCat,name="deleteCustomCat"),
+    path("contTypeCat/<str:val>?<str:val2>",views.contTypeCat,name="contTypeCat"),
+    path("contTypeRangeCat/<str:val>?<str:val2>?<str:val3>",views.contTypeRangeCat,name="contTypeRangeCat"),
+    # path("contTypeRangeTarjeta/<str:val>?<str:val2>?<str:val3>",views.contTypeRangeTarjeta,name="contTypeRangeTarjeta"),
+    # path("contTypeTarjeta/<str:val>?<str:val2>",views.contTypeTarjeta,name="contTypeTarjeta"),
 
     # path('getCar/$', views.getCar,name="getCar")
 ]

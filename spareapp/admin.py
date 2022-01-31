@@ -167,6 +167,7 @@ admin.site.register(mainTable)
 admin.site.register(mainTableAux)
 admin.site.register(customTable)
 admin.site.register(tableOperacion)
+admin.site.register(tableOperacionCat)
 # admin.site.register(spareCart,spareCartAdmin)
 
 admin.site.site_header = "Auto Repuestos Interamericana administrator"
