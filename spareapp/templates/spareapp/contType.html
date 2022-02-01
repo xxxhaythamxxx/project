@@ -129,7 +129,7 @@
             
         </tbody>
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
-            <tr style="background-color: #E77C7C;">
+            <tr class="tfoot" style="background-color: #E77C7C;">
                 <th class="p-2">Total</th>
                 <th class="p-2"></th>
                 <th class="p-2"></th>
@@ -161,10 +161,12 @@
     // Se debe agregar CSS th { cursor: pointer; }
     $('th').not("#check").click(function(){
         var table = $(this).parents('table').eq(0)
-        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+        var rows = table.find('tr:gt(0)').not(".tfoot").toArray().sort(comparer($(this).index()))
+        var rowsAux = table.find("tfoot tr:gt(0)").toArray().sort(comparer($(this).index()))
         this.asc = !this.asc
         if (!this.asc){rows = rows.reverse()}
         for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+        table.append(rowsAux[0])
     
     })
     function comparer(index) {

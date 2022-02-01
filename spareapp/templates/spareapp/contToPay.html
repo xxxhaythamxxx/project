@@ -45,7 +45,7 @@
 
         <tbody id="myTable">
             {% for facture in allFacturesPay %}
-            <tr>
+            <tr class="bodyM">
                 <td class="p-2">{{facture.num}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' facture.refPersona.id %}">{{facture.refPersona}}</a></td>
                 <td class="p-2">{{facture.refCategory}}</td>
@@ -127,8 +127,8 @@
     // Se debe agregar CSS th { cursor: pointer; }
     $('th').not("#check").click(function(){
         var table = $(this).parents('table').eq(0)
-        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-        var rowsAux = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+        var rows = table.find('tr:gt(0)').not(".tfoot").toArray().sort(comparer($(this).index()))
+        var rowsAux = table.find("tr:not('.bodyM'):gt(0)").toArray().sort(comparer($(this).index()))
         this.asc = !this.asc
         if (!this.asc){rows = rows.reverse()}
         for (var i = 0; i < rows.length; i++){table.append(rows[i])}

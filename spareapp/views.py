@@ -2776,7 +2776,7 @@ def contEntry(request):
 
         tod = datetime.now().date()
         acum = 0
-        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").distinct()
+        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").order_by("tabNombre").distinct()
         factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
         allTypesCustom = factType.objects.all()
         totalParcialOp = {}
@@ -2912,7 +2912,7 @@ def contEntry(request):
             acum = 0
 
         cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-        tableAux2Op = tableOperacion.objects.filter(fecha__date=tod)
+        tableAux2Op = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre")
         tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre","tabTipo__nombre")
 
         # ----------- Categoria -------------------
@@ -3927,7 +3927,7 @@ def contByDay(request):
     print("ENtra en operacion")
 
     acum = 0
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").order_by("tabNombre").distinct()
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
     tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy)
@@ -4056,7 +4056,7 @@ def contByDay(request):
 
         acum = 0
 
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").order_by("tabNombre").distinct()
     tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
 
     # ----------- Categoria -------------------
@@ -4207,7 +4207,7 @@ def contByDayCustom(request):
         # ----------- Operacion -------------------
 
         acum = 0
-        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").distinct()
+        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").order_by("tabNombre").distinct()
         factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
         allTypesCustom = factType.objects.all()
         totalParcialOp = {}
@@ -4343,7 +4343,7 @@ def contByDayCustom(request):
 
             acum = 0
 
-        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").distinct()
+        cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
         # ----------- Categoria -------------------
@@ -4554,7 +4554,7 @@ def contByRangeCustom(request):
                 
             custAcum = 0
             
-        cantAuxOp = tableOperacion.objects.all().values("tabNombre").distinct()
+        cantAuxOp = tableOperacion.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
         realAcum = 0
 
@@ -4629,7 +4629,7 @@ def contByRangeCustom(request):
                 
             custAcum = 0
            
-        cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").distinct()
+        cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
         realAcum = 0
 
@@ -4746,7 +4746,7 @@ def contByRange(request):
                 
             custAcum = 0
            
-        cantAuxOp = tableOperacion.objects.all().values("tabNombre").distinct()
+        cantAuxOp = tableOperacion.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
         realAcum = 0
 
@@ -4899,7 +4899,7 @@ def contCollectFac(request,val):
 
     tod = datetime.now().date()
     acum = 0
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").order_by("tabNombre").distinct()
     factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
@@ -5037,7 +5037,7 @@ def contCollectFac(request,val):
         acum = 0
 
     cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
+    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre")
 
     # ----------- Categoria -------------------
 
@@ -5209,7 +5209,7 @@ def contPayFac(request,val):
 
     tod = datetime.now().date()
     acum = 0
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").order_by("tabNombre").distinct()
     factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
@@ -5558,10 +5558,10 @@ def accountStat(request):
 
                     cont = cont + fac.total
 
-            if fac.pendiente == True and fac.refType.gasto == True:
-                balance[fac.id] = [cont,fac.total*(-1)]
-            else:
-                balance[fac.id] = [cont,fac.total]
+            # if fac.pendiente == True and fac.refType.gasto == True:
+            #     balance[fac.id] = [cont,fac.total*(-1)]
+            # else:
+            balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
@@ -5651,10 +5651,10 @@ def accountStat(request):
 
                         cont = cont + fac.total
 
-                if fac.pendiente == True and fac.refType.gasto == True:
-                    balance[fac.id] = [cont,fac.total*(-1)]
-                else:
-                    balance[fac.id] = [cont,fac.total]
+                # if fac.pendiente == True and fac.refType.gasto == True:
+                #     balance[fac.id] = [cont,fac.total*(-1)]
+                # else:
+                balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
@@ -6191,6 +6191,7 @@ def contIndividual(request,val):
 
     tod = datetime.now().date()
     acumTotal = 0
+    balanceFacMerc = 0
 
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
@@ -6225,10 +6226,10 @@ def contIndividual(request,val):
 
                 cont = cont + fac.total
 
-        if fac.pendiente == True and  fac.refType.gasto == True:
-            balance[fac.id] = [cont,fac.total*(-1)]
-        else:
-            balance[fac.id] = [cont,fac.total]
+        # if fac.pendiente == True and  fac.refType.gasto == True:
+        #     balance[fac.id] = [cont,fac.total*(-1)]
+        # else:
+        balance[fac.id] = [cont,fac.total]
 
     balanceTotal = cont
 
@@ -6248,6 +6249,8 @@ def contIndividual(request,val):
             acumTotal = acumTotal - abs(facT.total)
 
     if request.method == "POST":
+
+        balanceFacMerc = 0
 
         auxNombre = request.POST.get("contNombre")
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
@@ -6286,10 +6289,10 @@ def contIndividual(request,val):
 
                     cont = cont + fac.total
 
-            if fac.pendiente == True and fac.refType.gasto == True:
-                balance[fac.id] = [cont,fac.total*(-1)]
-            else:
-                balance[fac.id] = [cont,fac.total]
+            # if fac.pendiente == True and fac.refType.gasto == True:
+            #     balance[fac.id] = [cont,fac.total*(-1)]
+            # else:
+            balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
@@ -6381,10 +6384,10 @@ def contIndividual(request,val):
 
                         cont = cont + fac.total
 
-                if fac.pendiente == True and fac.refType.gasto == True:
-                    balance[fac.id] = [cont,fac.total*(-1)]
-                else:
-                    balance[fac.id] = [cont,fac.total]
+                # if fac.pendiente == True and fac.refType.gasto == True:
+                #     balance[fac.id] = [cont,fac.total*(-1)]
+                # else:
+                balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
@@ -7134,7 +7137,7 @@ def customTables(request,val):
     tod = val
 
     acum = 0
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").order_by("tabNombre").distinct()
     factureAuxOp = factura.objects.filter(fechaCreado__date=toddy)
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
@@ -7271,7 +7274,7 @@ def customTables(request,val):
 
         acum = 0
 
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").order_by("tabNombre").distinct()
     tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
 
     # ----------- Categoria -------------------
@@ -7648,7 +7651,7 @@ def customTablesRange(request,val,val2):
             
         custAcum = 0
         
-    cantAuxOp = tableOperacion.objects.all().values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
     realAcum = 0
 
@@ -7723,7 +7726,7 @@ def customTablesRange(request,val,val2):
             
         custAcum = 0
         
-    cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").distinct()
+    cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
     realAcum = 0
 
@@ -7834,7 +7837,7 @@ def contDayBack(request,val):
     # ----------- Operacion -------------------
     toddy = val
     acum = 0
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre").order_by("tabNombre").distinct()
     factureAuxOp = factura.objects.filter(fechaCreado__date=toddy)
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
@@ -7968,7 +7971,7 @@ def contDayBack(request,val):
 
         acum = 0
 
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").distinct()
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").order_by("tabNombre").distinct()
     tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy).order_by("tabTipo__nombre")
 
     # ----------- Categoria -------------------
@@ -8167,7 +8170,7 @@ def contDayBackRange(request,val,val2):
             
         custAcum = 0
         
-    cantAuxOp = tableOperacion.objects.all().values("tabNombre").distinct()
+    cantAuxOp = tableOperacion.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
     realAcum = 0
 
@@ -8195,8 +8198,9 @@ def contDayBackRange(request,val,val2):
 
         realAcum = 0
 
-    cantAuxOp = tableOperacionAux.objects.all().values("tabNombre","principal").distinct()
+    cantAuxOp = tableOperacionAux.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
     tableAuxOp = tableOperacionAux.objects.all().order_by("tabTipo__nombre")
+    print(tableAuxOp)
 
     # ----------- Categoria -------------------
 
@@ -8242,7 +8246,7 @@ def contDayBackRange(request,val,val2):
             
         custAcum = 0
         
-    cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").distinct()
+    cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").order_by("tabNombre").distinct()
 
     realAcum = 0
 
@@ -8330,10 +8334,10 @@ def searchTable(request):
 
                     cont = cont + fac.total
 
-            if fac.pendiente == True and  fac.refType.gasto == True:
-                balance[fac.id] = [cont,fac.total*(-1)]
-            else:
-                balance[fac.id] = [cont,fac.total]
+            # if fac.pendiente == True and  fac.refType.gasto == True:
+            #     balance[fac.id] = [cont,fac.total*(-1)]
+            # else:
+            balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
 
@@ -8433,10 +8437,10 @@ def searchTable(request):
 
                             cont = cont + fac.total
 
-                    if fac.pendiente == True and  fac.refType.gasto == True:
-                        balance[fac.id] = [cont,fac.total*(-1)]
-                    else:
-                        balance[fac.id] = [cont,fac.total]
+                    # if fac.pendiente == True and  fac.refType.gasto == True:
+                    #     balance[fac.id] = [cont,fac.total*(-1)]
+                    # else:
+                    balance[fac.id] = [cont,fac.total]
 
                 balanceTotal = cont
 
@@ -9027,10 +9031,10 @@ def editeFactAccount(request,val,val1,val2):
 
                             cont = cont + fac.total
 
-                    if fac.pendiente == True and  fac.refType.gasto == True:
-                        balance[fac.id] = [cont,fac.total*(-1)]
-                    else:
-                        balance[fac.id] = [cont,fac.total]
+                    # if fac.pendiente == True and  fac.refType.gasto == True:
+                    #     balance[fac.id] = [cont,fac.total*(-1)]
+                    # else:
+                    balance[fac.id] = [cont,fac.total]
 
                 balanceTotal = cont
 
