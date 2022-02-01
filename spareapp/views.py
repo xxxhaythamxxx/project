@@ -3289,8 +3289,6 @@ def contTypeRange(request,val,val2,val3):
 
 def contTypeRangeCat(request,val,val2,val3):
 
-    print(val)
-
     allTypes = factCategory.objects.all().order_by("nombre")
     tod = datetime.now().date()
     allFacturesVal = factura.objects.filter(refCategory__id=val,fechaCreado__date__gte=val2,fechaCreado__date__lte=val3).order_by("fechaCreado","id")
@@ -3326,6 +3324,7 @@ def contTypeRangeCat(request,val,val2,val3):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
+    val = factCategory.objects.get(id=val)
     dateFrom = val2
     dateTo = val3
 
