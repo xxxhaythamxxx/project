@@ -121,6 +121,30 @@
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 
 <script>
+    // Arreglar por click a cabecera ----------------------------------------------------------------------------------
+    // Se debe agregar CSS th { cursor: pointer; }
+    $('#invoice th').not("#check").click(function(){
+        var table = $(this).parents('table').eq(0)
+        var rows = table.find('tr:gt(0)').not(".tfoot").toArray().sort(comparer($(this).index()))
+        var rowsAux = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+        this.asc = !this.asc
+        if (!this.asc){rows = rows.reverse()}
+        for (var i = 0; i < rows.length; i++){
+            table.append(rows[i])
+        }
+        table.append(rowsAux[0])
+    
+    })
+    function comparer(index) {
+        return function(a, b) {
+            var valA = getCellValue(a, index), valB = getCellValue(b, index)
+            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+        }
+    }
+    function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+</script>
+
+<script>
 
     $("#cod").on("keyup",function(){                                // Cuando se teclea algo
         var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
