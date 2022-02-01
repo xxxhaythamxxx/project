@@ -165,7 +165,7 @@
 </table>
 <table class="table-bordered invoice mb-2 tfoot" style="font-size: small;" id="hInf">
     <thead>
-        <tr {% if acumTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
+        <tr {% if acumTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} class="">
             <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{acumTotal|floatformat:2}}</th>
             <!-- <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{balanceTotal|floatformat:2}}</th> -->
         </tr>
@@ -297,13 +297,13 @@ document.getElementById("downloadexcela").addEventListener("click",function(){
         $(".tfoot").hide()
         $(".erase").remove()
         if(totalTotal == 0){
-            $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #4e4e4e;color:white' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
+            $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
         }else{
             if(totalTotal < 0){
-                $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #c90a0a;color:white' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
+                $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #c90a0a' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
 
             }else{
-                $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #6a57d1;color:white' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
+                $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #1029b9' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
             }
         }
 
