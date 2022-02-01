@@ -3222,7 +3222,8 @@ def contTypeRange(request,val,val2,val3):
 
     allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
     tod = datetime.now().date()
-    typeAux = factType.objects.get(nombre=val)
+    typeAux = factType.objects.get(id=val)
+    
 
     montoTotal = 0
     itbmTotal = 0
@@ -3230,12 +3231,7 @@ def contTypeRange(request,val,val2,val3):
 
     todos = factType.objects.all()
 
-    for t in todos:
-            s=t.nombre
-            if s:
-                out = s.translate(str.maketrans('', '', '/'))
-                if val.upper()==out.upper():
-                    allFacturesVal = factura.objects.filter(refType__nombre=s,fechaCreado__date__gte=val2,fechaCreado__date__lte=val3).order_by("fechaCreado","id")
+    allFacturesVal = factura.objects.filter(refType=val,fechaCreado__date__gte=val2,fechaCreado__date__lte=val3).order_by("fechaCreado","id")
 
     if typeAux.facCobrada == True:
 
@@ -3283,6 +3279,7 @@ def contTypeRange(request,val,val2,val3):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
+    val = typeAux
     dateFrom = val2
     dateTo = val3
 
@@ -8744,8 +8741,23 @@ def editeCustomTableOp(request,val):
         bandRevisar = False
         sumas=request.POST.getlist("TsumaVal")
         restas=request.POST.getlist("TrestaVal")
+        customAux = tableOperacion.objects.filter(tabNombre=val)
 
         lista = tableOperacion.objects.values("tabTipo__nombre").filter(tabNombre=val).distinct()
+
+        for a in customAux:
+
+            b = tableOperacion.objects.get(id=a.id)
+
+            if request.POST.get("tabPrincipal"):
+
+                b.principal = True
+            
+            else:
+
+                b.principal = False
+
+            b.save()
 
         if lista:
 
@@ -9390,6 +9402,21 @@ def editeCustomTableCat(request,val):
         bandRevisar = False
         sumas=request.POST.getlist("TsumaVal")
         restas=request.POST.getlist("TrestaVal")
+        customAux = tableOperacionCat.objects.filter(tabNombre=val)
+
+        for a in customAux:
+
+            b = tableOperacionCat.objects.get(id=a.id)
+
+            if request.POST.get("tabPrincipal"):
+
+                b.principal = True
+            
+            else:
+
+                b.principal = False
+
+            b.save()
 
         lista = tableOperacionCat.objects.values("tabCat__nombre").filter(tabNombre=val).distinct()
 
