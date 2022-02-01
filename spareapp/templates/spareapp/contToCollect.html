@@ -91,7 +91,7 @@
             
             {% endfor %}
             
-            <tr class="tfoot" style="background-color: #E77C7C;">
+            <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %}>
                 <td class="p-2">Total</td>
                 <td class="p-2"></td>
                 <td class="p-2"></td>
@@ -208,7 +208,15 @@
         })
 
         $(".erase").remove()
-        $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+        if (totalTotal == 0){
+            $("#myTable").append("<tr class='tfoot erase' style='background-color: #4e4e4e;color:white'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+        }else{
+            if (totalTotal < 0){
+                $("#myTable").append("<tr class='tfoot erase' style='background-color: #c90a0a;color:white'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+            }else{
+                $("#myTable").append("<tr class='tfoot erase' style='background-color: #6a57d1;color:white'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+            }
+        }
 
         if(value==""){
             $(".erase").remove()

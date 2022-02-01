@@ -34,7 +34,7 @@
             {% endfor %}
             {% for key,value in totalParcialOp.items %}
                 {% if key == tab.tabNombre %}
-                <tr style="background-color: #E77C7C;" class="">
+                <tr {% if value == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
                     <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
                 </tr>
                 {% endif %}
@@ -70,7 +70,7 @@
                 {% endfor %}
                 {% for key,value in totalParcialOpCat.items %}
                     {% if key == tab.tabNombre %}
-                    <tr style="background-color: #E77C7C;" class="">
+                    <tr {% if value == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
                         <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
                     </tr>
                     {% endif %}
@@ -84,7 +84,7 @@
                 </tr>
                 {% endif %}
                 {% endfor %}
-                <tr style="background-color: #E77C7C;" class="">
+                <tr style="background-color: #4e4e4e;" class="">
                     <td colspan="2" class="p-2">TOTAL: $0.00</td>
                 </tr>
             {% endif %}
@@ -120,7 +120,7 @@
             {% endfor %}
             {% for key,value in totalParcialOp.items %}
                 {% if key == tab.tabNombre %}
-                <tr style="background-color: #E77C7C;" class="">
+                <tr {% if value == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
                     <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
                 </tr>
                 {% endif %}
@@ -156,7 +156,7 @@
                 {% endfor %}
                 {% for key,value in totalParcialOpCat.items %}
                     {% if key == tab.tabNombre %}
-                    <tr style="background-color: #E77C7C;" class="">
+                    <tr {% if value == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
                         <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
                     </tr>
                     {% endif %}
@@ -170,7 +170,7 @@
                 </tr>
                 {% endif %}
                 {% endfor %}
-                <tr style="background-color: #E77C7C;" class="">
+                <tr style="background-color: #4e4e4e;" class="">
                     <td colspan="2" class="p-2">TOTAL: $0.00</td>
                 </tr>
             {% endif %}

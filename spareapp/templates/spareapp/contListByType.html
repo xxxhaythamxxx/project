@@ -88,14 +88,14 @@
     </tbody>
     {% if factureName.0.refType.visa == False and factureName.0.refType.clave == False %}
     <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
-        <tr style="background-color: #E77C7C;" class="">
+        <tr {% if balanceTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
             <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
         </tr>
     </tfoot>
     {% else %}
         {% if factureName.0.refType.visa == True or factureName.0.refType.clave == True %}
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
-            <tr style="background-color: #E77C7C;" class="">
+            <tr {% if balanceTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
                 <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}  |  ITBM ${{itbmTotal|floatformat:2}}  |  INTERÉS ${{interesTotal|floatformat:2}}  |  RETENCIÓN ${{retencionTotal|floatformat:2}}</td>
             </tr>
         </tfoot>

@@ -84,7 +84,7 @@
 </table>
 <table class="table-bordered invoice mb-2 tfoot" style="font-size: small;" id="hInf">
     <thead>
-        <tr style="background-color: #E77C7C;" class="">
+        <tr {% if balanceTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
             <th colspan=8 id="balanceTotal" class="p-2">TOTAL ${{balanceTotal|floatformat:2}}</th>
         </tr>
     </thead>
@@ -169,7 +169,15 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
     
     $(".tfoot").hide()
     $(".erase").remove()
-    $("#invoice2").append("<table class='table-bordered invoice tfoot erase' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+total.toFixed(2)+"</th></tr></head></table>")
+    if(totalTotal == 0){
+        $("#invoice2").append("<table class='table-bordered invoice tfoot erase' style='font-size: small;' id='hInf'><head><tr style='background-color: #4e4e4e;color:white' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+total.toFixed(2)+"</th></tr></head></table>")
+    }else{
+        if(totalTotal < 0){
+            $("#invoice2").append("<table class='table-bordered invoice tfoot erase' style='font-size: small;' id='hInf'><head><tr style='background-color: #c90a0a;color:white' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+total.toFixed(2)+"</th></tr></head></table>")
+        }else{
+            $("#invoice2").append("<table class='table-bordered invoice tfoot erase' style='font-size: small;' id='hInf'><head><tr style='background-color: #6a57d1;color:white' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+total.toFixed(2)+"</th></tr></head></table>")
+        }
+    }
 
     total = 0
     
