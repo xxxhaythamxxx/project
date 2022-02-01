@@ -6,6 +6,8 @@
 
 {% include "spareapp/contSuperior.html" %}
 
+<div id="invoice2">
+
 {% for tab in cantAuxOp %}
 {% if tab.principal == True %}
 <div class="container">
@@ -86,5 +88,41 @@
 
 {% endif %}
 {% endfor %}
+
+</div>
+
+<script>
+    function generatePDF2(){
+        
+        $('#invoice2 tr:first th').each(function() {
+            var value = $(this).css("position", "static");
+          });
+        const element = document.getElementById("invoice2");
+        $("#check").hide();
+        $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+        
+        var opt = {
+            margin:       0.5,
+            filename:     'report.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            enableLinks:  false,
+            pagebreak:    {mode: "avoid-all"},
+            jsPDF:        { unit: 'in', format: 'letter' }
+          };
+        html2pdf()
+        .set(opt)
+        .from(element)
+        .save();
+        html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+            $('#invoice2 tr:first th').each(function() {
+                var value = $(this).css("position", "sticky");
+                $("#check").show();
+                $("table td:nth-child("+($("#check").index() + 1)+")").show();
+                $("input:checkbox[name=check]").prop("checked",true);
+              });
+          });
+    }
+</script>
 
 {% endblock %}
