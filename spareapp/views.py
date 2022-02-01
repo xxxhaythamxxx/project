@@ -1,4 +1,5 @@
 from typing import List
+from django.forms import NullBooleanField
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse, HttpResponseRedirect
 from .models import *
 from django.views import View
@@ -2703,6 +2704,8 @@ def contEntry(request):
     noIncludeTotalGasto = 0
     contPagadoCobrado = 0
     acum = 0
+    banderaRepetido = False
+    banderaNumero = ""
 
     dic = {"actualDay":actualDay,"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
 
@@ -2723,6 +2726,13 @@ def contEntry(request):
         factAux.refPersona = nomAux
 
         if request.POST.get("contNumFac"):
+
+            auxF = factura.objects.filter(num=request.POST.get("contNumFac"))
+            if auxF:
+                banderaRepetido = True
+                banderaNumero = request.POST.get("contNumFac")
+                # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
             contNumFac = request.POST.get("contNumFac")
             factAux.num = contNumFac
 
@@ -3039,11 +3049,11 @@ def contEntry(request):
             noIncludeTotalGasto = 0
             contPagadoCobrado = 0
 
-            dic = {"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxCat":tableAuxCat,"totalParcialOpCat":totalParcialOpCat,"totalParcialOp":totalParcialOp,"tableAuxOp":tableAux2Op,"cantAuxOp":cantAuxOp,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
+            dic = {"banderaNumero":banderaNumero,"banderaRepetido":banderaRepetido,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxCat":tableAuxCat,"totalParcialOpCat":totalParcialOpCat,"totalParcialOp":totalParcialOp,"tableAuxOp":tableAux2Op,"cantAuxOp":cantAuxOp,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotalGasto":noIncludeTotalGasto,"noIncludeTotal":noIncludeTotal,"allFactures":allFactures,"contTotal":contTotal,"tod":tod,"allTypes":allTypes,"facturesToCollect":facturesToCollect,"facturesToPay":facturesToPay}
 
             return render(request,"spareapp/contDay.html",dic)
 
-        dic = {"contPagadoCobrado":contPagadoCobrado,"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
+        dic = {"banderaNumero":banderaNumero,"banderaRepetido":banderaRepetido,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
     return render(request,"spareapp/contEntry.html",dic)
 

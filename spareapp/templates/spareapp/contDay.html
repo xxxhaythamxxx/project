@@ -6,6 +6,12 @@
 
 {% include "spareapp/contSuperior.html" %}
 
+{% if banderaRepetido == True %}
+<div class="container invoice mb-2">
+    <div class="p-2" style="background-color: #E77C7C;font-size: small;">EL NUMERO DE FACTURA {{banderaNumero}} FUE REGISTRADO COMO REPETIDO</div>
+</div>
+{% endif %}
+
 <div id="invoice2">
 
 {% for tab in cantAuxOp %}
