@@ -2913,7 +2913,7 @@ def contEntry(request):
 
         cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAux2Op = tableOperacion.objects.filter(fecha__date=tod)
-        tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
+        tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre","tabTipo__nombre")
 
         # ----------- Categoria -------------------
 
@@ -3030,8 +3030,8 @@ def contEntry(request):
             acum = 0
 
         cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-        tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
-        tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod)
+        tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabNombre","tabCat__nombre")
+        tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabNombre","tabCat__nombre")
 
         if request.POST.get("entryOption")=="otro":
 
@@ -3497,10 +3497,6 @@ def contAddType(request):
                 else:
                     factTypeAux.ingreso = False
                     factTypeAux.gasto = True
-                if request.POST.get("typeInclude") == "on":
-                    factTypeAux.include = True
-                else:
-                    factTypeAux.include = False
                 factTypeAux.save()
 
     return render(request,"spareapp/contAddType.html")
@@ -4180,7 +4176,7 @@ def contByDay(request):
         acum = 0
 
     cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
+    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
 
     todDate = datetime.strptime(tod, '%Y-%m-%d')
     tod = todDate.date()
@@ -4467,7 +4463,7 @@ def contByDayCustom(request):
             acum = 0
 
         cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-        tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
+        tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
 
         todDate = datetime.strptime(tod, '%Y-%m-%d')
         tod = todDate.date()
@@ -5158,8 +5154,8 @@ def contCollectFac(request,val):
         acum = 0
 
     cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
-    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod)
+    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
+    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -5351,7 +5347,7 @@ def contPayFac(request,val):
         acum = 0
 
     cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
+    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
 
     # ----------- Categoria -------------------
 
@@ -5468,8 +5464,8 @@ def contPayFac(request,val):
         acum = 0
 
     cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
-    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod)
+    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
+    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -7393,8 +7389,8 @@ def customTables(request,val):
         acum = 0
 
     cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
-    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod)
+    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
+    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
 
     allTypes=factType.objects.all()
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
@@ -8092,7 +8088,7 @@ def contDayBack(request,val):
         acum = 0
 
     cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod)
+    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
 
     todDate = datetime.strptime(tod, '%Y-%m-%d')
     tod = todDate.date()
