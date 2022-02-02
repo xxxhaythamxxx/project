@@ -58,12 +58,12 @@
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory|upper}}</td>
                 <td class="p-2">{{fac.note}}</td>
-                <td id="auxMonto" class="p-2">${{fac.monto|floatformat:2}}</td>
-                <td id="auxItbm" class="p-2">${{fac.iva|floatformat:2}}</td>
-                <td id="auxTotal" class="p-2">${{fac.total|floatformat:2}}</td>
-                <td id="auxInteres" class="p-2">${{value.1|floatformat:2}}</td>
-                <td id="auxRetencion" class="p-2">${{value.2|floatformat:2}}</td>
-                <td id="auxNeto" class="p-2">${{value.3|floatformat:2}}</td>
+                <td id="auxMonto" class="p-2">${{fac.monto|stringformat:".2f"}}</td>
+                <td id="auxItbm" class="p-2">${{fac.iva|stringformat:".2f"}}</td>
+                <td id="auxTotal" class="p-2">${{fac.total|stringformat:".2f"}}</td>
+                <td id="auxInteres" class="p-2">${{value.1|stringformat:".2f"}}</td>
+                <td id="auxRetencion" class="p-2">${{value.2|stringformat:".2f"}}</td>
+                <td id="auxNeto" class="p-2">${{value.3|stringformat:".2f"}}</td>
                 <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fac.id request.get_full_path|cut:'/' %}">Edite</a></td>
             </tr>
             {% endif %}
@@ -78,12 +78,12 @@
                 <th class="p-2"></th>
                 <th class="p-2"></th>
                 <th class="p-2"></th>
-                <th class="p-2">$ {{montoTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{itbmTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{totalTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{interesTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{retencionTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{netoTotal|floatformat:2}}</th>
+                <th class="p-2">$ {{montoTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{itbmTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{totalTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{interesTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{retencionTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{netoTotal|stringformat:".2f"}}</th>
                 <th class="p-2 exclude"></th>
             </tr>
         </tfoot>

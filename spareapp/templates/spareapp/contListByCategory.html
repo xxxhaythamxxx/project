@@ -80,7 +80,7 @@
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2">{{fact.refCategory.nombre|upper}}</td>
             <td class="p-2"><a href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
-            <td class="p-2">${{fact.total|floatformat:2}}</td>
+            <td class="p-2">${{fact.total|stringformat:".2f"}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
@@ -89,7 +89,7 @@
     </tbody>
     <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
         <tr {% if balanceTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
-            <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
+            <th class="p-2" colspan="10">BALANCE ${{balanceTotal|stringformat:".2f"}}</td>
         </tr>
     </tfoot>
 </table>

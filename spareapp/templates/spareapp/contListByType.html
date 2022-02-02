@@ -80,7 +80,7 @@
             <td class="p-2">{{fact.num}}</td>
             <td class="p-2"><a href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
             <td class="p-2">{{fact.refType.nombre|upper}}</td>
-            <td class="p-2">${{fact.total|floatformat:2}}</td>
+            <td class="p-2">${{fact.total|stringformat:".2f"}}</td>
             <td style="max-width: 200px;" class="p-2">{{fact.note}}</td>
             <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
         </tr>
@@ -89,14 +89,14 @@
     {% if factureName.0.refType.visa == False and factureName.0.refType.clave == False %}
     <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
         <tr {% if balanceTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
-            <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}</td>
+            <th class="p-2" colspan="10">BALANCE ${{balanceTotal|stringformat:".2f"}}</td>
         </tr>
     </tfoot>
     {% else %}
         {% if factureName.0.refType.visa == True or factureName.0.refType.clave == True %}
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
             <tr {% if balanceTotal == 0 %} style="background-color: #4e4e4e;color: white" {% else %} {% if value < 0 %} style="background-color: #c90a0a;color: white" {% else %} style="background-color: #6a57d1;color: white" {% endif %} {% endif %} class="">
-                <th class="p-2" colspan="10">BALANCE ${{balanceTotal|floatformat:2}}  |  ITBM ${{itbmTotal|floatformat:2}}  |  INTERÉS ${{interesTotal|floatformat:2}}  |  RETENCIÓN ${{retencionTotal|floatformat:2}}</td>
+                <th class="p-2" colspan="10">BALANCE ${{balanceTotal|stringformat:".2f"}}  |  ITBM ${{itbmTotal|stringformat:".2f"}}  |  INTERÉS ${{interesTotal|stringformat:".2f"}}  |  RETENCIÓN ${{retencionTotal|stringformat:".2f"}}</td>
             </tr>
         </tfoot>
         {% endif %}

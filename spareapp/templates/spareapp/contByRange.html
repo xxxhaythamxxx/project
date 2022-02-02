@@ -26,14 +26,14 @@
             {% if table.tabNombre == tab.tabNombre %}
             <tr>
                 <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' table.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' table.tabTipo.id dateFrom dateTo %}" {% endif %}>{{table.tabTipo}}</a></td>
-                <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|floatformat:2}}</td>
+                <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|stringformat:".2f"}}</td>
             </tr>
             {% endif %}
             {% endfor %}
             {% for key,value in totalParcialOp.items %}
                 {% if key == tab.tabNombre %}
                 <tr {% if value == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} class="">
-                    <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+                    <td colspan="2" class="p-2">TOTAL: ${{value|stringformat:".2f"}}</td>
                 </tr>
                 {% endif %}
             {% endfor %}
@@ -67,7 +67,7 @@
                     {% if tab.tabNombre == n.tabNombre %}
                     <tr>
                     <td class="p-2"><a href="{% url 'contTypeRangeCat' tab.tabCat.id dateFrom dateTo %}" {% if tab.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %}>{{tab.tabCat}}</a></td>
-                    <td {% if tab.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{tab.tabTotal|floatformat:2}}</td>
+                    <td {% if tab.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{tab.tabTotal|stringformat:".2f"}}</td>
                     </tr>
                     {% endif %}
                 {% endfor %}
@@ -75,7 +75,7 @@
                 {% for key,value in totalParcialOpCat.items %}
                     {% if key == n.tabNombre %}
                     <tr {% if value == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} class="">
-                        <td colspan="2" class="p-2">TOTAL: ${{value|floatformat:2}}</td>
+                        <td colspan="2" class="p-2">TOTAL: ${{value|stringformat:".2f"}}</td>
                     </tr>
                     {% endif %}
                 {% endfor %}

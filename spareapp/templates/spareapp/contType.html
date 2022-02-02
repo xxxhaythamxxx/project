@@ -56,9 +56,9 @@
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory|upper}}</td>
                 <td class="p-2">{{fac.note}}</td>
-                <td id="auxMonto" class="p-2">${{fac.monto|floatformat:2}}</td>
-                <td id="auxItbm" class="p-2">${{fac.iva|floatformat:2}}</td>
-                <td id="auxTotal" class="p-2">${{fac.total|floatformat:2}}</td>
+                <td id="auxMonto" class="p-2">${{fac.monto|stringformat:".2f"}}</td>
+                <td id="auxItbm" class="p-2">${{fac.iva|stringformat:".2f"}}</td>
+                <td id="auxTotal" class="p-2">${{fac.total|stringformat:".2f"}}</td>
                 <td class="p-2 exclude"><input id="pathId" value="{{fac.id}}" style="display: none;" type="text"><input id="returnPath" value="{{request.path}}" style="display: none;" type="text"><a id="editButton" style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fac.id request.get_full_path|cut:'/' %}">Editar</a>
                     {% if fac.pendiente == True %}
                     {% if fac.refCategory.ingreso == True %}
@@ -133,9 +133,9 @@
                 <th class="p-2"></th>
                 <th class="p-2"></th>
                 <th class="p-2"></th>
-                <th class="p-2">$ {{montoTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{itbmTotal|floatformat:2}}</th>
-                <th class="p-2">$ {{totalTotal|floatformat:2}}</th>
+                <th class="p-2">$ {{montoTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{itbmTotal|stringformat:".2f"}}</th>
+                <th class="p-2">$ {{totalTotal|stringformat:".2f"}}</th>
                 <th class="p-2 exclude"></th>
             </tr>
         </tfoot>

@@ -94,15 +94,15 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contMonto">Sub total</label>
-                <input value="{{facAux.0.monto}}" class="form-control" id="contMonto" name="contMonto" step="0.001" required>
+                <input value="{{facAux.0.monto|stringformat:'.2f'}}" class="form-control" id="contMonto" name="contMonto" step="0.001" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contItbm">ITBM</label>
-                <input value="{{facAux.0.iva}}" class="form-control" id="contItbm" name="contItbm" step="0.001">
+                <input value="{{facAux.0.iva|stringformat:'.2f'}}" class="form-control" id="contItbm" name="contItbm" step="0.001">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contTotal">Total</label>
-                <input value="{{facAux.0.total}}" class="form-control" id="contTotal" name="contTotal" step="0.001" readonly>
+                <input value="{{facAux.0.total|stringformat:'.2f'}}" class="form-control" id="contTotal" name="contTotal" step="0.001" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contNota">Nota</label>
