@@ -116,21 +116,63 @@
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 
-<script>
-    $("#search4").click(function(){
-        $("#formByRange2").show()
-    })
+<script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
+
+<script type="text/javascript">
+        $("#downloadexcela").click(function(){
+
+            var body = document.getElementsByTagName("body")[0];
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            var tblHead = document.createElement("thead");
+
+            $("#invoice thead tr").each(function(){
+                var hilera = document.createElement("tr");
+                $(this).find("th:not(#check)").each(function(){
+                    var celda = document.createElement("th");
+                    var textoCelda = document.createTextNode($(this).text());
+                    celda.appendChild(textoCelda);
+                    hilera.appendChild(celda);
+                })
+                tblHead.appendChild(hilera)
+            })
+
+            $("#invoice tbody tr").each(function(){
+                if ($(this).is(":visible")){
+                    var hilera = document.createElement("tr");
+                    $(this).find("td:not(.exclude)").each(function(){
+                        if ($(this).is(":visible")){
+                            var celda = document.createElement("td");
+                            var textoCelda = document.createTextNode($(this).text());
+                            celda.appendChild(textoCelda);
+                            hilera.appendChild(celda);
+                        }
+                    })
+                    tblBody.appendChild(hilera)
+                }
+            })
+
+            tabla.appendChild(tblHead);
+            tabla.appendChild(tblBody);
+            body.appendChild(tabla);
+            tabla.style.display = "none"
+            tabla.setAttribute("id", "prueba");
+
+            let table = document.getElementById("prueba")
+
+            TableToExcel.convert(table, {
+                name: `export.xlsx`,
+                sheet: {
+                name: 'Sheet 1'
+                }
+            });
+            $("#prueba").remove()
+        })
 </script>
 
 <script>
-    // boton para exportar a Excel -------------------------------------------------------------------------------------
-    document.getElementById("downloadexcela").addEventListener("click",function(){
-        $("#check").hide();
-        $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-        var table2excel = new Table2Excel();
-        table2excel.export(document.querySelectorAll("#invoice"));
-        $("#check").show();
-        $("table td:nth-child("+($("#check").index() + 1)+")").show();
+    $("#search4").click(function(){
+        $("#formByRange2").show()
     })
 </script>
 

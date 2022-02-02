@@ -186,6 +186,60 @@
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
 
+<script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
+
+<script type="text/javascript">
+        $("#downloadexcela").click(function(){
+
+            var body = document.getElementsByTagName("body")[0];
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            var tblHead = document.createElement("thead");
+
+            $("#invoice thead tr").each(function(){
+                var hilera = document.createElement("tr");
+                $(this).find("th:not(#check)").each(function(){
+                    var celda = document.createElement("th");
+                    var textoCelda = document.createTextNode($(this).text());
+                    celda.appendChild(textoCelda);
+                    hilera.appendChild(celda);
+                })
+                tblHead.appendChild(hilera)
+            })
+
+            $("#invoice tbody tr").each(function(){
+                if ($(this).is(":visible")){
+                    var hilera = document.createElement("tr");
+                    $(this).find("td:not(.exclude)").each(function(){
+                        if ($(this).is(":visible")){
+                            var celda = document.createElement("td");
+                            var textoCelda = document.createTextNode($(this).text());
+                            celda.appendChild(textoCelda);
+                            hilera.appendChild(celda);
+                        }
+                    })
+                    tblBody.appendChild(hilera)
+                }
+            })
+
+            tabla.appendChild(tblHead);
+            tabla.appendChild(tblBody);
+            body.appendChild(tabla);
+            tabla.style.display = "none"
+            tabla.setAttribute("id", "prueba");
+
+            let table = document.getElementById("prueba")
+
+            TableToExcel.convert(table, {
+                name: `export.xlsx`,
+                sheet: {
+                name: 'Sheet 1'
+                }
+            });
+            $("#prueba").remove()
+        })
+</script>
+
 <script>
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
@@ -204,50 +258,6 @@ function comparer(index) {
     }
 }
 function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
-</script>
-
-<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-
-<script>
-function Export() {
-    $("#invoice").table2excel({
-    filename: "file.xls"
-    });
-}
-</script> -->
-
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", type="text/javascript">
-    function Export() {
-        alert("Entra")
-      $("#invoice").table2excel({
-        filename: "file.xls"
-      });
-    }
-</script> -->
-
-<!-- <script type="text/javascript">
-    function exportReportToExcel() {
-      let table = $("#invoice")
-    //   let table = document.getElementsByID("invoice");
-      TableToExcel.convert(table[0], { 
-        name: `file.xlsx`,
-        sheet: {
-          name: 'Sheet 1'
-        }
-      });
-    }
-  </script> -->
-
-<script>
-// boton para exportar a Excel -------------------------------------------------------------------------------------
-document.getElementById("downloadexcela").addEventListener("click",function(){
-    $("#check").hide();
-    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
-    var table2excel = new Table2Excel();
-    table2excel.export(document.querySelectorAll("#invoice"));
-    $("#check").show();
-    $("table td:nth-child("+($("#check").index() + 1)+")").show();
-})
 </script>
 
 <script>

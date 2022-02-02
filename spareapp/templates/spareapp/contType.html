@@ -44,7 +44,7 @@
                 <th class="p-2">Monto</th>
                 <th class="p-2">ITBM</th>
                 <th class="p-2">Total</th>
-                <th class="p-2 exclude">Option</th>
+                <th id="check" class="p-2 exclude">Option</th>
             </tr>
         </thead>
 
@@ -127,7 +127,7 @@
             
         </tbody>
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
-            <tr class="tfoot" style="background-color: #E77C7C;">
+            <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %}>
                 <th class="p-2">Total</th>
                 <th class="p-2"></th>
                 <th class="p-2"></th>
@@ -153,6 +153,61 @@
 <script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
+
+<script type="text/javascript">
+        $("#downloadexcela").click(function(){
+
+            var body = document.getElementsByTagName("body")[0];
+            var tabla   = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+            var tblHead = document.createElement("thead");
+
+            $("#invoice thead tr").each(function(){
+                var hilera = document.createElement("tr");
+                $(this).find("th:not(#check)").each(function(){
+                    var celda = document.createElement("th");
+                    var textoCelda = document.createTextNode($(this).text());
+                    celda.appendChild(textoCelda);
+                    hilera.appendChild(celda);
+                })
+                tblHead.appendChild(hilera)
+            })
+
+            $("#invoice tbody tr").each(function(){
+                if ($(this).is(":visible")){
+                    var hilera = document.createElement("tr");
+                    $(this).find("td:not(.exclude)").each(function(){
+                        if ($(this).is(":visible")){
+                            var celda = document.createElement("td");
+                            var textoCelda = document.createTextNode($(this).text());
+                            celda.appendChild(textoCelda);
+                            hilera.appendChild(celda);
+                        }
+                    })
+                    tblBody.appendChild(hilera)
+                }
+            })
+
+            tabla.appendChild(tblHead);
+            tabla.appendChild(tblBody);
+            body.appendChild(tabla);
+            tabla.style.display = "none"
+            tabla.setAttribute("id", "prueba");
+
+            let table = document.getElementById("prueba")
+
+            TableToExcel.convert(table, {
+                name: `export.xlsx`,
+                sheet: {
+                name: 'Sheet 1'
+                }
+            });
+            $("#prueba").remove()
+        })
+</script>
 
 <script>
     // Arreglar por click a cabecera ----------------------------------------------------------------------------------
@@ -259,7 +314,15 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
 
         $(".erase").remove()
 
-        $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
+        if (totalTotal == 0){
+            $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
+        }else{
+            if (totalTotal < 0){
+                $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
+            }else{
+                $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
+            }
+        }
 
         if(value==""){
             $(".erase").remove()
