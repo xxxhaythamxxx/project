@@ -3127,7 +3127,7 @@ def contTypeCat(request,val,val2):
     totalTotal = 0
     val = str(factCategory.objects.get(id=val))
 
-    allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refCategory__nombre=val)
+    allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refCategory__nombre=val).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
     if val2 != "today":
 
@@ -3138,7 +3138,7 @@ def contTypeCat(request,val,val2):
             if s:
                 out = s.translate(str.maketrans('', '', '/'))
                 if val.upper()==out.upper():
-                    allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refCategory__nombre=s).order_by("fechaCreado","id")
+                    allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refCategory__nombre=s).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True).order_by("fechaCreado","id")
 
     itbm7 = {}
     
@@ -4365,7 +4365,7 @@ def contByDayCustom(request):
                 allTypesCustom = factCategory.objects.all()
                 custAcum = 0
                 for ty in allTypesCustom:
-                    facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty)
+                    facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
                     for fac in facAuxAllCat:
                         custAcum = custAcum + fac.total
@@ -4410,7 +4410,7 @@ def contByDayCustom(request):
 
                 custAcum = 0
                 for ty in allTypesCustom:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty)
+                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
@@ -7296,7 +7296,7 @@ def customTables(request,val):
             allTypesCustom = factCategory.objects.all()
             custAcum = 0
             for ty in allTypesCustom:
-                facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty)
+                facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
@@ -7341,7 +7341,7 @@ def customTables(request,val):
 
             custAcum = 0
             for ty in allTypesCustom:
-                facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty)
+                facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
