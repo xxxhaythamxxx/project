@@ -2711,6 +2711,8 @@ def contEntry(request):
 
     if request.method == "POST":
 
+        print("Entra a POST de contEntry")
+
         actualAux=datetime.now().date()
         actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
 
@@ -6435,20 +6437,20 @@ def factTypeES(request):
     if request.GET.get("val") == "entry":
 
         if cateAux and request.GET.get("cat") == "Factura cobrada":
-            print("Existe factura y es factura cobrada")
+            # print("Existe factura y es factura cobrada")
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
         else:
-            print("No existe factura o no es factura cobrada")
+            # print("No existe factura o no es factura cobrada")
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
         if cateAux and cate.limite == True:
-            print("Existe factura y la categoria limite es True")
+            # print("Existe factura y la categoria limite es True")
             allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
         else:
             if cateAux and cate.limite == False:
-                print("Existe factura y la categoría limite es False")
+                # print("Existe factura y la categoría limite es False")
                 allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
             else:
-                print("No existe factura o la categoria limite es False")
+                # print("No existe factura o la categoria limite es False")
                 allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True).exclude(facCobrar=True)
         cobrarPagar = factType.objects.filter(facCobrar=True)
     
@@ -9540,8 +9542,69 @@ def editeCustomTableCat(request,val):
 
     return render(request,"spareapp/editeCustomTableCat.html",dic)
 
+def probarRepetido(request):
 
+    print("Entra en probarRepetido")
+    repetido = False
+    contFacType = request.POST.get("contFacType")
+    print(contFacType)
+    contFechaCreado = request.POST.get("contFechaCreado")
+    print(contFechaCreado)
+    contNombre = persona.objects.get(id=request.POST.get("contNombre"))
+    print(contNombre)
+    contNumFac = request.POST.get("contNumFac")
+    print(contNumFac)
 
+    prueba = factura.objects.filter(num=contNumFac)
+    if prueba:
+        repetido = True
+    else:
+        repetido = False
+
+    contCatIng = factCategory.objects.get(id=request.POST.get("contCatIng"))
+    print(contCatIng)
+    contTypeIng = factType.objects.get(id=request.POST.get("contTypeIng"))
+    print(contTypeIng)
+    print(request.POST.get("contFechaTope"))
+    contMonto = request.POST.get("contMonto")
+    print(contMonto)
+    contItbm = request.POST.get("contItbm")
+    print(contItbm)
+    contTotal = request.POST.get("contTotal")
+    print(contTotal)
+    contNota = request.POST.get("contNota")
+    print(contNota)
+
+    pruebaRep = repetido
+
+    print(pruebaRep)
+
+    return JsonResponse({'pruebaRep':pruebaRep})
+
+    # if request.method == "POST":
+
+    #     nombreaux = request.POST.get("custName")
+    #     identificacionaux = request.POST.get("custId")
+
+    #     personProbar = persona.objects.filter(nombre=nombreaux,documento=identificacionaux)
+
+    #     if personProbar:
+
+    #         print("Ya existe")
+
+    #     else:
+
+    #         personAux = persona()
+    #         personAux.nombre = nombreaux
+    #         personAux.documento = identificacionaux
+    #         personAux.save()
+
+    #         personLast = persona.objects.filter(id=personAux.id)
+    #         lastPerson = list(personLast.values())
+            
+    #         return JsonResponse({'lastPerson':lastPerson})
+
+    # return render(request,"spareapp/contDay.html")
 
 
 

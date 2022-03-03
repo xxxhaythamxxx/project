@@ -16,7 +16,7 @@
 
 <div class="d-flex justify-content-center">
     <div class="container mt-3 col-lg-4">
-        <form action="" method="POST">
+        <form id="formFact" main="{% url 'probarRepetido' %}" method="POST">
             {% csrf_token %}
 
             <div class="mb-3">
@@ -91,7 +91,7 @@
                 <label class="form-label" for="contNota">Nota</label>
                 <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
             </div>
-            <button style="font-size: small;" value="otro" name="entryOption" class="btn btn-primary" type="submit">Aceptar</button>
+            <button id="buttonAccept" style="font-size: small;" value="otro" name="entryOption" class="btn btn-primary" type="submit">Aceptar</button>
             <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar y agregar otra</button>
             <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </form>
@@ -124,6 +124,26 @@
         </div>
     </div>
 </div>  
+
+<div tabindex="-1" id="miModal" class="modal fade modal-dialog-scrollable" aria-labelledby="contNombreModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="contNombreModallLabel">Advertencia</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>El número de factura ya se encuentra registrado</p>
+          <p>¿Desea agregar la factura de todas maneras?</p>
+        </div>
+        <div class="modal-footer">
+            <button style="font-size: small;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button id="acceptModal" style="font-size: small;" type="button" class="btn btn-primary">Aceptar</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 <script>
 
 $("#contFechaCreado").change(function(){
@@ -137,6 +157,43 @@ $("#contFechaCreado").change(function(){
 
         }
     });
+})
+
+// Probamos si el numero de factura está repetido
+$("#formFact").submit(function(e){
+    var form_valido = false
+    $.ajax({
+        async: false,
+        url: $(this).attr("main"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+        
+        success: function(data){
+            console.log("Success")
+            if (data.pruebaRep == true){
+                form_valido = true
+            }else{
+                form_valido = false
+            }
+            if (form_valido == false){
+                console.log("Factura nueva")
+                return true
+            }else{
+                console.log("Factura repetida")
+                $("#miModal").modal("show");
+                e.preventDefault()
+                return false
+            }
+        }
+    })
+    varClick = false
+    $("#acceptModal").click(function(){
+        varClick = true
+        $(".btn-close").click()
+        if (varClick == true){
+            $("#formFact").submit()
+        }
+    })
 })
 
 // Agregar modal Customer

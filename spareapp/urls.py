@@ -126,8 +126,8 @@ urlpatterns = [
     path("contTypeRangeCat/<str:val>?<str:val2>?<str:val3>",views.contTypeRangeCat,name="contTypeRangeCat"),
     # path("contTypeRangeTarjeta/<str:val>?<str:val2>?<str:val3>",views.contTypeRangeTarjeta,name="contTypeRangeTarjeta"),
     # path("contTypeTarjeta/<str:val>?<str:val2>",views.contTypeTarjeta,name="contTypeTarjeta"),
-
     # path('getCar/$', views.getCar,name="getCar")
+    path("probarRepetido",views.probarRepetido,name="probarRepetido"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
