@@ -27,7 +27,7 @@
             {% for table in tableAuxOp %}
             {% if table.tabNombre == tab.tabNombre %}
             <tr>
-                <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo}}</a></td>
+                <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeTarjeta' table.tabTipo|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo|cut:'/' tod %}" {% endif %}>{{table.tabTipo|upper}}</a></td>
                 <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|stringformat:".2f"}}</td>
             </tr>
             {% endif %}
@@ -63,7 +63,7 @@
                 {% for table in tableAuxOpCat %}
                 {% if table.tabNombre == tab.tabNombre %}
                 <tr>
-                    <td class="p-2"><a href="{% url 'contTypeCat' table.tabCat.id tod %}" {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} >{{table.tabCat}}</a></td>
+                    <td class="p-2"><a href="{% url 'contTypeCat' table.tabCat.id tod %}" {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} >{{table.tabCat|upper}}</a></td>
                     <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|stringformat:".2f"}}</td>
                 </tr>
                 {% endif %}
@@ -79,7 +79,7 @@
                 {% for table in tableAuxOpEmptyCat %}
                 {% if table.tabNombre == tab.tabNombre %}
                 <tr>
-                    <td class="p-2"><a>{{table.tabCat__nombre}}</a></td>
+                    <td class="p-2"><a>{{table.tabCat__nombre|upper}}</a></td>
                     <td class="p-2">$0.00</td>
                 </tr>
                 {% endif %}
@@ -113,7 +113,7 @@
             {% for table in tableAuxOp %}
             {% if table.tabNombre == tab.tabNombre %}
             <tr>
-                <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' table.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' table.tabTipo.id dateFrom dateTo %}" {% endif %}>{{table.tabTipo}}</a></td>
+                <td class="p-2"><a {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% if table.tabTipo.visa == True or table.tabTipo.clave == True %} href="{% url 'contTypeRangeTarjeta' table.tabTipo|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' table.tabTipo.id dateFrom dateTo %}" {% endif %}>{{table.tabTipo|upper}}</a></td>
                 <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|stringformat:".2f"}}</td>
             </tr>
             {% endif %}
@@ -149,7 +149,7 @@
                 {% for table in tableAuxOpCat %}
                 {% if table.tabNombre == tab.tabNombre %}
                 <tr>
-                    <td class="p-2"><a href="{% url 'contTypeRangeCat' table.tabCat.id dateFrom dateTo %}" {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} >{{table.tabCat}}</a></td>
+                    <td class="p-2"><a href="{% url 'contTypeRangeCat' table.tabCat.id dateFrom dateTo %}" {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} >{{table.tabCat|upper}}</a></td>
                     <td {% if table.suma == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{table.tabTotal|stringformat:".2f"}}</td>
                 </tr>
                 {% endif %}

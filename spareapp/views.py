@@ -2610,6 +2610,14 @@ def contDay(request):
         catA.nombre = "Mercancia credito pagada"
         catA.egreso = True
         catA.save()
+    catAuxMay = factCategory.objects.filter(nombre="Factura cobrada (Mayorista)")
+    if catAuxMay:
+        pass
+    else:
+        catA = factCategory()
+        catA.nombre = "Factura cobrada (Mayorista)"
+        catA.ingreso = True
+        catA.save()
 
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
@@ -4881,6 +4889,10 @@ def contCollectFac(request,val):
         reciboCollect.refPersona = factErase.refPersona
         reciboCollect.refType = typeAux
         auxCat = factCategory.objects.get(nombre="Factura cobrada")
+        # print(factAux[0].refCategory.nombre)
+        if factAux[0].refCategory.nombre.lower() == "venta mayorista":
+            # print("Entra a mayorista")
+            auxCat = factCategory.objects.get(nombre="Factura cobrada (Mayorista)")
         reciboCollect.refCategory = auxCat
         reciboCollect.fechaTope = factErase.fechaTope
         reciboCollect.fechaCobrado = tod
@@ -6441,7 +6453,7 @@ def factTypeES(request):
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
         else:
             # print("No existe factura o no es factura cobrada")
-            allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+            allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada").exclude(nombre="Factura cobrada (Mayorista)")
         if cateAux and cate.limite == True:
             # print("Existe factura y la categoria limite es True")
             allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(mercPagar=True)
@@ -6459,7 +6471,7 @@ def factTypeES(request):
         if cateAux and request.GET.get("cat") == "Mercancia credito pagada":
             allCategories = factCategory.objects.filter(egreso=True).order_by("nombre")
         else:
-            allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada")
+            allCategories = factCategory.objects.filter(egreso=True).order_by("nombre").exclude(nombre="Factura cobrada").exclude(nombre="Mercancia credito pagada").exclude(nombre="Factura cobrada (Mayorista)")
         if cateAux and cate.limite == True:
             allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(mercPagada=True).exclude(facCobrar=True)
         else:
