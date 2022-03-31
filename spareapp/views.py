@@ -6448,7 +6448,7 @@ def factTypeES(request):
 
     if request.GET.get("val") == "entry":
 
-        if cateAux and request.GET.get("cat") == "Factura cobrada":
+        if cateAux and (request.GET.get("cat") == "Factura cobrada" or request.GET.get("cat") == "Factura cobrada (Mayorista)"):
             # print("Existe factura y es factura cobrada")
             allCategories = factCategory.objects.filter(ingreso=True).order_by("nombre")
         else:

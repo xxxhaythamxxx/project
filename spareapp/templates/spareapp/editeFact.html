@@ -67,7 +67,7 @@
                 <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
                     <option value="">Seleccione categoría</option>
                     {% for category in allCategories %}
-                    {% if category.nombre == facAux.0.refCategory.nombre or facAux.0.refCategory.nombre == "Factura cobrada" or facAux.0.refCategory.nombre == "Mercancia credito pagada" %}
+                    {% if category.nombre == facAux.0.refCategory.nombre or facAux.0.refCategory.nombre == "Factura cobrada" or facAux.0.refCategory.nombre == "Factura cobrada (Mayorista)" or facAux.0.refCategory.nombre == "Mercancia credito pagada" %}
                     <option limit="{{facAux.0.refCategory.limite}}" value="{{facAux.0.refCategory.nombre}}" selected>{{facAux.0.refCategory.nombre}}</option>
                     {% else %}
                     <option limit="{{facAux.0.refCategory.limite}}" value="{{facAux.0.refCategory.nombre}}">{{facAux.0.refCategory.nombre}}</option>
