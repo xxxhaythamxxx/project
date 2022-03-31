@@ -2783,7 +2783,7 @@ def contEntry(request):
         allTypesCustom = factType.objects.all()
         totalParcialOp = {}
         
-        tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
+        tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre","tabTipo")
 
         if factureAuxOp:
 
@@ -2914,7 +2914,7 @@ def contEntry(request):
             acum = 0
 
         cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
-        tableAux2Op = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre")
+        tableAux2Op = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre","tabTipo__nombre")
         tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre","tabTipo__nombre")
 
         # ----------- Categoria -------------------
@@ -2927,7 +2927,7 @@ def contEntry(request):
         totalParcialOpCat = {}
         custAcum = 0
         
-        tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod)
+        tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabNombre","tabCat")
 
         if factureAuxCat:
 
