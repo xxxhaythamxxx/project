@@ -2618,6 +2618,17 @@ def contDay(request):
         catA.nombre = "Factura cobrada (Mayorista)"
         catA.ingreso = True
         catA.save()
+    
+    # Lleno los tipos basicos -------------------------------
+    catAux = factType.objects.filter(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
+    if catAux:
+        pass
+    else:
+        catA = factType()
+        catA.nombre = "FACTURA CREDITO COBRADA (MAYORISTA)"
+        catA.facCobrada = True
+        catA.ingreso = True
+        catA.save()
 
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
@@ -2816,7 +2827,11 @@ def contEntry(request):
                         facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
@@ -2873,8 +2888,11 @@ def contEntry(request):
                         facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
@@ -3092,7 +3110,11 @@ def contType(request,val,val2):
 
     if typeAux.facCobrada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada")
+        if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+            allFacturesVal = factura.objects.filter(fechaCreado=tod,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+        else:
+            allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada")
 
     if typeAux.mercPagada == True:
 
@@ -3245,7 +3267,11 @@ def contTypeRange(request,val,val2,val3):
 
     if typeAux.facCobrada == True:
 
-        allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+        if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+            allFacturesVal = factura.objects.filter(fechaCreado__lte=val3,fechaCreado__gte=val2,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+        else:
+            allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado__lte=val3,fechaCobrado__gte=val2,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
 
     if typeAux.mercPagada == True:
 
@@ -3752,7 +3778,11 @@ def contListType(request):
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
@@ -3810,7 +3840,11 @@ def contListType(request):
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
             for fac in facAuxAll:
@@ -3957,7 +3991,11 @@ def contByDay(request):
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
@@ -4016,7 +4054,11 @@ def contByDay(request):
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
             for fac in facAuxAll:
@@ -4242,7 +4284,11 @@ def contByDayCustom(request):
                         facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
@@ -4301,7 +4347,11 @@ def contByDayCustom(request):
                         facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
                     for fac in facAuxAll:
@@ -4531,7 +4581,11 @@ def contByRangeCustom(request):
                 facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
@@ -4723,7 +4777,11 @@ def contByRange(request):
                 facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
@@ -4874,7 +4932,8 @@ def contCollectFac(request,val):
     tod = datetime.now().date()
     allTypes = factType.objects.all().order_by("nombre")
     factAux = factura.objects.filter(id=val)
-    typeAux = factType.objects.get(facCobrada=True)
+    typeAux = factType.objects.filter(facCobrada=True).exclude(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
+    typeAux = typeAux[0]
 
     if factAux:
 
@@ -4887,13 +4946,12 @@ def contCollectFac(request,val):
         reciboCollect.fechaCreado=tod
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
-        reciboCollect.refType = typeAux
         auxCat = factCategory.objects.get(nombre="Factura cobrada")
-        # print(factAux[0].refCategory.nombre)
         if factAux[0].refCategory.nombre.lower() == "venta mayorista":
-            # print("Entra a mayorista")
             auxCat = factCategory.objects.get(nombre="Factura cobrada (Mayorista)")
+            typeAux = factType.objects.get(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
         reciboCollect.refCategory = auxCat
+        reciboCollect.refType = typeAux
         reciboCollect.fechaTope = factErase.fechaTope
         reciboCollect.fechaCobrado = tod
         reciboCollect.iva = factErase.iva
@@ -4939,7 +4997,11 @@ def contCollectFac(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
@@ -4998,7 +5060,11 @@ def contCollectFac(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
                 for fac in facAuxAll:
@@ -5249,7 +5315,11 @@ def contPayFac(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
@@ -5308,7 +5378,11 @@ def contPayFac(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
                 for fac in facAuxAll:
@@ -5955,7 +6029,11 @@ def editeFact(request,val,val2):
                         facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
@@ -6012,7 +6090,11 @@ def editeFact(request,val,val2):
                         facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
                     for fac in facAuxAll:
@@ -6906,7 +6988,11 @@ def deleteFac(request,val):
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
@@ -6964,7 +7050,11 @@ def deleteFac(request,val):
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
-                facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                else:
+                    facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
             for fac in facAuxAll:
@@ -7177,7 +7267,11 @@ def customTables(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
@@ -7236,8 +7330,11 @@ def customTables(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
 
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
@@ -7537,7 +7634,11 @@ def editeCustomTable(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
@@ -7632,7 +7733,11 @@ def customTablesRange(request,val,val2):
             facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
         if ty.facCobrada == True:
-            facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+            if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+            else:
+                facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
         for fac in facAuxAll:
             custAcum = custAcum + fac.total
@@ -7877,7 +7982,11 @@ def contDayBack(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
@@ -7935,7 +8044,11 @@ def contDayBack(request,val):
                     facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.facCobrada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
                 for fac in facAuxAll:
@@ -8151,7 +8264,11 @@ def contDayBackRange(request,val,val2):
             facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
         if ty.facCobrada == True:
-            facAuxAll = factura.objects.filter(fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+            if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+            else:
+                facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
         for fac in facAuxAll:
             custAcum = custAcum + fac.total
@@ -9100,7 +9217,11 @@ def editeFactAccount(request,val,val1,val2):
                         facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
@@ -9157,7 +9278,11 @@ def editeFactAccount(request,val,val1,val2):
                         facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
                     if ty.facCobrada == True:
-                        facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__ingreso=True,refCategory__limite=True)
+
+                        if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        else:
+                            facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
 
                     for fac in facAuxAll:
