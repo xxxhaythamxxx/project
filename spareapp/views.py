@@ -1,6 +1,7 @@
 from typing import List
 from django.forms import NullBooleanField
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse, HttpResponseRedirect
+from sqlalchemy import null
 from .models import *
 from django.views import View
 from .cart import *
@@ -2593,6 +2594,22 @@ def contBase(request):
 
 def contDay(request):
 
+    pedido=factura.objects.filter(refPersona__nombre="PODEROSO") | factura.objects.filter(refPersona__nombre="SUPERCAR") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #1") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #2")
+    # pedido=factura.objects.filter(refPersona__nombre="Luis Velasco")
+    typeAuxx = factType.objects.get(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
+
+    for ped in pedido:
+
+        pedAux = factura.objects.get(id=ped.id)
+
+        if pedAux.refCategory.nombre == "Factura cobrada (Mayorista)":
+
+            pedAux.refType=typeAuxx
+
+        pedAux.save()
+
+    # print(pedido)
+
     # Lleno las categorias basicas -------------------------------
     catAux = factCategory.objects.filter(nombre="Factura cobrada")
     if catAux:
@@ -2786,6 +2803,11 @@ def contEntry(request):
 
         contTotal = request.POST.get("contTotal")
         factAux.total = contTotal
+
+        if request.POST.get("notaCredito"):
+            factAux.nc = True
+        else:
+            factAux.nc = False
 
         factAux.note = request.POST.get("contNota")
 
@@ -5268,6 +5290,10 @@ def contPayFac(request,val):
         reciboCollect.num = factErase.num
         reciboCollect.refPersona = factErase.refPersona
         reciboCollect.refType = typeAux
+        if factAux[0].nc == True:
+            reciboCollect.nc = True
+        else:
+            reciboCollect.nc = False
         auxCat = factCategory.objects.get(nombre="Mercancia credito pagada")
         reciboCollect.refCategory = auxCat
         reciboCollect.fechaTope = factErase.fechaTope
@@ -5707,6 +5733,10 @@ def accountStat(request):
 
             for fac in factureName:
 
+                # print(fac)
+                # print(cont)
+                # print(fac.total)
+
                 if fac.refCategory.ingreso:
 
                     cont = cont
@@ -5717,7 +5747,7 @@ def accountStat(request):
                         if fac.pendiente == True:
                             balanceFacMerc = balanceFacMerc + fac.total
                     
-                    if fac.refCategory.nombre=="Factura cobrada":
+                    if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
 
                         cont = cont - fac.total
                 
@@ -5725,15 +5755,29 @@ def accountStat(request):
 
                     cont = cont
 
-                    if fac.refType.mercPagar==True:
+                    if fac.nc == True:
 
-                        cont = cont - fac.total
-                        if fac.pendiente == True:
-                            balanceFacMerc = balanceFacMerc - fac.total
+                        if fac.refType.mercPagar==True:
+
+                            cont = cont + fac.total
+                            if fac.pendiente == True:
+                                balanceFacMerc = balanceFacMerc - fac.total
                     
-                    if fac.refCategory.nombre=="Mercancia credito pagada":
+                        if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                        cont = cont + fac.total
+                            cont = cont - fac.total
+
+                    else:
+
+                        if fac.refType.mercPagar==True:
+
+                            cont = cont - fac.total
+                            if fac.pendiente == True:
+                                balanceFacMerc = balanceFacMerc - fac.total
+                        
+                        if fac.refCategory.nombre=="Mercancia credito pagada":
+
+                            cont = cont + fac.total
 
                 # if fac.pendiente == True and fac.refType.gasto == True:
                 #     balance[fac.id] = [cont,fac.total*(-1)]
@@ -9037,6 +9081,9 @@ def deleteCustomOpCat(request,val):
 def editeFactAccount(request,val,val1,val2):
 
     cont = 0
+
+    dayFrom = ""
+    dayTo = ""
 
     check = False
     allCustomers = persona.objects.all()

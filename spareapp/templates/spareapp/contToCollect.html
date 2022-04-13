@@ -59,7 +59,7 @@
                 <td class="p-2">${{facture.monto|stringformat:".2f"}}</td>
                 <td class="p-2">{{facture.iva|stringformat:".2f"}}</td>
                 <td class="p-2">${{facture.total|stringformat:".2f"}}</td>
-                <td class="p-2 exclude"><a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a></td>
+                <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' facture.id request.get_full_path|cut:'/' %}">Editar</a> <a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a></td>
 
                 <div tabindex="-1" id="modalCobrar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{facture.id}}Label" aria-hidden="true">
                     <div class="modal-dialog">
