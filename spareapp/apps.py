@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from flask_sqlalchemy import SQLAlchemy
+
 
 
 class SpareappConfig(AppConfig):

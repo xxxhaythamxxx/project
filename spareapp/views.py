@@ -21,6 +21,7 @@ from datetime import timedelta
 from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 # import numpy as np
+from flask_sqlalchemy import SQLAlchemy
 
 # Create your views here.
 
