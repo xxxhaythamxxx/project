@@ -7,7 +7,7 @@ from datetime import timedelta
 import os
 from django.db import models
 from django.contrib.auth.models import User
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 
 # Create your models here.
 class car(models.Model):
