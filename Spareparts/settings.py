@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'spareapp',
     'smart_selects',
     'import_export',
+    'flask_sqlalchemy'
     # 'crispy_forms',
 ]
 
