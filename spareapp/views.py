@@ -5792,13 +5792,36 @@ def accountStat(request):
 
         for facT in factureName:
 
-            if (facT.refType.ingreso == True and facT.refType.facCobrar == False) or facT.refType.mercPagar == True:
+            if facT.refType.ingreso == True:
+                if (facT.refType.facCobrar == False):
 
-                acumTotal = acumTotal + abs(facT.total)
+                    acumTotal = acumTotal + abs(facT.total)
+
+                else:
+
+                    acumTotal = acumTotal - abs(facT.total)        
             
             else:
 
-                acumTotal = acumTotal - abs(facT.total)
+                if facT.nc == False:
+
+                    if facT.refType.mercPagar == True:
+
+                        acumTotal = acumTotal + abs(facT.total)
+
+                    else:
+
+                        acumTotal = acumTotal - abs(facT.total)
+
+                else:
+
+                    if facT.refType.mercPagar == True:
+
+                        acumTotal = acumTotal - abs(facT.total)
+
+                    else:
+
+                        acumTotal = acumTotal + abs(facT.total)
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -6382,13 +6405,36 @@ def contIndividual(request,val):
 
     for facT in factureName:
 
-        if facT.refType.ingreso == True and facT.refType.facCobrar == False or facT.refType.mercPagar == True:
+            if facT.refType.ingreso == True:
+                if (facT.refType.facCobrar == False):
 
-            acumTotal = acumTotal + abs(facT.total)
-        
-        else:
+                    acumTotal = acumTotal + abs(facT.total)
 
-            acumTotal = acumTotal - abs(facT.total)
+                else:
+
+                    acumTotal = acumTotal - abs(facT.total)        
+            
+            else:
+
+                if facT.nc == False:
+
+                    if facT.refType.mercPagar == True:
+
+                        acumTotal = acumTotal + abs(facT.total)
+
+                    else:
+
+                        acumTotal = acumTotal - abs(facT.total)
+
+                else:
+
+                    if facT.refType.mercPagar == True:
+
+                        acumTotal = acumTotal - abs(facT.total)
+
+                    else:
+
+                        acumTotal = acumTotal + abs(facT.total)
 
     if request.method == "POST":
 
@@ -6437,8 +6483,6 @@ def contIndividual(request,val):
             balance[fac.id] = [cont,fac.total]
 
         balanceTotal = cont
-
-        
 
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
 
@@ -6537,13 +6581,36 @@ def contIndividual(request,val):
 
         for facT in factureName:
 
-            if facT.refType.ingreso == True and facT.refType.facCobrar == False or facT.refType.mercPagar == True:
+            if facT.refType.ingreso == True:
+                if (facT.refType.facCobrar == False):
 
-                acumTotal = acumTotal + abs(facT.total)
+                    acumTotal = acumTotal + abs(facT.total)
+
+                else:
+
+                    acumTotal = acumTotal - abs(facT.total)        
             
             else:
 
-                acumTotal = acumTotal - abs(facT.total)
+                if facT.nc == False:
+
+                    if facT.refType.mercPagar == True:
+
+                        acumTotal = acumTotal + abs(facT.total)
+
+                    else:
+
+                        acumTotal = acumTotal - abs(facT.total)
+
+                else:
+
+                    if facT.refType.mercPagar == True:
+
+                        acumTotal = acumTotal - abs(facT.total)
+
+                    else:
+
+                        acumTotal = acumTotal + abs(facT.total)
 
     balanceTotal = cont
 
