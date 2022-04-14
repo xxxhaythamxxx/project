@@ -2596,19 +2596,19 @@ def contBase(request):
 
 def contDay(request):
 
-    pedido=factura.objects.filter(refPersona__nombre="PODEROSO") | factura.objects.filter(refPersona__nombre="SUPERCAR") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #1") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #2")
-    # # pedido=factura.objects.filter(refPersona__nombre="Luis Velasco")
-    typeAuxx = factType.objects.get(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
+    # pedido=factura.objects.filter(refPersona__nombre="PODEROSO") | factura.objects.filter(refPersona__nombre="SUPERCAR") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #1") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #2")
+    # # # pedido=factura.objects.filter(refPersona__nombre="Luis Velasco")
+    # typeAuxx = factType.objects.get(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
 
-    for ped in pedido:
+    # for ped in pedido:
 
-        pedAux = factura.objects.get(id=ped.id)
+    #     pedAux = factura.objects.get(id=ped.id)
 
-        if pedAux.refCategory.nombre == "Factura cobrada (Mayorista)":
+    #     if pedAux.refCategory.nombre == "Factura cobrada (Mayorista)":
 
-            pedAux.refType=typeAuxx
+    #         pedAux.refType=typeAuxx
 
-        pedAux.save()
+    #     pedAux.save()
 
     # print(pedido)
 
