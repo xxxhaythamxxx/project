@@ -136,7 +136,7 @@
             <td style="max-width: 100px;" class="p-2"><a {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
             <td style="max-width: 100px;" class="p-2"><a {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|stringformat:".2f"}}</div></td>
-            <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|stringformat:".2f"}}</td>
+            <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxNc="{{fact.nc}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|stringformat:".2f"}}</td>
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} style="max-width: 100px;" class="p-2">{{fact.note}}</td>
             <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" {% if busqueda %} href="{% url 'editeFactAccount' fact.id busqueda request.get_full_path|cut:'/' %}" {% else %} href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}" {% endif %}>Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
@@ -287,32 +287,29 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
                                 cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
                             }
                         }else{
-                            if($(this).attr("auxPagar")=="True"){
-                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            }
-                            if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+
+                            if($(this).attr("auxNc")=="True"){
+                                if($(this).attr("auxPagar")=="True"){
+                                    cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                                }
+                                if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
+                                    cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                                }
+                            }else{
+                                if($(this).attr("auxPagar")=="True"){
+                                    cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                                }
+                                if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
+                                    cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                                }
                             }
                         }
-
 
                         if($(this).attr("auxIngreso")=="True" && $(this).attr("auxCobrar")=="False" || $(this).attr("auxPagar")=="True"){
                             totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            // if($(this).attr("auxCobrar")=="True"){
-                            //     cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal")))
-                            // }
-                            // if($(this).attr("auxCatCobrada")=="FACTURA COBRADA"){
-                            //     cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal")))
-                            // }
                         }
                         else{
                             totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            // if($(this).attr("auxIngreso")=="False" && $(this).attr("auxPagar")=="True"){
-                            //     cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal")))
-                            // }
-                            // if($(this).attr("auxIngreso")=="False" && $(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-                            //     cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal")))
-                            // }
                         }
                         $(this).html("$"+cont2.toFixed(2))
                         balanc.push(cont2.toFixed(2))
