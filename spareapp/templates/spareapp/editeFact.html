@@ -28,6 +28,10 @@
                 </select>
             </div>
             <div class="mb-3">
+                <input {% if facAux.0.nc == True %} checked {% else %} '' {% endif %} name="notaCredito" id="notaCredito" type="checkbox">
+                <label class="form-label" for="notaCredito">Nota de crédito</label>
+            </div>
+            <div class="mb-3">
                 <label class="form-label" for="searchDateFrom">Cambiar fecha</label>
                 <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
             </div>

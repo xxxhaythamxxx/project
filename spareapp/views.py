@@ -5961,7 +5961,6 @@ def editeFact(request,val,val2):
     allTypes = factType.objects.all()
     # DEPENDE DEL TYPE SALEN UNOS U OTROS
     facAux = factura.objects.filter(id=val)
-    print(facAux)
     facTotal = 0
     auxFacGet = factura.objects.get(id=val)
     tope=""
@@ -6030,6 +6029,11 @@ def editeFact(request,val,val2):
 
         contTotal = request.POST.get("contTotal")
         factAux.total = str(contTotal).replace(',','.')
+
+        if request.POST.get("notaCredito"):
+            factAux.nc = True
+        else:
+            factAux.nc = False
 
         factAux.note = request.POST.get("contNota")
 
