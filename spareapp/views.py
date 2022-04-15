@@ -5952,6 +5952,12 @@ def editeFact(request,val,val2):
     if val2.find("contType")>-1:
         typeA = val2.replace("contType","")
         urlFinal = "/contType/"+typeA
+    if val2.find("contToCollect")>-1:
+        typeA = val2.replace("contToCollect","")
+        urlFinal = "/contToCollect"
+    if val2.find("contToPay")>-1:
+        typeA = val2.replace("contToPay","")
+        urlFinal = "/contToPay"
     if val2.find("searchTable")>-1:
         # typeA = val2.replace("searchTable","")
         # urlFinal = "/searchTable/"+typeA
