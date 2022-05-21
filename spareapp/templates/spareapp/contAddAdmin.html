@@ -1,19 +1,21 @@
 <html>
     <body>
         
-        <div class="container col-lg-6 mt-2 d-flex justify-content-center">
+        <div class="container col-lg-7 mt-2 d-flex justify-content-center">
             <a style="font-size: small;" class="btn btn-primary mx-1" href="{% url 'contAddType' %}">Nuevo tipo</a>
             <a style="font-size: small;" class="btn btn-primary mx-1" href="{% url 'contAddCategory' %}">Nueva categoría</a>
             <a style="font-size: small;" class="btn btn-primary mx-1" href="{% url 'contAddOperacionCat' %}">Op. categoría</a>
             <a style="font-size: small;" class="btn btn-primary mx-1" href="{% url 'contAddOperacion' %}">Operaciones</a>
             <a style="font-size: small;" class="btn btn-primary mx-1" href="{% url 'contAddCliente' %}">Nuevo cliente</a>
+            <a style="font-size: small;" class="btn btn-primary mx-1" href="{% url 'respaldarDb' %}">Respaldar DB</a>
         </div>
-        <div class="container col-lg-6 mt-1 d-flex justify-content-center">
+        <div class="container col-lg-7 mt-1 d-flex justify-content-center">
             <a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'contListType' %}">Lista de tipos</a>
             <a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'contListCategory' %}">Lista de categorías</a>
             <a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'contListCustomTablesCat' %}">Lista de tablas</a>
             <a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'contListCustomTablesOp' %}">Lista de tablas</a>
             <a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'contListClienteTables' %}">Lista de clientes</a>
+            <a style="font-size: small;" class="btn btn-secondary mx-1" href="{% url 'cargarDb' %}">Cargar DB</a>
         </div>
 
     </body>

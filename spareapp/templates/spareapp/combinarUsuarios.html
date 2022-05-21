@@ -1,0 +1,41 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Category {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="row mb-3">
+    <div class="container mt-5 col-lg-6 d-flex justify-content-center">
+        <form method="POST" action="">
+        {% csrf_token %}
+        <table style="font-size: small;" class="table-bordered ">
+            <thead>
+                <tr class="color text-white">
+                    <th class="p-2">Nombre</th>
+                    <th class="p-2">Identificación</th>
+                    <th class="p-2">Principal</th>
+                    <th class="p-2">Selección</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ty in lista %}
+                <tr>
+                    <td class="p-2">{{ty.nombre}}</td>
+                    <td class="p-2">{{ty.documento}}</td>
+                    <td class="p-2"><input name="principal" value="{{ty.id}}" type="checkbox"></td>
+                    <td class="p-2"><input name="seleccion" value="{{ty.id}}" type="checkbox"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pt-2">
+            <button style="font-size: small;" class="btn btn-success mx-1" type="submit">Combinar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,2147 @@
+[
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2022-05-18T16:33:25.073Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "5",
+        "object_repr": "5 Jezreel Velasco 2022-05-18 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2022-05-18T16:33:25.183Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "4",
+        "object_repr": "2 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2022-05-18T16:33:25.194Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "3",
+        "object_repr": "4 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2022-05-18T16:33:25.205Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "2",
+        "object_repr": "3 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2022-05-18T16:33:25.217Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "1",
+        "object_repr": "1 Jezreel Velasco 2022-05-16 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2022-05-20T20:19:05.771Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "6",
+        "object_repr": "8 Luis Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2022-05-20T20:19:05.918Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "5",
+        "object_repr": "7 Jezreel Velasco 2022-05-18 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2022-05-20T20:19:06.007Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "4",
+        "object_repr": "2 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2022-05-20T20:19:06.074Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "3",
+        "object_repr": "4 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2022-05-20T20:19:06.173Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "2",
+        "object_repr": "3 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2022-05-20T20:19:06.218Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "1",
+        "object_repr": "1 Jezreel Velasco 2022-05-16 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2022-05-20T20:22:00.261Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "6",
+        "object_repr": "8 Luis Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2022-05-20T20:22:00.288Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "5",
+        "object_repr": "7 Jezreel Velasco 2022-05-18 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2022-05-20T20:22:00.299Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "4",
+        "object_repr": "2 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2022-05-20T20:22:00.310Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "3",
+        "object_repr": "4 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2022-05-20T20:22:00.321Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "2",
+        "object_repr": "3 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2022-05-20T20:22:00.332Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "1",
+        "object_repr": "1 Jezreel Velasco 2022-05-16 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.185Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "8",
+        "object_repr": "12 Jezreel Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.242Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "7",
+        "object_repr": "11 Jezreel Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.342Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "6",
+        "object_repr": "8 Luis Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.353Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "5",
+        "object_repr": "7 Jezreel Velasco 2022-05-18 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.364Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "4",
+        "object_repr": "2 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.375Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "3",
+        "object_repr": "4 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.386Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "2",
+        "object_repr": "3 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+        "action_time": "2022-05-20T20:29:12.397Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "1",
+        "object_repr": "1 Jezreel Velasco 2022-05-16 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 2,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 2,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 2,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 2,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 3,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 3,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 3,
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add user",
+        "content_type": 4,
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change user",
+        "content_type": 4,
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete user",
+        "content_type": 4,
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view user",
+        "content_type": 4,
+        "codename": "view_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 5,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 5,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 5,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 5,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 6,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 6,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 6,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 6,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add car",
+        "content_type": 7,
+        "codename": "add_car"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change car",
+        "content_type": 7,
+        "codename": "change_car"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete car",
+        "content_type": 7,
+        "codename": "delete_car"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view car",
+        "content_type": 7,
+        "codename": "view_car"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add category",
+        "content_type": 8,
+        "codename": "add_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change category",
+        "content_type": 8,
+        "codename": "change_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete category",
+        "content_type": 8,
+        "codename": "delete_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view category",
+        "content_type": 8,
+        "codename": "view_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add engine",
+        "content_type": 9,
+        "codename": "add_engine"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change engine",
+        "content_type": 9,
+        "codename": "change_engine"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete engine",
+        "content_type": 9,
+        "codename": "delete_engine"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view engine",
+        "content_type": 9,
+        "codename": "view_engine"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add spare",
+        "content_type": 10,
+        "codename": "add_spare"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change spare",
+        "content_type": 10,
+        "codename": "change_spare"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete spare",
+        "content_type": 10,
+        "codename": "delete_spare"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+        "name": "Can view spare",
+        "content_type": 10,
+        "codename": "view_spare"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+        "name": "Can add reference",
+        "content_type": 11,
+        "codename": "add_reference"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+        "name": "Can change reference",
+        "content_type": 11,
+        "codename": "change_reference"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+        "name": "Can delete reference",
+        "content_type": 11,
+        "codename": "delete_reference"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+        "name": "Can view reference",
+        "content_type": 11,
+        "codename": "view_reference"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+        "name": "Can add dimension",
+        "content_type": 12,
+        "codename": "add_dimension"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+        "name": "Can change dimension",
+        "content_type": 12,
+        "codename": "change_dimension"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+        "name": "Can delete dimension",
+        "content_type": 12,
+        "codename": "delete_dimension"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+        "name": "Can view dimension",
+        "content_type": 12,
+        "codename": "view_dimension"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add atribute",
+        "content_type": 13,
+        "codename": "add_atribute"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change atribute",
+        "content_type": 13,
+        "codename": "change_atribute"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete atribute",
+        "content_type": 13,
+        "codename": "delete_atribute"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view atribute",
+        "content_type": 13,
+        "codename": "view_atribute"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add vendor",
+        "content_type": 14,
+        "codename": "add_vendor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change vendor",
+        "content_type": 14,
+        "codename": "change_vendor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete vendor",
+        "content_type": 14,
+        "codename": "delete_vendor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view vendor",
+        "content_type": 14,
+        "codename": "view_vendor"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+        "name": "Can add spare cart",
+        "content_type": 15,
+        "codename": "add_sparecart"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+        "name": "Can change spare cart",
+        "content_type": 15,
+        "codename": "change_sparecart"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+        "name": "Can delete spare cart",
+        "content_type": 15,
+        "codename": "delete_sparecart"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+        "name": "Can view spare cart",
+        "content_type": 15,
+        "codename": "view_sparecart"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+        "name": "Can add profile",
+        "content_type": 16,
+        "codename": "add_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+        "name": "Can change profile",
+        "content_type": 16,
+        "codename": "change_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+        "name": "Can delete profile",
+        "content_type": 16,
+        "codename": "delete_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+        "name": "Can view profile",
+        "content_type": 16,
+        "codename": "view_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+        "name": "Can add fact category",
+        "content_type": 17,
+        "codename": "add_factcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+        "name": "Can change fact category",
+        "content_type": 17,
+        "codename": "change_factcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+        "name": "Can delete fact category",
+        "content_type": 17,
+        "codename": "delete_factcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+        "name": "Can view fact category",
+        "content_type": 17,
+        "codename": "view_factcategory"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+        "name": "Can add fact type",
+        "content_type": 18,
+        "codename": "add_facttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+        "name": "Can change fact type",
+        "content_type": 18,
+        "codename": "change_facttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+        "name": "Can delete fact type",
+        "content_type": 18,
+        "codename": "delete_facttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+        "name": "Can view fact type",
+        "content_type": 18,
+        "codename": "view_facttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 73,
+    "fields": {
+        "name": "Can add persona",
+        "content_type": 19,
+        "codename": "add_persona"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 74,
+    "fields": {
+        "name": "Can change persona",
+        "content_type": 19,
+        "codename": "change_persona"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 75,
+    "fields": {
+        "name": "Can delete persona",
+        "content_type": 19,
+        "codename": "delete_persona"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 76,
+    "fields": {
+        "name": "Can view persona",
+        "content_type": 19,
+        "codename": "view_persona"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 77,
+    "fields": {
+        "name": "Can add factura",
+        "content_type": 20,
+        "codename": "add_factura"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 78,
+    "fields": {
+        "name": "Can change factura",
+        "content_type": 20,
+        "codename": "change_factura"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 79,
+    "fields": {
+        "name": "Can delete factura",
+        "content_type": 20,
+        "codename": "delete_factura"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 80,
+    "fields": {
+        "name": "Can view factura",
+        "content_type": 20,
+        "codename": "view_factura"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 81,
+    "fields": {
+        "name": "Can add main table",
+        "content_type": 21,
+        "codename": "add_maintable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 82,
+    "fields": {
+        "name": "Can change main table",
+        "content_type": 21,
+        "codename": "change_maintable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 83,
+    "fields": {
+        "name": "Can delete main table",
+        "content_type": 21,
+        "codename": "delete_maintable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 84,
+    "fields": {
+        "name": "Can view main table",
+        "content_type": 21,
+        "codename": "view_maintable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 85,
+    "fields": {
+        "name": "Can add main table aux",
+        "content_type": 22,
+        "codename": "add_maintableaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 86,
+    "fields": {
+        "name": "Can change main table aux",
+        "content_type": 22,
+        "codename": "change_maintableaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 87,
+    "fields": {
+        "name": "Can delete main table aux",
+        "content_type": 22,
+        "codename": "delete_maintableaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 88,
+    "fields": {
+        "name": "Can view main table aux",
+        "content_type": 22,
+        "codename": "view_maintableaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 89,
+    "fields": {
+        "name": "Can add custom table",
+        "content_type": 23,
+        "codename": "add_customtable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 90,
+    "fields": {
+        "name": "Can change custom table",
+        "content_type": 23,
+        "codename": "change_customtable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 91,
+    "fields": {
+        "name": "Can delete custom table",
+        "content_type": 23,
+        "codename": "delete_customtable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 92,
+    "fields": {
+        "name": "Can view custom table",
+        "content_type": 23,
+        "codename": "view_customtable"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 93,
+    "fields": {
+        "name": "Can add custom aux",
+        "content_type": 24,
+        "codename": "add_customaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 94,
+    "fields": {
+        "name": "Can change custom aux",
+        "content_type": 24,
+        "codename": "change_customaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 95,
+    "fields": {
+        "name": "Can delete custom aux",
+        "content_type": 24,
+        "codename": "delete_customaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 96,
+    "fields": {
+        "name": "Can view custom aux",
+        "content_type": 24,
+        "codename": "view_customaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 97,
+    "fields": {
+        "name": "Can add table operacion",
+        "content_type": 25,
+        "codename": "add_tableoperacion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 98,
+    "fields": {
+        "name": "Can change table operacion",
+        "content_type": 25,
+        "codename": "change_tableoperacion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 99,
+    "fields": {
+        "name": "Can delete table operacion",
+        "content_type": 25,
+        "codename": "delete_tableoperacion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 100,
+    "fields": {
+        "name": "Can view table operacion",
+        "content_type": 25,
+        "codename": "view_tableoperacion"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 101,
+    "fields": {
+        "name": "Can add table operacion aux",
+        "content_type": 26,
+        "codename": "add_tableoperacionaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 102,
+    "fields": {
+        "name": "Can change table operacion aux",
+        "content_type": 26,
+        "codename": "change_tableoperacionaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 103,
+    "fields": {
+        "name": "Can delete table operacion aux",
+        "content_type": 26,
+        "codename": "delete_tableoperacionaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 104,
+    "fields": {
+        "name": "Can view table operacion aux",
+        "content_type": 26,
+        "codename": "view_tableoperacionaux"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 105,
+    "fields": {
+        "name": "Can add table operacion cat",
+        "content_type": 27,
+        "codename": "add_tableoperacioncat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 106,
+    "fields": {
+        "name": "Can change table operacion cat",
+        "content_type": 27,
+        "codename": "change_tableoperacioncat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 107,
+    "fields": {
+        "name": "Can delete table operacion cat",
+        "content_type": 27,
+        "codename": "delete_tableoperacioncat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 108,
+    "fields": {
+        "name": "Can view table operacion cat",
+        "content_type": 27,
+        "codename": "view_tableoperacioncat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 109,
+    "fields": {
+        "name": "Can add table operacion aux cat",
+        "content_type": 28,
+        "codename": "add_tableoperacionauxcat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 110,
+    "fields": {
+        "name": "Can change table operacion aux cat",
+        "content_type": 28,
+        "codename": "change_tableoperacionauxcat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 111,
+    "fields": {
+        "name": "Can delete table operacion aux cat",
+        "content_type": 28,
+        "codename": "delete_tableoperacionauxcat"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 112,
+    "fields": {
+        "name": "Can view table operacion aux cat",
+        "content_type": 28,
+        "codename": "view_tableoperacionauxcat"
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$320000$yOkiht76cpGDy29VFD8eR4$cisNDy+kIVE56sNYiieA9d0pHD+/ohgCmAY3eXLNSZ8=",
+        "last_login": "2022-05-18T14:20:44.969Z",
+        "is_superuser": true,
+        "username": "luisvelasco",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-05-18T14:20:34.370Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "auth",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "car"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "category"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "engine"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "spare"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "reference"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "dimension"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "atribute"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "vendor"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "sparecart"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "profile"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "factcategory"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "facttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 19,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "persona"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 20,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "factura"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 21,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "maintable"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 22,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "maintableaux"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 23,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "customtable"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 24,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "customaux"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 25,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "tableoperacion"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 26,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "tableoperacionaux"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 27,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "tableoperacioncat"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 28,
+    "fields": {
+        "app_label": "spareapp",
+        "model": "tableoperacionauxcat"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "vawofdix9nceq4cpxekl6hd8h533hld7",
+    "fields": {
+        "session_data": ".eJxVjDsOwjAQBe_iGlle_Isp6XMGa9de4wBypDipEHeHSCmgfTPzXiLitta4dV7ilMVFgDj9boTpwW0H-Y7tNss0t3WZSO6KPGiX45z5eT3cv4OKvX5r1oRKJx0KDkTZpqCQQkkAAbQ2bNl7YETtgyrOoKIzFM6ZzaDQOSveHwR3OIE:1nrKXd:NEbI2hwkVQasiOGdGeQZKs5KlRjt_A-Kky8bbK-TzME",
+        "expire_date": "2022-06-01T14:20:45.048Z"
+    }
+},
+{
+    "model": "spareapp.persona",
+    "pk": 2,
+    "fields": {
+        "nombre": "Jezreel Velasco",
+        "documento": ""
+    }
+},
+{
+    "model": "spareapp.persona",
+    "pk": 3,
+    "fields": {
+        "nombre": "Luis Velasco",
+        "documento": ""
+    }
+},
+{
+    "model": "spareapp.facttype",
+    "pk": 1,
+    "fields": {
+        "nombre": "FACTURA CREDITO COBRADA (MAYORISTA)",
+        "include": true,
+        "manual": false,
+        "mercPagada": false,
+        "mercPagar": false,
+        "facCobrar": false,
+        "facCobrada": true,
+        "visa": false,
+        "clave": false,
+        "ingreso": true,
+        "gasto": false
+    }
+},
+{
+    "model": "spareapp.facttype",
+    "pk": 2,
+    "fields": {
+        "nombre": "CASH",
+        "include": true,
+        "manual": false,
+        "mercPagada": false,
+        "mercPagar": false,
+        "facCobrar": false,
+        "facCobrada": false,
+        "visa": false,
+        "clave": false,
+        "ingreso": true,
+        "gasto": false
+    }
+},
+{
+    "model": "spareapp.facttype",
+    "pk": 3,
+    "fields": {
+        "nombre": "ACH",
+        "include": true,
+        "manual": false,
+        "mercPagada": false,
+        "mercPagar": false,
+        "facCobrar": false,
+        "facCobrada": false,
+        "visa": false,
+        "clave": false,
+        "ingreso": false,
+        "gasto": true
+    }
+},
+{
+    "model": "spareapp.factcategory",
+    "pk": 1,
+    "fields": {
+        "nombre": "Factura cobrada",
+        "ingreso": true,
+        "egreso": false,
+        "limite": false
+    }
+},
+{
+    "model": "spareapp.factcategory",
+    "pk": 2,
+    "fields": {
+        "nombre": "Mercancia credito pagada",
+        "ingreso": false,
+        "egreso": true,
+        "limite": false
+    }
+},
+{
+    "model": "spareapp.factcategory",
+    "pk": 3,
+    "fields": {
+        "nombre": "Factura cobrada (Mayorista)",
+        "ingreso": true,
+        "egreso": false,
+        "limite": false
+    }
+},
+{
+    "model": "spareapp.factcategory",
+    "pk": 4,
+    "fields": {
+        "nombre": "VENTA",
+        "ingreso": true,
+        "egreso": false,
+        "limite": false
+    }
+},
+{
+    "model": "spareapp.factcategory",
+    "pk": 5,
+    "fields": {
+        "nombre": "COMPRA",
+        "ingreso": false,
+        "egreso": true,
+        "limite": false
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 1,
+    "fields": {
+        "num": "1",
+        "refPersona": 2,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-16T05:00:00Z",
+        "fechaTope": "2022-06-15",
+        "fechaCobrado": null,
+        "iva": 0.7,
+        "monto": 10.0,
+        "total": 10.7,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 2,
+    "fields": {
+        "num": "3",
+        "refPersona": 2,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-17T05:00:00Z",
+        "fechaTope": "2022-06-16",
+        "fechaCobrado": null,
+        "iva": 0.07,
+        "monto": 1.0,
+        "total": 1.07,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 3,
+    "fields": {
+        "num": "4",
+        "refPersona": 2,
+        "refType": 3,
+        "refCategory": 5,
+        "fechaCreado": "2022-05-17T05:00:00Z",
+        "fechaTope": "2022-06-16",
+        "fechaCobrado": null,
+        "iva": 0.14,
+        "monto": 2.0,
+        "total": 2.14,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 4,
+    "fields": {
+        "num": "2",
+        "refPersona": 2,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-17T05:00:00Z",
+        "fechaTope": "2022-06-16",
+        "fechaCobrado": null,
+        "iva": 2.31,
+        "monto": 33.0,
+        "total": 35.31,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 5,
+    "fields": {
+        "num": "7",
+        "refPersona": 2,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-18T05:00:00Z",
+        "fechaTope": "2022-06-17",
+        "fechaCobrado": null,
+        "iva": 0.07,
+        "monto": 1.0,
+        "total": 1.07,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 6,
+    "fields": {
+        "num": "8",
+        "refPersona": 3,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-20T05:00:00Z",
+        "fechaTope": "2022-06-19",
+        "fechaCobrado": null,
+        "iva": 0.7,
+        "monto": 10.0,
+        "total": 10.7,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 7,
+    "fields": {
+        "num": "9",
+        "refPersona": 3,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-20T05:00:00Z",
+        "fechaTope": "2022-06-19",
+        "fechaCobrado": null,
+        "iva": 0.56,
+        "monto": 8.0,
+        "total": 8.56,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 1,
+    "fields": {
+        "fecha": "2022-05-16T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 2,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 10.7
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 2,
+    "fields": {
+        "fecha": "2022-05-16T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 3,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 3,
+    "fields": {
+        "fecha": "2022-05-16T05:00:00Z",
+        "tabNombre": "B2 - Segunda",
+        "tabTipo": 2,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 10.7
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 4,
+    "fields": {
+        "fecha": "2022-05-17T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 2,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 36.38
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 5,
+    "fields": {
+        "fecha": "2022-05-17T05:00:00Z",
+        "tabNombre": "B2 - Segunda",
+        "tabTipo": 2,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 36.38
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 6,
+    "fields": {
+        "fecha": "2022-05-17T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 3,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 2.14
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 7,
+    "fields": {
+        "fecha": "2022-05-18T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 2,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 1.07
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 8,
+    "fields": {
+        "fecha": "2022-05-18T05:00:00Z",
+        "tabNombre": "B2 - Segunda",
+        "tabTipo": 2,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 1.07
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 9,
+    "fields": {
+        "fecha": "2022-05-18T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 3,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 10,
+    "fields": {
+        "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 2,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 19.259999999999998
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 11,
+    "fields": {
+        "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "B2 - Segunda",
+        "tabTipo": 2,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 19.259999999999998
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 12,
+    "fields": {
+        "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 3,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 1,
+    "fields": {
+        "fecha": "2022-05-16T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 4,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 10.7
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 2,
+    "fields": {
+        "fecha": "2022-05-16T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 5,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 3,
+    "fields": {
+        "fecha": "2022-05-16T05:00:00Z",
+        "tabNombre": "B1 - Primera",
+        "tabCat": 5,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 4,
+    "fields": {
+        "fecha": "2022-05-17T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 4,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 36.38
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 5,
+    "fields": {
+        "fecha": "2022-05-17T05:00:00Z",
+        "tabNombre": "B1 - Primera",
+        "tabCat": 5,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 2.14
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 6,
+    "fields": {
+        "fecha": "2022-05-17T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 5,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 2.14
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 7,
+    "fields": {
+        "fecha": "2022-05-18T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 4,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 1.07
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 8,
+    "fields": {
+        "fecha": "2022-05-18T05:00:00Z",
+        "tabNombre": "B1 - Primera",
+        "tabCat": 5,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 9,
+    "fields": {
+        "fecha": "2022-05-18T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 5,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 10,
+    "fields": {
+        "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 4,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 19.259999999999998
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 11,
+    "fields": {
+        "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "B1 - Primera",
+        "tabCat": 5,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 12,
+    "fields": {
+        "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 5,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+}
+]

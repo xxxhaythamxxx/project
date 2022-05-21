@@ -128,6 +128,9 @@ urlpatterns = [
     # path("contTypeTarjeta/<str:val>?<str:val2>",views.contTypeTarjeta,name="contTypeTarjeta"),
     # path('getCar/$', views.getCar,name="getCar")
     path("probarRepetido",views.probarRepetido,name="probarRepetido"),
+    path("combinarUsuarios",views.combinarUsuarios,name="combinarUsuarios"),
+    path("respaldarDb",views.respaldarDb,name="respaldarDb"),
+    path("cargarDb",views.cargarDb,name="cargarDb"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
