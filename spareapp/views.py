@@ -9846,6 +9846,8 @@ def probarRepetido(request):
 
 def combinarUsuarios(request):
 
+    print("Entra en combinar usuarios")
+
     lista = persona.objects.all().order_by("nombre").order_by("id","nombre")
 
     dic = {"lista":lista}
@@ -9887,7 +9889,7 @@ from django.core import management
 from django.core.management.commands import loaddata, dumpdata
 
 import sys
-
+ 
 # from django.core.management import call_command
 
 
