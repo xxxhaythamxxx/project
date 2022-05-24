@@ -1,0 +1,24 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Add Type {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/contAddAdmin.html" %}
+
+<div class="d-flex justify-content-center">
+    <div class="container  mt-5 col-lg-4">
+        <form enctype="multipart/form-data" action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="cargar">Cargar base de datos desde la pc</label>
+                <input class="form-control" id="cargar" name="cargar" type="file">
+                <!-- <input class="form-control" id="cargar" type="file" name="cargar" required> -->
+            </div>
+            <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar</button>
+            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

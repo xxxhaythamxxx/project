@@ -130,6 +130,7 @@ urlpatterns = [
     path("probarRepetido",views.probarRepetido,name="probarRepetido"),
     path("combinarUsuarios",views.combinarUsuarios,name="combinarUsuarios"),
     path("respaldarDb",views.respaldarDb,name="respaldarDb"),
+    path("contCargarDb",views.contCargarDb,name="contCargarDb"),
     path("cargarDb",views.cargarDb,name="cargarDb"),
 ]
 

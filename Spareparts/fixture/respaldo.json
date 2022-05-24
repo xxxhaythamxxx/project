@@ -325,6 +325,110 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.397Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "7",
+        "object_repr": "9 Luis Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.434Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "6",
+        "object_repr": "8 Luis Velasco 2022-05-20 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.445Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "5",
+        "object_repr": "7 Jezreel Velasco 2022-05-18 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.512Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "4",
+        "object_repr": "2 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.523Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "3",
+        "object_repr": "4 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.534Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "2",
+        "object_repr": "3 Jezreel Velasco 2022-05-17 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+        "action_time": "2022-05-20T20:30:11.545Z",
+        "user": 1,
+        "content_type": 20,
+        "object_id": "1",
+        "object_repr": "1 Jezreel Velasco 2022-05-16 05:00:00+00:00",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+        "action_time": "2022-05-20T20:31:39.926Z",
+        "user": 1,
+        "content_type": 18,
+        "object_id": "3",
+        "object_repr": "ACH",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -1833,6 +1937,44 @@
     }
 },
 {
+    "model": "spareapp.factura",
+    "pk": 8,
+    "fields": {
+        "num": "10",
+        "refPersona": 2,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-20T05:00:00Z",
+        "fechaTope": "2022-06-19",
+        "fechaCobrado": null,
+        "iva": 0.07,
+        "monto": 1.0,
+        "total": 1.07,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
+    "model": "spareapp.factura",
+    "pk": 9,
+    "fields": {
+        "num": "11",
+        "refPersona": 2,
+        "refType": 2,
+        "refCategory": 4,
+        "fechaCreado": "2022-05-24T05:00:00Z",
+        "fechaTope": "2022-06-23",
+        "fechaCobrado": null,
+        "iva": 3.08,
+        "monto": 44.0,
+        "total": 47.08,
+        "pendiente": false,
+        "nc": false,
+        "note": ""
+    }
+},
+{
     "model": "spareapp.tableoperacion",
     "pk": 1,
     "fields": {
@@ -1959,7 +2101,7 @@
         "principal": true,
         "suma": true,
         "resta": false,
-        "tabTotal": 19.259999999999998
+        "tabTotal": 20.33
     }
 },
 {
@@ -1972,7 +2114,7 @@
         "principal": false,
         "suma": true,
         "resta": false,
-        "tabTotal": 19.259999999999998
+        "tabTotal": 20.33
     }
 },
 {
@@ -1980,6 +2122,45 @@
     "pk": 12,
     "fields": {
         "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 3,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 13,
+    "fields": {
+        "fecha": "2022-05-24T05:00:00Z",
+        "tabNombre": "A1 - Primera",
+        "tabTipo": 2,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 47.08
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 14,
+    "fields": {
+        "fecha": "2022-05-24T05:00:00Z",
+        "tabNombre": "B2 - Segunda",
+        "tabTipo": 2,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 47.08
+    }
+},
+{
+    "model": "spareapp.tableoperacion",
+    "pk": 15,
+    "fields": {
+        "fecha": "2022-05-24T05:00:00Z",
         "tabNombre": "A1 - Primera",
         "tabTipo": 3,
         "principal": true,
@@ -2115,7 +2296,7 @@
         "principal": true,
         "suma": true,
         "resta": false,
-        "tabTotal": 19.259999999999998
+        "tabTotal": 20.33
     }
 },
 {
@@ -2136,6 +2317,45 @@
     "pk": 12,
     "fields": {
         "fecha": "2022-05-20T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 5,
+        "principal": true,
+        "suma": false,
+        "resta": true,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 13,
+    "fields": {
+        "fecha": "2022-05-24T05:00:00Z",
+        "tabNombre": "A2- Segunda",
+        "tabCat": 4,
+        "principal": true,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 47.08
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 14,
+    "fields": {
+        "fecha": "2022-05-24T05:00:00Z",
+        "tabNombre": "B1 - Primera",
+        "tabCat": 5,
+        "principal": false,
+        "suma": true,
+        "resta": false,
+        "tabTotal": 0.0
+    }
+},
+{
+    "model": "spareapp.tableoperacioncat",
+    "pk": 15,
+    "fields": {
+        "fecha": "2022-05-24T05:00:00Z",
         "tabNombre": "A2- Segunda",
         "tabCat": 5,
         "principal": true,
