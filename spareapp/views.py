@@ -8542,6 +8542,8 @@ def searchTable(request):
 
     personaVarios = ""
 
+    factureName = ""
+
     if request.method == "POST":
 
         tod = datetime.now().date()
@@ -9948,20 +9950,26 @@ def contCargarDb(request):
 
     if request.method == "POST":
 
-        archivo = request.FILES['cargar'].read()
-        data = json.loads(archivo)
-        s = json.dumps(data, indent=4, sort_keys=True)
+        if request.FILES.get("cargar"):
 
-        output = open('Spareparts/fixture/respaldoAux.json', 'w')
-        output.write(s)
-        output.close()
+            archivo = request.FILES['cargar'].read()
+            data = json.loads(archivo)
+            s = json.dumps(data, indent=4, sort_keys=True)
 
-        management.call_command('loaddata', 'Spareparts/fixture/respaldoAux.json')
+            output = open('Spareparts/fixture/respaldoAux.json', 'w')
+            output.write(s)
+            output.close()
 
-        file = 'respaldoAux.json'
-        location = 'Spareparts/fixture'
-        path = os.path.join(location, file)
-        os.remove(path)
+            management.call_command('loaddata', 'Spareparts/fixture/respaldoAux.json')
+
+            file = 'respaldoAux.json'
+            location = 'Spareparts/fixture'
+            path = os.path.join(location, file)
+            os.remove(path)
+
+        else:
+
+            return render(request,"spareapp/contCargarDb.html")
 
         # ----------- Operacion -------------------
         toddy = datetime.now().date()
