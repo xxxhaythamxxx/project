@@ -132,6 +132,7 @@ urlpatterns = [
     path("respaldarDb",views.respaldarDb,name="respaldarDb"),
     path("contCargarDb",views.contCargarDb,name="contCargarDb"),
     path("cargarDb",views.cargarDb,name="cargarDb"),
+    path("checkearNc",views.checkearNc,name="checkearNc"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
