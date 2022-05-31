@@ -137,6 +137,7 @@ urlpatterns = [
     path("filterToCollect",views.filterToCollect,name="filterToCollect"),
     path("filterContType",views.filterContType,name="filterContType"),
     path("filterContTypeTarjeta",views.filterContTypeTarjeta,name="filterContTypeTarjeta"),
+    path("filterContTypeCat",views.filterContTypeCat,name="filterContTypeCat"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
