@@ -133,6 +133,9 @@ urlpatterns = [
     path("contCargarDb",views.contCargarDb,name="contCargarDb"),
     path("cargarDb",views.cargarDb,name="cargarDb"),
     path("checkearNc",views.checkearNc,name="checkearNc"),
+    path("deleteDb",views.deleteDb,name="deleteDb"),
+    path("filterToCollect",views.filterToCollect,name="filterToCollect"),
+    path("filterContType",views.filterContType,name="filterContType"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

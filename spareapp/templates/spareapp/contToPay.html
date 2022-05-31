@@ -217,29 +217,28 @@ $("#downloadexcela").click(function(){
 </script>
 
 <script>
-    // Arreglar por click a cabecera ----------------------------------------------------------------------------------
-    // Se debe agregar CSS th { cursor: pointer; }
-    $('th').not("#check").click(function(){
-        var table = $(this).parents('table').eq(0)
-        var rows = table.find('tr:gt(0)').not(".tfoot").toArray().sort(comparer($(this).index()))
-        var rowsAux = table.find("tr:not('.bodyM'):gt(0)").toArray().sort(comparer($(this).index()))
-        this.asc = !this.asc
-        if (!this.asc){rows = rows.reverse()}
-        for (var i = 0; i < rows.length; i++){table.append(rows[i])}
-        table.append(rowsAux[0])
-    
-    })
-    function comparer(index) {
-        return function(a, b) {
-            var valA = getCellValue(a, index), valB = getCellValue(b, index)
-            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-        }
+// Arreglar por click a cabecera ----------------------------------------------------------------------------------
+// Se debe agregar CSS th { cursor: pointer; }
+$('th').not("#check").click(function(){
+    var table = $(this).parents('table').eq(0)
+    var rows = table.find('tr:gt(0)').not(".tfoot").toArray().sort(comparer($(this).index()))
+    var rowsAux = table.find("tr:not('.bodyM'):gt(0)").toArray().sort(comparer($(this).index()))
+    this.asc = !this.asc
+    if (!this.asc){rows = rows.reverse()}
+    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+    table.append(rowsAux[0])
+
+})
+function comparer(index) {
+    return function(a, b) {
+        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
     }
-    function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+}
+function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 </script>
 
 <script>
-
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var checkeado = false;
     var filter = $("#cod").val().toLowerCase();
@@ -255,7 +254,7 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         success:function(data){
             $("#myTable").empty()
             for(var i = 0; i<data.allFacturesQuery.length;i++){
-                $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado+"</td><td class='p-2'>Dias</td><td class='p-2'>"+parseFloat(data.allFacturesQuery[i].monto).toFixed(2)+"</td><td class='p-2'>"+parseFloat(data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2'>"+parseFloat(data.allFacturesQuery[i].total).toFixed(2)+"</td><td class='p-2 exclude'><a style='color: white;font-size: small;' class='btn btn-secondary' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToPay'>Editar</a> <a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
+                $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>"+data.dateDic[i]+"</td><td class='p-2'>"+data.deadlineDic[i]+" days</td><td class='p-2'>"+parseFloat(data.allFacturesQuery[i].monto).toFixed(2)+"</td><td class='p-2'>"+parseFloat(data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2'>"+parseFloat(data.allFacturesQuery[i].total).toFixed(2)+"</td><td class='p-2 exclude'><a style='color: white;font-size: small;' class='btn btn-secondary' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToPay'>Editar</a> <a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
             }
             if(data.acum == 0){
                 $("#myTable").append("<tr class='tfoot' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>"+data.acum.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>"+data.acum2.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
@@ -269,77 +268,6 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
                 }
         }
     });
-
-    // var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-    // var sumarMonto = 0
-    // var auxMonto = 0
-    // var totalMonto = 0
-    // var sumarTotal = 0
-    // var auxTotal = 0
-    // var totalTotal = 0
-
-    // $(".invoice tbody tr").filter(function(){                             // 
-    //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    // })
-
-    // $(".tfoot").hide()
-
-    // $("#invoice tbody tr").each(function(){
-    //     $(this).find("td").each(function(){
-    //         if ($(this).index() == $("#facTotal").index()) {
-    //             if ($(this).is(":visible")){
-    //                 sumarTotal = $(this).text()
-    //                 auxTotal = sumarTotal.split("$")[1]
-    //             }
-    //             else{
-    //                 auxTotal = 0
-    //             }
-                
-    //         }
-    //         if ($(this).index() == $("#facMonto").index()) {
-    //             if ($(this).is(":visible")){
-    //                 sumarMonto = $(this).text()
-    //                 auxMonto = sumarMonto.split("$")[1]
-    //             }
-    //             else{
-    //                 auxMonto = 0
-    //             }
-                
-    //         }
-    //     })
-        
-    //     var auxMontoFull = auxMonto
-    //     String(auxMontoFull)
-    //     if (String(auxMontoFull).indexOf(",")>-1){
-    //         auxMontoFull.replace(',', '.')
-    //         auxMonto = auxMontoFull.replace(',', '.')
-    //     }
-    //     totalMonto = totalMonto + parseFloat(auxMonto)
-
-    //     var auxTotalFull = auxTotal
-    //     String(auxTotalFull)
-    //     if (String(auxTotalFull).indexOf(",")>-1){
-    //         auxTotalFull.replace(',', '.')
-    //         auxTotal = auxTotalFull.replace(',', '.')
-    //     }
-    //     totalTotal = totalTotal + parseFloat(auxTotal)
-    // })
-    
-    // $(".erase").remove()
-    // if (totalTotal == 0){
-    //     $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
-    // }else{
-    //     if (totalTotal < 0){
-    //         $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;color: #c90a0a'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
-    //     }else{
-    //         $("#myTable").append("<tr class='tfoot erase' style='background-color: #E77C7C;color: #1029b9'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+totalMonto.toFixed(2)+"</td><td class='p-2'></td><td class='p-2'>$"+totalTotal.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
-    //     }
-    // }
-
-    // if(value==""){
-    //     $(".erase").remove()
-    //     $(".tfoot").show()
-    // }
 })
 </script>
 
@@ -356,8 +284,6 @@ if($("#cod").val()){
 var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
 var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
 var tableRowCells = [...document.querySelectorAll('#invoice tbody tr:not(.tfoot) td:not(.exclude)')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
-// var tableFooterCells = [...document.querySelectorAll('#invoice tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
-// alert(tableFooterCells)
 var rows = []
 var fila = []
 var footerFooter = []
@@ -394,7 +320,6 @@ var docDefinition = {
         tableHeaderText,
         ...rows,
         ...footerFooter,
-        // [aux,"","","","","","",""],
         ],
       },
       layout: {
@@ -416,7 +341,6 @@ var docDefinition = {
   ],
     styles: {
         tableExample: {
-            // margin: [0, 20, 0, 80],
             margin: [0, 1, 0, 1],
             fontSize: 8,
         },
@@ -432,7 +356,6 @@ var docDefinition = {
         },
         tableData: {
             margin: 1,
-            // fontSize: 10,
         },
         fuente: {
             margin: 1,
@@ -450,8 +373,6 @@ pdfMake.createPdf(docDefinition).download("MercanciaPagar");
 }
 
 $("#invoice").dragtable()
-
-
 
 </script>
 
