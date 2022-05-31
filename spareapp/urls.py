@@ -136,6 +136,7 @@ urlpatterns = [
     path("deleteDb",views.deleteDb,name="deleteDb"),
     path("filterToCollect",views.filterToCollect,name="filterToCollect"),
     path("filterContType",views.filterContType,name="filterContType"),
+    path("filterContTypeTarjeta",views.filterContTypeTarjeta,name="filterContTypeTarjeta"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
