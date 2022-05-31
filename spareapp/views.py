@@ -4957,7 +4957,7 @@ def contByRange(request):
                 
             custAcum = 0
            
-        cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre").distinct()
+        cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre","principal").distinct()
 
         realAcum = 0
 
