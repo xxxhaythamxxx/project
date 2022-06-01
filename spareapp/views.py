@@ -10753,6 +10753,8 @@ def totalTablasType(request):
     acum = 0
     total = 0
     tod = datetime.now().date()
+    searchDateFrom = None
+    searchDateTo = None
 
     # actualAux=datetime.now().date()
     # actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
@@ -10767,19 +10769,25 @@ def totalTablasType(request):
         if request.POST.get("search") == "all":
 
             toddy = (datetime.now()-timedelta(days=30)).date()
-        # nombreaux = request.POST.get("custName")
+
+        if request.POST.get("search") == "range":
+
+            searchDateFrom = request.POST.get("searchDateFrom")
+            searchDateTo = request.POST.get("searchDateTo")
 
     allTablesOpOnlyNames = tableOperacion.objects.values("tabNombre","principal").all().order_by("tabNombre").distinct()
-    fechas = factura.objects.values("fechaCreado").filter(fechaCreado__date__gte=toddy).order_by("fechaCreado").distinct()
-    # fechas = factura.objects.values("fechaCreado").all().order_by("fechaCreado").distinct()
-    # print(fechas)
-    nombreAux = ""
-    totalAux = 0
+    if searchDateFrom:
+        fechas = factura.objects.values("fechaCreado").filter(fechaCreado__date__gte=searchDateFrom,fechaCreado__date__lte=searchDateTo).order_by("fechaCreado").distinct()
+    else:
+        fechas = factura.objects.values("fechaCreado").filter(fechaCreado__date__gte=toddy).order_by("fechaCreado").distinct()
 
     vector = []
     vectorSup = []
 
-    factureName = factura.objects.filter(fechaCreado__date__gte=toddy).order_by("fechaCreado","id")
+    if searchDateFrom:
+        factureName = factura.objects.filter(fechaCreado__date__gte=searchDateFrom,fechaCreado__date__lte=searchDateTo).order_by("fechaCreado","id")
+    else:
+        factureName = factura.objects.filter(fechaCreado__date__gte=toddy).order_by("fechaCreado","id")
     if factureName:
         dayFrom = factureName[0].fechaCreado.date()
         dayTo = factureName[len(factureName)-1].fechaCreado.date()
@@ -10790,7 +10798,6 @@ def totalTablasType(request):
     facAuxAll = None
     lista = None
     allTypesCustom = factType.objects.all()
-    # print("ENtra en operacion")
 
     for fec in fechas:
 

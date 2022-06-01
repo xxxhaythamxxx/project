@@ -10,14 +10,6 @@
 
 {% include "spareapp/accountStatSuperior.html" %}
 
-    <!-- <div>-------------------------------</div>
-    {% for key,value in diccionario.items %}
-        <div>{{key|date:"M d, Y"}}</div>
-        {% for val in value %}
-            <div>{{val.0}}: {{val.1}}</div>
-        {% endfor %}
-    {% endfor %} -->
-
 <div class="container mt-2">
 <form action="" method="POST">
     {% csrf_token %}
@@ -30,7 +22,7 @@
         <input value="range" class="form-check-input" id="search4" type="radio" name="search">
         <label class="form-check-label" for="search4">Rango</label>
     </div>
-    <div class="mb-3" id="formByRange2" style="display: none;">
+    <div class="mb-3 col-lg-4" id="formByRange2" style="display: none;">
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-6">
