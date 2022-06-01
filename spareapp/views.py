@@ -10359,10 +10359,15 @@ def checkearNc(request):
 def deleteDb(request):
 
     facturasDelete = factura.objects.all()
+    tableOperacionDelete = tableOperacion.objects.all()
 
     for fac in facturasDelete:
 
         fac.delete()
+
+    for op in tableOperacionDelete:
+
+        op.delete()
 
     return render(request,"spareapp/contAdmin.html")
 
@@ -10735,6 +10740,233 @@ def filterContTypeCat(request):
         acum2 = acum2 + fac.total
 
     return JsonResponse({'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2,'val':val1,'val2':val2,"acumIva":acumIva})
+
+def totalTablasType(request):
+
+    print("Entra")
+
+    diccionario = {}
+    diccionarioTipo = {}
+    vector = []
+    dayFrom = ""
+    dayTo = ""
+    acum = 0
+    total = 0
+    tod = datetime.now().date()
+
+    # actualAux=datetime.now().date()
+    # actualDay=str(actualAux.year)+"-"+str('%02d' % actualAux.month)+"-"+str('%02d' % actualAux.day)
+    # deadlineDefault=(datetime.now()+timedelta(days=30)).date()
+    # actual=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+    # print((datetime.now()-timedelta(days=30)).date())
+
+    toddy = tod
+
+    if request.method == "POST":
+
+        if request.POST.get("search") == "all":
+
+            toddy = (datetime.now()-timedelta(days=30)).date()
+        # nombreaux = request.POST.get("custName")
+
+    allTablesOpOnlyNames = tableOperacion.objects.values("tabNombre","principal").all().order_by("tabNombre").distinct()
+    fechas = factura.objects.values("fechaCreado").filter(fechaCreado__date__gte=toddy).order_by("fechaCreado").distinct()
+    # fechas = factura.objects.values("fechaCreado").all().order_by("fechaCreado").distinct()
+    # print(fechas)
+    nombreAux = ""
+    totalAux = 0
+
+    vector = []
+    vectorSup = []
+
+    factureName = factura.objects.filter(fechaCreado__date__gte=toddy).order_by("fechaCreado","id")
+    if factureName:
+        dayFrom = factureName[0].fechaCreado.date()
+        dayTo = factureName[len(factureName)-1].fechaCreado.date()
+
+    # ----------- Operacion -------------------
+    cantAuxOp = None
+    totalParcialOp = {}
+    facAuxAll = None
+    lista = None
+    allTypesCustom = factType.objects.all()
+    # print("ENtra en operacion")
+
+    for fec in fechas:
+
+        toddy = fec["fechaCreado"].date()
+
+        acum = 0
+        cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").order_by("tabNombre").distinct()
+        totalParcialOp = {}
+        tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy)
+
+        if tableAuxOp:
+
+            print("Hay tabla")
+
+            allTypesCustom = factType.objects.all()
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+
+                if ty.facCobrar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.mercPagar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
+
+                if ty.mercPagada == True:
+                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+
+                if ty.facCobrada == True:
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+
+                for fac in facAuxAll:
+                    custAcum = custAcum + fac.total
+                # customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
+
+                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                for nom in lista:
+
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    if prob:
+
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+
+                        if prob2:
+
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd.tabTotal = custAcum
+                            costomInd.save()
+
+                        else:
+
+                            costomInd = tableOperacion()
+                            costomInd.fecha = toddy
+                            costomInd.tabNombre = nom["tabNombre"]
+                            typeAux = factType.objects.get(nombre=ty)
+                            costomInd.tabTipo = typeAux
+                            costomInd.principal = principalAux[0]["principal"]
+                            if sumaAux[0]["suma"]==True:
+                                costomInd.suma = True
+                                costomInd.resta = False
+                            else:
+                                costomInd.suma = False
+                                costomInd.resta = True
+                            costomInd.tabTotal = custAcum
+                            costomInd.save()
+                    
+                custAcum = 0
+
+        else:
+
+            print("No hay tabla")
+
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+
+                if ty.facCobrar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.mercPagar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
+
+                if ty.mercPagada == True:
+                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+
+                if ty.facCobrada == True:
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+
+
+                for fac in facAuxAll:
+                    custAcum = custAcum + fac.total
+                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                for nom in lista:
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    if prob:
+                        costomInd = tableOperacion()
+                        costomInd.fecha = toddy
+                        costomInd.tabNombre = nom["tabNombre"]
+                        typeAux = factType.objects.get(nombre=ty)
+                        costomInd.tabTipo = typeAux
+                        costomInd.principal = principalAux[0]["principal"]
+                        if sumaAux[0]["suma"]==True:
+                            costomInd.suma = True
+                            costomInd.resta = False
+                        else:
+                            costomInd.suma = False
+                            costomInd.resta = True
+                        costomInd.tabTotal = custAcum
+                        costomInd.save()
+                
+                custAcum = 0
+
+    # ------------------------------------------------------------------
+
+    for date in fechas:
+
+        diccionario[date["fechaCreado"]] = {}
+
+        for tables in allTablesOpOnlyNames:
+            
+            vector.append(tables["tabNombre"])
+            acum = 0
+            tableaux = tableOperacion.objects.filter(tabNombre=tables["tabNombre"],fecha__date=date["fechaCreado"].date())
+
+            for a in tableaux:
+
+                if a.suma == True:
+
+                    acum = acum + a.tabTotal
+
+                else:
+
+                    acum = acum - a.tabTotal
+
+            total = total + acum
+            vector.append(total)
+            vectorSup.append(vector)
+            vector = []
+            total = 0
+
+        diccionario[date["fechaCreado"]] = vectorSup
+        vectorSup = []
+
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    dic = {"total":total,"dayTo":dayTo,"dayFrom":dayFrom,"diccionario":diccionario,"fechas":fechas,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+
+    return render(request,"spareapp/totalTablasType.html",dic)
+
+
+# {% for fact in factureName %}
+#         {% for key,value in balance.items %}
+#         {% if key == fact.id %}
+#         <tr>
+#             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
+#             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} class="p-2">{{fact.refPersona.nombre}}</td>
+#             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|stringformat:".2f"}}</div></td>
+#         </tr>
+#         {% endif %}
+#         {% endfor %}
+#         {% endfor %}
 
 
 # tod = datetime.now().date()

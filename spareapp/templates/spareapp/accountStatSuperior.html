@@ -2,7 +2,8 @@
 
 {% load static %}
 
-<div class="container mt-2 col-lg-4 d-flex justify-content-center">
+<div class="container mt-2 col-lg-5 d-flex justify-content-center">
+    <a href="{% url 'totalTablasType' %}" style="font-size: small;" class="btn btn-success mx-1">Total tablas</a>
     <a href="{% url 'accountDay' %}" style="font-size: small;" class="btn btn-success mx-1">Estado del día</a>
     <a href="{% url 'accountStat' %}" style="font-size: small;" class="btn btn-success mx-1">Cliente</a>
     <a href="{% url 'contListByTypeZero' %}" style="font-size: small;" class="btn btn-success mx-1">Tipo de pago</a>

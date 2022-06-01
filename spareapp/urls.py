@@ -138,6 +138,7 @@ urlpatterns = [
     path("filterContType",views.filterContType,name="filterContType"),
     path("filterContTypeTarjeta",views.filterContTypeTarjeta,name="filterContTypeTarjeta"),
     path("filterContTypeCat",views.filterContTypeCat,name="filterContTypeCat"),
+    path("totalTablasType",views.totalTablasType,name="totalTablasType"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
