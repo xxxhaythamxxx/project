@@ -286,14 +286,14 @@ $("#contFacType").change(function(){
 
             $("#contCatIng").change(function(){
                 if($(this).find("option:selected").attr("limit").toLowerCase() == "true"){
-                    $("#divFechaTope").show()
+                    // $("#divFechaTope").show()
                     select2.empty()
                     for(var i = 0;i<data.cobrarPagar.length;i++){
                         select2.append("<option value="+data.cobrarPagar[i].id+">"+data.cobrarPagar[i].nombre.toUpperCase()+"</option>")
                     }
                 }
                 else{
-                    $("#divFechaTope").hide()
+                    // $("#divFechaTope").hide()
                     $("#contTypeIng option").each(function(){
                         $(this).show()
                         select2.empty()

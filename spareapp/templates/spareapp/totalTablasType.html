@@ -15,11 +15,11 @@
     {% csrf_token %}
     
     <div class="mb-3">
-        <input value="today" class="form-check-input" id="search2" type="radio" name="search" checked>
+        <input value="today" class="form-check-input" id="search2" type="radio" name="search" {% if tipoBusqueda == "today" %} checked {% else %} '' {% endif %}>
         <label class="form-check-label" for="search2">Hoy</label>
-        <input value="all" class="form-check-input" id="search1" type="radio" name="search">
+        <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if tipoBusqueda == "all" %} checked {% else %} '' {% endif %}>
         <label class="form-check-label" for="search1">Ultimos 30 días</label>
-        <input value="range" class="form-check-input" id="search4" type="radio" name="search">
+        <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if tipoBusqueda == "range" %} checked {% else %} '' {% endif %}>
         <label class="form-check-label" for="search4">Rango</label>
     </div>
     <div class="mb-3 col-lg-4" id="formByRange2" style="display: none;">
@@ -73,9 +73,9 @@
         {% if date.fechaCreado|date:"M d, Y" == key|date:"M d, Y" %}
         {% for val in value %}
         <tr>
-            <td class="p-2">{{key|date:"M d, Y"}}</td>
-            <td class="p-2">{{val.0}}</td>
-            <td class="p-2">${{val.1|stringformat:".2f"}}</td>
+            <td {% if val.1 < 0 %} style="color: #a00a0a;" {% else %} {% if val.1 > 0 %} style="color: #1029b9;" {% endif %} {% endif %} class="p-2">{{key|date:"M d, Y"}}</td>
+            <td {% if val.1 < 0 %} style="color: #a00a0a;" {% else %} {% if val.1 > 0 %} style="color: #1029b9;" {% endif %} {% endif %} class="p-2">{{val.0}}</td>
+            <td {% if val.1 < 0 %} style="color: #a00a0a;" {% else %} {% if val.1 > 0 %} style="color: #1029b9;" {% endif %} {% endif %} class="p-2">${{val.1|stringformat:".2f"}}</td>
         </tr>
         {% endfor %}
         {% endif %}
@@ -86,7 +86,7 @@
 <table class="table-bordered invoice mb-2 tfoot" style="font-size: small;" id="hInf">
     <thead>
         <tr {% if total == 0 %} style="background-color: #E77C7C;" {% else %} {% if total < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} class="">
-            <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{total|stringformat:".2f"}}</th>
+            <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{totalFinal|stringformat:".2f"}}</th>
         </tr>
     </thead>
 </table>

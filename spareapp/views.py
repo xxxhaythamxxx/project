@@ -3473,7 +3473,7 @@ def contToCollect(request):
 
     tod = datetime.now().date()
 
-    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope")
+    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope","id")
     allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
     
     deadlineDic = {}
@@ -5682,6 +5682,8 @@ def accountStat(request):
     dayTo = ""
     balanceFacMerc = 0
     acumTotal = 0
+    auxNombre = ""
+    searchMetodo = "all"
 
     if request.method == "POST":
 
@@ -5735,9 +5737,11 @@ def accountStat(request):
 
             print("Entra en balance")
 
+            searchMetodo = "balance"
+
             for key in balance:
 
-                if balance[key]==0:
+                if balance[key][0]==0:
                     pos = key
             
             facActAux = factura.objects.filter(id=pos)
@@ -5751,7 +5755,15 @@ def accountStat(request):
 
                 factureName = None
 
+            if factureName:
+                pass
+            else:
+                factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
+
+
         if request.POST.get("search") == "month":
+
+            searchMetodo = "month"
 
             mes = datetime.now().date().month
             date_today = datetime.now()
@@ -5767,6 +5779,8 @@ def accountStat(request):
         if request.POST.get("search") == "range":
 
             print("Entra en range")
+
+            searchMetodo = "range"
 
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
@@ -5882,7 +5896,7 @@ def accountStat(request):
 
     tod = datetime.now().date()
 
-    dic = {"acumTotal":acumTotal,"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
+    dic = {"searchMetodo":searchMetodo,"auxNombre":auxNombre,"acumTotal":acumTotal,"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -6415,6 +6429,8 @@ def contIndividual(request,val):
     tod = datetime.now().date()
     acumTotal = 0
     balanceFacMerc = 0
+    auxNombre = val
+    searchMetodo = "all"
 
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
@@ -6496,8 +6512,6 @@ def contIndividual(request,val):
 
     if request.method == "POST":
 
-        balanceFacMerc = 0
-
         auxNombre = request.POST.get("contNombre")
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
         if factureName:
@@ -6548,9 +6562,11 @@ def contIndividual(request,val):
 
             print("Entra en balance")
 
+            searchMetodo = "balance"
+
             for key in balance:
 
-                if balance[key]==0:
+                if balance[key][0]==0:
                     pos = key
             
             facActAux = factura.objects.filter(id=pos)
@@ -6564,7 +6580,15 @@ def contIndividual(request,val):
 
                 factureName = None
 
+            if factureName:
+                pass
+            else:
+                factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
+
+
         if request.POST.get("search") == "month":
+
+            searchMetodo = "month"
 
             mes = datetime.now().date().month
             date_today = datetime.now()
@@ -6580,6 +6604,8 @@ def contIndividual(request,val):
         if request.POST.get("search") == "range":
 
             print("Entra en range")
+
+            searchMetodo = "range"
 
             dateFrom = request.POST.get("searchDateFrom")
             dateTo = request.POST.get("searchDateTo")
@@ -6600,6 +6626,10 @@ def contIndividual(request,val):
 
             for fac in factureName:
 
+                # print(fac)
+                # print(cont)
+                # print(fac.total)
+
                 if fac.refCategory.ingreso:
 
                     cont = cont
@@ -6610,7 +6640,7 @@ def contIndividual(request,val):
                         if fac.pendiente == True:
                             balanceFacMerc = balanceFacMerc + fac.total
                     
-                    if fac.refCategory.nombre=="Factura cobrada":
+                    if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
 
                         cont = cont - fac.total
                 
@@ -6618,15 +6648,29 @@ def contIndividual(request,val):
 
                     cont = cont
 
-                    if fac.refType.mercPagar==True:
+                    if fac.nc == True:
 
-                        cont = cont - fac.total
-                        if fac.pendiente == True:
-                            balanceFacMerc = balanceFacMerc - fac.total
+                        if fac.refType.mercPagar==True:
+
+                            cont = cont + fac.total
+                            if fac.pendiente == True:
+                                balanceFacMerc = balanceFacMerc - fac.total
                     
-                    if fac.refCategory.nombre=="Mercancia credito pagada":
+                        if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                        cont = cont + fac.total
+                            cont = cont - fac.total
+
+                    else:
+
+                        if fac.refType.mercPagar==True:
+
+                            cont = cont - fac.total
+                            if fac.pendiente == True:
+                                balanceFacMerc = balanceFacMerc - fac.total
+                        
+                        if fac.refCategory.nombre=="Mercancia credito pagada":
+
+                            cont = cont + fac.total
 
                 # if fac.pendiente == True and fac.refType.gasto == True:
                 #     balance[fac.id] = [cont,fac.total*(-1)]
@@ -6677,7 +6721,7 @@ def contIndividual(request,val):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"acumTotal":acumTotal,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"searchMetodo":searchMetodo,"auxNombre":auxNombre,"acumTotal":acumTotal,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"allCustomers":allCustomers,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
@@ -10293,6 +10337,7 @@ def checkearNc(request):
     filterCategorys = factura.objects.none()
     acum = 0
     acum2 = 0
+    acumIva = 0
     deadline = ""
     deadlineDic = []
     dateDic = []
@@ -10353,8 +10398,9 @@ def checkearNc(request):
 
         acum = acum + fac.monto
         acum2 = acum2 + fac.total
+        acumIva = acumIva + fac.iva
 
-    return JsonResponse({'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
+    return JsonResponse({'acumIva':acumIva,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
 
 def deleteDb(request):
 
@@ -10381,6 +10427,7 @@ def filterToCollect(request):
     filterCategorys = factura.objects.none()
     acum = 0
     acum2 = 0
+    acumIva = 0
     deadline = ""
     deadlineDic = []
     dateDic = []
@@ -10412,7 +10459,11 @@ def filterToCollect(request):
         deadlineDic.append(deadline.days)
         dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
 
-    return JsonResponse({'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
+        acum = acum + fac.monto
+        acum2 = acum2 + fac.total
+        acumIva = acumIva + fac.iva
+
+    return JsonResponse({'acumIva':acumIva,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
 
 def filterContType(request):
 
@@ -10746,12 +10797,13 @@ def totalTablasType(request):
     print("Entra")
 
     diccionario = {}
-    diccionarioTipo = {}
+    # diccionarioTipo = {}
     vector = []
     dayFrom = ""
     dayTo = ""
     acum = 0
     total = 0
+    totalFinal = 0
     tod = datetime.now().date()
     searchDateFrom = None
     searchDateTo = None
@@ -10764,14 +10816,18 @@ def totalTablasType(request):
 
     toddy = tod
 
+    tipoBusqueda = "today"
+
     if request.method == "POST":
 
         if request.POST.get("search") == "all":
 
+            tipoBusqueda = "all"
             toddy = (datetime.now()-timedelta(days=30)).date()
 
         if request.POST.get("search") == "range":
 
+            tipoBusqueda = "range"
             searchDateFrom = request.POST.get("searchDateFrom")
             searchDateTo = request.POST.get("searchDateTo")
 
@@ -10945,6 +11001,7 @@ def totalTablasType(request):
                     acum = acum - a.tabTotal
 
             total = total + acum
+            totalFinal = totalFinal + total
             vector.append(total)
             vectorSup.append(vector)
             vector = []
@@ -10958,7 +11015,7 @@ def totalTablasType(request):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"total":total,"dayTo":dayTo,"dayFrom":dayFrom,"diccionario":diccionario,"fechas":fechas,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"totalFinal":totalFinal,"tipoBusqueda":tipoBusqueda,"total":total,"dayTo":dayTo,"dayFrom":dayFrom,"diccionario":diccionario,"fechas":fechas,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/totalTablasType.html",dic)
 

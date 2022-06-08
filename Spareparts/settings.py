@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-bf_=3uldbt4lpm8ack11r66ov-7wmcqxir8727h80ft++f1r8!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','13.52.250.205','localhost']
+ALLOWED_HOSTS = ['3.87.107.94','127.0.0.1','13.52.250.205','localhost']
 
 
 # Application definition
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'spareapp',
-    'smart_selects',
+    # 'smart_selects',
     'import_export',
     # 'flask_sqlalchemy'
     # 'crispy_forms',

@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-from smart_selects.db_fields import ChainedManyToManyField, ChainedForeignKey
+# from smart_selects.db_fields import ChainedManyToManyField, ChainedForeignKey
 from django.utils.timezone import now
 from datetime import datetime, timezone
 from datetime import timedelta
@@ -54,10 +54,11 @@ class spare(models.Model):
     spare_brand=models.CharField(max_length=20, verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
     spare_name=models.CharField(max_length=80, verbose_name="Description",blank=True,null=True)          #Ejemplo: Oil filter
     car_info=models.ManyToManyField(car,blank=True,null=True)
-    engine_info=ChainedManyToManyField(
-        engine,
-        chained_field="car_info",
-        chained_model_field="car_engine_info",blank=True,null=True)
+    engine_info=models.ManyToManyField(engine,blank=True,null=True)
+    # ChainedManyToManyField(
+    #     engine,
+    #     chained_field="car_info",
+    #     chained_model_field="car_engine_info",blank=True,null=True)
     spare_category = models.ForeignKey(category,on_delete=CASCADE,verbose_name="Category",blank=True,null=True)
     spare_vendor = models.ManyToManyField(vendor,verbose_name="Vendor",blank=True,null=True)
     # spare_reference=models.ManyToManyField(reference,verbose_name="Reference code",blank=True,null=True)

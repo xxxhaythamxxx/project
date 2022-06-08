@@ -10,6 +10,16 @@
 
 {% include "spareapp/accountStatSuperior.html" %}
 
+<!-- {{balance}} -->
+<!-- <div></div>
+{% for fact in factureName %}
+    {% for key,value in balance.items %}
+    {% if key == fact.id %}
+    {{value.0|stringformat:".2f"}}
+    {% endif %}
+    {% endfor %}
+{% endfor %} -->
+
 <div class="container mt-2 col-lg-4">
 <form action="" method="POST">
     {% csrf_token %}
@@ -18,18 +28,18 @@
         <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
             <option value="" selected>Seleccionar cliente</option>
             {% for cust in allCustomers %}
-            <option value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
+            <option value="{{cust.id}}" {% if cust.id|slugify == auxNombre|slugify %} selected {% else %} '' {% endif %}>{{cust.nombre}} - {{cust.documento}}</option>
             {% endfor %}
         </select>
     </div>
     <div class="mb-3">
-        <input value="all" class="form-check-input" id="search1" type="radio" name="search" checked>
+        <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %}>
         <label class="form-check-label" for="search1">Todos</label>
-        <input value="month" class="form-check-input" id="search2" type="radio" name="search">
+        <input value="month" class="form-check-input" id="search2" type="radio" name="search" {% if searchMetodo == 'month' %} checked {$ else %} '' {% endif %}>
         <label class="form-check-label" for="search2">Éste mes</label>
-        <input value="range" class="form-check-input" id="search4" type="radio" name="search">
+        <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %}>
         <label class="form-check-label" for="search4">Rango</label>
-        <input value="balance" class="form-check-input" id="search5" type="radio" name="search">
+        <input value="balance" class="form-check-input" id="search5" type="radio" name="search" {% if searchMetodo == 'balance' %} checked {$ else %} '' {% endif %}>
         <label class="form-check-label" for="search5">Último balance</label>
     </div>
     <div class="mb-3" id="formByRange2" style="display: none;">
