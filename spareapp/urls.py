@@ -8,7 +8,7 @@ from . import views
 urlpatterns = [
     path('', views.home,name='home'),
     path('find', views.find,name='find'),
-    path('chaining/', include('smart_selects.urls')),
+    # path('chaining/', include('smart_selects.urls')),
     path("sparedetails/<str:val>?<str:val2>",views.sparedetails,name="sparedetails"),
     path("brand/<str:val>",views.brand,name="brand"),
     path("name/<str:val>",views.name,name="name"),
