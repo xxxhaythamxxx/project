@@ -10406,6 +10406,110 @@ def deleteDb(request):
 
     facturasDelete = factura.objects.all()
     tableOperacionDelete = tableOperacion.objects.all()
+    carDelete = car.objects.all()
+    engineDelete = engine.objects.all()
+    categoryDelete = category.objects.all()
+    vendorDelete = vendor.objects.all()
+    spareDelete = spare.objects.all()
+    dimensionDelete = dimension.objects.all()
+    atributeDelete = atribute.objects.all()
+    referenceDelete = reference.objects.all()
+    spareCartDelete = spareCart.objects.all()
+    ProfileDelete = Profile.objects.all()
+    personaDelete = persona.objects.all()
+    factTypeDelete = factType.objects.all()
+    factCategoryDelete = factCategory.objects.all()
+    mainTableDelete = mainTable.objects.all()
+    mainTableAuxDelete = mainTableAux.objects.all()
+    customTableDelete = customTable.objects.all()
+    customAuxDelete = customAux.objects.all()
+    tableOperacionAuxDelete = tableOperacionAux.objects.all()
+    tableOperacionCatDelete = tableOperacionCat.objects.all()
+    tableOperacionAuxCatDelete = tableOperacionAuxCat.objects.all()
+
+    for fac in tableOperacionAuxDelete:
+
+        fac.delete()
+
+    for fac in tableOperacionCatDelete:
+
+        fac.delete()
+
+    for fac in tableOperacionAuxCatDelete:
+
+        fac.delete()
+
+    for fac in mainTableAuxDelete:
+
+        fac.delete()
+
+    for fac in customTableDelete:
+
+        fac.delete()
+
+    for fac in customAuxDelete:
+
+        fac.delete()
+
+    for fac in factTypeDelete:
+
+        fac.delete()
+
+    for fac in factCategoryDelete:
+
+        fac.delete()
+
+    for fac in mainTableDelete:
+
+        fac.delete()
+
+    for fac in categoryDelete:
+
+        fac.delete()
+
+    for fac in vendorDelete:
+
+        fac.delete()
+
+    for fac in spareDelete:
+
+        fac.delete()
+
+    for fac in dimensionDelete:
+
+        fac.delete()
+
+    for fac in atributeDelete:
+
+        fac.delete()
+
+    for fac in referenceDelete:
+
+        fac.delete()
+
+    for fac in spareCartDelete:
+
+        fac.delete()
+
+    for fac in ProfileDelete:
+
+        fac.delete()
+
+    for fac in personaDelete:
+
+        fac.delete()
+
+    for fac in engineDelete:
+
+        fac.delete()
+
+    for fac in carDelete:
+
+        fac.delete()
+
+    # for fac in engineDelete:
+
+    #     fac.delete()
 
     for fac in facturasDelete:
 

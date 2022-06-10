@@ -275,11 +275,12 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
 
 function generatePDF2(){
 
-if($("#cod").val()){
-    var tableFooterCells = [...document.querySelectorAll('.erase td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
-}else{
-    var tableFooterCells = [...document.querySelectorAll('.tfoot td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
-}
+// if($("#cod").val()){
+//     var tableFooterCells = [...document.querySelectorAll('.erase td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+// }else{
+//     var tableFooterCells = [...document.querySelectorAll('.tfoot td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+// }
+var tableFooterCells = [...document.querySelectorAll('.tfoot td:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
 
 var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
 var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
