@@ -10212,7 +10212,7 @@ def contCargarDb(request):
                         costomInd = tableOperacion()
                         costomInd.fecha = toddy
                         costomInd.tabNombre = nom["tabNombre"]
-                        typeAux = factType.objects.get(nombre=ty)
+                        typeAux = factType.objects.get(id=ty.id)
                         costomInd.tabTipo = typeAux
                         costomInd.principal = principalAux[0]["principal"]
                         if sumaAux[0]["suma"]==True:
