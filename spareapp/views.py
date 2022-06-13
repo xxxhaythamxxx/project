@@ -2870,19 +2870,19 @@ def contEntry(request):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -2930,11 +2930,11 @@ def contEntry(request):
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
                             costomInd.fecha = tod
@@ -3005,19 +3005,19 @@ def contEntry(request):
                     for fac in facAuxAllCat:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -3050,11 +3050,11 @@ def contEntry(request):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacionCat()
                             costomInd.fecha = tod
@@ -3179,7 +3179,7 @@ def contType(request,val,val2):
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    dic = {"typeAux":typeAux,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"itbm7":itbm7,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contType.html",dic)
 
@@ -3353,7 +3353,7 @@ def contTypeRange(request,val,val2,val3):
     dateFrom = val2
     dateTo = val3
 
-    dic = {"dateTo":dateTo,"dateFrom":dateFrom,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"allTypes":allTypes,"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+    dic = {"typeAux":typeAux,"dateTo":dateTo,"dateFrom":dateFrom,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"allTypes":allTypes,"totalTotal":totalTotal,"itbmTotal":itbmTotal,"montoTotal":montoTotal,"itbm7":itbm7,"typeDate":typeDate,"val3":val3,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
 
     return render(request,"spareapp/contType.html",dic)
 
@@ -3822,19 +3822,19 @@ def contListType(request):
                 custAcum = custAcum + fac.total
             customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
-                    prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                    prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                     if prob2:
 
-                        costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                         costomInd.tabTotal = custAcum
                         costomInd.save()
 
@@ -3883,11 +3883,11 @@ def contListType(request):
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
                     costomInd = tableOperacion()
                     costomInd.fecha = toddy
@@ -4036,19 +4036,19 @@ def contByDay(request):
                 custAcum = custAcum + fac.total
             customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
-                    prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                    prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                     if prob2:
 
-                        costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                         costomInd.tabTotal = custAcum
                         costomInd.save()
 
@@ -4098,11 +4098,11 @@ def contByDay(request):
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
                     costomInd = tableOperacion()
                     costomInd.fecha = toddy
@@ -4174,19 +4174,19 @@ def contByDay(request):
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -4219,11 +4219,11 @@ def contByDay(request):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacionCat()
                         costomInd.fecha = tod
@@ -4339,19 +4339,19 @@ def contByDayCustom(request):
                         custAcum = custAcum + fac.total
                     customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -4401,11 +4401,11 @@ def contByDayCustom(request):
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
                             costomInd.fecha = tod
@@ -4479,19 +4479,19 @@ def contByDayCustom(request):
                     for fac in facAuxAllCat:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -4524,11 +4524,11 @@ def contByDayCustom(request):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacionCat()
                             costomInd.fecha = tod
@@ -4648,12 +4648,12 @@ def contByRangeCustom(request):
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
 
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
                     costomInd = tableOperacionAux()
@@ -4727,12 +4727,12 @@ def contByRangeCustom(request):
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
 
-            lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+            lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
                     costomInd = tableOperacionAuxCat()
@@ -4854,12 +4854,12 @@ def contByRange(request):
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
 
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
                     costomInd = tableOperacionAux()
@@ -4933,12 +4933,12 @@ def contByRange(request):
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
 
-            lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+            lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
                     costomInd = tableOperacionAuxCat()
@@ -5083,19 +5083,19 @@ def contCollectFac(request,val):
                     custAcum = custAcum + fac.total
                 customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -5145,11 +5145,11 @@ def contCollectFac(request,val):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = tod
@@ -5219,19 +5219,19 @@ def contCollectFac(request,val):
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -5264,11 +5264,11 @@ def contCollectFac(request,val):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacionCat()
                         costomInd.fecha = tod
@@ -5405,19 +5405,19 @@ def contPayFac(request,val):
                     custAcum = custAcum + fac.total
                 customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -5467,11 +5467,11 @@ def contPayFac(request,val):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = tod
@@ -5541,19 +5541,19 @@ def contPayFac(request,val):
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -5586,11 +5586,11 @@ def contPayFac(request,val):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacionCat()
                         costomInd.fecha = tod
@@ -6183,19 +6183,19 @@ def editeFact(request,val,val2):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -6244,11 +6244,11 @@ def editeFact(request,val,val2):
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
                             costomInd.fecha = tod
@@ -6295,19 +6295,19 @@ def editeFact(request,val,val2):
                     for fac in facAuxAllCat:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -6340,11 +6340,11 @@ def editeFact(request,val,val2):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacionCat()
                             costomInd.fecha = tod
@@ -7217,19 +7217,19 @@ def deleteFac(request,val):
                 custAcum = custAcum + fac.total
             customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
 
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
 
-                    prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                    prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                     if prob2:
 
-                        costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                         costomInd.tabTotal = custAcum
                         costomInd.save()
 
@@ -7278,11 +7278,11 @@ def deleteFac(request,val):
 
             for fac in facAuxAll:
                 custAcum = custAcum + fac.total
-            lista = tableOperacion.objects.all().values("tabNombre").distinct()
+            lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
-                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                 if prob:
                     costomInd = tableOperacion()
                     costomInd.fecha = toddy
@@ -7329,19 +7329,19 @@ def deleteFac(request,val):
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -7374,11 +7374,11 @@ def deleteFac(request,val):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacionCat()
                         costomInd.fecha = tod
@@ -7498,19 +7498,19 @@ def customTables(request,val):
                     custAcum = custAcum + fac.total
                 customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -7559,11 +7559,11 @@ def customTables(request,val):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = toddy
@@ -7637,19 +7637,19 @@ def customTables(request,val):
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -7682,11 +7682,11 @@ def customTables(request,val):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacionCat()
                         costomInd.fecha = tod
@@ -7973,12 +7973,12 @@ def customTablesRange(request,val,val2):
         for fac in facAuxAll:
             custAcum = custAcum + fac.total
 
-        lista = tableOperacion.objects.all().values("tabNombre").distinct()
+        lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
         for nom in lista:
 
-            prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-            sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+            prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+            sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
             if prob:
 
                 costomInd = tableOperacionAux()
@@ -8052,12 +8052,12 @@ def customTablesRange(request,val,val2):
         for fac in facAuxAll:
             custAcum = custAcum + fac.total
 
-        lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+        lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
         for nom in lista:
 
-            prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-            principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-            sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+            prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+            principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+            sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
             if prob:
 
                 costomInd = tableOperacionAuxCat()
@@ -8232,19 +8232,19 @@ def contDayBack(request,val):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -8294,11 +8294,11 @@ def contDayBack(request,val):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = toddy
@@ -8370,19 +8370,19 @@ def contDayBack(request,val):
                 for fac in facAuxAllCat:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -8415,11 +8415,11 @@ def contDayBack(request,val):
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
 
-                lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacionCat()
                         costomInd.fecha = tod
@@ -8525,12 +8525,12 @@ def contDayBackRange(request,val,val2):
         for fac in facAuxAll:
             custAcum = custAcum + fac.total
 
-        lista = tableOperacion.objects.all().values("tabNombre").distinct()
+        lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
         for nom in lista:
 
-            prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-            sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+            prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+            principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+            sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
             if prob:
 
                 costomInd = tableOperacionAux()
@@ -8605,12 +8605,12 @@ def contDayBackRange(request,val,val2):
         for fac in facAuxAll:
             custAcum = custAcum + fac.total
 
-        lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+        lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
         for nom in lista:
 
-            prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-            principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-            sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+            prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+            principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+            sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
             if prob:
 
                 costomInd = tableOperacionAuxCat()
@@ -9016,9 +9016,9 @@ def contAddOperacion(request):
 
     if request.method == "POST":
 
-        lista=request.POST.getlist("type")
-        nombreTabla = request.POST.get("tabNombre")
-        principal=request.POST.get("tabPrincipal")
+        # lista=request.POST.getlist("type")
+        # nombreTabla = request.POST.get("tabNombre")
+        # principal=request.POST.get("tabPrincipal")
         sumas = request.POST.getlist("TsumaVal")
         restas = request.POST.getlist("TrestaVal")
         searchTable = tableOperacion.objects.filter(tabNombre=request.POST.get("tabNombre"))
@@ -9059,7 +9059,7 @@ def contAddOperacion(request):
                 typeAux = factType.objects.get(nombre=val)
                 facAux = factura.objects.filter(fechaCreado__date=tod,refType=typeAux)
                 for fac in facAux:
-                    acum = acum - fac.total
+                    acum = acum + fac.total
                 tableAux.tabTipo = typeAux
                 if request.POST.get("tabPrincipal"):
                     tableAux.principal = True
@@ -9492,19 +9492,19 @@ def editeFactAccount(request,val,val1,val2):
                         custAcum = custAcum + fac.total
                     customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                                costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -9552,11 +9552,11 @@ def editeFactAccount(request,val,val1,val2):
 
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
-                    lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                        prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacion()
                             costomInd.fecha = toddy
@@ -9605,19 +9605,19 @@ def editeFactAccount(request,val,val1,val2):
                     for fac in facAuxAllCat:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -9650,11 +9650,11 @@ def editeFactAccount(request,val,val1,val2):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacionCat()
                             costomInd.fecha = tod
@@ -9731,7 +9731,7 @@ def contAddOperacionCat(request):
                 typeAux = factCategory.objects.get(nombre=val)
                 facAux = factura.objects.filter(fechaCreado__date=tod,refCategory=typeAux)
                 for fac in facAux:
-                    acum = acum - fac.total
+                    acum = acum + fac.total
                 tableAux.tabCat = typeAux
                 if request.POST.get("tabPrincipal"):
                     tableAux.principal = True
@@ -10087,6 +10087,22 @@ def contCargarDb(request):
 
     if request.method == "POST":
 
+        facturasDelete = factura.objects.all()
+        factTypeDelete = factType.objects.all()
+        factCategoryDelete = factCategory.objects.all()
+
+        for fac in facturasDelete:
+
+            fac.delete()
+
+        for fac in factTypeDelete:
+
+            fac.delete()
+
+        for fac in factCategoryDelete:
+
+            fac.delete()
+
         if request.FILES.get("cargar"):
 
             archivo = request.FILES['cargar'].read()
@@ -10142,19 +10158,19 @@ def contCargarDb(request):
                     custAcum = custAcum + fac.total
                 customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -10203,11 +10219,11 @@ def contCargarDb(request):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = toddy
@@ -10254,19 +10270,19 @@ def contCargarDb(request):
                     for fac in facAuxAllCat:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
 
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
 
-                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                            prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                             if prob2:
 
-                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty)
+                                costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                                 costomInd.tabTotal = custAcum
                                 costomInd.save()
 
@@ -10299,11 +10315,11 @@ def contCargarDb(request):
                     for fac in facAuxAll:
                         custAcum = custAcum + fac.total
 
-                    lista = tableOperacionCat.objects.all().values("tabNombre").distinct()
+                    lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
-                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty)
-                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("principal").distinct()
-                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty).values("suma").distinct()
+                        prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                        principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                        sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                         if prob:
                             costomInd = tableOperacionCat()
                             costomInd.fecha = tod
@@ -10569,7 +10585,11 @@ def filterToCollect(request):
 
     return JsonResponse({'acumIva':acumIva,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
 
+from django.core import serializers
+
 def filterContType(request):
+
+    tod = datetime.now().date()
 
     # allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=val)
     # typeAux = factType.objects.get(nombre=val)
@@ -10636,6 +10656,7 @@ def filterContType(request):
     dateFrom = request.GET.get("dateFrom")
     tod = val2
     typeAux = factType.objects.get(nombre=val1)
+    filter = [item for item in filter if item]
 
     for fil in filter:
 
@@ -10643,49 +10664,160 @@ def filterContType(request):
 
             if dateTo:
 
-                filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+
+                if typeAux.mercPagada == True:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+                if typeAux.facCobrada == True:
+
+                    if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                        filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    else:
+                        filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+
+                if typeAux.facCobrar == True:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+
+                if typeAux.mercPagar == True:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
 
             else:
 
-                filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+
+                if typeAux.mercPagada == True:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+                    auxil = ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+                if typeAux.facCobrada == True:
+
+                    if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                        filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    else:
+                        filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+
+                if typeAux.facCobrar == True:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+
+                if typeAux.mercPagar == True:
+
+                    filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
 
         else:
 
             if dateTo:
 
-                filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+
+                if typeAux.mercPagada == True:
+
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+                if typeAux.facCobrada == True:
+
+                    if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                        filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    else:
+                        filterFactures = ( factura.objects.filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+
+                if typeAux.facCobrar == True:
+
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+
+                if typeAux.mercPagar == True:
+
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
 
             else:
 
-                filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
-                filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
 
-    # if typeAux.facCobrada == True:
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
 
-    #     if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                if typeAux.mercPagada == True:
 
-    #         filterFactures = factura.objects.filter(fechaCreado=tod,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
-    #     else:
-    #         filterFactures = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
 
-    # if typeAux.mercPagada == True:
+                if typeAux.facCobrada == True:
 
-    #     filterFactures = factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+                    if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
 
-    # if typeAux.facCobrar == True:
+                        filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                        filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    else:
+                        filterFactures = ( factura.objects.filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+                        filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil) )
+       
+                if typeAux.facCobrar == True:
 
-    #     filterFactures = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True) )
 
-    # if typeAux.mercPagar == True:
+                if typeAux.mercPagar == True:
 
-    #     filterFactures = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+                    filterFactures = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                    filterCategorys = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
 
     allFacturesQuery = list(filterFactures.values())
     allPersonasQuery = list(filterPersonas)
@@ -10701,7 +10833,20 @@ def filterContType(request):
         acumIva = acumIva + fac.iva
         acum2 = acum2 + fac.total
 
-    return JsonResponse({'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2,'val':val1,'val2':val2,"acumIva":acumIva})
+    typeSearch = {}
+    typeSearch["nombre"] = typeAux.nombre
+    typeSearch["include"] = typeAux.include
+    typeSearch["manual"] = typeAux.manual
+    typeSearch["mercPagada"] = typeAux.mercPagada
+    typeSearch["mercPagar"] = typeAux.mercPagar
+    typeSearch["facCobrar"] = typeAux.facCobrar
+    typeSearch["facCobrada"] = typeAux.facCobrada
+    typeSearch["visa"] = typeAux.visa
+    typeSearch["clave"] = typeAux.clave
+    typeSearch["ingreso"] = typeAux.ingreso
+    typeSearch["gasto"] = typeAux.gasto
+
+    return JsonResponse({"typeSearch":typeSearch,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2,'val':val1,'val2':val2,"acumIva":acumIva})
 
 def filterContTypeTarjeta(request):
 
@@ -10843,10 +10988,11 @@ def filterContTypeCat(request):
     val2 = request.GET.get("val2")
     dateTo = request.GET.get("dateTo")
     dateFrom = request.GET.get("dateFrom")
+    tod = datetime.now().date()
     tod = val2
     # typeAux = factType.objects.get(nombre=val1)
 
-    print(filter)
+    # print(filter)
 
     # allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refCategory__nombre=val).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
@@ -10894,7 +11040,22 @@ def filterContTypeCat(request):
         acumIva = acumIva + fac.iva
         acum2 = acum2 + fac.total
 
-    return JsonResponse({'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2,'val':val1,'val2':val2,"acumIva":acumIva})
+    typeSearch = {}
+    typeAux = factType.objects.filter(id=filterFactures[0].refType.id)
+    # print(filterFactures[0].refType.id)
+    typeSearch["nombre"] = typeAux[0].nombre
+    typeSearch["include"] = typeAux[0].include
+    typeSearch["manual"] = typeAux[0].manual
+    typeSearch["mercPagada"] = typeAux[0].mercPagada
+    typeSearch["mercPagar"] = typeAux[0].mercPagar
+    typeSearch["facCobrar"] = typeAux[0].facCobrar
+    typeSearch["facCobrada"] = typeAux[0].facCobrada
+    typeSearch["visa"] = typeAux[0].visa
+    typeSearch["clave"] = typeAux[0].clave
+    typeSearch["ingreso"] = typeAux[0].ingreso
+    typeSearch["gasto"] = typeAux[0].gasto
+
+    return JsonResponse({"typeSearch":typeSearch,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2,'val':val1,'val2':val2,"acumIva":acumIva})
 
 def totalTablasType(request):
 
@@ -10997,19 +11158,19 @@ def totalTablasType(request):
                     custAcum = custAcum + fac.total
                 # customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
 
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
 
-                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
 
                         if prob2:
 
-                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
                             costomInd.tabTotal = custAcum
                             costomInd.save()
 
@@ -11059,11 +11220,11 @@ def totalTablasType(request):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                lista = tableOperacion.objects.all().values("tabNombre").distinct()
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
-                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty)
-                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("principal").distinct()
-                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty).values("suma").distinct()
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
                         costomInd.fecha = toddy

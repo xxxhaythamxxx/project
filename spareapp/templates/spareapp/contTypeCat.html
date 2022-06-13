@@ -133,7 +133,7 @@
             
         </tbody>
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
-            <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %}>
+            <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if allFacturesVal.0.refType.ingreso == False %} {% if allFacturesVal.0.refType.mercPagar == True %} style="background-color: #E77C7C;color: #1029b9" {% else %} style="background-color: #E77C7C;color: #c90a0a" {% endif %}  {% else %} {% if allFacturesVal.0.refType.facCobrar == True %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} {% endif %}>
                 <th class="p-2">Total</th>
                 <th class="p-2"></th>
                 <th class="p-2"></th>
@@ -229,131 +229,46 @@ $("#cod").on("keyup",function(){
         url: '/filterContTypeCat',
         data: {'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter,'val1':val1,'val2':val2},
         success:function(data){
+            // alert(data.allFacturesQuery[0].refType)
+            // alert(data.allFacturesQuery[0].refType.ingreso)
             $("#myTable").empty()
             $("tfoot").empty()
             for(var i = 0; i<data.allFacturesQuery.length;i++){
                 if(data.allFacturesQuery[i].pendiente == true){
                     if(data.allCategorysQuery[i].refCategory__ingreso == true){
-                        $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.val2+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refType__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalCobrar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalCobrar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Cobrar</a></td></tr>")
+                        $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refType__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalCobrar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalCobrar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Cobrar</a></td></tr>")
                     }
                     else{
-                        $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.val2+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refType__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
+                        $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refType__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
                     }
                 }
                 else{
-                    $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.val2+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refType__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a></td></tr>")
+                    $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refType__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a></td></tr>")
                 }
             }
             if(data.acum2 == 0){
                 $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th>th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
             }
-            else
-                if(data.acum2 < 0){
-                    $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+            else{
+                if(data.typeSearch.ingreso == false){
+                    if(data.typeSearch.mercPagar == true){
+                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                    }
+                    else
+                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
                 }
                 else{
-                    $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                    if(data.typeSearch.facCobrar == true){
+                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                    }
+                    else
+                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
                 }
+
+            }
         }
     });
 })
-
-// $("#cod").on("keyup",function(){                                // Cuando se teclea algo
-
-//     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-//     var sumarMonto = 0
-//     var auxMonto = 0
-//     var sumarItbm = 0
-//     var auxItbm = 0
-//     var sumarTotal = 0
-//     var auxTotal = 0
-//     var totalMonto = 0
-//     var totalItbm = 0
-//     var totalTotal = 0
-
-//     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-//     $(".invoice tbody tr").filter(function(){                             // 
-//         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//     })
-
-//     $("tfoot").hide()
-
-//     $("#invoice tbody tr").each(function(){
-//             $(this).find("td").each(function(){
-//                 if ($(this).index() == $("#auxMonto").index()) {
-//                     if ($(this).is(":visible")){
-//                         sumarMonto = $(this).text()
-//                         auxMonto = sumarMonto.split("$")[1]
-//                     }
-//                     else{
-//                         auxMonto = 0
-//                     }
-                    
-//                 }
-//                 if ($(this).index() == $("#auxItbm").index()) {
-//                     if ($(this).is(":visible")){
-//                         sumarItbm = $(this).text()
-//                         auxItbm = sumarItbm.split("$")[1]
-//                     }
-//                     else{
-//                         auxItbm = 0
-//                     }
-                    
-//                 }
-//                 if ($(this).index() == $("#auxTotal").index()) {
-//                     if ($(this).is(":visible")){
-//                         sumarTotal = $(this).text()
-//                         auxTotal = sumarTotal.split("$")[1]
-//                     }
-//                     else{
-//                         auxTotal = 0
-//                     }
-                    
-//                 }
-//             })
-            
-//             var auxItbmFull = auxItbm
-//             String(auxItbmFull)
-//             if (String(auxItbmFull).indexOf(",")>-1){
-//                 auxItbmFull.replace(',', '.')
-//                 auxItbm = auxItbmFull.replace(',', '.')
-//             }
-//             totalItbm = totalItbm + parseFloat(auxItbm)
-
-//             var auxMontoFull = auxMonto
-//             String(auxMontoFull)
-//             if (String(auxMontoFull).indexOf(",")>-1){
-//                 auxMontoFull.replace(',', '.')
-//                 auxMonto = auxMontoFull.replace(',', '.')
-//             }
-//             totalMonto = totalMonto + parseFloat(auxMonto)
-
-//             var auxTotalFull = auxTotal
-//             String(auxTotalFull)
-//             if (String(auxTotalFull).indexOf(",")>-1){
-//                 auxTotalFull.replace(',', '.')
-//                 auxTotal = auxTotalFull.replace(',', '.')
-//             }
-//             totalTotal = totalTotal + parseFloat(auxTotal)
-//         })
-
-//         $(".erase").remove()
-
-//         if (totalTotal == 0){
-//             $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
-//         }else{
-//             if (totalTotal < 0){
-//                 $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
-//             }else{
-//                 $("#invoice").append("<tfoot class='table-bordered invoice erase' style='font-size: small;' id='hInf'><tr style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+totalMonto.toFixed(2)+"</th><th class='p-2'>$ "+totalItbm.toFixed(2)+"</th><th class='p-2'>$ "+totalTotal.toFixed(2)+"</th><th class='p-2 exclude'></th></tr></tfoot>")
-//             }
-//         }
-
-//         if(value==""){
-//             $(".erase").remove()
-//             $("tfoot").show()
-//         }
-// })
     
 </script>
 
