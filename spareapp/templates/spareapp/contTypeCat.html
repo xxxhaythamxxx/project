@@ -133,7 +133,7 @@
             
         </tbody>
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
-            <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if allFacturesVal.0.refType.ingreso == False %} {% if allFacturesVal.0.refType.mercPagar == True %} style="background-color: #E77C7C;color: #1029b9" {% else %} style="background-color: #E77C7C;color: #c90a0a" {% endif %}  {% else %} {% if allFacturesVal.0.refType.facCobrar == True %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} {% endif %}>
+            <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if totalTotal > 0 %} style="background-color: #E77C7C;color: #1029b9" {% else %} style="background-color: #E77C7C;color: #c90a0a" {% endif %} {% endif %}>
                 <th class="p-2">Total</th>
                 <th class="p-2"></th>
                 <th class="p-2"></th>
@@ -250,20 +250,30 @@ $("#cod").on("keyup",function(){
                 $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th>th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
             }
             else{
-                if(data.typeSearch.ingreso == false){
-                    if(data.typeSearch.mercPagar == true){
-                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-                    }
-                    else
-                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                if(data.acum2 > 0){
+                    $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                }else{
+                    $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
                 }
-                else{
-                    if(data.typeSearch.facCobrar == true){
-                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-                    }
-                    else
-                        $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-                }
+
+
+                // if(data.typeSearch.ingreso == false){
+                //     if(data.typeSearch.mercPagar == true){
+                //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                //     }
+                //     else
+                //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                // }
+                // else{
+                //     if(data.typeSearch.facCobrar == true){
+                //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                //     }
+                //     else
+                //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+                // }
+
+
+
 
             }
         }
