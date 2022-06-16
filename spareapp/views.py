@@ -5511,11 +5511,36 @@ def contCollectFac(request,val):
 
     editPrueba = False
 
-    dic = {"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    # contToCollect -------------------------------------------
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope","id")
+    allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
+    
+    deadlineDic = {}
+
+    for all in allFacturesPay:
+
+        deadline = datetime.now().date() - all.fechaCreado.date()
+        deadline = deadline.days
+        deadlineDic[all.id] = deadline
+
+    acum = 0
+    acum2 = 0
+
+    for fac in allFacturesPay:
+
+        acum = acum + fac.monto
+        acum2 = acum2 + fac.total
+
+    dic = {"acum":acum,"acum2":acum2,"deadlineDic":deadlineDic,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+
+    return render(request,"spareapp/contToCollect.html",dic)
+
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contPayFac(request,val):
+
+    print("------------------------Entra a pagar")
 
     acum = 0
 
@@ -5597,7 +5622,6 @@ def contPayFac(request,val):
 
                 for fac in facAuxAll:
                     custAcum = custAcum + fac.total
-                customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
                 lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
@@ -5685,8 +5709,6 @@ def contPayFac(request,val):
                 custAcum = 0
 
     for nom in cantAuxOp:
-
-        suma = 0
 
         aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
 
@@ -5833,9 +5855,31 @@ def contPayFac(request,val):
 
     editPrueba = False
 
-    dic = {"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    # contToPay ------------------------------------------
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+    allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
+
+    deadlineDic = {}
+
+    for all in allFacturesPay:
+
+        deadline = datetime.now().date() - all.fechaCreado.date()
+        deadline = deadline.days
+        deadlineDic[all.id] = deadline
+
+    acum = 0
+    acum2 = 0
+
+    for fac in allFacturesPay:
+
+        acum = acum + fac.monto
+        acum2 = acum2 + fac.total
+
+    dic = {"deadlineDic":deadlineDic,"acum":acum,"acum2":acum2,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+
+    return render(request,"spareapp/contToPay.html",dic)
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contAddPerson(request):
 
@@ -5874,6 +5918,8 @@ def accountStat(request):
     factureName = None
     dayFrom = ""
     dayTo = ""
+    dateFrom = None
+    dateTo = None
     balanceFacMerc = 0
     acumTotal = 0
     auxNombre = ""
@@ -11584,6 +11630,8 @@ def totalTablasType(request):
 
     return render(request,"spareapp/totalTablasType.html",dic)
 
+from django.db.models import Q
+
 def filterAccountStat(request):
 
     filter = request.GET.get("filter")
@@ -11594,56 +11642,199 @@ def filterAccountStat(request):
     all = request.GET.get("all")
     month = request.GET.get("month")
     range = request.GET.get("range")
-    balance = request.GET.get("balance")
+    balanceAux = request.GET.get("balance")
     auxNombre = request.GET.get("nombre")
+    factureName = None
     print(filter)
-    # print(dateFrom)
-    # print(dateTo)
-    # print("Nombre:")
-    # print(auxNombre)
-    # print(all)
-    # print(month)
-    # print(range)
-    # print(balance)
+
+    # from django.db.models import Q
+    # Poll.objects.get(Q(question__startswith='Who'),Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)))
     
-    if all:
-        print("Todas las facturas")
-        factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
-    if month:
-        print("Por mes")
+    # combined_queryset = User.objects.filter(income__gte=5000) | User.objects.filter(income__isnull=True)
+    # ordered_queryset = combined_queryset.order_by('-income')
 
-        mes = datetime.now().date().month
-        date_today = datetime.now()
-        dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
-        dateFrom = dateFrom.date()
+    # if filter.index(fil) == 0:
+    cont = 0
+    balanceTotal = 0
+    balanceFacMerc = 0
+    balance = {}
 
-        mes = datetime.now().date().month
-        dayFrom = dateFrom
-        dayTo = datetime.now().date()
-        anio = datetime.now().date().year
-        factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado")
+    factureNameAux = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
 
-    if range:
-        print("Por rango")
+    for fac in factureNameAux:
 
-        fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
-        fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+        if fac.refCategory.ingreso:
 
-        dayFrom = fecha_from.date()
-        dayTo = fecha_to.date()
+            cont = cont
 
-        if dateFrom and dateTo:
+            if fac.refType.facCobrar==True:
+
+                cont = cont + fac.total
+                if fac.pendiente == True:
+                    balanceFacMerc = balanceFacMerc + fac.total
             
-            factureName = factura.objects.filter(fechaCreado__date__gte=dayFrom,fechaCreado__date__lte=dayTo,refPersona__id=auxNombre).order_by("fechaCreado")
-    
-    if balance:
-        print("Por balance")
+            if fac.refCategory.nombre=="Factura cobrada":
 
-    # factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
+                cont = cont - fac.total
+        
+        else:
+
+            cont = cont
+
+            if fac.refType.mercPagar==True:
+
+                cont = cont - fac.total
+                if fac.pendiente == True:
+                    balanceFacMerc = balanceFacMerc - fac.total
+            
+            if fac.refCategory.nombre=="Mercancia credito pagada":
+
+                cont = cont + fac.total
+
+        balance[fac.id] = [cont,fac.total]
+
+    balanceTotal = cont
+
+    for fil in filter:
+
+        if all:
+
+            if filter.index(fil) == 0:
+                
+                factureName = factura.objects.filter(Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado","id")
+
+            else:
+
+                factureName = factureName & factura.objects.filter(Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado","id")
+
+        if month:
+
+            mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+
+            mes = datetime.now().date().month
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
+            anio = datetime.now().date().year
+
+            if filter.index(fil) == 0:
+
+                factureName = factura.objects.filter(Q(fechaCreado__month=mes),Q(fechaCreado__year=anio),Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado")
+
+            else:
+
+                factureName = factureName & factura.objects.filter(Q(fechaCreado__month=mes),Q(fechaCreado__year=anio),Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado")
+
+        if range:
+
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
+            if dateFrom and dateTo:
+
+                if filter.index(fil) == 0:
+                
+                    factureName = factura.objects.filter(Q(fechaCreado__date__gte=dayFrom),Q(fechaCreado__date__lte=dayTo),Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado")
+
+                else:
+
+                    factureName = factureName & factura.objects.filter(Q(fechaCreado__date__gte=dayFrom),Q(fechaCreado__date__lte=dayTo),Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado")
+        
+        if balanceAux:
+
+            for key in balance:
+
+                if balance[key][0]==0:
+                    pos = key
+            
+            facActAux = factura.objects.filter(id=pos)
+
+            if facActAux:
+            
+                facAct = factura.objects.get(id=pos)
+                factureNameSome = factura.objects.filter(id__gte=facAct.id,fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado","id")
+
+                if filter.index(fil) == 0:
+                    factureName = factura.objects.filter(Q(id__gte=facAct.id),Q(fechaCreado__gte=facAct.fechaCreado),Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado","id")
+                else:
+                    factureName = factureName & factura.objects.filter(Q(id__gte=facAct.id),Q(fechaCreado__gte=facAct.fechaCreado),Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado","id")
+            
+            else:
+
+                factureName = None
+
+            if factureNameSome:
+                pass
+            else:
+                if filter.index(fil) == 0:
+                    factureName = factura.objects.filter(Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado","id")
+                else:
+                    factureName = factureName & factura.objects.filter(Q(refPersona__id=auxNombre),Q(refPersona__nombre__icontains=fil) | Q(num__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil) | Q(note__icontains=fil)).order_by("fechaCreado","id")
+
+    if filter:
+        pass
+    else:
+        factureName = None
+        if all:
+            factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
+        if month:
+
+            mes = datetime.now().date().month
+            date_today = datetime.now()
+            dateFrom = date_today.replace(month=mes,day=1, hour=0, minute=0, second=0, microsecond=0)
+            dateFrom = dateFrom.date()
+
+            mes = datetime.now().date().month
+            dayFrom = dateFrom
+            dayTo = datetime.now().date()
+            anio = datetime.now().date().year
+
+            factureName = factura.objects.filter(fechaCreado__month=mes,fechaCreado__year=anio,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        if range:
+
+            fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+            fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+            dayFrom = fecha_from.date()
+            dayTo = fecha_to.date()
+
+            if dateFrom and dateTo:
+
+                factureName = factura.objects.filter(fechaCreado__date__gte=dayFrom,fechaCreado__date__lte=dayTo,refPersona__id=auxNombre).order_by("fechaCreado")
+        
+        if balanceAux:
+            for key in balance:
+
+                if balance[key][0]==0:
+                    pos = key
+            
+            facActAux = factura.objects.filter(id=pos)
+
+            if facActAux:
+            
+                facAct = factura.objects.get(id=pos)
+                factureName = factura.objects.filter(id__gte=facAct.id,fechaCreado__gte=facAct.fechaCreado,refPersona__id=auxNombre).order_by("fechaCreado","id")
+            
+            else:
+
+                factureName = None
+
+            if factureName:
+                pass
+            else:
+                factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
+
     if factureName:
         dayFrom = factureName[0].fechaCreado.date()
         dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
+    print("Salida de todo")
     print(factureName)
 
     return JsonResponse({"all":all,"dateTo":dateTo,"dateFrom":dateFrom})

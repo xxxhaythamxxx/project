@@ -67,37 +67,36 @@
                 <td class="p-2">${{facture.iva|stringformat:".2f"}}</td>
                 <td class="p-2">${{facture.total|stringformat:".2f"}}</td>
                 <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' facture.id request.get_full_path|cut:'/' %}">Editar</a> <a data-bs-toggle="modal" type="button" data-bs-target="#modalPagar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalPagar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Pagar</a></td>
-
-                <div tabindex="-1" id="modalPagar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{facture.id}}Label" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalPagar{{facture.id}}Label">Tipo de pago</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body"> 
-                                <form id="formCust" method="POST" action="{% url 'contPayFac' facture.id %}">
-                                    {% csrf_token %}
-                                    <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
-                                        <option value="" selected>Seleccione tipo de pago</option>
-                                        {% for type in allTypes %}
-                                        <option value="{{type.id}}">{{type.nombre}}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <div class="mb-3">
-                                        <label class="form-label" for="contNota">Nota</label>
-                                        <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
-                                    </div>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Pagar</button>
-                                </form>
-                                
-                            </div>   
-                        </div>
-                    </div>
-                </div> 
-
             </tr>
+
+            <div tabindex="-1" id="modalPagar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{facture.id}}Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalPagar{{facture.id}}Label">Tipo de pago</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body"> 
+                            <form id="formCust" method="POST" action="{% url 'contPayFac' facture.id %}">
+                                {% csrf_token %}
+                                <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
+                                    <option value="" selected>Seleccione tipo de pago</option>
+                                    {% for type in allTypes %}
+                                    <option value="{{type.id}}">{{type.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="mb-3">
+                                    <label class="form-label" for="contNota">Nota</label>
+                                    <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Pagar</button>
+                            </form>
+                            
+                        </div>   
+                    </div>
+                </div>
+            </div> 
             {% endfor %}
             
             <tr class="tfoot" {% if totalTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %}>

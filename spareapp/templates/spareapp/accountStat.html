@@ -144,24 +144,24 @@
             <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" {% if busqueda %} href="{% url 'editeFactAccount' fact.id busqueda request.get_full_path|cut:'/' %}" {% else %} href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}" {% endif %}>Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
             </td>
-            <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="deleteFacLabel{{fact.id}}">Precaución</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ¿Seguro/a que deseas eliminar la factura {{fact.num}}?
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a id="deleteFacture" class="btn btn-primary" href="{% url 'deleteFac' fact.id %}">Borrar</a>
-                        </div>
-                    </div>
-                    </div>
-            </div> 
         </tr>
+        <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="deleteFacLabel{{fact.id}}">Precaución</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Seguro/a que deseas eliminar la factura {{fact.num}}?
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a id="deleteFacture" class="btn btn-primary" href="{% url 'deleteFac' fact.id %}">Borrar</a>
+                    </div>
+                </div>
+                </div>
+        </div> 
         {% endif %}
         {% endfor %}
         {% endfor %}
@@ -266,150 +266,150 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 
 <script>
 
-$("#cod").on("keyup",function(){
-    // alert("Entra")
-    var filter = $("#cod").val().toLowerCase();
-    var dateTo = $("#dateTo").val()
-    var dateFrom = $("#dateFrom").val()
-    var requestP = $("#requestP").val()
-    var all = $("#search1").attr('checked')
-    var month = $("#search2").attr('checked')
-    var range = $("#search4").attr('checked')
-    var balance = $("#search5").attr('checked')
-    var nombre = $("#contNombre option:selected").val()
-    // var nombre = $("#contNombre").val()
+// $("#cod").on("keyup",function(){
+//     // alert("Entra")
+//     var filter = $("#cod").val().toLowerCase();
+//     var dateTo = $("#dateTo").val()
+//     var dateFrom = $("#dateFrom").val()
+//     var requestP = $("#requestP").val()
+//     var all = $("#search1").attr('checked')
+//     var month = $("#search2").attr('checked')
+//     var range = $("#search4").attr('checked')
+//     var balance = $("#search5").attr('checked')
+//     var nombre = $("#contNombre option:selected").val()
+//     // var nombre = $("#contNombre").val()
 
-    $.ajax({
-        method: 'GET',
-        url: '/filterAccountStat',
-        data: {"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
-        success:function(data){
-            // alert(data)
+//     $.ajax({
+//         method: 'GET',
+//         url: '/filterAccountStat',
+//         data: {"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+//         success:function(data){
+//             // alert(data)
 
 
-            // $("#myTable").empty()
-            // $("tfoot").empty()
-            // for(var i = 0; i<data.allFacturesQuery.length;i++){
-            //     if(data.allFacturesQuery[i].pendiente == true){
-            //         if(data.allCategorysQuery[i].refCategory__ingreso == true){
-            //             $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalCobrar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalCobrar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Cobrar</a></td></tr>")
-            //         }
-            //         else{
-            //             $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
-            //         }
-            //     }
-            //     else{
-            //         $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a></td></tr>")
-            //     }
-            // }
-            // if(data.acum2 == 0){
-            //     $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th>th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-            // }
-            // else{
-            //     if(data.acum2 < 0){
-            //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-            //     }else{
-            //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-            //     }
-            // }
-        }
-    });
-
-})
-
-// $("#cod").on("keyup",function(){                                // Cuando se teclea algo
-//     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-//     $(".invoice tbody tr").filter(function(){                             // 
-//         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//     })
-
-//     var cont2 = 0
-//     var totalTotal = 0
-//     balanc = []
-
-//     $("#myTable tr:not(.tfoot)").each(function(){
-//         if ($(this).is(":visible")){
-//             $(this).find("td:not(.exclude)").each(function(){
-//                 if ($(this).index() == $("#thBalance").index()) {
-//                     cont2 = cont2
-
-//                     if($(this).attr("auxIngreso")=="True"){
-//                         if($(this).attr("auxCobrar")=="True"){
-//                             cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                         }
-//                         if($(this).attr("auxCatCobrada")=="FACTURA COBRADA" || $(this).attr("auxCatCobrada")=="FACTURA COBRADA (MAYORISTA)"){
-//                             cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                         }
-//                     }else{
-
-//                         if($(this).attr("auxNc")=="True"){
-//                             if($(this).attr("auxPagar")=="True"){
-//                                 cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }
-//                             if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-//                                 cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }
-//                         }else{
-//                             if($(this).attr("auxPagar")=="True"){
-//                                 cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }
-//                             if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-//                                 cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }
-//                         }
-//                     }
-
-//                     if($(this).attr("auxIngreso")=="True"){
-//                         if($(this).attr("auxCobrar")=="False"){
-//                             totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                         }else{
-//                             totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                         }
-//                     }
-//                     else{
-//                         if($(this).attr("auxNc")=="False"){
-//                             if($(this).attr("auxPagar")=="True"){
-//                                 totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }else{
-//                                 totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }
-//                         }else{
-//                             if($(this).attr("auxPagar")=="True"){
-//                                 totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }else{
-//                                 totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-//                             }
-//                         }
-//                     }
-
-//                     $(this).html("$"+cont2.toFixed(2))
-//                     balanc.push(cont2.toFixed(2))
-//                 }
-                
-//             })
+//             // $("#myTable").empty()
+//             // $("tfoot").empty()
+//             // for(var i = 0; i<data.allFacturesQuery.length;i++){
+//             //     if(data.allFacturesQuery[i].pendiente == true){
+//             //         if(data.allCategorysQuery[i].refCategory__ingreso == true){
+//             //             $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalCobrar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalCobrar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Cobrar</a></td></tr>")
+//             //         }
+//             //         else{
+//             //             $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
+//             //         }
+//             //     }
+//             //     else{
+//             //         $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a></td></tr>")
+//             //     }
+//             // }
+//             // if(data.acum2 == 0){
+//             //     $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th>th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+//             // }
+//             // else{
+//             //     if(data.acum2 < 0){
+//             //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+//             //     }else{
+//             //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
+//             //     }
+//             // }
 //         }
-//     })
+//     });
 
-//     $(".tfoot").hide()
-//     $(".erase").remove()
-//     if(totalTotal == 0){
-//         $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-//     }else{
-//         if(totalTotal < 0){
-//             $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #c90a0a' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-
-//         }else{
-//             $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #1029b9' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-//         }
-//     }
-
-//     total = 0
-    
-//     if(value==""){
-//         $(".erase").remove()
-//         $(".tfoot").show()
-//     }
 // })
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $(".invoice tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+
+    var cont2 = 0
+    var totalTotal = 0
+    balanc = []
+
+    $("#myTable tr:not(.tfoot)").each(function(){
+        if ($(this).is(":visible")){
+            $(this).find("td:not(.exclude)").each(function(){
+                if ($(this).index() == $("#thBalance").index()) {
+                    cont2 = cont2
+
+                    if($(this).attr("auxIngreso")=="True"){
+                        if($(this).attr("auxCobrar")=="True"){
+                            cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                        }
+                        if($(this).attr("auxCatCobrada")=="FACTURA COBRADA" || $(this).attr("auxCatCobrada")=="FACTURA COBRADA (MAYORISTA)"){
+                            cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                        }
+                    }else{
+
+                        if($(this).attr("auxNc")=="True"){
+                            if($(this).attr("auxPagar")=="True"){
+                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }
+                            if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
+                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }
+                        }else{
+                            if($(this).attr("auxPagar")=="True"){
+                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }
+                            if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
+                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }
+                        }
+                    }
+
+                    if($(this).attr("auxIngreso")=="True"){
+                        if($(this).attr("auxCobrar")=="False"){
+                            totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                        }else{
+                            totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                        }
+                    }
+                    else{
+                        if($(this).attr("auxNc")=="False"){
+                            if($(this).attr("auxPagar")=="True"){
+                                totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }else{
+                                totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }
+                        }else{
+                            if($(this).attr("auxPagar")=="True"){
+                                totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }else{
+                                totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            }
+                        }
+                    }
+
+                    $(this).html("$"+cont2.toFixed(2))
+                    balanc.push(cont2.toFixed(2))
+                }
+                
+            })
+        }
+    })
+
+    $(".tfoot").hide()
+    $(".erase").remove()
+    if(totalTotal == 0){
+        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
+    }else{
+        if(totalTotal < 0){
+            $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #c90a0a' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
+
+        }else{
+            $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #1029b9' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
+        }
+    }
+
+    total = 0
+    
+    if(value==""){
+        $(".erase").remove()
+        $(".tfoot").show()
+    }
+})
     
 </script>
 
