@@ -95,7 +95,7 @@
     </div>  
 </div>
 <div class="container mt-2">
-    <input id="entrySpending" name="entrySpending" type="checkbox">
+    <input value="entrySpending" id="entrySpending" name="entrySpending" type="checkbox">
     <label for="entrySpending">Sólo facturas/mercancía por cobrar/pagar</label>
 </div>
 
@@ -141,7 +141,7 @@
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{value.1|stringformat:".2f"}}</div></td>
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxNc="{{fact.nc}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|stringformat:".2f"}}</td>
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} style="max-width: 100px;" class="p-2">{{fact.note}}</td>
-            <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" {% if busqueda %} href="{% url 'editeFactAccount' fact.id busqueda request.get_full_path|cut:'/' %}" {% else %} href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}" {% endif %}>Editar</a>
+            <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
             </td>
         </tr>
@@ -171,7 +171,6 @@
     <thead>
         <tr {% if acumTotal == 0 %} style="background-color: #E77C7C;" {% else %} {% if acumTotal < 0 %} style="background-color: #E77C7C;color: #c90a0a" {% else %} style="background-color: #E77C7C;color: #1029b9" {% endif %} {% endif %} class="">
             <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{acumTotal|stringformat:".2f"}}</th>
-            <!-- <th colspan=9 id="balanceTotal" class="p-2">TOTAL ${{balanceTotal|floatformat:2}}</th> -->
         </tr>
     </thead>
 </table>
@@ -266,151 +265,102 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 
 <script>
 
-// $("#cod").on("keyup",function(){
-//     // alert("Entra")
-//     var filter = $("#cod").val().toLowerCase();
-//     var dateTo = $("#dateTo").val()
-//     var dateFrom = $("#dateFrom").val()
-//     var requestP = $("#requestP").val()
-//     var all = $("#search1").attr('checked')
-//     var month = $("#search2").attr('checked')
-//     var range = $("#search4").attr('checked')
-//     var balance = $("#search5").attr('checked')
-//     var nombre = $("#contNombre option:selected").val()
-//     // var nombre = $("#contNombre").val()
+$("#cod").on("keyup",function(){
+    var filter = $("#cod").val().toLowerCase();
+    var dateTo = $("#dateTo").val()
+    var dateFrom = $("#dateFrom").val()
+    var requestP = $("#requestP").val()
+    var all = $("#search1").attr('checked')
+    var month = $("#search2").attr('checked')
+    var range = $("#search4").attr('checked')
+    var balance = $("#search5").attr('checked')
+    var soloFac = $("#entrySpending").is(':checked')
+    var nombre = $("#contNombre option:selected").val()
 
-//     $.ajax({
-//         method: 'GET',
-//         url: '/filterAccountStat',
-//         data: {"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
-//         success:function(data){
-//             // alert(data)
-
-
-//             // $("#myTable").empty()
-//             // $("tfoot").empty()
-//             // for(var i = 0; i<data.allFacturesQuery.length;i++){
-//             //     if(data.allFacturesQuery[i].pendiente == true){
-//             //         if(data.allCategorysQuery[i].refCategory__ingreso == true){
-//             //             $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalCobrar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalCobrar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Cobrar</a></td></tr>")
-//             //         }
-//             //         else{
-//             //             $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a><a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
-//             //         }
-//             //     }
-//             //     else{
-//             //         $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado.split("T05:00:00Z")[0]+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre.toUpperCase()+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>$"+data.allFacturesQuery[i].monto.toFixed(2)+"</td><td class='p-2'>$"+data.allFacturesQuery[i].iva.toFixed(2)+"</td><td class='p-2'>$"+(data.allFacturesQuery[i].monto+data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2 exclude'><input id='pathId' value="+data.allFacturesQuery[i].id+" style='display: none;' type='text'><input id='returnPath' value="+requestP+" style='display: none;' type='text'><a id='editButton' style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a></td></tr>")
-//             //     }
-//             // }
-//             // if(data.acum2 == 0){
-//             //     $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th>th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-//             // }
-//             // else{
-//             //     if(data.acum2 < 0){
-//             //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-//             //     }else{
-//             //         $("tfoot").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><th class='p-2'>Total</th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'></th><th class='p-2'>$ "+data.acum.toFixed(2)+"</th><th class='p-2'>$ "+data.acumIva.toFixed(2)+"</th><th class='p-2'>$ "+data.acum2.toFixed(2)+"</th><th class='p-2 exclude'></th></tr>")
-//             //     }
-//             // }
-//         }
-//     });
-
-// })
-
-$("#cod").on("keyup",function(){                                // Cuando se teclea algo
-    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-    $(".invoice tbody tr").filter(function(){                             // 
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    })
-
-    var cont2 = 0
-    var totalTotal = 0
-    balanc = []
-
-    $("#myTable tr:not(.tfoot)").each(function(){
-        if ($(this).is(":visible")){
-            $(this).find("td:not(.exclude)").each(function(){
-                if ($(this).index() == $("#thBalance").index()) {
-                    cont2 = cont2
-
-                    if($(this).attr("auxIngreso")=="True"){
-                        if($(this).attr("auxCobrar")=="True"){
-                            cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                        }
-                        if($(this).attr("auxCatCobrada")=="FACTURA COBRADA" || $(this).attr("auxCatCobrada")=="FACTURA COBRADA (MAYORISTA)"){
-                            cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+    $.ajax({
+        method: 'GET',
+        url: '/filterAccountStat',
+        data: {"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+        success:function(data){
+            $("#myTable").empty()
+            $(".tfoot thead").empty()
+            // alert(data.cont)
+            for(var i = 0; i<data.allFacturesQuery.length;i++){
+                if(data.allFacturesQuery[i].pendiente == true){
+                    if(data.allTypesQuery[i].refType__ingreso == true){
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                                // $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>Nombre nc mercpagar</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == false | data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
                         }
                     }else{
-
-                        if($(this).attr("auxNc")=="True"){
-                            if($(this).attr("auxPagar")=="True"){
-                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            }
-                            if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            }
-                        }else{
-                            if($(this).attr("auxPagar")=="True"){
-                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            }
-                            if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            }
-                        }
-                    }
-
-                    if($(this).attr("auxIngreso")=="True"){
-                        if($(this).attr("auxCobrar")=="False"){
-                            totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                        }else{
-                            totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                        }
-                    }
-                    else{
-                        if($(this).attr("auxNc")=="False"){
-                            if($(this).attr("auxPagar")=="True"){
-                                totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }else{
-                                totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }
                         }else{
-                            if($(this).attr("auxPagar")=="True"){
-                                totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                            if(data.allTypesQuery[i].refType__facCobrar == true | data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }else{
-                                totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }
                         }
                     }
-
-                    $(this).html("$"+cont2.toFixed(2))
-                    balanc.push(cont2.toFixed(2))
+                }else{
+                    if(data.allTypesQuery[i].refType__ingreso == true){
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == false | data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }else{
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == true | data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }
                 }
-                
-            })
+            }
+
+            if(data.acumTotal == 0){
+                $(".tfoot thead").append("<tr style='background-color: #E77C7C;'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+            }
+            else{
+                if(data.acumTotal < 0){
+                    $(".tfoot thead").append("<tr style='background-color: #E77C7C;color: #c90a0a'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+                }else{
+                    $(".tfoot thead").append("<tr style='background-color: #E77C7C;color: #1029b9'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+                }
+            }
         }
-    })
+    });
 
-    $(".tfoot").hide()
-    $(".erase").remove()
-    if(totalTotal == 0){
-        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-    }else{
-        if(totalTotal < 0){
-            $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #c90a0a' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-
-        }else{
-            $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;color: #1029b9' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-        }
-    }
-
-    total = 0
-    
-    if(value==""){
-        $(".erase").remove()
-        $(".tfoot").show()
-    }
 })
-    
+
 </script>
 
 <script>
@@ -545,97 +495,223 @@ $("tbody tr").each(function(){
 })
 var auxMonto = $("#auxMonto").text()
 var auxBalance = $("#auxBalance").text()
+// Filtro de Sólo facturas/mercancía por cobrar/pagar
 $("#entrySpending").change(function(){
-    if ($(this).is(':checked')){
-        $("tbody tr").each(function(){
-        var bol = false
-        
-            $(this).find("td").each(function(){
-                if ($(this).attr("id") == "auxMonto"){
-                    auxMonto = $(this).text()
-                }
-                if ($(this).attr("id") == "auxBalance"){
-                    auxBalance = $(this).text()
-                    $(this).html(auxMonto)
-                }
-                
-                $(this).find("div").each(function(){
-                    if ($(this).attr("style")=="font-weight: bold;"){
-                        bol = true
-                    }
-                })
-            })
-            if (bol == false){
-                $(this).hide()
-            }else{
-                $(this).show()
-            }
-        })
-        $("#balanceTotal").hide()
-        $("#balanceTotalFacMerc").show()
-    }
-    else{
-        
-        $("tbody tr").each(function(){
-            $(this).show()
+    var filter = $("#cod").val().toLowerCase();
+    var dateTo = $("#dateTo").val()
+    var dateFrom = $("#dateFrom").val()
+    var requestP = $("#requestP").val()
+    var all = $("#search1").attr('checked')
+    var month = $("#search2").attr('checked')
+    var range = $("#search4").attr('checked')
+    var balance = $("#search5").attr('checked')
+    var soloFac = $("#entrySpending").is(':checked')
+    var nombre = $("#contNombre option:selected").val()
 
-            $(this).find("td").each(function(){
-                if ($(this).attr("id") == "auxBalance"){
-                    $(this).html(vec[$(this).parent().index()])
-                }
-            })
-        })
-        $("#balanceTotalFacMerc").hide()
-        $("#balanceTotal").show()
-    }
-
-    var cont2 = 0
-    balanc = []
-    var totalTotal = 0
-
-        $("#myTable tr:not(.tfoot)").each(function(){
-            if ($(this).is(":visible")){
-                $(this).find("td:not(.exclude)").each(function(){
-                    if ($(this).index() == $("#thBalance").index()) {
-                        if($(this).attr("auxIngreso")=="True" && $(this).attr("auxCobrar")=="False" || $(this).attr("auxPagar")=="True"){
-                            totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            cont2 = cont2
-                            if($(this).attr("auxCobrar")=="True"){
-                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal")))
+    $.ajax({
+        method: 'GET',
+        url: '/filterAccountStat',
+        data: {"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+        success:function(data){
+            $("#myTable").empty()
+            $(".tfoot thead").empty()
+            // alert(data.cont)
+            for(var i = 0; i<data.allFacturesQuery.length;i++){
+                if(data.allFacturesQuery[i].pendiente == true){
+                    if(data.allTypesQuery[i].refType__ingreso == true){
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                                // $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>Nombre nc mercpagar</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }
-                            if($(this).attr("auxCatCobrada")=="FACTURA COBRADA"){
-                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal")))
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == false | data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }
                         }
-                        else{
-                            totalTotal = totalTotal - Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
-                            cont2 = cont2
-                            if($(this).attr("auxPagar")=="True"){
-                                cont2 = cont2 - Math.abs(parseFloat($(this).attr("auxTotal")))
+                    }else{
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }
-                            if($(this).attr("auxCatPagada")=="MERCANCIA CREDITO PAGADA"){
-                                cont2 = cont2 + Math.abs(parseFloat($(this).attr("auxTotal")))
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == true | data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
                             }
                         }
-                        $(this).html("$"+cont2.toFixed(2))
-                        balanc.push(cont2.toFixed(2))
                     }
-                    
-                })
+                }else{
+                    if(data.allTypesQuery[i].refType__ingreso == true){
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == false | data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }else{
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == true | data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }
+                }
             }
-        })
 
-        $(".tfoot").hide()
-        $(".erase").remove()
-        $("#invoice2").append("<table class='table-bordered invoice tfoot erase mb-2' style='font-size: small;' id='hInf'><head><tr style='background-color: #E77C7C;' class=''><th colspan=8 id='balanceTotal' class='p-2'>TOTAL $"+totalTotal.toFixed(2)+"</th></tr></head></table>")
-
-        total = 0
-        
-        if(value==""){
-            $(".erase").remove()
-            $(".tfoot").show()
+            if(data.acumTotal == 0){
+                $(".tfoot thead").append("<tr style='background-color: #E77C7C;'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+            }
+            else{
+                if(data.acumTotal < 0){
+                    $(".tfoot thead").append("<tr style='background-color: #E77C7C;color: #c90a0a'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+                }else{
+                    $(".tfoot thead").append("<tr style='background-color: #E77C7C;color: #1029b9'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+                }
+            }
         }
-    
+    });
+})
+
+$("input[name=search]").change(function(){
+
+    if ($(this).val() == "all"){
+        var all = $("#search1").attr('checked','checked')
+        var month = $("#search2").attr('checked',false)
+        var range = $("#search4").attr('checked',false)
+        var balance = $("#search5").attr('checked',false)
+    }else{
+        if ($(this).val() == "month"){
+            var month = $("#search2").attr('checked',false)
+            var range = $("#search4").attr('checked',false)
+            var balance = $("#search5").attr('checked',false)
+            var month = $("#search2").attr('checked','checked')
+        }else{
+            if ($(this).val() == "range"){
+                var all = $("#search1").attr('checked',false)
+                var month = $("#search2").attr('checked',false)
+                var balance = $("#search5").attr('checked',false)
+                var range = $("#search4").attr('checked','checked')
+            }else{
+                if ($(this).val() == "balance"){
+                    var all = $("#search1").attr('checked',false)
+                    var month = $("#search2").attr('checked',false)
+                    var range = $("#search4").attr('checked',false)
+                    var balance = $("#search5").attr('checked','checked')
+                }
+            }
+        }
+    }
+    var all = $("#search1").attr('checked')
+    var month = $("#search2").attr('checked')
+    var range = $("#search4").attr('checked')
+    var balance = $("#search5").attr('checked')
+    var filter = $("#cod").val().toLowerCase();
+    var dateTo = $("#dateTo").val()
+    var dateFrom = $("#dateFrom").val()
+    var requestP = $("#requestP").val()
+    var soloFac = $("#entrySpending").is(':checked')
+    var nombre = $("#contNombre option:selected").val()
+
+    $.ajax({
+        method: 'GET',
+        url: '/filterAccountStat',
+        data: {"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+        success:function(data){
+            $("#myTable").empty()
+            $(".tfoot thead").empty()
+            // alert(data.cont)
+            for(var i = 0; i<data.allFacturesQuery.length;i++){
+                if(data.allFacturesQuery[i].pendiente == true){
+                    if(data.allTypesQuery[i].refType__ingreso == true){
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                                // $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>Nombre nc mercpagar</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == false | data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }else{
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == true | data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div style='font-weight: bold;'>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }
+                }else{
+                    if(data.allTypesQuery[i].refType__ingreso == true){
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == false | data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }else{
+                        if(data.allFacturesQuery[i].nc == true){
+                            if(data.allTypesQuery[i].refType__mercPagar == true){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }else{
+                            if(data.allTypesQuery[i].refType__facCobrar == true | data.allTypesQuery[i].refType__mercPagar == false){
+                                $("#myTable").append("<tr><td style='color: #a00a0a;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #a00a0a;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #a00a0a;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #a00a0a;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #a00a0a;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #a00a0a;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }else{
+                                $("#myTable").append("<tr><td style='color: #1029b9;' class='p-2'>"+data.dateDic[i]+"</td><td style='color: #1029b9;' class='p-2'>"+data.allTypesQuery[i].refPersona__nombre+"</td><td style='color: #1029b9;' class='p-2'>"+data.allFacturesQuery[i].num+"</td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByCategory/"+data.allCategorysQuery[i].refCategory__nombre+"'>"+data.allCategorysQuery[i].refCategory__nombre+"</a></td><td style='max-width: 100px;' class='p-2'><a style='color: #1029b9;' href='/contListByType/"+data.allTypesQuery[i].refType__nombre+"'>"+data.allTypesQuery[i].refType__nombre+"</a></td><td style='color: #1029b9;' id='auxMonto' class='p-2'><div>$"+data.balance[data.allFacturesQuery[i].id][1].toFixed(2)+"</div></td><td style='color: #1029b9;' class='p-2'>$"+data.balance[data.allFacturesQuery[i].id][0].toFixed(2)+"</td><td style='color: #1029b9;' style='max-width: 100px;' class='p-2'>"+data.allFacturesQuery[i].note+"</td><td id='check' class='exclude'><a style='color: white;font-size: small;' class='btn btn-secondary mx-1' href='/editeFact/"+data.allFacturesQuery[i].id+"/accountStat'>Editar</a><a data-bs-toggle='modal' data-bs-target='#deleteFac"+data.allFacturesQuery[i].id+"' style='text-decoration: none;color: rgb(136,12,12);font-size: small;' id='deleteFacId' class='btn btn-danger text-white' href='javascript:void(0);'>Eliminar</a></td></tr>")
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(data.acumTotal == 0){
+                $(".tfoot thead").append("<tr style='background-color: #E77C7C;'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+            }
+            else{
+                if(data.acumTotal < 0){
+                    $(".tfoot thead").append("<tr style='background-color: #E77C7C;color: #c90a0a'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+                }else{
+                    $(".tfoot thead").append("<tr style='background-color: #E77C7C;color: #1029b9'><th colspan=9 id='balanceTotal' class='p-2'>TOTAL $"+data.acumTotal.toFixed(2)+"</th></tr>")
+                }
+            }
+        }
+    });
 })
 
 $("#invoice").dragtable()

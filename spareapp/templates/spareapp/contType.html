@@ -251,6 +251,7 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         success:function(data){
             $("#myTable").empty()
             $("tfoot").empty()
+            alert(data.allFacturesQuery[0].fechaCreado)
             for(var i = 0; i<data.allFacturesQuery.length;i++){
                 if(data.allFacturesQuery[i].pendiente == true){
                     if(data.allCategorysQuery[i].refCategory__ingreso == true){
