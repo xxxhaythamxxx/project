@@ -9057,12 +9057,15 @@ def searchTable(request):
             factureName = factura.objects.filter(num__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=busqueda).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=busqueda).order_by("fechaCreado","id")
             facPersona = factura.objects.filter(num__icontains=busqueda).values("refPersona").distinct() | factura.objects.filter(refPersona__nombre__icontains=busqueda).values("refPersona").distinct() | factura.objects.filter(note__icontains=busqueda).values("refPersona").distinct() | factura.objects.filter(refType__nombre__icontains=busqueda).values("refPersona").distinct() | factura.objects.filter(refCategory__nombre__icontains=busqueda).values("refPersona").distinct()
 
-            if len(facPersona)>1:
-                personaVarios = "Varios"
-            else:
-                auxNombre = factureName[0].refPersona.id
+            print("Antes")
+            print(factureName)
 
             if factureName:
+
+                if len(facPersona)>1:
+                    personaVarios = "Varios"
+                else:
+                    auxNombre = factureName[0].refPersona.id
 
                 for fac in factureName:
 
