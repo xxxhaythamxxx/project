@@ -13,6 +13,9 @@
 <input id="dateTo" value="{{dateTo}}" type="text" hidden>
 <input id="dateFrom" value="{{dateFrom}}" type="text" hidden>
 <input id="requestP" value="{{request.path}}" type="text" hidden>
+{% if busqueda %}
+    <input id="busquedaValor" value="{{busqueda}}" type="text" hidden>
+{% endif %}
 
 <div class="container mt-2 col-lg-4">
 <form action="" method="POST">
@@ -270,6 +273,7 @@ $("#cod").on("keyup",function(){
     var dateTo = $("#dateTo").val()
     var dateFrom = $("#dateFrom").val()
     var requestP = $("#requestP").val()
+    var busquedaValor = $("#busquedaValor").val()
     var all = $("#search1").attr('checked')
     var month = $("#search2").attr('checked')
     var range = $("#search4").attr('checked')
@@ -280,7 +284,7 @@ $("#cod").on("keyup",function(){
     $.ajax({
         method: 'GET',
         url: '/filterAccountStat',
-        data: {"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+        data: {"busquedaValor":busquedaValor,"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
         success:function(data){
             $("#myTable").empty()
             $(".tfoot thead").empty()
@@ -500,6 +504,7 @@ $("#entrySpending").change(function(){
     var filter = $("#cod").val().toLowerCase();
     var dateTo = $("#dateTo").val()
     var dateFrom = $("#dateFrom").val()
+    var busquedaValor = $("#busquedaValor").val()
     var requestP = $("#requestP").val()
     var all = $("#search1").attr('checked')
     var month = $("#search2").attr('checked')
@@ -511,7 +516,7 @@ $("#entrySpending").change(function(){
     $.ajax({
         method: 'GET',
         url: '/filterAccountStat',
-        data: {"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+        data: {"busquedaValor":busquedaValor,"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
         success:function(data){
             $("#myTable").empty()
             $(".tfoot thead").empty()
@@ -623,6 +628,7 @@ $("input[name=search]").change(function(){
     var all = $("#search1").attr('checked')
     var month = $("#search2").attr('checked')
     var range = $("#search4").attr('checked')
+    var busquedaValor = $("#busquedaValor").val()
     var balance = $("#search5").attr('checked')
     var filter = $("#cod").val().toLowerCase();
     var dateTo = $("#dateTo").val()
@@ -634,11 +640,10 @@ $("input[name=search]").change(function(){
     $.ajax({
         method: 'GET',
         url: '/filterAccountStat',
-        data: {"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
+        data: {"busquedaValor":busquedaValor,"soloFac":soloFac,"nombre":nombre,"all":all,"month":month,"range":range,"balance":balance,'dateFrom':dateFrom,'dateTo':dateTo,'filter':filter},
         success:function(data){
             $("#myTable").empty()
             $(".tfoot thead").empty()
-            // alert(data.cont)
             for(var i = 0; i<data.allFacturesQuery.length;i++){
                 if(data.allFacturesQuery[i].pendiente == true){
                     if(data.allTypesQuery[i].refType__ingreso == true){
