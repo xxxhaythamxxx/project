@@ -13,10 +13,10 @@
 <div class="container">
 
 <div class="col-lg-5">
-    <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
+    <input value="{{filtro}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
 </div>
 <div class="mt-2">
-    <input id="entrySpending" name="entrySpending" type="checkbox">
+    <input id="entrySpending" name="entrySpending" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %}>
     <label for="entrySpending">Sólo notas de crédito</label>
 </div>
 </div>
@@ -79,6 +79,8 @@
                         <div class="modal-body"> 
                             <form id="formCust" method="POST" action="{% url 'contPayFac' facture.id %}">
                                 {% csrf_token %}
+                                <input value="{{filtro}}" name="filtro{{facture.id}}" id="filtro{{facture.id}}" type="text" hidden>
+                                <input id="entrySpendingFiltro{{facture.id}}" name="entrySpendingFiltro{{facture.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
                                 <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
                                     <option value="" selected>Seleccione tipo de pago</option>
                                     {% for type in allTypes %}
@@ -147,7 +149,14 @@ $("#entrySpending").change(function(){
         success:function(data){
             $("#myTable").empty()
             for(var i = 0; i<data.allFacturesQuery.length;i++){
-                $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>"+data.allFacturesQuery[i].fechaCreado+"</td><td class='p-2'>Dias</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].monto).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].total).toFixed(2)+"</td><td class='p-2 exclude'><a style='color: white;font-size: small;' class='btn btn-secondary' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToPay'>Editar</a> <a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
+                $("#filtro"+data.allFacturesQuery[i].id).val(filter)
+                if (checkeado == true){
+                    $("#entrySpendingFiltro"+data.allFacturesQuery[i].id).prop("checked", true)
+                }else{
+                    $("#entrySpendingFiltro"+data.allFacturesQuery[i].id).prop("checked", false)
+                }
+                
+                $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>"+data.dateDic[i]+"</td><td class='p-2'>"+data.deadlineDic[i]+" days</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].monto).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].total).toFixed(2)+"</td><td class='p-2 exclude'><a style='color: white;font-size: small;' class='btn btn-secondary' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToPay'>Editar</a> <a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
             }
             if(data.acum == 0){
                 $("#myTable").append("<tr class='tfoot' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+data.acum.toFixed(2)+"</td><td class='p-2'>$"+data.acumIva.toFixed(2)+"</td><td class='p-2'>$"+data.acum2.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
@@ -241,6 +250,7 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var checkeado = false;
     var filter = $("#cod").val().toLowerCase();
+    
     if ($("#entrySpending").is(':checked')){
         checkeado = true;
     }else{
@@ -253,6 +263,12 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         success:function(data){
             $("#myTable").empty()
             for(var i = 0; i<data.allFacturesQuery.length;i++){
+                $("#filtro"+data.allFacturesQuery[i].id).val(filter)
+                if (checkeado == true){
+                    $("#entrySpendingFiltro"+data.allFacturesQuery[i].id).prop("checked", true)
+                }else{
+                    $("#entrySpendingFiltro"+data.allFacturesQuery[i].id).prop("checked", false)
+                }
                 $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>"+data.dateDic[i]+"</td><td class='p-2'>"+data.deadlineDic[i]+" days</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].monto).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].total).toFixed(2)+"</td><td class='p-2 exclude'><a style='color: white;font-size: small;' class='btn btn-secondary' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToPay'>Editar</a> <a data-bs-toggle='modal' type='button' data-bs-target='#modalPagar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalPagar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Pagar</a></td></tr>")
             }
             if(data.acum == 0){

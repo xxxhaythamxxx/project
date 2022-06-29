@@ -5203,6 +5203,10 @@ def contCollectFac(request,val):
     typeAux = factType.objects.filter(facCobrada=True).exclude(nombre="FACTURA CREDITO COBRADA (MAYORISTA)")
     typeAux = typeAux[0]
 
+    print(val)
+    print(request.POST.get("filtro"+val))
+    filtro = request.POST.get("filtro"+val)
+
     if factAux:
 
         factErase = factura.objects.get(id=val)
@@ -5511,7 +5515,31 @@ def contCollectFac(request,val):
 
     # contToCollect -------------------------------------------
 
-    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope","id")
+    deadline = ""
+    deadlineDic = []
+    filterFactures = None
+    allFacturesPay = None
+
+    filter = request.POST.get("filtro"+val)
+    filter = filter.split(" ")
+
+    if filter:
+
+        for fil in filter:
+
+            if allFacturesPay:
+
+                allFacturesPay = allFacturesPay & ( factura.objects.filter(Q(pendiente=True),Q(refCategory__limite=True),Q(refCategory__ingreso=True),Q(num__icontains=fil) | Q(refPersona__nombre__icontains=fil) | Q(note__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil)).order_by("fechaCreado","id"))
+
+            else:
+
+                allFacturesPay = ( factura.objects.filter(Q(pendiente=True),Q(refCategory__limite=True),Q(refCategory__ingreso=True),Q(num__icontains=fil) | Q(refPersona__nombre__icontains=fil) | Q(note__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil)).order_by("fechaCreado","id"))
+
+    # allFacturesPay = allFacturesPay & filterFactures
+
+    # ----------------------------------------------------------------
+
+    # allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("fechaTope","id")
     allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
     
     deadlineDic = {}
@@ -5530,7 +5558,7 @@ def contCollectFac(request,val):
         acum = acum + fac.monto
         acum2 = acum2 + fac.total
 
-    dic = {"acum":acum,"acum2":acum2,"deadlineDic":deadlineDic,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"filtro":filtro,"totalTotal":acum2,"montoTotal":acum,"deadlineDic":deadlineDic,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/contToCollect.html",dic)
 
@@ -5539,6 +5567,15 @@ def contCollectFac(request,val):
 def contPayFac(request,val):
 
     print("------------------------Entra a pagar")
+
+    print(request.POST)
+    print(request.GET)
+    # filtro3685 
+    # entryspendingfiltro3685 on
+    print(val)
+    print(request.POST.get("filtro"+val))
+    filtro = request.POST.get("filtro"+val)
+    print(request.POST.get("entrySpendingFiltro"+val))
 
     acum = 0
 
@@ -5855,7 +5892,45 @@ def contPayFac(request,val):
 
     # contToPay ------------------------------------------
 
-    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+    deadline = ""
+    deadlineDic = []
+    filterFactures = None
+
+    checkeado = None
+    filter = request.POST.get("filtro"+val)
+    filter = filter.split(" ")
+
+    for fil in filter:
+
+        if filterFactures:
+
+            filterFactures = filterFactures & ( factura.objects.filter(Q(pendiente=True),Q(refCategory__limite=True),Q(refCategory__egreso=True),Q(num__icontains=fil) | Q(refPersona__nombre__icontains=fil) | Q(note__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil)).order_by("fechaCreado","id"))
+
+        else:
+
+            filterFactures = ( factura.objects.filter(Q(pendiente=True),Q(refCategory__limite=True),Q(refCategory__egreso=True),Q(num__icontains=fil) | Q(refPersona__nombre__icontains=fil) | Q(note__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil)).order_by("fechaCreado","id"))
+
+    if request.POST.get("entrySpendingFiltro"+val):
+
+        checkeado = True
+    
+    else:
+
+        checkeado = False
+
+    if checkeado == True:
+
+        allFacturesPay = factura.objects.filter(nc=checkeado)
+
+    else:
+
+        allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+
+    allFacturesPay = allFacturesPay & filterFactures
+
+    # --------------------------------------------------------------------------------
+
+    # allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
     allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
     deadlineDic = {}
@@ -5874,7 +5949,7 @@ def contPayFac(request,val):
         acum = acum + fac.monto
         acum2 = acum2 + fac.total
 
-    dic = {"deadlineDic":deadlineDic,"acum":acum,"acum2":acum2,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"filtro":filtro,"checkeado":checkeado,"deadlineDic":deadlineDic,"totalTotal":acum2,"montoTotal":acum,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
     return render(request,"spareapp/contToPay.html",dic)
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
@@ -10685,7 +10760,7 @@ def checkearNc(request):
         acum2 = acum2 + fac.total
         acumIva = acumIva + fac.iva
 
-    return JsonResponse({'acumIva':acumIva,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
+    return JsonResponse({"filter":filter,'acumIva':acumIva,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
 
 def deleteDb(request):
 
