@@ -5517,7 +5517,6 @@ def contCollectFac(request,val):
 
     deadline = ""
     deadlineDic = []
-    filterFactures = None
     allFacturesPay = None
 
     filter = request.POST.get("filtro"+val)
@@ -11749,6 +11748,7 @@ def filterAccountStat(request):
     pagCob = None
     auxNombre = request.GET.get("nombre")
     busquedaValor = request.GET.get("busquedaValor")
+    pos = -1
 
     if busquedaValor:
         print("Hay busqueda")
