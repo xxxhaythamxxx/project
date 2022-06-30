@@ -3706,18 +3706,20 @@ def contToCollect(request):
 
     acum = 0
     acum2 = 0
+    iva = 0
 
     for fac in allFacturesPay:
 
         acum = acum + fac.monto
         acum2 = acum2 + fac.total
+        iva = iva + fac.iva
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True).order_by("fechaCreado","id")
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True).order_by("fechaCreado","id")
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"searchMetodo":searchMetodo,"dayFrom":dayFrom,"dayTo":dayTo,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
+    dic = {"iva":iva,"searchMetodo":searchMetodo,"dayFrom":dayFrom,"dayTo":dayTo,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
 
     return render(request,"spareapp/contToCollect.html",dic)
 
@@ -3766,18 +3768,20 @@ def contToPay(request):
 
     acum = 0
     acum2 = 0
+    iva = 0
 
     for fac in allFacturesPay:
 
         acum = acum + fac.monto
         acum2 = acum2 + fac.total
+        iva = iva + fac.iva
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
-    dic = {"searchMetodo":searchMetodo,"dayFrom":dayFrom,"dayTo":dayTo,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum}
+    dic = {"searchMetodo":searchMetodo,"dayFrom":dayFrom,"dayTo":dayTo,"dateFrom":dateFrom,"dateTo":dateTo,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"deadlineDic":deadlineDic,"allFacturesPay":allFacturesPay,"totalTotal":acum2,"montoTotal":acum,"iva":iva}
 
     return render(request,"spareapp/contToPay.html",dic)
 
