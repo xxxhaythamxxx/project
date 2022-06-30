@@ -8,10 +8,45 @@
 
 {% include "spareapp/contSuperior.html" %}
 
+<input id="dateTo" value="{{dateTo}}" type="text" hidden>
+<input id="dateFrom" value="{{dateFrom}}" type="text" hidden>
+
 <div class="container">
 <div class="col-lg-5">
     <input value="{{filtro}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
 </div>
+
+<div class="col-lg-4">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="my-2">
+            <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %}>
+            <label class="form-check-label" for="search1">Todos</label>
+            <!-- <input value="month" class="form-check-input" id="search2" type="radio" name="search" {% if searchMetodo == 'month' %} checked {$ else %} '' {% endif %}>
+            <label class="form-check-label" for="search2">Éste mes</label> -->
+            <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %}>
+            <label class="form-check-label" for="search4">Rango</label>
+        </div>
+        <div class="mb-3" id="formByRange2" style="display: none;">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="searchDateFrom">Desde</label>
+                        <input name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="searchDateTo">Hasta</label>
+                        <input name="searchDateTo" id="searchDateTo" class="form-control" type="date">
+                    </div>
+                </div>
+            </div>
+            <button style="font-size: small;" class="btn btn-primary mt-2" type="submit">Aceptar</button>
+            <!-- <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger mt-2">Cancelar</a> -->
+        </div>
+        
+    </form>
+    </div>
+    
 </div>
 
 <div class="container mt-2">
@@ -19,7 +54,7 @@
     <thead id="hSup">
         <tr class="excludeFooter" style="background-color: #F5F087">
             <th class="p-2">
-                <span style="font-weight: bold;">Por cobrar</span>
+                <span style="font-weight: bold;">Por cobrar: Desde {{dayFrom}} hasta {{dayTo}}</span>
             </th>
         </tr>
     </thead>
@@ -200,12 +235,45 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 </script>
 
 <script>
-$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+$("input:radio[name=search]").change(function(){
     var filter = $("#cod").val().toLowerCase();
+    var dateFrom = $("#dateFrom").val()
+    var dateTo = $("#dateTo").val()
+    var searchMetodo = $("input:radio[name=search]:checked").val()
     $.ajax({
         method: 'GET',
         url: '/filterToCollect',
-        data: {'filter':filter},
+        data: {'searchMetodo':searchMetodo,'dateTo':dateTo,'dateFrom':dateFrom,'filter':filter},
+        success:function(data){
+            $("#myTable").empty()
+            for(var i = 0; i<data.allFacturesQuery.length;i++){
+                $("#filtro"+data.allFacturesQuery[i].id).val(filter)
+                $("#myTable").append("<tr class='bodyM'><td class='p-2'>"+data.allFacturesQuery[i].num+"</td><td class='p-2'><a href='/contIndividual/"+data.allFacturesQuery[i].refPersona_id+"'>"+data.allPersonasQuery[i].refPersona__nombre+"</a></td><td class='p-2'>"+data.allCategorysQuery[i].refCategory__nombre+"</td><td class='p-2'>"+data.allFacturesQuery[i].note+"</td><td class='p-2'>"+data.dateDic[i]+"</td><td class='p-2'>"+data.deadlineDic[i]+" days</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].monto).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].iva).toFixed(2)+"</td><td class='p-2'>$"+parseFloat(data.allFacturesQuery[i].total).toFixed(2)+"</td><td class='p-2 exclude'><a style='color: white;font-size: small;' class='btn btn-secondary' href='/editeFact/"+data.allFacturesQuery[i].id+"/contToCollect'>Editar</a> <a data-bs-toggle='modal' type='button' data-bs-target='#modalCobrar"+data.allFacturesQuery[i].id+"' style='font-size: small;color: aliceblue;' id='modalCobrar"+data.allFacturesQuery[i].id+"Id' class='btn btn-danger' href='javascript:void(0);'>Cobrar</a></td></tr>")
+            }
+            if(data.acum == 0){
+                $("#myTable").append("<tr class='tfoot' style='background-color: #E77C7C;'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+data.acum.toFixed(2)+"</td><td class='p-2'>$"+data.acumIva.toFixed(2)+"</td><td class='p-2'>$"+data.acum2.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+            }
+            else
+                if(data.acum < 0){
+                    $("#myTable").append("<tr class='tfoot' style='background-color: #E77C7C;color: #c90a0a'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+data.acum.toFixed(2)+"</td><td class='p-2'>$"+data.acumIva.toFixed(2)+"</td><td class='p-2'>$"+data.acum2.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+                }
+                else{
+                    $("#myTable").append("<tr class='tfoot' style='background-color: #E77C7C;color: #1029b9'><td class='p-2'>Total</td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'></td><td class='p-2'>$"+data.acum.toFixed(2)+"</td><td class='p-2'>$"+data.acumIva.toFixed(2)+"</td><td class='p-2'>$"+data.acum2.toFixed(2)+"</td><td class='p-2 exclude'></td></tr>")
+                }
+        }
+    });
+
+})
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var filter = $("#cod").val().toLowerCase();
+    var dateFrom = $("#dateFrom").val()
+    var dateTo = $("#dateTo").val()
+    var searchMetodo = $("input:radio[name=search]:checked").val()
+    $.ajax({
+        method: 'GET',
+        url: '/filterToCollect',
+        data: {'searchMetodo':searchMetodo,'dateTo':dateTo,'dateFrom':dateFrom,'filter':filter},
         success:function(data){
             $("#myTable").empty()
             for(var i = 0; i<data.allFacturesQuery.length;i++){
