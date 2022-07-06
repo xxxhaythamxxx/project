@@ -3734,7 +3734,7 @@ def contToPay(request):
     creadoAuxdateFrom = None
     creadoAuxdateTo = None
 
-    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+    allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
     if allFacturesPay:
         dateFrom = allFacturesPay[0].fechaCreado.date()
         creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
@@ -3756,7 +3756,7 @@ def contToPay(request):
 
     if request.POST.get("search") == "range":
         searchMetodo = "range"
-        allFacturesPay = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+        allFacturesPay = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
 
     deadlineDic = {}
 
@@ -3776,8 +3776,8 @@ def contToPay(request):
         acum2 = acum2 + fac.total
         iva = iva + fac.iva
 
-    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
-    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True).order_by("fechaCreado","id")
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True).order_by("fechaCreado","id")
     facturesToCollect = len(allFacturesToPay)
     facturesToPay = len(allFacturesToCollect)
 
@@ -6386,6 +6386,8 @@ def editeFact(request,val,val2):
 
     # http://localhost:8000/editeFact/485/contTypeCASH%3F2021-11-13
 
+    # contCollectFac1917
+
     urlFinal = ""
     if val2.find("contType")>-1:
         typeA = val2.replace("contType","")
@@ -6393,6 +6395,12 @@ def editeFact(request,val,val2):
     if val2.find("contToCollect")>-1:
         typeA = val2.replace("contToCollect","")
         urlFinal = "/contToCollect"
+    if val2.find("contCollectFac")>-1:
+        typeA = val2.replace("contCollectFac","")
+        urlFinal = "/contToCollect"
+    if val2.find("contPayFac")>-1:
+        typeA = val2.replace("contPayFac","")
+        urlFinal = "/contToPay"
     if val2.find("contToPay")>-1:
         typeA = val2.replace("contToPay","")
         urlFinal = "/contToPay"
@@ -6439,6 +6447,7 @@ def editeFact(request,val,val2):
     # if auxFacGet.pendiente == True:
     #     tope=str(auxFacGet.fechaTope.year)+"-"+str('%02d' % auxFacGet.fechaTope.month)+"-"+str('%02d' % auxFacGet.fechaTope.day)
     todold = auxFacGet.fechaCreado.date()
+    # actual = ""
     actual=str(auxFacGet.fechaCreado.date().year)+"-"+str('%02d' % auxFacGet.fechaCreado.date().month)+"-"+str('%02d' % auxFacGet.fechaCreado.date().day)
     if auxFacGet.monto == auxFacGet.total:
         check = False
