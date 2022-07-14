@@ -10796,55 +10796,52 @@ def checkearNc(request):
     deadline = ""
     deadlineDic = []
     dateDic = []
-    lst = []
-    exacto = None
 
     checkeado = request.GET.get("checkeado")
     filter = request.GET.get("filter")
-    # filterComillas = filter.split('"')
-    print("Filter")
-    print(filter)
-    # print("Después del split comillas:")
-    # if len(filterComillas)>2:
-    #     print("Hay palabras encerradas en comillas")
-    #     print(filterComillas[1])
-    # filter = filter.split(" ")
 
-    contComillas = 0
-    palabra = None
-    posicion = -1
-    vecAuxiliar = []
-    left = None
+    auxInicio = -1
+    auxFin = -1
+    acumCom = 0
+    filterAux = filter
+    palabras = []
+    nuevoFilter = ""
+    palabraFinal = ""
 
+    for pos,let in enumerate(filter):
 
-    print("Ciclo")
-    for pos,char in enumerate(filter):
+        if(let == '"'):
 
-        print("pos: "+str(pos))
-        print("char: "+str(char))
-        
-        if(char == '"'):
-            print("Consigue comilla")
-            lst.append(pos)
-            posicion = pos
-            contComillas = contComillas + 1
-            print(contComillas)
-        if contComillas == 2:
-            print("Hay dos comillas")
-            print(len(lst))
-            if len(lst)>1:
-                left = filter[:pos]
-                print("Tamaño del vector lst mayor a 1")
-                # if (lst[0]==0) and (lst[len(lst)-1]==(len(filter)-1)):
-                vecAuxiliar.append(filter[pos])
-                # exacto = fil.strip('"')
-                print("palabra")
-                print(lst)
-                print(vecAuxiliar)
-                print(left)
-            contComillas = 0
-            lst = []
-            
+            acumCom = acumCom + 1
+
+            if acumCom == 2:
+
+                nuevoFilter = filterAux.replace(filterAux[:auxInicio],"")
+                auxFin = pos
+                palabraFinal = nuevoFilter[:auxFin-auxInicio+1]
+                palabras.append(palabraFinal)
+                acumCom = 0
+                auxInicio = -1
+                auxFin = -1
+
+            else:
+
+                auxInicio = pos
+
+    palabrasAux = []
+
+    for val in palabras:
+
+        if filterAux.find(val) or filterAux == val:
+
+            filterAux2 = filterAux.replace(val,"")
+            filterAux = filterAux2
+        palabrasAux.append(val.strip('"'))
+
+    filterAux = filterAux.split(" ")
+    filterAux = [item for item in filterAux if item]
+    filter = filterAux + palabrasAux
+
     if searchMetodo == "range":
         filterFacturesDate = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
         filterFacturesDatePersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
@@ -10852,54 +10849,17 @@ def checkearNc(request):
 
     for fil in filter:
 
-        for pos,char in enumerate(fil):
-            if(char == '"'):
-                lst.append(pos)
-
-        if len(lst)>1:
-            if (lst[0]==0) and (lst[len(lst)-1]==(len(fil)-1)):
-                # print("Las comillas están a los extremos")
-                exacto = fil.strip('"')
-
         if filterFactures:
 
-            if exacto:
-
-                fil = exacto
-                # print("Es exacto y hay filterFactures")
-                # print(fil)
-
-                filterFactures = filterFactures & ( factura.objects.filter(num__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre").filter(num__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refPersona__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(note__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refType__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refCategory__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                # print(filterFactures)
-
-            else:
-
-                filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+            filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+            filterPersonas = filterPersonas & ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+            filterCategorys = filterCategorys & ( factura.objects.values("refCategory__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
 
         else:
 
-            if exacto:
-
-                fil = exacto
-                # print("Es exacto y no hay FilterFactures")
-                # print(fil)
-
-                filterFactures = ( factura.objects.filter(num__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterCategorys = ( factura.objects.values("refCategory__nombre").filter(num__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refPersona__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(note__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refType__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refCategory__nombre__iexact=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                # print(filterFactures)
-
-            else:
-
-                filterFactures = ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-                filterCategorys = ( factura.objects.values("refCategory__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
-
-        exacto = None
+            filterFactures = ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+            filterPersonas = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+            filterCategorys = ( factura.objects.values("refCategory__nombre").filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre").filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
 
     if checkeado == "true":
 
@@ -10921,6 +10881,16 @@ def checkearNc(request):
         allPersonas = factura.objects.values("refPersona__nombre").filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
         allCategorys = factura.objects.values("refCategory__nombre").filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
 
+    if filter:
+
+        pass
+
+    else:
+
+        filterFactures = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+        filterPersonas = factura.objects.values("refPersona__nombre").filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+        filterCategorys = factura.objects.values("refCategory__nombre").filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+
     if searchMetodo == "range":
         allFactures = allFactures & filterFactures & filterFacturesDate
         allPersonas = allPersonas & filterPersonas & filterFacturesDatePersonas
@@ -10929,7 +10899,7 @@ def checkearNc(request):
         allFactures = allFactures & filterFactures
         allPersonas = allPersonas & filterPersonas
         allCategorys = allCategorys & filterCategorys
-
+    
     for fac in allFactures:
 
         deadline = datetime.now().date() - fac.fechaCreado.date()
