@@ -115,6 +115,10 @@
                                 {% csrf_token %}
                                 <input value="{{filtro}}" name="filtro{{facture.id}}" id="filtro{{facture.id}}" type="text" hidden>
                                 <input id="entrySpendingFiltro{{facture.id}}" name="entrySpendingFiltro{{facture.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
+                                <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
+                                <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
+                                <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
+                                <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
                                 <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
                                     <option value="" selected>Seleccione tipo de pago</option>
                                     {% for type in allTypes %}

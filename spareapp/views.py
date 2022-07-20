@@ -3747,10 +3747,16 @@ def contToPay(request):
 
     if request.POST.get("searchDateFrom"):
         dateFrom = request.POST.get("searchDateFrom")
+        creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+        dateFrom = creadoAuxdateFrom.date()
         dayFrom = dateFrom
+        dateFrom = str(creadoAuxdateFrom.date())
     if request.POST.get("searchDateTo"):
         dateTo = request.POST.get("searchDateTo")
+        creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+        dateTo = creadoAuxdateTo.date()
         dayTo = dateTo
+        dateTo = str(creadoAuxdateTo.date())
     # allFacturesPay = factura.objects.filter(fechaCreado__gte=dateFrom,fechaCreado__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
     allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
@@ -5619,7 +5625,9 @@ def contCollectFac(request,val):
 
     dic = {"filtro":filtro,"totalTotal":acum2,"montoTotal":acum,"deadlineDic":deadlineDic,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
-    return render(request,"spareapp/contToCollect.html",dic)
+    # return redirect("/contToPay",dic)
+    return redirect("/contToCollect")
+    # return render(request,"spareapp/contToCollect.html",dic)
 
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -5627,14 +5635,14 @@ def contPayFac(request,val):
 
     print("------------------------Entra a pagar")
 
-    print(request.POST)
-    print(request.GET)
+    # print(request.POST)
+    # print(request.GET)
     # filtro3685 
     # entryspendingfiltro3685 on
-    print(val)
-    print(request.POST.get("filtro"+val))
+    # print(val)
+    # print(request.POST.get("filtro"+val))
     filtro = request.POST.get("filtro"+val)
-    print(request.POST.get("entrySpendingFiltro"+val))
+    # print(request.POST.get("entrySpendingFiltro"+val))
 
     acum = 0
 
@@ -5643,6 +5651,8 @@ def contPayFac(request,val):
     factAux = factura.objects.filter(id=val)
 
     typeAux = request.POST.get("contTypeIng")
+    # print("typeAux")
+    # print(typeAux)
     typeAux = factType.objects.get(id=typeAux)
 
     if factAux:
@@ -5951,23 +5961,46 @@ def contPayFac(request,val):
 
     # contToPay ------------------------------------------
 
+    searchMetodo = "all"
+    dateFrom = ""
+    dateTo = ""
+    dayFrom = ""
+    dayTo = ""
+
+    if request.POST.get("search") == "all":
+        searchMetodo = "all"
+        allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+        if allFacturesPay:
+            dateFrom = allFacturesPay[0].fechaCreado.date()
+            creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+            dateTo = allFacturesPay[len(allFacturesPay)-1].fechaCreado.date()
+            creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+            dayFrom = dateFrom
+            dayTo = dateTo
+            dateFrom = str(creadoAuxdateFrom.date())
+            dateTo = str(creadoAuxdateTo.date())
+    else:
+        searchMetodo = "range"
+        dateFrom = request.POST.get("dateFrom")
+        creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+        dateTo = request.POST.get("dateTo")
+        creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+        dateFrom = creadoAuxdateFrom.date()
+        dateTo = creadoAuxdateTo.date()
+        dayFrom = dateFrom
+        dayTo = dateTo
+        dateFrom = str(creadoAuxdateFrom.date())
+        dateTo = str(creadoAuxdateTo.date())
+
+    filterFactures = None
+    acum = 0
+    acum2 = 0
+    acumIva = 0
     deadline = ""
     deadlineDic = []
-    filterFactures = None
+    dateDic = []
 
     checkeado = None
-    filter = request.POST.get("filtro"+val)
-    filter = filter.split(" ")
-
-    for fil in filter:
-
-        if filterFactures:
-
-            filterFactures = filterFactures & ( factura.objects.filter(Q(pendiente=True),Q(refCategory__limite=True),Q(refCategory__egreso=True),Q(num__icontains=fil) | Q(refPersona__nombre__icontains=fil) | Q(note__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil)).order_by("fechaCreado","id"))
-
-        else:
-
-            filterFactures = ( factura.objects.filter(Q(pendiente=True),Q(refCategory__limite=True),Q(refCategory__egreso=True),Q(num__icontains=fil) | Q(refPersona__nombre__icontains=fil) | Q(note__icontains=fil) | Q(refType__nombre__icontains=fil) | Q(refCategory__nombre__icontains=fil)).order_by("fechaCreado","id"))
 
     if request.POST.get("entrySpendingFiltro"+val):
 
@@ -5977,22 +6010,108 @@ def contPayFac(request,val):
 
         checkeado = False
 
+    filter = request.POST.get("filtro"+val)
+
+    auxInicio = -1
+    auxFin = -1
+    acumCom = 0
+    filterAux = filter
+    palabras = []
+    nuevoFilter = ""
+    palabraFinal = ""
+
+    for pos,let in enumerate(filter):
+
+        if(let == '"'):
+
+            acumCom = acumCom + 1
+
+            if acumCom == 2:
+
+                nuevoFilter = filterAux.replace(filterAux[:auxInicio],"")
+                auxFin = pos
+                palabraFinal = nuevoFilter[:auxFin-auxInicio+1]
+                palabras.append(palabraFinal)
+                acumCom = 0
+                auxInicio = -1
+                auxFin = -1
+
+            else:
+
+                auxInicio = pos
+
+    palabrasAux = []
+
+    for val in palabras:
+
+        if filterAux.find(val) or filterAux == val:
+
+            filterAux2 = filterAux.replace(val,"")
+            filterAux = filterAux2
+        palabrasAux.append(val.strip('"'))
+
+    filterAux = filterAux.split(" ")
+    filterAux = [item for item in filterAux if item]
+    filter = filterAux + palabrasAux
+
+    filterFacturesDate = ""
+
+    if searchMetodo == "range":
+        filterFacturesDate = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+
+    for fil in filter:
+
+        if filterFactures:
+
+            filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
+        else:
+
+            filterFactures = ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
     if checkeado == True:
 
-        allFacturesPay = factura.objects.filter(nc=checkeado)
+        allFactures = factura.objects.filter(nc=checkeado)
 
     else:
 
-        allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+        allFactures = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
 
-    allFacturesPay = allFacturesPay & filterFactures
+    if filter:
 
-    # --------------------------------------------------------------------------------
+        pass
 
-    # allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+    else:
+
+        filterFactures = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+
+    if searchMetodo == "range":
+        allFacturesPay = allFactures & filterFactures & filterFacturesDate
+    else:
+        allFacturesPay = allFactures & filterFactures
     allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
     deadlineDic = {}
+
+    creadoAuxdateFrom = ""
+    creadoAuxdateTo = ""
+
+    # if allFacturesPay:
+
+    #     dayFrom = allFacturesPay[0].fechaCreado.date()
+    #     dayTo = allFacturesPay[len(allFacturesPay)-1].fechaCreado.date()
+
+    #     # dateFrom = allFacturesPay[0].fechaCreado.date()
+
+    #     creadoAuxdateFrom = datetime.strptime(str(dayFrom),"%Y-%m-%d")
+    #     # dateTo = allFacturesPay[len(allFacturesPay)-1].fechaCreado.date()
+    #     creadoAuxdateTo = datetime.strptime(str(dayTo),"%Y-%m-%d")
+    #     dayFrom = str(creadoAuxdateFrom.date())
+    #     dayTo = str(creadoAuxdateTo.date())
+    #     # dayFrom = dateFrom
+    #     # dayTo = dateTo
+    #     # dateFrom = str(creadoAuxdateFrom.date())
+        # dateTo = str(creadoAuxdateTo.date())
 
     for all in allFacturesPay:
 
@@ -6007,10 +6126,12 @@ def contPayFac(request,val):
 
         acum = acum + fac.monto
         acum2 = acum2 + fac.total
+        acumIva = acumIva + fac.iva
 
-    dic = {"filtro":filtro,"checkeado":checkeado,"deadlineDic":deadlineDic,"totalTotal":acum2,"montoTotal":acum,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+    dic = {"dateFrom":dateFrom,"dateTo":dateTo,"dayFrom":dayFrom,"dayTo":dayTo,"iva":acumIva,"searchMetodo":searchMetodo,"filtro":filtro,"checkeado":checkeado,"deadlineDic":deadlineDic,"totalTotal":acum2,"montoTotal":acum,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
-    return render(request,"spareapp/contToPay.html",dic)
+    # return render(request,"spareapp/contToPay.html",dic)
+    return redirect("/contToPay",dic)
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contAddPerson(request):
@@ -10789,6 +10910,12 @@ def checkearNc(request):
         searchMetodo = "range"
         dateFrom = request.GET.get("dateFrom")
         dateTo = request.GET.get("dateTo")
+        creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+        creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+        dayFrom = creadoAuxdateFrom.date()
+        dayTo = creadoAuxdateTo.date()
+        dateFrom = str(creadoAuxdateFrom.date())
+        dateTo = str(creadoAuxdateTo.date())
 
     acum = 0
     acum2 = 0
