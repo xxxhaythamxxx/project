@@ -29,7 +29,7 @@ from django.http import JsonResponse
 # Código para saber si usa el input o el filtro
 
 import locale
-locale.setlocale(locale.LC_ALL, 'es_CR.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'es_CR.UTF-8')
 
 def selectf(request):
 
