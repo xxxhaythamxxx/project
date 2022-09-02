@@ -6420,40 +6420,47 @@ def accountStat(request):
             dayTo = factureName[len(factureName)-1].fechaCreado.date()
         cont = 0
         
-        for fac in factureName:
+        # for fac in factureName:
 
-            if fac.refCategory.ingreso:
+        #     if fac.refCategory.ingreso:
 
-                cont = cont
+        #         cont = cont
 
-                if fac.refType.facCobrar==True:
+        #         if fac.refType.facCobrar==True:
 
-                    cont = cont + fac.total
-                    if fac.pendiente == True:
-                        balanceFacMerc = balanceFacMerc + fac.total
+        #             cont = cont + fac.total
+        #             if fac.pendiente == True:
+        #                 balanceFacMerc = balanceFacMerc + fac.total
                 
-                if fac.refCategory.nombre=="Factura cobrada":
+        #         if fac.refCategory.nombre=="Factura cobrada":
 
-                    cont = cont - fac.total
+        #             cont = cont - fac.total
             
-            else:
+        #     else:
 
-                cont = cont
+        #         cont = cont
 
-                if fac.refType.mercPagar==True:
+        #         if fac.refType.mercPagar==True:
 
-                    cont = cont - fac.total
-                    if fac.pendiente == True:
-                        balanceFacMerc = balanceFacMerc - fac.total
+        #             cont = cont - fac.total
+        #             if fac.pendiente == True:
+        #                 balanceFacMerc = balanceFacMerc - fac.total
                 
-                if fac.refCategory.nombre=="Mercancia credito pagada":
+        #         if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                    cont = cont + fac.total
+        #             cont = cont + fac.total
 
-            # if fac.pendiente == True and fac.refType.gasto == True:
-            #     balance[fac.id] = [cont,fac.total*(-1)]
-            # else:
-            balance[fac.id] = [cont,fac.total]
+        #     # if fac.pendiente == True and fac.refType.gasto == True:
+        #     #     balance[fac.id] = [cont,fac.total*(-1)]
+        #     # else:
+        #     balance[fac.id] = [cont,fac.total]
+
+
+
+        
+
+
+
 
         balanceTotal = cont
 
@@ -6525,11 +6532,64 @@ def accountStat(request):
 
         if factureName:
 
+            # for fac in factureName:
+
+            #     # print(fac)
+            #     # print(cont)
+            #     # print(fac.total)
+
+            #     if fac.refCategory.ingreso:
+
+            #         cont = cont
+
+            #         if fac.refType.facCobrar==True:
+
+            #             cont = cont + fac.total
+            #             if fac.pendiente == True:
+            #                 balanceFacMerc = balanceFacMerc + fac.total
+                    
+            #         if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
+
+            #             cont = cont - fac.total
+                
+            #     else:
+
+            #         cont = cont
+
+            #         if fac.nc == True:
+
+            #             if fac.refType.mercPagar==True:
+
+            #                 cont = cont + fac.total
+            #                 if fac.pendiente == True:
+            #                     balanceFacMerc = balanceFacMerc - fac.total
+                    
+            #             if fac.refCategory.nombre=="Mercancia credito pagada":
+
+            #                 cont = cont - fac.total
+
+            #         else:
+
+            #             if fac.refType.mercPagar==True:
+
+            #                 cont = cont - fac.total
+            #                 if fac.pendiente == True:
+            #                     balanceFacMerc = balanceFacMerc - fac.total
+                        
+            #             if fac.refCategory.nombre=="Mercancia credito pagada":
+
+            #                 cont = cont + fac.total
+
+            #     # if fac.pendiente == True and fac.refType.gasto == True:
+            #     #     balance[fac.id] = [cont,fac.total*(-1)]
+            #     # else:
+            #     balance[fac.id] = [cont,fac.total]
+
             for fac in factureName:
 
-                # print(fac)
-                # print(cont)
-                # print(fac.total)
+                # deadline = datetime.now().date() - fac.fechaCreado.date()
+                # deadlineDic.append(deadline.days)
+                # dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
 
                 if fac.refCategory.ingreso:
 
@@ -6540,7 +6600,7 @@ def accountStat(request):
                         cont = cont + fac.total
                         if fac.pendiente == True:
                             balanceFacMerc = balanceFacMerc + fac.total
-                    
+
                     if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
 
                         cont = cont - fac.total
@@ -6549,71 +6609,58 @@ def accountStat(request):
 
                     cont = cont
 
-                    if fac.nc == True:
+                    if fac.refType.mercPagar==True:
 
-                        if fac.refType.mercPagar==True:
-
-                            cont = cont + fac.total
-                            if fac.pendiente == True:
-                                balanceFacMerc = balanceFacMerc - fac.total
+                        cont = cont - fac.total
+                        if fac.pendiente == True:
+                            balanceFacMerc = balanceFacMerc - fac.total
                     
-                        if fac.refCategory.nombre=="Mercancia credito pagada":
+                    if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                            cont = cont - fac.total
+                        cont = cont + fac.total
 
-                    else:
-
-                        if fac.refType.mercPagar==True:
-
-                            cont = cont - fac.total
-                            if fac.pendiente == True:
-                                balanceFacMerc = balanceFacMerc - fac.total
-                        
-                        if fac.refCategory.nombre=="Mercancia credito pagada":
-
-                            cont = cont + fac.total
-
-                # if fac.pendiente == True and fac.refType.gasto == True:
-                #     balance[fac.id] = [cont,fac.total*(-1)]
-                # else:
                 balance[fac.id] = [cont,fac.total]
+
+
+                print(cont)
+                acumTotal = cont
 
         balanceTotal = cont
 
-        acumTotal = 0
+        # acumTotal = 0
 
-        for facT in factureName:
+        # for facT in factureName:
 
-            if facT.refType.ingreso == True:
-                if (facT.refType.facCobrar == False):
+        #     if facT.refType.ingreso == True:
+        #         if (facT.refType.facCobrar == False):
 
-                    acumTotal = acumTotal + abs(facT.total)
+        #             acumTotal = acumTotal + abs(facT.total)
 
-                else:
+        #         else:
 
-                    acumTotal = acumTotal - abs(facT.total)        
+        #             acumTotal = acumTotal - abs(facT.total)        
             
-            else:
+        #     else:
 
-                if facT.nc == False:
+        #         if facT.nc == False:
 
-                    if facT.refType.mercPagar == True:
+        #             if facT.refType.mercPagar == True:
 
-                        acumTotal = acumTotal + abs(facT.total)
+        #                 acumTotal = acumTotal + abs(facT.total)
 
-                    else:
+        #             else:
 
-                        acumTotal = acumTotal - abs(facT.total)
+        #                 acumTotal = acumTotal - abs(facT.total)
 
-                else:
+        #         else:
 
-                    if facT.refType.mercPagar == True:
+        #             if facT.refType.mercPagar == True:
 
-                        acumTotal = acumTotal - abs(facT.total)
+        #                 acumTotal = acumTotal - abs(facT.total)
 
-                    else:
+        #             else:
 
-                        acumTotal = acumTotal + abs(facT.total)
+        #                 acumTotal = acumTotal + abs(facT.total)
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
@@ -7213,45 +7260,47 @@ def contIndividual(request,val):
         # else:
         balance[fac.id] = [cont,fac.total]
 
+        acumTotal = cont
+
     balanceTotal = cont
 
     dayFrom = factureName[0].fechaCreado.date()
     dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
-    acumTotal = 0
+    # acumTotal = 0
 
-    for facT in factureName:
+    # for facT in factureName:
 
-            if facT.refType.ingreso == True:
-                if (facT.refType.facCobrar == False):
+    #         if facT.refType.ingreso == True:
+    #             if (facT.refType.facCobrar == False):
 
-                    acumTotal = acumTotal + abs(facT.total)
+    #                 acumTotal = acumTotal + abs(facT.total)
 
-                else:
+    #             else:
 
-                    acumTotal = acumTotal - abs(facT.total)        
+    #                 acumTotal = acumTotal - abs(facT.total)        
             
-            else:
+    #         else:
 
-                if facT.nc == False:
+    #             if facT.nc == False:
 
-                    if facT.refType.mercPagar == True:
+    #                 if facT.refType.mercPagar == True:
 
-                        acumTotal = acumTotal + abs(facT.total)
+    #                     acumTotal = acumTotal + abs(facT.total)
 
-                    else:
+    #                 else:
 
-                        acumTotal = acumTotal - abs(facT.total)
+    #                     acumTotal = acumTotal - abs(facT.total)
 
-                else:
+    #             else:
 
-                    if facT.refType.mercPagar == True:
+    #                 if facT.refType.mercPagar == True:
 
-                        acumTotal = acumTotal - abs(facT.total)
+    #                     acumTotal = acumTotal - abs(facT.total)
 
-                    else:
+    #                 else:
 
-                        acumTotal = acumTotal + abs(facT.total)
+    #                     acumTotal = acumTotal + abs(facT.total)
 
     if request.method == "POST":
 
@@ -7422,42 +7471,46 @@ def contIndividual(request,val):
                 # else:
                 balance[fac.id] = [cont,fac.total]
 
+                print(cont)
+
+                acumTotal = cont
+
         balanceTotal = cont
 
-        acumTotal = 0
+        # acumTotal = 0
 
-        for facT in factureName:
+        # for facT in factureName:
 
-            if facT.refType.ingreso == True:
-                if (facT.refType.facCobrar == False):
+        #     if facT.refType.ingreso == True:
+        #         if (facT.refType.facCobrar == False):
 
-                    acumTotal = acumTotal + abs(facT.total)
+        #             acumTotal = acumTotal + abs(facT.total)
 
-                else:
+        #         else:
 
-                    acumTotal = acumTotal - abs(facT.total)        
+        #             acumTotal = acumTotal - abs(facT.total)        
             
-            else:
+        #     else:
 
-                if facT.nc == False:
+        #         if facT.nc == False:
 
-                    if facT.refType.mercPagar == True:
+        #             if facT.refType.mercPagar == True:
 
-                        acumTotal = acumTotal + abs(facT.total)
+        #                 acumTotal = acumTotal + abs(facT.total)
 
-                    else:
+        #             else:
 
-                        acumTotal = acumTotal - abs(facT.total)
+        #                 acumTotal = acumTotal - abs(facT.total)
 
-                else:
+        #         else:
 
-                    if facT.refType.mercPagar == True:
+        #             if facT.refType.mercPagar == True:
 
-                        acumTotal = acumTotal - abs(facT.total)
+        #                 acumTotal = acumTotal - abs(facT.total)
 
-                    else:
+        #             else:
 
-                        acumTotal = acumTotal + abs(facT.total)
+        #                 acumTotal = acumTotal + abs(facT.total)
 
     balanceTotal = cont
 
@@ -12448,6 +12501,7 @@ def filterAccountStat(request):
                     cont = cont + fac.total
 
             balance[fac.id] = [cont,fac.total]
+            acumTotal = cont
 
     balanceTotal = cont
 
@@ -12773,51 +12827,54 @@ def filterAccountStat(request):
                 cont = cont + fac.total
 
         balance[fac.id] = [cont,fac.total]
+        acumTotal = cont
 
     if factureName:
 
         dayFrom = factureName[0].fechaCreado.date()
         dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
-    acumTotal = 0
+    # acumTotal = 0
 
-    for facT in factureName:
+    # for facT in factureName:
 
-        if facT.refType.ingreso == True:
-            if (facT.refType.facCobrar == False):
+    #     if facT.refType.ingreso == True:
+    #         if (facT.refType.facCobrar == False):
 
-                acumTotal = acumTotal + abs(facT.total)
+    #             acumTotal = acumTotal + abs(facT.total)
 
-            else:
+    #         else:
 
-                acumTotal = acumTotal - abs(facT.total)        
+    #             acumTotal = acumTotal - abs(facT.total)        
         
-        else:
+    #     else:
 
-            if facT.nc == False:
+    #         if facT.nc == False:
 
-                if facT.refType.mercPagar == True:
+    #             if facT.refType.mercPagar == True:
 
-                    acumTotal = acumTotal + abs(facT.total)
+    #                 acumTotal = acumTotal + abs(facT.total)
 
-                else:
+    #             else:
 
-                    acumTotal = acumTotal - abs(facT.total)
+    #                 acumTotal = acumTotal - abs(facT.total)
 
-            else:
+    #         else:
 
-                if facT.refType.mercPagar == True:
+    #             if facT.refType.mercPagar == True:
 
-                    acumTotal = acumTotal - abs(facT.total)
+    #                 acumTotal = acumTotal - abs(facT.total)
 
-                else:
+    #             else:
 
-                    acumTotal = acumTotal + abs(facT.total)
+    #                 acumTotal = acumTotal + abs(facT.total)
 
     allFacturesQuery = list(factureName.values())
     # allPersonasQuery = list(filterPersonas)
     allCategorysQuery = list(filterCategorys)
     allTypesQuery = list(filterTypes)
+
+    print(acumTotal)
 
     return JsonResponse({"acumTotal":acumTotal,"cont":cont,"dateDic":dateDic,"balance":balance,"allTypesQuery":allTypesQuery,"allCategorysQuery":allCategorysQuery,"allFacturesQuery":allFacturesQuery,"all":all,"dateTo":dateTo,"dateFrom":dateFrom})
     # return JsonResponse({"typeSearch":typeSearch,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2,'val':val1,'val2':val2,"acumIva":acumIva})
