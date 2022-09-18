@@ -134,6 +134,7 @@ urlpatterns = [
     path("cargarDb",views.cargarDb,name="cargarDb"),
     path("checkearNc",views.checkearNc,name="checkearNc"),
     path("deleteDb",views.deleteDb,name="deleteDb"),
+    path("deleteDbSpare",views.deleteDbSpare,name="deleteDbSpare"),
     path("filterToCollect",views.filterToCollect,name="filterToCollect"),
     path("filterContType",views.filterContType,name="filterContType"),
     path("filterContTypeTarjeta",views.filterContTypeTarjeta,name="filterContTypeTarjeta"),
