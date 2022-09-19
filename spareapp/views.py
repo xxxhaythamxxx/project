@@ -11885,10 +11885,20 @@ def deleteDb(request):
 def deleteDbSpare(request):
 
     spareDelete = spare.objects.all()
+    carDelete = car.objects.all()
+    engineDelete = engine.objects.all()
     # referenceDelete = reference.objects.all()
     # spareCartDelete = spareCart.objects.all()
 
     for fac in spareDelete:
+
+        fac.delete()
+
+    for fac in carDelete:
+
+        fac.delete()
+
+    for fac in engineDelete:
 
         fac.delete()
 
