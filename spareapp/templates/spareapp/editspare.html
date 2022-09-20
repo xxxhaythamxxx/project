@@ -770,12 +770,12 @@ $("#vendorPasar option").each(function(){
     }
 })
 
-// Pasar de un lado a otro los spares references ---------------------------------------------
-function pasar(){
-    $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
+// Pasar de un lado a otro los vendors  ---------------------------------------------
+function vendorpasar(){
+    $("#vendorPasar option:selected").each(function(){ // Recorre lista sin pasar
         band = false
         var aux = $(this).text()
-        $("#codPasado option").each(function(){ // Recorre lista pasada
+        $("#vendorPasado option").each(function(){ // Recorre lista pasada
             if(aux == $(this).text()){
             }
             else{
@@ -784,21 +784,21 @@ function pasar(){
             }
             
         })
-        if($("#codPasado option:selected").length<1){
+        if($("#vendorPasado option:selected").length<1){
             band = true
             aux2 = aux
         }
         $(this).remove()
         if(band == true){
-            $("#codPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+            $("#vendorPasado").prepend("<option class='p-1'>"+aux2+"</option>")
         }
     })
 }
-function regresar(){
-    $("#codPasado option:selected").each(function(){ // Recorre lista pasada
+function vendorregresar(){
+    $("#vendorPasado option:selected").each(function(){ // Recorre lista pasada
         band = false
         var aux = $(this).text()
-        $("#codPasar option").each(function(){ // Recorre lista sin pasar
+        $("#vendorPasar option").each(function(){ // Recorre lista sin pasar
             if(aux == $(this).text()){
             }
             else{
@@ -806,13 +806,13 @@ function regresar(){
                 aux2 = aux
             }
         })
-        if($("#codPasar option:selected").length<1){
+        if($("#vendorPasar option:selected").length<1){
             band = true
             aux2 = aux
         }
         $(this).remove()
         if(band == true){
-            $("#codPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+            $("#vendorPasar").prepend("<option class='p-1'>"+aux2+"</option>")
         }
     })
     
