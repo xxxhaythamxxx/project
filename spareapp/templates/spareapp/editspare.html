@@ -145,7 +145,7 @@
                             <option value="">Select category</option>
                             {% for sp in allCategories %}
                                 {% if sp == sparefind.0.spare_category %}
-                                <option value="" selected value="{{sp}}">{{sp}}</option>
+                                <option value="{{sp}}" selected>{{sp}}</option>
                                 {% else %}
                                 <option value="{{sp}}">{{sp}}</option>
                                 {% endif %}

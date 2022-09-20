@@ -1357,7 +1357,9 @@ def editspare(request,val):
 
     if request.method == "POST":
 
-# Eliminamos tabla si no tiene atributos en precios ---------
+        print("Entra a POST")
+
+        # Eliminamos tabla si no tiene atributos en precios ---------
 
         # if request.POST.get("pricem")=="":
         #     if spare1.spare_code == None:
@@ -1373,7 +1375,7 @@ def editspare(request,val):
         #         spare1.delete()
         #     spare1 = spare()
         
-# Spare ------------------------------------------------------
+        # Spare ------------------------------------------------------
         sparrr = request.POST.getlist("toReg")
         sparrrPasar = request.POST.getlist("toPass")
         sparrrAux = []
@@ -1398,10 +1400,11 @@ def editspare(request,val):
         else:
             pass
 
-# Cagetory ----------------------------------------------------
+        # Cagetory ----------------------------------------------------
 
-        # print("Category")
-        # print(request.POST.get("catSelect"))
+        print("Category")
+        print(request.POST.get("catSelect"))
+        print(request.POST)
         if request.POST.get("catSelect") == "":
             # print("Entra")
             # category1 = category.objects.get(category=request.POST.get("catSelect"))
@@ -1412,7 +1415,7 @@ def editspare(request,val):
 
 
 
-# Prices ------------------------------------------------------
+        # Prices ------------------------------------------------------
 
         if request.POST.get("pricem")=="":
             spare1.price_m = None
@@ -1425,7 +1428,7 @@ def editspare(request,val):
             spare1.price_d = request.POST.get("priced")
         spare1.save()
 
-# Car info ----------------------------------------------------
+        # Car info ----------------------------------------------------
 
         cartoreg = request.POST.getlist("cartoReg")
         cartopass = request.POST.getlist("cartoPass")
@@ -1461,7 +1464,7 @@ def editspare(request,val):
                 targetCar = car.objects.get(id=idAux)
                 spare1.car_info.add(targetCar)
         
-# Engine info ----------------------------------------------------
+        # Engine info ----------------------------------------------------
 
         enginetoreg = request.POST.getlist("enginetoReg")
         enginetopass = request.POST.getlist("enginetoPass")
@@ -1497,7 +1500,7 @@ def editspare(request,val):
                 targetEngine = engine.objects.get(id=idAux)
                 spare1.engine_info.add(targetEngine)
 
-# Vendors ----------------------------------------------------
+        # Vendors ----------------------------------------------------
 
         vendortoreg = request.POST.getlist("vendortoReg")
         vendortopass = request.POST.getlist("vendortoPass")
@@ -1533,7 +1536,7 @@ def editspare(request,val):
                 targetVendor = vendor.objects.get(id=idAux)
                 spare1.spare_vendor.add(targetVendor)
 
-# Spare targets -----------------------------------------------
+        # Spare targets -----------------------------------------------
 
         spAux = spare.objects.filter(spare_code=val)
 
@@ -1564,7 +1567,7 @@ def editspare(request,val):
                 targetCode = spare.objects.get(id=varId)
                 spare1.spare_spare.add(targetCode)
         
-# Reference ------------------------------------------------------
+        # Reference ------------------------------------------------------
         codesList = request.POST.getlist("refcodes")
         notesList = request.POST.getlist("refcodesnote")
 
@@ -1591,7 +1594,7 @@ def editspare(request,val):
                 reference1.save()
             i = i + 1
 
-# Atributes ------------------------------------------------------
+        # Atributes ------------------------------------------------------
 
         atrtName = request.POST.getlist("atributName")
         atrtVal = request.POST.getlist("atributVal")
@@ -1614,20 +1617,20 @@ def editspare(request,val):
                     varId = sp.id
                 targetSpare = spare.objects.get(id=varId)
                 atribute1.atributeSpare = targetSpare
-                print(ref)
-                print(atrtVal[i])
+                # print(ref)
+                # print(atrtVal[i])
                 atribute1.atributeName = ref
                 atribute1.atributeVal = atrtVal[i]
                 atribute1.save()
             i = i + 1
 
-# Dimensions ------------------------------------------------------
+        # Dimensions ------------------------------------------------------
 
         dimName = request.POST.getlist("dimensName")
         dimVal = request.POST.getlist("dimensVal")
-        print(dimName)
-        print(dimVal)
-        print(type(dimVal[0]))
+        # print(dimName)
+        # print(dimVal)
+        # print(type(dimVal[0]))
 
         auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
         if auxSp:
@@ -1650,8 +1653,13 @@ def editspare(request,val):
                 dimension1.atributeVal = dimVal[i]
                 dimension1.save()
             i = i + 1
+
+        allSparesall = spare.objects.all()
+
+        dic = {"allSparesall":allSparesall}
         
-        return render(request,"spareapp/listspare.html",dic)
+        # return render(request,"spareapp/listspare.html",dic)
+        return redirect("listspare")
     else:
         return render(request,"spareapp/editspare.html",dic)
 
