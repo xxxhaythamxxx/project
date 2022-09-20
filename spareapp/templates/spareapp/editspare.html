@@ -755,6 +755,21 @@
 
 <script>
 
+// Mostrar a ambos lados los vendors que se tienen -------------------------------------
+$("#vendorPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#vendorPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
 // Pasar de un lado a otro los spares references ---------------------------------------------
 function pasar(){
     $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
@@ -803,91 +818,91 @@ function regresar(){
     
 }
 
-    // Formulario del modal para carro
-    $("#secondForm").submit(function(e){
-        e.preventDefault()
-    
-        manuf = $("#manufactur").val()
-        model = $("#mode").val()
-        from = $("#yearfro").val()
-        to = $("#yeart").val()
-        valor = manuf+" "+model+",("+from+" / "+to+")"
-    
-        $.ajax({
-            url: $(this).attr("action"),
-            type: $(this).attr("method"),
-            data: $(this).serialize(),
-    
-            success: function(){
-                console.log("Success")
-                $("#carcodPasado").prepend("<option class='p-1'>"+valor+"</option>")
-                $(".btn-close").click()
-            }
-        })
+// Formulario del modal para carro
+$("#secondForm").submit(function(e){
+    e.preventDefault()
+
+    manuf = $("#manufactur").val()
+    model = $("#mode").val()
+    from = $("#yearfro").val()
+    to = $("#yeart").val()
+    valor = manuf+" "+model+",("+from+" / "+to+")"
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+            $("#carcodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+            $(".btn-close").click()
+        }
     })
-    
-    // Formulario del modal para engine
-    $("#firstForm").submit(function(e){
-        e.preventDefault()
-    
-        code = $("#codefill").val()
-        litres = $("#litresfill").val()
-        type = $("#typefill").val()
-        valve = $("#valvefill").val()
-        pistons = $("#pistonsfill").val()
-        valor = code+" "+litres+" "+type+" "+valve+" "+pistons+" pistons"
-    
-        $.ajax({
-            url: $(this).attr("action"),
-            type: $(this).attr("method"),
-            data: $(this).serialize(),
-    
-            success: function(){
-                console.log("Success")
-                $("#enginecodPasado").prepend("<option class='p-1'>"+valor+"</option>")
-                $(".btn-close").click()
-            }
-        })
+})
+
+// Formulario del modal para engine
+$("#firstForm").submit(function(e){
+    e.preventDefault()
+
+    code = $("#codefill").val()
+    litres = $("#litresfill").val()
+    type = $("#typefill").val()
+    valve = $("#valvefill").val()
+    pistons = $("#pistonsfill").val()
+    valor = code+" "+litres+" "+type+" "+valve+" "+pistons+" pistons"
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+            $("#enginecodPasado").prepend("<option class='p-1'>"+valor+"</option>")
+            $(".btn-close").click()
+        }
     })
-    
-    // Agregar modal Category
-    $("#firstCategory").submit(function(e){
-        e.preventDefault()
-    
-        cat = $("#categor").val()
-    
-        $.ajax({
-            url: $(this).attr("action"),
-            type: $(this).attr("method"),
-            data: $(this).serialize(),
-    
-            success: function(){
-                console.log("Success")
-    
-                $("#catSelect").append("<option value="+cat+" selected>"+cat+"</option>")
-                $(".btn-close").click()
-            }
-        })
+})
+
+// Agregar modal Category
+$("#firstCategory").submit(function(e){
+    e.preventDefault()
+
+    cat = $("#categor").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+
+            $("#catSelect").append("<option value="+cat+" selected>"+cat+"</option>")
+            $(".btn-close").click()
+        }
     })
-    
-    // Formulario del modal para vendor
-    $("#firstVendor").submit(function(e){
-        e.preventDefault()
-    
-        vendor = $("#vendo").val()
-    
-        $.ajax({
-            url: $(this).attr("action"),
-            type: $(this).attr("method"),
-            data: $(this).serialize(),
-    
-            success: function(){
-                console.log("Success")
-                $("#vendorPasado").prepend("<option class='p-1'>"+vendor+"</option>")
-                $(".btn-close").click()
-            }
-        })
+})
+
+// Formulario del modal para vendor
+$("#firstVendor").submit(function(e){
+    e.preventDefault()
+
+    vendor = $("#vendo").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+
+        success: function(){
+            console.log("Success")
+            $("#vendorPasado").prepend("<option class='p-1'>"+vendor+"</option>")
+            $(".btn-close").click()
+        }
     })
+})
     
 </script>
 
