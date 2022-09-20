@@ -651,6 +651,54 @@
 
 <script>
 
+// Pasar de un lado a otro los vendors  ---------------------------------------------
+function vendorpasar(){
+    $("#vendorPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#vendorPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#vendorPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#vendorPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function vendorregresar(){
+    $("#vendorPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#vendorPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#vendorPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#vendorPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+    
+}
+
 // Formulario del modal para carro
 $("#secondForm").submit(function(e){
     e.preventDefault()
@@ -736,9 +784,9 @@ $("#firstVendor").submit(function(e){
     })
 })
 
-$("#formPass").click(function(){
-    // alert($("#formMain").serialize())
-})
+// $("#formPass").click(function(){
+//     // alert($("#formMain").serialize())
+// })
 
 </script>
 {% endblock %}
