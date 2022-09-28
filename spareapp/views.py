@@ -6717,7 +6717,7 @@ def contPayFac(request,val):
 
     for val in palabras:
 
-        if filterAux.find(val) or filterAux == val:
+        if filterAux.find(val) >= 0:
 
             filterAux2 = filterAux.replace(val,"")
             filterAux = filterAux2
@@ -12289,6 +12289,17 @@ def filterContType(request):
     auxCat = None
     dayFrom = None
     dayTo = None
+    dateFrom = None
+    dateTo = None
+
+    print(request.GET)
+    print("request.GET.get(val2)")
+    print(request.GET.get("val2"))
+    diaAux = datetime.strptime(str(request.GET.get("val2")),"%Y-%m-%d")
+    print("diaAux.date()")
+    print(diaAux.date())
+    val1 = request.GET.get("val1")
+    val2 = request.GET.get("val2")
 
     if request.GET.get("dateTo"):
 
@@ -12309,7 +12320,7 @@ def filterContType(request):
     else:
 
         searchMetodo = "all"
-        allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+        allFacturesPay = factura.objects.filter(fechaCreado__date=diaAux.date(),refType__nombre=val1).order_by("fechaTope")
         if allFacturesPay:
             dateFrom = allFacturesPay[0].fechaCreado.date()
             creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
@@ -12323,6 +12334,9 @@ def filterContType(request):
             dayTo = dateTo
             dateFrom = str(creadoAuxdateFrom.date())
             dateTo = str(creadoAuxdateTo.date())
+
+    print("allFacturesPay")
+    print(allFacturesPay)
 
     acum = 0
     acum2 = 0
@@ -12399,8 +12413,7 @@ def filterContType(request):
     for val in palabrasErase2:
         filter.remove(val)
 
-    val1 = request.GET.get("val1")
-    val2 = request.GET.get("val2")
+    
     tod = val2
     typeAux = factType.objects.get(nombre=val1)
 

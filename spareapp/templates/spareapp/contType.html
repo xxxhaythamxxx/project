@@ -110,6 +110,12 @@
                         <div class="modal-body"> 
                             <form id="formCust" method="POST" action="{% url 'contPayFac' fac.id %}">
                                 {% csrf_token %}
+                                <input value="{{filtro}}" name="filtro{{fac.id}}" id="filtro{{fac.id}}" type="text" hidden>
+                                <input id="entrySpendingFiltro{{fac.id}}" name="entrySpendingFiltro{{fac.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
+                                <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
+                                <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
+                                <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
+                                <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
                                 <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
                                     <option value="" selected>Seleccione tipo de pago</option>
                                     {% for type in allTypes %}
@@ -120,8 +126,8 @@
                                     <label class="form-label" for="contNota">Nota</label>
                                     <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
                                 </div>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Pagar</button>
                             </form>
                             
                         </div>   
