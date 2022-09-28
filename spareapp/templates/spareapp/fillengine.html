@@ -146,6 +146,137 @@
 </div>
 <script>
 
+// Mostrar a ambos lados los car info que se tienen -------------------------------------
+$("#carcodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#carcodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
+// Mostrar a ambos lados los car info que se tienen en fillEngine -------------------------------------
+$("#engcarcodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#engcarcodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
+// Para filtrar por car
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#carSelect').select2();
+    });
+});
+
+// Pasar de un lado a otro los car info  --------------------------------------------------
+function carpasar(){
+    $("#carcodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#carcodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#carcodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#carcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function carregresar(){
+    $("#carcodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#carcodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#carcodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#carcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Pasar de un lado a otro los car info en FillSpare --------------------------------------
+function engcarpasar(){
+    $("#engcarcodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#engcarcodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#engcarcodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#engcarcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function engcarregresar(){
+    $("#engcarcodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#engcarcodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#engcarcodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#engcarcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
 $("#secondForm").submit(function(e){
     e.preventDefault()
 

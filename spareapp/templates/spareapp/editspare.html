@@ -755,6 +755,21 @@
 
 <script>
 
+// Mostrar a ambos lados los car info que se tienen -------------------------------------
+$("#carcodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#carcodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
 // Mostrar a ambos lados los vendors que se tienen -------------------------------------
 $("#vendorPasar option").each(function(){
     var aux = $(this).text()
@@ -769,6 +784,37 @@ $("#vendorPasar option").each(function(){
         // $(this).hide()
     }
 })
+
+// Mostrar a ambos lados los engine info que se tienen -------------------------------------
+$("#enginecodPasar option").each(function(){
+    var aux = $(this).text()
+    var band = false
+    $("#enginecodPasado option").each(function(){
+        if($(this).text() == aux){
+            band = true
+        }
+    })
+    if (band == true){
+        $(this).remove()
+        // $(this).hide()
+    }
+})
+
+// Para filtrar por categoria
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#catSelect').select2();
+    });
+});
+
+// Para filtrar por car
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#carSelect').select2();
+    });
+});
+
+
 
 // Pasar de un lado a otro los vendors  ---------------------------------------------
 function vendorpasar(){
@@ -817,6 +863,268 @@ function vendorregresar(){
     })
     
 }
+
+// Pasar de un lado a otro los spares references ---------------------------------------------
+function pasar(){
+    $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#codPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#codPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#codPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function regresar(){
+    $("#codPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#codPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#codPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#codPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+    
+}
+
+// Pasar de un lado a otro los car info  --------------------------------------------------
+function carpasar(){
+    $("#carcodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#carcodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#carcodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#carcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function carregresar(){
+    $("#carcodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#carcodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#carcodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#carcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+// Pasar de un lado a otro los engine info  --------------------------------------------------
+function enginepasar(){
+    $("#enginecodPasar option:selected").each(function(){ // Recorre lista sin pasar
+        band = false
+        var aux = $(this).text()
+        $("#enginecodPasado option").each(function(){ // Recorre lista pasada
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+            
+        })
+        if($("#enginecodPasado option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#enginecodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+function engineregresar(){
+    $("#enginecodPasado option:selected").each(function(){ // Recorre lista pasada
+        band = false
+        var aux = $(this).text()
+        $("#enginecodPasar option").each(function(){ // Recorre lista sin pasar
+            if(aux == $(this).text()){
+            }
+            else{
+                band = true
+                aux2 = aux
+            }
+        })
+        if($("#enginecodPasar option:selected").length<1){
+            band = true
+            aux2 = aux
+        }
+        $(this).remove()
+        if(band == true){
+            $("#enginecodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+        }
+    })
+}
+
+
+// Arreglar los valores que se pasarán ------------------------------------------------
+$("#formPass").on("click",function(){
+    $("#codPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#codPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+})
+
+$("#formPass2").on("click",function(){
+    $("#codPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#codPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#carcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#enginecodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#vendorPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasar option").each(function(){
+        $(this).attr("selected",true)
+    })
+})
+
+
+// reftam = 1
+// Agregar ref codes
+$("#addRef").click(function(){
+    // reftam++
+    $("#reference-content")
+    .append(
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80"><input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="deleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
+// Eliminar ref codes
+$("#reference-content").on("click","#deleteRef",function(a){
+    a.preventDefault()
+    $(this).parent().parent().parent().remove()
+    // reftam--
+})
+
+// atrtam = 1
+// Agregar Atributos
+$("#atributaddRef").click(function(){
+    // alert("Entra")
+    // atrtam++
+    $("#atribute-content")
+    .append(
+        // '<div>HOla</div>')
+        // '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"><input placeholder="Add the atribute valor" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
+// Eliminar Atributes
+$("#atribute-content").on("click","#atributdeleteRef",function(a){
+    a.preventDefault()
+    $(this).parent().parent().parent().remove()
+    // atrtam--
+})
+
+// Agregar dimensiones
+$("#dimensaddRef").click(function(){
+    $("#dimension-content")
+    .append(
+        // '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the dimension name" value="" type="text" class="form-control" name="dimensName" id="dimensName" aria-describedby="dimensNameHelp" maxlength="80"><input placeholder="Add the dimension value" value="" type="number" class="form-control" name="dimensVal" id="dimensVal" aria-describedby="dimensValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="dimesdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the dimension name" value="" type="text" class="form-control" name="dimensName" id="dimensName" aria-describedby="dimensNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the dimension value" value="" type="number" class="form-control" name="dimensVal" id="dimensVal" aria-describedby="dimensValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="dimesdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
+// Eliminar dimensiones
+$("#dimension-content").on("click","#dimesdeleteRef",function(a){
+    a.preventDefault()
+    $(this).parent().parent().parent().remove()
+})
+
+
 
 // Formulario del modal para carro
 $("#secondForm").submit(function(e){
