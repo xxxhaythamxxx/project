@@ -2879,31 +2879,27 @@ def contEntry(request):
                         else:
                             facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-                    for fac in facAuxAll:
+                    if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                        if fac.nc == True:
+                        for fac in facAuxAll:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                            custAcum = custAcum + fac.total
 
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
+                    else:
 
-                                    custAcum = custAcum + fac.total
+                        for fac in facAuxAll:
 
-                                else:
+                            if fac.nc == True:
 
-                                    custAcum = custAcum - fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                            else:
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                                custAcum = custAcum + fac.total
+                                        custAcum = custAcum + fac.total
 
-                        else:
+                                    else:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                                    custAcum = custAcum - fac.total
+                                        custAcum = custAcum - fac.total
 
                                 else:
 
@@ -2911,7 +2907,21 @@ def contEntry(request):
 
                             else:
 
-                                custAcum = custAcum + fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                        custAcum = custAcum - fac.total
+
+                                    else:
+
+                                        custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                    custAcum = abs(custAcum)
 
                     lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -2971,31 +2981,27 @@ def contEntry(request):
                         else:
                             facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-                    for fac in facAuxAll:
+                    if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                        if fac.nc == True:
+                        for fac in facAuxAll:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                            custAcum = custAcum + fac.total
 
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
+                    else:
 
-                                    custAcum = custAcum + fac.total
+                        for fac in facAuxAll:
 
-                                else:
+                            if fac.nc == True:
 
-                                    custAcum = custAcum - fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                            else:
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                                custAcum = custAcum + fac.total
+                                        custAcum = custAcum + fac.total
 
-                        else:
+                                    else:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                                    custAcum = custAcum - fac.total
+                                        custAcum = custAcum - fac.total
 
                                 else:
 
@@ -3003,7 +3009,21 @@ def contEntry(request):
 
                             else:
 
-                                custAcum = custAcum + fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                        custAcum = custAcum - fac.total
+
+                                    else:
+
+                                        custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                    custAcum = abs(custAcum)
 
                     lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -4456,57 +4476,80 @@ def contListType(request):
         allTypesCustom = factType.objects.all()
         custAcum = 0
         for ty in allTypesCustom:
+            # print("Ty")
+            # print(ty)
             facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
 
             if ty.facCobrar == True:
+                # print("Entra en facCobrar")
                 facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
 
             if ty.mercPagar == True:
+                # print("Entra en mercPagar")
                 facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.mercPagada == True:
+                # print("Entra en mercPagada")
                 facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=False)
+                # facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
 
             if ty.facCobrada == True:
+                # print("Entra en facCobrada")
 
                 if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
                     facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
                 else:
                     facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-            for fac in facAuxAll:
+            # print("facAuxAll")
+            # print(facAuxAll)
 
-                if fac.nc == True:
+            if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                    if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                for fac in facAuxAll:
 
-                        if fac.refCategory.nombre == "Mercancia credito pagada":
+                    custAcum = custAcum + fac.total
 
-                            custAcum = custAcum + fac.total
+            else:
+
+                for fac in facAuxAll:
+
+                    # custAcum = custAcum + fac.total
+
+
+                    if fac.nc == True:
+
+                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum - fac.total
 
                         else:
 
-                            custAcum = custAcum - fac.total
+                            custAcum = custAcum + fac.total
 
                     else:
 
-                        custAcum = custAcum + fac.total
+                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                else:
+                            if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                    if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                                custAcum = custAcum - fac.total
 
-                        if fac.refCategory.nombre == "Mercancia credito pagada":
+                            else:
 
-                            custAcum = custAcum - fac.total
+                                custAcum = custAcum + fac.total
 
                         else:
 
                             custAcum = custAcum + fac.total
 
-                    else:
-
-                        custAcum = custAcum + fac.total
+            custAcum = abs(custAcum)
                         
             customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
 
@@ -4568,31 +4611,27 @@ def contListType(request):
                 else:
                     facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-            for fac in facAuxAll:
+            if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                if fac.nc == True:
+                for fac in facAuxAll:
 
-                    if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                    custAcum = custAcum + fac.total
 
-                        if fac.refCategory.nombre == "Mercancia credito pagada":
+            else:
 
-                            custAcum = custAcum + fac.total
+                for fac in facAuxAll:
 
-                        else:
+                    if fac.nc == True:
 
-                            custAcum = custAcum - fac.total
+                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                    else:
+                            if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                        custAcum = custAcum + fac.total
+                                custAcum = custAcum + fac.total
 
-                else:
+                            else:
 
-                    if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                        if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                            custAcum = custAcum - fac.total
+                                custAcum = custAcum - fac.total
 
                         else:
 
@@ -4600,7 +4639,21 @@ def contListType(request):
 
                     else:
 
-                        custAcum = custAcum + fac.total
+                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                custAcum = custAcum - fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum + fac.total
+
+            custAcum = abs(custAcum)
                         
             lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
             for nom in lista:
@@ -6334,31 +6387,27 @@ def contPayFac(request,val):
                     else:
                         facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-                for fac in facAuxAll:
+                if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                    if fac.nc == True:
+                    for fac in facAuxAll:
 
-                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                        custAcum = custAcum + fac.total
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada":
+                else:
 
-                                custAcum = custAcum + fac.total
+                    for fac in facAuxAll:
 
-                            else:
+                        if fac.nc == True:
 
-                                custAcum = custAcum - fac.total
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                        else:
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                            custAcum = custAcum + fac.total
+                                    custAcum = custAcum + fac.total
 
-                    else:
+                                else:
 
-                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                            if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                                custAcum = custAcum - fac.total
+                                    custAcum = custAcum - fac.total
 
                             else:
 
@@ -6366,7 +6415,21 @@ def contPayFac(request,val):
 
                         else:
 
-                            custAcum = custAcum + fac.total
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum - fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                custAcum = abs(custAcum)
 
                 lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
@@ -6427,32 +6490,27 @@ def contPayFac(request,val):
                     else:
                         facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
+                if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                for fac in facAuxAll:
+                    for fac in facAuxAll:
 
-                    if fac.nc == True:
+                        custAcum = custAcum + fac.total
 
-                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                else:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada":
+                    for fac in facAuxAll:
 
-                                custAcum = custAcum + fac.total
+                        if fac.nc == True:
 
-                            else:
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                                custAcum = custAcum - fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                        else:
+                                    custAcum = custAcum + fac.total
 
-                            custAcum = custAcum + fac.total
+                                else:
 
-                    else:
-
-                        if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                            if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                                custAcum = custAcum - fac.total
+                                    custAcum = custAcum - fac.total
 
                             else:
 
@@ -6460,7 +6518,21 @@ def contPayFac(request,val):
 
                         else:
 
-                            custAcum = custAcum + fac.total
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum - fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                custAcum = abs(custAcum)
 
                 lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
@@ -7395,31 +7467,27 @@ def editeFact(request,val,val2):
                         else:
                             facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-                    for fac in facAuxAll:
+                    if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                        if fac.nc == True:
+                        for fac in facAuxAll:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                            custAcum = custAcum + fac.total
 
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
+                    else:
 
-                                    custAcum = custAcum + fac.total
+                        for fac in facAuxAll:
 
-                                else:
+                            if fac.nc == True:
 
-                                    custAcum = custAcum - fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                            else:
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                                custAcum = custAcum + fac.total
+                                        custAcum = custAcum + fac.total
 
-                        else:
+                                    else:
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                                    custAcum = custAcum - fac.total
+                                        custAcum = custAcum - fac.total
 
                                 else:
 
@@ -7427,7 +7495,21 @@ def editeFact(request,val,val2):
 
                             else:
 
-                                custAcum = custAcum + fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                        custAcum = custAcum - fac.total
+
+                                    else:
+
+                                        custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                    custAcum = abs(custAcum)
 
                     lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -7487,32 +7569,27 @@ def editeFact(request,val,val2):
                         else:
                             facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
+                    if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
 
-                    for fac in facAuxAll:
+                        for fac in facAuxAll:
 
-                        if fac.nc == True:
+                            custAcum = custAcum + fac.total
 
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+                    else:
 
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
+                        for fac in facAuxAll:
 
-                                    custAcum = custAcum + fac.total
+                            if fac.nc == True:
 
-                                else:
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
 
-                                    custAcum = custAcum - fac.total
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
 
-                            else:
+                                        custAcum = custAcum + fac.total
 
-                                custAcum = custAcum + fac.total
+                                    else:
 
-                        else:
-
-                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
-
-                                if fac.refCategory.nombre == "Mercancia credito pagada":
-
-                                    custAcum = custAcum - fac.total
+                                        custAcum = custAcum - fac.total
 
                                 else:
 
@@ -7520,7 +7597,21 @@ def editeFact(request,val,val2):
 
                             else:
 
-                                custAcum = custAcum + fac.total
+                                if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                    if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                        custAcum = custAcum - fac.total
+
+                                    else:
+
+                                        custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                    custAcum = abs(custAcum)
 
                     lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
