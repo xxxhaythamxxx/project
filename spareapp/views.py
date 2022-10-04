@@ -2883,7 +2883,13 @@ def contEntry(request):
 
                         for fac in facAuxAll:
 
-                            custAcum = custAcum + fac.total
+                            if fac.nc == True:
+
+                                custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum - fac.total
 
                     else:
 
@@ -2985,7 +2991,13 @@ def contEntry(request):
 
                         for fac in facAuxAll:
 
-                            custAcum = custAcum + fac.total
+                            if fac.nc == True:
+
+                                custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum - fac.total
 
                     else:
 
@@ -3535,20 +3547,97 @@ def contTypeRange(request,val,val2,val3):
         allFacturesVal = factura.objects.filter(fechaCreado__date__lte=val3,fechaCreado__date__gte=val2,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
         allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
 
+    # --------------------------------------------------------
+
+    # if typeAux.facCobrada == False and typeAux.mercPagada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+    #     if typeAux.ingreso:
+
+    #         for fac in allFacturesVal:
+
+    #             montoTotal = montoTotal + fac.monto
+    #             itbmTotal = itbmTotal + float(fac.iva)
+    #             totalTotal = totalTotal + fac.total
+
+    #     else:
+
+    #         for fac in allFacturesVal:
+
+    #             if fac.nc == True:
+
+    #                 montoTotal = montoTotal + fac.monto
+    #                 itbmTotal = itbmTotal + float(fac.iva)
+    #                 totalTotal = totalTotal + fac.total
+
+    #             else:
+
+    #                 montoTotal = montoTotal - fac.monto
+    #                 itbmTotal = itbmTotal - float(fac.iva)
+    #                 totalTotal = totalTotal - fac.total
+
+    # if typeAux.facCobrada == True:
+
+    #     for fac in allFacturesVal:
+
+    #         montoTotal = montoTotal + fac.monto
+    #         itbmTotal = itbmTotal + float(fac.iva)
+    #         totalTotal = totalTotal + fac.total
+
+    # if typeAux.mercPagada == True:
+
+    #     for fac in allFacturesVal:
+
+    #         if fac.nc == True:
+
+    #             montoTotal = montoTotal + fac.monto
+    #             itbmTotal = itbmTotal + float(fac.iva)
+    #             totalTotal = totalTotal + fac.total
+
+    #         else:
+
+    #             montoTotal = montoTotal - fac.monto
+    #             itbmTotal = itbmTotal - float(fac.iva)
+    #             totalTotal = totalTotal - fac.total
+
+    # if typeAux.facCobrar == True:
+
+    #     for fac in allFacturesVal:
+
+    #         montoTotal = montoTotal - fac.monto
+    #         itbmTotal = itbmTotal - float(fac.iva)
+    #         totalTotal = totalTotal - fac.total
+
+    # if typeAux.mercPagar == True:
+
+    #     for fac in allFacturesVal:
+
+    #         if fac.nc == True:
+
+    #             montoTotal = montoTotal - fac.monto
+    #             itbmTotal = itbmTotal - float(fac.iva)
+    #             totalTotal = totalTotal - fac.total
+
+    #         else:
+
+    #             montoTotal = montoTotal + fac.monto
+    #             itbmTotal = itbmTotal + float(fac.iva)
+    #             totalTotal = totalTotal + fac.total
+
+    # ----------------------------------------
 
     itbm7 = {}
 
-    for fac in allFacturesVal:
+    # for fac in allFacturesVal:
 
-        if fac.refCategory.ingreso == True:
+    #     if fac.refCategory.ingreso == True:
 
-            if fac.monto == fac.total:
+    #         if fac.monto == fac.total:
 
-                itbm7[fac.id] = float(0)
+    #             itbm7[fac.id] = float(0)
 
-            else:
+    #         else:
 
-                itbm7[fac.id] = float(fac.monto)*0.07
+    #             itbm7[fac.id] = float(fac.monto)*0.07
 
     if typeAux.facCobrada == False and typeAux.mercPagada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
 
@@ -3620,9 +3709,17 @@ def contTypeRange(request,val,val2,val3):
 
         for fac in allFacturesVal:
 
-            montoTotal = montoTotal + fac.monto
-            itbmTotal = itbmTotal + float(fac.iva)
-            totalTotal = totalTotal + fac.total
+            if fac.nc == True:
+
+                montoTotal = montoTotal - fac.monto
+                itbmTotal = itbmTotal - float(fac.iva)
+                totalTotal = totalTotal - fac.total
+
+            else:
+
+                montoTotal = montoTotal + fac.monto
+                itbmTotal = itbmTotal + float(fac.iva)
+                totalTotal = totalTotal + fac.total
 
     typeDate = "From "+val2+", to "+val3
 
@@ -4508,7 +4605,13 @@ def contListType(request):
 
                 for fac in facAuxAll:
 
-                    custAcum = custAcum + fac.total
+                    if fac.nc == True:
+
+                        custAcum = custAcum + fac.total
+
+                    else:
+
+                        custAcum = custAcum - fac.total
 
             else:
 
@@ -4615,7 +4718,13 @@ def contListType(request):
 
                 for fac in facAuxAll:
 
-                    custAcum = custAcum + fac.total
+                    if fac.nc == True:
+
+                        custAcum = custAcum + fac.total
+
+                    else:
+
+                        custAcum = custAcum - fac.total
 
             else:
 
@@ -4808,7 +4917,13 @@ def contByDay(request):
 
                 for fac in facAuxAll:
 
-                    custAcum = custAcum + fac.total
+                    if fac.nc == True:
+
+                        custAcum = custAcum + fac.total
+
+                    else:
+
+                        custAcum = custAcum - fac.total
 
             else:
 
@@ -4912,7 +5027,13 @@ def contByDay(request):
 
                 for fac in facAuxAll:
 
-                    custAcum = custAcum + fac.total
+                    if fac.nc == True:
+
+                        custAcum = custAcum + fac.total
+
+                    else:
+
+                        custAcum = custAcum - fac.total
 
             else:
 
@@ -5709,7 +5830,13 @@ def contByRange(request):
 
                 for fac in facAuxAll:
 
-                    custAcum = custAcum + fac.total
+                    if fac.nc == True:
+
+                        custAcum = custAcum + fac.total
+
+                    else:
+
+                        custAcum = custAcum - fac.total
 
             else:
 
@@ -5982,7 +6109,13 @@ def contCollectFac(request,val):
 
                     for fac in facAuxAll:
 
-                        custAcum = custAcum + fac.total
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
 
                 else:
 
@@ -6087,7 +6220,13 @@ def contCollectFac(request,val):
 
                     for fac in facAuxAll:
 
-                        custAcum = custAcum + fac.total
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
 
                 else:
 
@@ -6502,7 +6641,13 @@ def contPayFac(request,val):
 
                     for fac in facAuxAll:
 
-                        custAcum = custAcum + fac.total
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
 
                 else:
 
@@ -6605,7 +6750,13 @@ def contPayFac(request,val):
 
                     for fac in facAuxAll:
 
-                        custAcum = custAcum + fac.total
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
 
                 else:
 
@@ -7582,7 +7733,13 @@ def editeFact(request,val,val2):
 
                         for fac in facAuxAll:
 
-                            custAcum = custAcum + fac.total
+                            if fac.nc == True:
+
+                                custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum - fac.total
 
                     else:
 
@@ -7684,7 +7841,13 @@ def editeFact(request,val,val2):
 
                         for fac in facAuxAll:
 
-                            custAcum = custAcum + fac.total
+                            if fac.nc == True:
+
+                                custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum - fac.total
 
                     else:
 

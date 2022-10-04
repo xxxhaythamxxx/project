@@ -15,8 +15,10 @@
 
 <div class="container">
 
+<div class="collapse" id="collapseExample">
+
 <div class="col-lg-5">
-    <input value="{{filtro}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
+    <input value="{{filtro}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filtro... ">
 </div>
 <div class="col-lg-4">
 <form id="formMain" action="{% url 'contToPay' %}" method="POST">
@@ -55,6 +57,8 @@
     <input id="entrySpending" name="entrySpending" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %}>
     <label for="entrySpending">Sólo notas de crédito</label>
 </div>
+</div>
+
 </div>
 
 <div class="container mt-2">
@@ -157,6 +161,7 @@
         </tbody>
     </table>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>

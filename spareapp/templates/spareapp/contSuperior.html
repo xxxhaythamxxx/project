@@ -1,9 +1,25 @@
 <html>
 
     <body>
-        
+        <div class="mx-2 my-2">
+            <svg type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-down-left-square-fill" viewBox="0 0 16 16">
+                <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm8.096-10.803L6 9.293V6.525a.5.5 0 0 0-1 0V10.5a.5.5 0 0 0 .5.5h3.975a.5.5 0 0 0 0-1H6.707l4.096-4.096a.5.5 0 1 0-.707-.707z"/>
+            </svg>
+        </div>
+        <!-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Filtros
+        </button> -->
+
+          <!-- <div class="collapse" id="collapseExample">
+            <div class="">
+              Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+            </div>
+          </div> -->
+
         {% if tod %}
+        
         <div class="container mt-2">Día: {{tod}}</div>
+        
         {% else %}
             {% if dateFrom %}
             <div class="container mt-2">Desde: {{dateFrom}}, hasta: {{dateTo}}</div>
@@ -12,40 +28,10 @@
             {% endif %}
         {% endif %}
 
+        <div class="collapse" id="collapseExample">
 
         <div class="container">
             <div class="row mt-2">
-                <form id="formByDay" method="POST" action="{% url 'contByDay' %}" style="display: none;">
-                    {% csrf_token %}
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-2">
-                                <input name="searchDate" id="searchDate" class="form-control" type="date" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 d-flex align-items-center mt-2">
-                            <button type="submit" class="btn btn-danger" style="font-size: small;" href="">Buscar</button>
-                        </div>
-                    </div>
-                </form>
-                <form id="formByRange" method="POST" action="{% url 'contByRange' %}" style="display: none;">
-                    {% csrf_token %}
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-2">
-                                <label for="searchDateFrom">From</label>
-                                <input name="searchDateFrom" id="searchDateFrom" class="form-control" type="date" required>
-                            </div>
-                            <div class="col-lg-2">
-                                <label for="searchDateTo">To</label>
-                                <input name="searchDateTo" id="searchDateTo" class="form-control" type="date" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 d-flex align-items-center mt-2">
-                            <button type="submit" class="btn btn-danger" style="font-size: small;" href="">Buscar</button>
-                        </div>
-                    </div>
-                </form>
                 <div class="col-lg-8">
                     <a href="{% url 'contAdmin' %}" style="font-size: small;" class="btn btn-secondary">Admin</a>
                     <a href="{% url 'contEntry' %}" style="font-size: small;" class="btn btn-primary">Agregar</a>
@@ -63,13 +49,14 @@
                     {% else %}
                     <a style="font-size: small;" href="{% url 'customTablesRange' dateFrom dateTo %}" class="btn btn-primary">Custom tables</a>
                     {% endif %}
+                    
                     <form action="{% url 'searchTable' %}" method="POST">
                     {% csrf_token %}
                     <div class="col-lg-5 mt-3">
                         {% if busqueda %}
                         <input value="{{busqueda}}" placeholder="Search" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
                         {% else %}
-                        <input placeholder="Search" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
+                        <input placeholder="Buscar" id="Tsearch" name="Tsearch" class="form-control" style="font-size: small;" type="text" required>
                         {% endif %}
                     </div>
                     <!-- <input id="Tsearch" name="Tsearch" class="col-lg-3" style="font-size: small;" type="text"> -->
@@ -86,9 +73,16 @@
                             Mercancía por pagar<span class="badge bg-secondary">{{facturesToPay}}</span>
                         </a>
                     </div>
-                    
                 </div>
+                {% include "spareapp/contSuperiorSearch.html" %}
             </div>
+        </div>
         </div>
     </body>
 </html>
+
+<script>
+// $(document).on('click',function(){
+//     $('.collapse').collapse('hide');
+// })
+</script>
