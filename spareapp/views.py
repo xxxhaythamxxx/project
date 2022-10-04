@@ -7383,8 +7383,6 @@ def accountStat(request):
 
                 balance[fac.id] = [cont,fac.total]
 
-
-                print(cont)
                 acumTotal = cont
 
         balanceTotal = cont

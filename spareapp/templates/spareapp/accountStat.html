@@ -17,6 +17,8 @@
     <input id="busquedaValor" value="{{busqueda}}" type="text" hidden>
 {% endif %}
 
+<div class="collapse show" id="collapseExample2">
+
 <div class="container mt-2 col-lg-4">
 
 <form action="" method="POST">
@@ -60,15 +62,20 @@
 
 </div>
 
+<!-- Fin del collapse -->
+</div>
+
 {% if factureName %}
 
-<!-- <div class="mx-2 my-2">
+<div class="mx-2 my-2">
     <svg type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-down-left-square-fill" viewBox="0 0 16 16">
         <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm8.096-10.803L6 9.293V6.525a.5.5 0 0 0-1 0V10.5a.5.5 0 0 0 .5.5h3.975a.5.5 0 0 0 0-1H6.707l4.096-4.096a.5.5 0 1 0-.707-.707z"/>
     </svg>
-</div> -->
+</div>
 
 <div class="container mt-2">
+
+<div class="collapse show" id="collapseExample2">
 
 {% if personaVarios %}
 <label id="nombrePersona" for=""><span style="font-weight: bold;color: rgb(136,12,12);">Cliente: </span>{{personaVarios}}</label>
@@ -113,8 +120,11 @@
 
 <div class="mt-2">
     <div class="col-lg-5">
-        <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
+        <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filtro... ">
     </div>
+</div>
+
+<!-- Fin del collapse -->
 </div>
 
 <div id="invoice2">
