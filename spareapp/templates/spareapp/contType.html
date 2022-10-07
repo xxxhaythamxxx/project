@@ -248,6 +248,7 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
     var filter = $("#cod").val().toLowerCase();
     // $("#cod").val(filter)
     $("#cod2").val(filter)
+    // alert($("#cod2").val())
     var val1 = $("#val1").val()
     var val2 = $("#val2").val()
     var dateTo = $("#dateTo").val()
@@ -260,6 +261,7 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         success:function(data){
             $("#myTable").empty()
             $("tfoot").empty()
+            // $("#cod2").val(data.filter)
             for(var i = 0; i<data.allFacturesQuery.length;i++){
                 if(data.allFacturesQuery[i].pendiente == true){
                     if(data.allCategorysQuery[i].refCategory__ingreso == true){
