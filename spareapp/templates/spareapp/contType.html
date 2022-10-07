@@ -18,7 +18,7 @@
 
 <div class="container">
     <div class="col-lg-5">
-        <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
+        <input value="{{filtro}}" type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filter... ">
     </div>
 </div>
 
@@ -108,9 +108,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body"> 
-                            <form id="formCust" method="POST" action="{% url 'contPayFac' fac.id %}">
+                            <form id="formCust" method="POST" action="{% url 'contPayFacType' val typeDate fac.id %}">
                                 {% csrf_token %}
-                                <input value="{{filtro}}" name="filtro{{fac.id}}" id="filtro{{fac.id}}" type="text" hidden>
+                                <input value="{{filtro}}" name="filtro{{fac.id}}" id="filtro{{fac.id}}" type="text">
+                                <input value="{{filtro}}" name="cod2" id="cod2" type="text">
                                 <input id="entrySpendingFiltro{{fac.id}}" name="entrySpendingFiltro{{fac.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
                                 <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
                                 <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
@@ -245,6 +246,8 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var filter = $("#cod").val().toLowerCase();
+    // $("#cod").val(filter)
+    $("#cod2").val(filter)
     var val1 = $("#val1").val()
     var val2 = $("#val2").val()
     var dateTo = $("#dateTo").val()

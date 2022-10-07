@@ -7124,6 +7124,1240 @@ def contPayFac(request,val):
     # return redirect("/contToPay",dic)
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+def contPayFacType(request,val,val2,val3):
+
+    # print("val")
+    # print(val)
+    # print("val2")
+    # print(val2)
+    # print("val3")
+    # print(val3)
+
+    # print("------------------------Entra a pagar")
+
+    # print(request.POST)
+    # print(request.GET)
+    # filtro3685 
+    # entryspendingfiltro3685 on
+    # print(val)
+    # print(request.POST.get("filtro"+val))
+    filtro = request.POST.get("filtro"+val3)
+    # print(request.POST.get("entrySpendingFiltro"+val))
+
+    acum = 0
+
+    tod = datetime.now().date()
+    allTypes = factType.objects.all().order_by("nombre")
+    factAux = factura.objects.filter(id=val3)
+
+    typeAux = request.POST.get("contTypeIng")
+    # print("typeAux")
+    # print(typeAux)
+    typeAux = factType.objects.get(id=typeAux)
+
+    if factAux:
+
+        factErase = factura.objects.get(id=val3)
+        factErase.pendiente = False
+        factErase.fechaCobrado = tod
+        factErase.save()
+
+        reciboCollect = factura()
+        reciboCollect.fechaCreado = tod
+        reciboCollect.num = factErase.num
+        reciboCollect.refPersona = factErase.refPersona
+        reciboCollect.refType = typeAux
+        if factAux[0].nc == True:
+            reciboCollect.nc = True
+        else:
+            reciboCollect.nc = False
+        auxCat = factCategory.objects.get(nombre="Mercancia credito pagada")
+        reciboCollect.refCategory = auxCat
+        reciboCollect.fechaTope = factErase.fechaTope
+        reciboCollect.fechaCobrado = tod
+        reciboCollect.iva = factErase.iva
+        reciboCollect.monto = factErase.monto
+        reciboCollect.note = request.POST.get("contNota")
+        reciboCollect.total = factErase.total
+        reciboCollect.pendiente = False
+        reciboCollect.save()
+
+    contTotal = 0
+
+    # ----------- Operacion -------------------
+
+    tod = datetime.now().date()
+    acum = 0
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").order_by("tabNombre").distinct()
+    factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
+    allTypesCustom = factType.objects.all()
+    totalParcialOp = {}
+    
+    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod)
+
+    if factureAuxOp:
+
+        # print("Hay facturas")
+
+        if tableAuxOp:
+
+            # print("Hay tabla")
+            toddy = datetime.now().date()
+            allTypesCustom = factType.objects.all()
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+
+                if ty.facCobrar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.mercPagar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
+
+                if ty.mercPagada == True:
+                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=False)
+
+                if ty.facCobrada == True:
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+
+                if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
+
+                else:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum - fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                        else:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum - fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                custAcum = abs(custAcum)
+
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
+                for nom in lista:
+
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
+                    if prob:
+
+                        prob2 = tableOperacion.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+
+                        if prob2:
+
+                            costomInd = tableOperacion.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                            costomInd.tabTotal = custAcum
+                            costomInd.save()
+
+                        else:
+
+                            costomInd = tableOperacion()
+                            costomInd.fecha = toddy
+                            costomInd.tabNombre = nom["tabNombre"]
+                            typeAux = factType.objects.get(nombre=ty)
+                            costomInd.tabTipo = typeAux
+                            costomInd.principal = principalAux[0]["principal"]
+                            if sumaAux[0]["suma"]==True:
+                                costomInd.suma = True
+                                costomInd.resta = False
+                            else:
+                                costomInd.suma = False
+                                costomInd.resta = True
+                            costomInd.tabTotal = custAcum
+                            costomInd.save()
+                    
+                custAcum = 0
+
+        else:
+
+            # print("No hay tabla")
+
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty)
+
+                if ty.facCobrar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+
+                if ty.mercPagar == True:
+                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
+
+                if ty.mercPagada == True:
+                    facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=False)
+
+                if ty.facCobrada == True:
+
+                    if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+                        facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                    else:
+                        facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+
+                if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
+
+                else:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum - fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                        else:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum - fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                custAcum = abs(custAcum)
+
+                lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
+                for nom in lista:
+                    prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
+                    if prob:
+                        costomInd = tableOperacion()
+                        costomInd.fecha = tod
+                        costomInd.tabNombre = nom["tabNombre"]
+                        typeAux = factType.objects.get(nombre=ty)
+                        costomInd.tabTipo = typeAux
+                        costomInd.principal = principalAux[0]["principal"]
+                        if sumaAux[0]["suma"]==True:
+                            costomInd.suma = True
+                            costomInd.resta = False
+                        else:
+                            costomInd.suma = False
+                            costomInd.resta = True
+                        costomInd.tabTotal = custAcum
+                        costomInd.save()
+                
+                custAcum = 0
+
+    for nom in cantAuxOp:
+
+        aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
+
+        for a in aux:
+
+            if a.suma == True:
+
+                acum = acum + a.tabTotal
+
+            else:
+
+                acum = acum - a.tabTotal
+        
+        totalParcialOp[nom["tabNombre"]] = acum
+
+        acum = 0
+
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
+    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+
+    # ----------- Categoria -------------------
+
+    tod = datetime.now().date()
+    acum = 0
+    cantAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre").distinct()
+    factureAuxCat = factura.objects.filter(fechaCreado__date=tod)
+    allTypesCustom = factCategory.objects.all()
+    totalParcialOpCat = {}
+    custAcum = 0
+    
+    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod)
+
+    if factureAuxCat:
+
+        # print("Hay facturas")
+
+        if tableAuxCat:
+
+            # print("Hay tabla")
+            toddy = datetime.now().date()
+            allTypesCustom = factCategory.objects.all()
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty)
+
+                for fac in facAuxAllCat:
+                    custAcum = custAcum + fac.total
+
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
+                for nom in lista:
+
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
+                    if prob:
+
+                        prob2 = tableOperacionCat.objects.filter(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+
+                        if prob2:
+
+                            costomInd = tableOperacionCat.objects.get(fecha__date=toddy,tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                            costomInd.tabTotal = custAcum
+                            costomInd.save()
+
+                        else:
+
+                            costomInd = tableOperacionCat()
+                            costomInd.fecha = toddy
+                            costomInd.tabNombre = nom["tabNombre"]
+                            typeAux = factCategory.objects.get(nombre=ty)
+                            costomInd.tabCat = typeAux
+                            costomInd.principal = principalAux[0]["principal"]
+                            if sumaAux[0]["suma"]==True:
+                                costomInd.suma = True
+                                costomInd.resta = False
+                            else:
+                                costomInd.suma = False
+                                costomInd.resta = True
+                            costomInd.tabTotal = custAcum
+                            costomInd.save()
+                    
+                custAcum = 0
+        else:
+
+            # print("No hay tabla")
+
+            custAcum = 0
+            for ty in allTypesCustom:
+                facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty)
+
+                for fac in facAuxAll:
+                    custAcum = custAcum + fac.total
+
+                lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
+                for nom in lista:
+                    prob = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"])
+                    principalAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("principal").distinct()
+                    sumaAux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],tabCat__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
+                    if prob:
+                        costomInd = tableOperacionCat()
+                        costomInd.fecha = tod
+                        costomInd.tabNombre = nom["tabNombre"]
+                        typeAux = factCategory.objects.get(nombre=ty)
+                        costomInd.tabCat = typeAux
+                        costomInd.principal = principalAux[0]["principal"]
+                        if sumaAux[0]["suma"]==True:
+                            costomInd.suma = True
+                            costomInd.resta = False
+                        else:
+                            costomInd.suma = False
+                            costomInd.resta = True
+                        costomInd.tabTotal = custAcum
+                        costomInd.save()
+                
+                custAcum = 0
+
+    for nom in cantAuxCat:
+
+        aux = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
+
+        for a in aux:
+
+            if a.suma == True:
+
+                acum = acum + a.tabTotal
+
+            else:
+
+                acum = acum - a.tabTotal
+        
+        totalParcialOpCat[nom["tabNombre"]] = acum
+
+        acum = 0
+
+    cantAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).values("tabNombre","principal").order_by("tabNombre").distinct()
+    tableAuxOpCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
+    tableAuxCat = tableOperacionCat.objects.filter(fecha__date=tod).order_by("tabCat__nombre")
+
+    allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    
+    facturesToCollect = len(allFacturesToPay)
+    facturesToPay = len(allFacturesToCollect)
+
+    editPrueba = False
+
+    # contType --------------------------------------------
+
+    tod = datetime.now().date()
+
+    allFactures = factura.objects.none()
+    allPersonas = factura.objects.none()
+    allCategorys = factura.objects.none()
+    allFacturesQuery = None
+    allPersonasQuery = None
+    allCategorysQuery = None
+    filterFactures = factura.objects.none()
+    filterPersonas = factura.objects.none()
+    filterCategorys = factura.objects.none()
+    filterFacturesE = factura.objects.none()
+    filterCategorysE = factura.objects.none()
+    filterFacturesDate = factura.objects.none()
+    filterFacturesDatePersonas = factura.objects.none()
+    filterFacturesDateCategories = factura.objects.none()
+    acum = 0
+    acum2 = 0
+    acumIva = 0
+    deadline = ""
+    deadlineDic = []
+    dateDic = []
+    auxFac = None
+    auxPer = None
+    auxCat = None
+    dayFrom = None
+    dayTo = None
+    dateFrom = None
+    dateTo = None
+
+    diaAux = datetime.strptime(str(val2),"%Y-%m-%d")
+    # val1 = val2
+    # val2 = val3
+
+    if request.GET.get("dateTo"):
+
+        searchMetodo = "range"
+        dateFrom = request.GET.get("dateFrom")
+        dateTo = request.GET.get("dateTo")
+        dayFromQuery = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+        dayFromQuery = dayFromQuery.date().strftime("%d de %B de %Y")
+        dayToQuery = datetime.strptime(str(dateTo),"%Y-%m-%d")
+        dayToQuery = dayToQuery.date().strftime("%d de %B de %Y")
+        creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+        creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+        dayFrom = dateFrom
+        dayTo = dateTo
+        dateFrom = str(creadoAuxdateFrom.date())
+        dateTo = str(creadoAuxdateTo.date())
+
+    else:
+
+        searchMetodo = "all"
+        allFacturesPay = factura.objects.filter(fechaCreado__date=diaAux.date(),refType__nombre=val).order_by("fechaTope")
+        if allFacturesPay:
+            dateFrom = allFacturesPay[0].fechaCreado.date()
+            creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+            dateTo = allFacturesPay[len(allFacturesPay)-1].fechaCreado.date()
+            dayFromQuery = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+            dayFromQuery = dayFromQuery.date().strftime("%d de %B de %Y")
+            dayToQuery = datetime.strptime(str(dateTo),"%Y-%m-%d")
+            dayToQuery = dayToQuery.date().strftime("%d de %B de %Y")
+            creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+            dayFrom = dateFrom
+            dayTo = dateTo
+            dateFrom = str(creadoAuxdateFrom.date())
+            dateTo = str(creadoAuxdateTo.date())
+
+    acum = 0
+    acum2 = 0
+    acumIva = 0
+    deadline = ""
+    deadlineDic = []
+    dateDic = []
+    palabrasErase = []
+    palabrasErase2 = []
+
+    # filter = request.GET.get("filter")
+    print(request.POST)
+    print("val")
+    print(val)
+    print("filtro"+val3)
+    print(request.POST.get("filtro"+val3))
+    filter = request.POST.get("filtro"+val3)
+    print("filter")
+    print(filter)
+    filtro = None
+    filtro = filter
+    print("filtro")
+    print(filtro)
+    cod2 = None
+    cod2 = request.POST.get("cod2")
+    print("cod2")
+    print(cod2)
+    filtro = None
+    filtro = cod2
+
+    auxInicio = -1
+    auxInicioe = -1
+    auxFin = -1
+    acumCom = 0
+    filterAux = filter
+    filterAuxErase = filter
+    palabras = []
+    nuevoFilter = ""
+    palabraFinal = ""
+
+    for pos,let in enumerate(filter):
+
+        if(let == '-'):
+
+            filterErase = filterAuxErase.replace(filterAuxErase[:auxInicioe+2],"")
+            # auxFine = pos
+            palabraFinalErase = filterErase.split(" ")
+            palabrasErase.append(palabraFinalErase[0])
+            auxInicioe = -1
+
+        else:
+
+            auxInicioe = pos
+
+    for val in palabrasErase:
+
+        palabrasErase2.append("-"+val)
+
+    for pos,let in enumerate(filter):
+
+        if(let == '"'):
+
+            acumCom = acumCom + 1
+
+            if acumCom == 2:
+
+                nuevoFilter = filterAux.replace(filterAux[:auxInicio],"")
+                auxFin = pos
+                palabraFinal = nuevoFilter[:auxFin-auxInicio+1]
+                palabras.append(palabraFinal)
+                acumCom = 0
+                auxInicio = -1
+                auxFin = -1
+
+            else:
+
+                auxInicio = pos
+
+    palabrasAux = []
+
+    for val in palabras:
+
+        if filterAux.find(val) >= 0:
+
+            filterAux2 = filterAux.replace(val,"")
+            filterAux = filterAux2
+        palabrasAux.append(val.strip('"'))
+
+    filterAux = filterAux.split(" ")
+    filterAux = [item for item in filterAux if item]
+    filter = filterAux + palabrasAux
+    for val in palabrasErase2:
+        filter.remove(val)
+    
+    tod = val2
+    typeAux = factType.objects.get(nombre=val)
+    val1 = None
+    val1 = val2
+
+    if searchMetodo == "range":
+        filterFacturesDate = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id")
+        filterFacturesDatePersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id")
+        filterFacturesDateCategories = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id")
+
+    for fil in filter:
+
+        if dateTo:
+
+            if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id") )
+
+            if typeAux.mercPagada == True:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+            if typeAux.facCobrada == True:
+
+                if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                    auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+
+                else:
+
+                    auxFac = ( factura.objects.filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+            if typeAux.facCobrar == True:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+
+            if typeAux.mercPagar == True:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
+        else:
+
+            if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id") )
+
+            if typeAux.mercPagada == True:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+            if typeAux.facCobrada == True:
+
+                if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                    auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+                    auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)",refType__nombre__icontains=fil).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id") )
+
+                else:
+
+                    auxFac = ( factura.objects.filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+                    auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada",refCategory__nombre__icontains=fil).order_by("fechaCreado","id") )
+
+            if typeAux.facCobrar == True:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id") )
+
+            if typeAux.mercPagar == True:
+
+                auxFac = ( factura.objects.filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                auxPer = ( factura.objects.values("refPersona__nombre").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refPersona__nombre").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+                auxCat = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(num__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refPersona__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(note__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refType__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__nombre__icontains=fil,fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
+        if filter.index(fil) == 0:
+
+            filterFactures = auxFac
+            filterPersonas = auxPer
+            filterCategorys = auxCat
+
+        if filterFactures:
+
+            filterFactures = filterFactures & auxFac
+            filterPersonas = filterPersonas & auxPer
+            filterCategorys = filterCategorys & auxCat
+
+        else:
+
+            filterFactures = auxFac
+            filterPersonas = auxPer
+            filterCategorys = auxCat
+
+        # if filter.index(fil) == 0:
+
+        #     filterFactures = auxFac
+        #     filterPersonas = auxPer
+        #     filterCategorys = auxCat
+
+        # else:
+
+        #     filterFactures = filterFactures & auxFac
+        #     filterPersonas = filterPersonas & auxPer
+        #     filterCategorys = filterCategorys & auxCat
+
+    if filter:
+
+        pass
+
+    else:
+
+        if dateTo:
+
+            if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                filterFactures = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType__nombre=val1).order_by("fechaCreado","id")
+
+            if typeAux.mercPagada == True:
+
+                filterFactures = factura.objects.filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+
+            if typeAux.facCobrada == True:
+
+                if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                    filterFactures = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+                    filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+                    filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+
+                else:
+
+                    filterFactures = factura.objects.filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+                    filterPersonas = factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+                    filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado__gte=dateFrom,fechaCobrado__lte=dateTo,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+
+            if typeAux.facCobrar == True:
+
+                filterFactures = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+
+            if typeAux.mercPagar == True:
+
+                filterFactures = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+
+        else:
+
+            if typeAux.mercPagada == False and typeAux.facCobrada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+                filterFactures = factura.objects.filter(fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=val2,refType__nombre=val1).order_by("fechaCreado","id")
+
+            if typeAux.mercPagada == True:
+
+                filterFactures = factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+
+            if typeAux.facCobrada == True:
+
+                if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+                    filterFactures = factura.objects.filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+                    filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+                    filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=val2,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+               
+                else:
+
+                    filterFactures = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+                    filterPersonas = factura.objects.values("refPersona__nombre").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+                    filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+
+            if typeAux.facCobrar == True:
+
+                filterFactures = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+
+            if typeAux.mercPagar == True:
+
+                filterFactures = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+                filterPersonas = factura.objects.values("refPersona__nombre").filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+                filterCategorys = factura.objects.values("refCategory__nombre","refCategory__ingreso").filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+            
+    for fil in palabrasErase:
+
+        if filterFacturesE:
+
+            filterFacturesE = filterFacturesE & ( factura.objects.all().exclude(num__icontains=fil))
+            filterPersonasE = filterPersonasE & ( factura.objects.values("refPersona__nombre").all().exclude(num__icontains=fil))
+            filterCategorysE = filterCategorysE & ( factura.objects.values("refCategory__nombre","refCategory__ingreso").all().exclude(num__icontains=fil))
+
+        else:
+
+            filterFacturesE = ( factura.objects.all().exclude(num__icontains=fil))
+            filterPersonasE = ( factura.objects.values("refPersona__nombre").all().exclude(num__icontains=fil))
+            filterCategorysE = ( factura.objects.values("refCategory__nombre","refCategory__ingreso").all().exclude(num__icontains=fil))
+
+    if palabrasErase:
+
+        pass
+
+    else:
+
+        filterFacturesE = factura.objects.all().order_by("fechaCreado","id")
+        filterPersonasE = factura.objects.values("refPersona__nombre").all().order_by("fechaCreado","id")
+        filterCategorysE = factura.objects.values("refCategory__nombre","refCategory__ingreso").all().order_by("fechaCreado","id")
+
+    if searchMetodo == "range":
+        allFactures = filterFactures & filterFacturesDate & filterFacturesE
+        allPersonas = filterPersonas & filterFacturesDatePersonas & filterPersonasE
+        allCategorys = filterCategorys & filterFacturesDateCategories & filterCategorysE
+    else:
+        allFactures = filterFactures & filterFacturesE
+        allPersonas = filterPersonas & filterPersonasE
+        allCategorys = filterCategorys & filterCategorysE
+
+    # allFacturesQuery = list(allFactures.values())
+    # allPersonasQuery = list(allPersonas)
+    # allCategorysQuery = list(allCategorys)
+
+    if typeAux.facCobrada == False and typeAux.mercPagada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+        if typeAux.ingreso:
+
+            for fac in allFactures:
+
+                deadline = datetime.now().date() - fac.fechaCreado.date()
+                deadlineDic.append(deadline.days)
+                dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+                acum = acum + fac.monto
+                acumIva = acumIva + fac.iva
+                acum2 = acum2 + fac.total
+
+        else:
+
+            for fac in allFactures:
+
+                deadline = datetime.now().date() - fac.fechaCreado.date()
+                deadlineDic.append(deadline.days)
+                dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+                acum = acum - fac.monto
+                acumIva = acumIva - fac.iva
+                acum2 = acum2 - fac.total
+
+    if typeAux.facCobrada == True:
+
+        for fac in allFactures:
+
+            deadline = datetime.now().date() - fac.fechaCreado.date()
+            deadlineDic.append(deadline.days)
+            dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+            acum = acum + fac.monto
+            acumIva = acumIva + fac.iva
+            acum2 = acum2 + fac.total
+
+    if typeAux.mercPagada == True:
+
+        for fac in allFactures:
+
+            deadline = datetime.now().date() - fac.fechaCreado.date()
+            deadlineDic.append(deadline.days)
+            dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+            if fac.nc == True:
+
+                acum = acum + fac.monto
+                acumIva = acumIva + fac.iva
+                acum2 = acum2 + fac.total
+
+            else:
+
+                acum = acum - fac.monto
+                acumIva = acumIva - fac.iva
+                acum2 = acum2 - fac.total
+
+    if typeAux.facCobrar == True:
+
+        for fac in allFactures:
+
+            deadline = datetime.now().date() - fac.fechaCreado.date()
+            deadlineDic.append(deadline.days)
+            dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+            acum = acum - fac.monto
+            acumIva = acumIva - fac.iva
+            acum2 = acum2 - fac.total
+
+    if typeAux.mercPagar == True:
+
+        for fac in allFactures:
+
+            deadline = datetime.now().date() - fac.fechaCreado.date()
+            deadlineDic.append(deadline.days)
+            dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+            if fac.nc == True:
+
+                acum = acum - fac.monto
+                acumIva = acumIva - fac.iva
+                acum2 = acum2 - fac.total
+
+            else:
+
+                acum = acum + fac.monto
+                acumIva = acumIva + fac.iva
+                acum2 = acum2 + fac.total
+
+    print("contType")
+    montoTotal = 0
+    montoTotal = acum
+    itbmTotal = 0
+    itbmTotal = acumIva
+    totalTotal = 0
+    totalTotal = acum2
+    typeDate = None
+    typeDate = val2
+    allFacturesVal = None
+    allFacturesVal = allFactures
+
+    # allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
+    # todos = factType.objects.all()
+    # tod = datetime.now().date()
+    # montoTotal = 0
+    # itbmTotal = 0
+    # totalTotal = 0
+
+    # allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=val).order_by("fechaCreado","id")
+    # typeAux = factType.objects.get(nombre=val2)
+
+    # if val2 != "today":
+
+    #     tod = val3
+
+    #     for t in todos:
+    #         s=t.nombre
+    #         if s:
+    #             out = s.translate(str.maketrans('', '', '/'))
+    #             if val.upper()==out.upper():
+    #                 allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refType__nombre=s).order_by("fechaCreado","id")
+
+    # if typeAux.facCobrada == True:
+
+    #     if typeAux.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
+
+    #         allFacturesVal = factura.objects.filter(fechaCreado=tod,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)").order_by("fechaCreado","id")
+    #     else:
+    #         allFacturesVal = factura.objects.filter(refCategory__ingreso=True,fechaCobrado=tod,refCategory__nombre="Factura cobrada").order_by("fechaCreado","id")
+
+    # if typeAux.mercPagada == True:
+
+    #     allFacturesVal = factura.objects.filter(refCategory__egreso=True,fechaCobrado=tod,refCategory__nombre="Mercancia credito pagada").order_by("fechaCreado","id")
+
+    # if typeAux.facCobrar == True:
+
+    #     allFacturesVal = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__ingreso=True).order_by("fechaCreado","id")
+    #     allTypes = factType.objects.filter(ingreso=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
+
+    # if typeAux.mercPagar == True:
+
+    #     allFacturesVal = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refCategory__egreso=True).order_by("fechaCreado","id")
+    #     allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
+
+    # itbm7 = {}
+
+    # if typeAux.facCobrada == False and typeAux.mercPagada == False and typeAux.facCobrar == False and typeAux.mercPagar == False:
+
+    #     if typeAux.ingreso:
+
+    #         for fac in allFacturesVal:
+
+    #             montoTotal = montoTotal + fac.monto
+    #             itbmTotal = itbmTotal + float(fac.iva)
+    #             totalTotal = totalTotal + fac.total
+
+    #     else:
+
+    #         for fac in allFacturesVal:
+
+    #             if fac.nc == True:
+
+    #                 montoTotal = montoTotal + fac.monto
+    #                 itbmTotal = itbmTotal + float(fac.iva)
+    #                 totalTotal = totalTotal + fac.total
+
+    #             else:
+
+    #                 montoTotal = montoTotal - fac.monto
+    #                 itbmTotal = itbmTotal - float(fac.iva)
+    #                 totalTotal = totalTotal - fac.total
+
+    # if typeAux.facCobrada == True:
+
+    #     for fac in allFacturesVal:
+
+    #         montoTotal = montoTotal + fac.monto
+    #         itbmTotal = itbmTotal + float(fac.iva)
+    #         totalTotal = totalTotal + fac.total
+
+    # if typeAux.mercPagada == True:
+
+    #     for fac in allFacturesVal:
+
+    #         if fac.nc == True:
+
+    #             montoTotal = montoTotal + fac.monto
+    #             itbmTotal = itbmTotal + float(fac.iva)
+    #             totalTotal = totalTotal + fac.total
+
+    #         else:
+
+    #             montoTotal = montoTotal - fac.monto
+    #             itbmTotal = itbmTotal - float(fac.iva)
+    #             totalTotal = totalTotal - fac.total
+
+    # if typeAux.facCobrar == True:
+
+    #     for fac in allFacturesVal:
+
+    #         montoTotal = montoTotal - fac.monto
+    #         itbmTotal = itbmTotal - float(fac.iva)
+    #         totalTotal = totalTotal - fac.total
+
+    # if typeAux.mercPagar == True:
+
+    #     for fac in allFacturesVal:
+
+    #         if fac.nc == True:
+
+    #             montoTotal = montoTotal - fac.monto
+    #             itbmTotal = itbmTotal - float(fac.iva)
+    #             totalTotal = totalTotal - fac.total
+
+    #         else:
+
+    #             montoTotal = montoTotal + fac.monto
+    #             itbmTotal = itbmTotal + float(fac.iva)
+    #             totalTotal = totalTotal + fac.total
+
+    # typeDate = val2
+
+    # # allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+    # # allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
+    # # facturesToCollect = len(allFacturesToPay)
+    # # facturesToPay = len(allFacturesToCollect)
+
+    # # identi
+    # auxVal = val
+    # # type
+    # auxVal1 = val2
+    # # fecha
+    # auxVal2 = val3
+    # val = auxVal1
+    # val2 = auxVal2
+
+    # dic = {"typeAux":typeAux,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"val2":val2,"val":val}
+    dic = {"filtro":filtro,"typeAux":typeAux,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"tod":tod,"allTypes":allTypes,"montoTotal":montoTotal,"itbmTotal":itbmTotal,"totalTotal":totalTotal,"typeDate":typeDate,"val2":val2,"allFacturesVal":allFacturesVal,"val":val}
+
+
+    # contToPay ------------------------------------------
+
+    # searchMetodo = "all"
+    # dateFrom = ""
+    # dateTo = ""
+    # dayFrom = ""
+    # dayTo = ""
+
+    # if request.POST.get("search") == "all":
+    #     searchMetodo = "all"
+    #     allFacturesPay = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+    #     if allFacturesPay:
+    #         dateFrom = allFacturesPay[0].fechaCreado.date()
+    #         creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+    #         dateTo = allFacturesPay[len(allFacturesPay)-1].fechaCreado.date()
+    #         creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+    #         dayFrom = dateFrom
+    #         dayTo = dateTo
+    #         dateFrom = str(creadoAuxdateFrom.date())
+    #         dateTo = str(creadoAuxdateTo.date())
+    # else:
+    #     searchMetodo = "range"
+    #     dateFrom = request.POST.get("dateFrom")
+    #     creadoAuxdateFrom = datetime.strptime(str(dateFrom),"%Y-%m-%d")
+    #     dateTo = request.POST.get("dateTo")
+    #     creadoAuxdateTo = datetime.strptime(str(dateTo),"%Y-%m-%d")
+    #     dateFrom = creadoAuxdateFrom.date()
+    #     dateTo = creadoAuxdateTo.date()
+    #     dayFrom = dateFrom
+    #     dayTo = dateTo
+    #     dateFrom = str(creadoAuxdateFrom.date())
+    #     dateTo = str(creadoAuxdateTo.date())
+
+    # filterFactures = None
+    # acum = 0
+    # acum2 = 0
+    # acumIva = 0
+    # deadline = ""
+    # deadlineDic = []
+    # dateDic = []
+
+    # checkeado = None
+
+    # if request.POST.get("entrySpendingFiltro"+val):
+
+    #     checkeado = True
+    
+    # else:
+
+    #     checkeado = False
+
+    # filter = request.POST.get("filtro"+val)
+
+    # auxInicio = -1
+    # auxFin = -1
+    # acumCom = 0
+    # filterAux = filter
+    # palabras = []
+    # nuevoFilter = ""
+    # palabraFinal = ""
+
+    # for pos,let in enumerate(filter):
+
+    #     if(let == '"'):
+
+    #         acumCom = acumCom + 1
+
+    #         if acumCom == 2:
+
+    #             nuevoFilter = filterAux.replace(filterAux[:auxInicio],"")
+    #             auxFin = pos
+    #             palabraFinal = nuevoFilter[:auxFin-auxInicio+1]
+    #             palabras.append(palabraFinal)
+    #             acumCom = 0
+    #             auxInicio = -1
+    #             auxFin = -1
+
+    #         else:
+
+    #             auxInicio = pos
+
+    # palabrasAux = []
+
+    # for val in palabras:
+
+    #     if filterAux.find(val) >= 0:
+
+    #         filterAux2 = filterAux.replace(val,"")
+    #         filterAux = filterAux2
+    #     palabrasAux.append(val.strip('"'))
+
+    # filterAux = filterAux.split(" ")
+    # filterAux = [item for item in filterAux if item]
+    # filter = filterAux + palabrasAux
+
+    # filterFacturesDate = ""
+
+    # if searchMetodo == "range":
+    #     filterFacturesDate = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+
+    # for fil in filter:
+
+    #     if filterFactures:
+
+    #         filterFactures = filterFactures & ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
+    #     else:
+
+    #         filterFactures = ( factura.objects.filter(num__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refPersona__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(note__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refType__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") | factura.objects.filter(refCategory__nombre__icontains=fil,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id") )
+
+    # if checkeado == True:
+
+    #     allFactures = factura.objects.filter(nc=checkeado)
+
+    # else:
+
+    #     allFactures = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaTope")
+
+    # if filter:
+
+    #     pass
+
+    # else:
+
+    #     filterFactures = factura.objects.filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("fechaCreado","id")
+
+    # if searchMetodo == "range":
+    #     allFacturesPay = allFactures & filterFactures & filterFacturesDate
+    # else:
+    #     allFacturesPay = allFactures & filterFactures
+    # allTypes = factType.objects.filter(gasto=True).order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
+
+    # deadlineDic = {}
+
+    # creadoAuxdateFrom = ""
+    # creadoAuxdateTo = ""
+
+    # for all in allFacturesPay:
+
+    #     deadline = datetime.now().date() - all.fechaCreado.date()
+    #     deadline = deadline.days
+    #     deadlineDic[all.id] = deadline
+
+    # acum = 0
+    # acum2 = 0
+
+    # for fac in allFacturesPay:
+
+    #     acum = acum + fac.monto
+    #     acum2 = acum2 + fac.total
+    #     acumIva = acumIva + fac.iva
+
+    # dic = {"dateFrom":dateFrom,"dateTo":dateTo,"dayFrom":dayFrom,"dayTo":dayTo,"iva":acumIva,"searchMetodo":searchMetodo,"filtro":filtro,"checkeado":checkeado,"deadlineDic":deadlineDic,"totalTotal":acum2,"montoTotal":acum,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
+
+    return render(request,"spareapp/contType.html",dic)
+
 def contAddPerson(request):
 
     if request.method == "POST":
@@ -9854,11 +11088,11 @@ def contDayBack(request,val):
 
     if factureAuxOp:
 
-        print("Hay facturas")
+        # print("Hay facturas")
 
         if tableAuxOp:
 
-            print("Hay tabla")
+            # print("Hay tabla")
 
             allTypesCustom = factType.objects.all()
             custAcum = 0
@@ -9921,7 +11155,7 @@ def contDayBack(request,val):
 
         else:
 
-            print("No hay tabla")
+            # print("No hay tabla")
 
             custAcum = 0
             for ty in allTypesCustom:
@@ -10009,11 +11243,11 @@ def contDayBack(request,val):
 
     if factureAuxCat:
 
-        print("Hay facturas")
+        # print("Hay facturas")
 
         if tableAuxCat:
 
-            print("Hay tabla")
+            # print("Hay tabla")
             allTypesCustom = factCategory.objects.all()
             custAcum = 0
             for ty in allTypesCustom:
@@ -10058,7 +11292,7 @@ def contDayBack(request,val):
                 custAcum = 0
         else:
 
-            print("No hay tabla")
+            # print("No hay tabla")
 
             custAcum = 0
             for ty in allTypesCustom:
@@ -12655,14 +13889,15 @@ def filterContType(request):
     dateFrom = None
     dateTo = None
 
-    print(request.GET)
-    print("request.GET.get(val2)")
-    print(request.GET.get("val2"))
     diaAux = datetime.strptime(str(request.GET.get("val2")),"%Y-%m-%d")
-    print("diaAux.date()")
-    print(diaAux.date())
+    print("diaAux")
+    print(diaAux)
     val1 = request.GET.get("val1")
+    print("val1")
+    print(val1)
     val2 = request.GET.get("val2")
+    print("val2")
+    print(val2)
 
     if request.GET.get("dateTo"):
 
@@ -12698,9 +13933,6 @@ def filterContType(request):
             dateFrom = str(creadoAuxdateFrom.date())
             dateTo = str(creadoAuxdateTo.date())
 
-    print("allFacturesPay")
-    print(allFacturesPay)
-
     acum = 0
     acum2 = 0
     acumIva = 0
@@ -12711,6 +13943,10 @@ def filterContType(request):
     palabrasErase2 = []
 
     filter = request.GET.get("filter")
+    print("filter")
+    print(filter)
+    # filtro = None
+    # filtro = filter
 
     auxInicio = -1
     auxInicioe = -1
@@ -12775,7 +14011,6 @@ def filterContType(request):
     filter = filterAux + palabrasAux
     for val in palabrasErase2:
         filter.remove(val)
-
     
     tod = val2
     typeAux = factType.objects.get(nombre=val1)

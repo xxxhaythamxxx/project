@@ -77,6 +77,7 @@ urlpatterns = [
     path("contByRangeCustom",views.contByRangeCustom,name="contByRangeCustom"),
     path("contCollectFac/<str:val>",views.contCollectFac,name="contCollectFac"),
     path("contPayFac/<str:val>",views.contPayFac,name="contPayFac"),
+    path("contPayFacType/<str:val>?<str:val2>?<str:val3>",views.contPayFacType,name="contPayFacType"),
     path("contTypeRange/<str:val>?<str:val2>?<str:val3>",views.contTypeRange,name="contTypeRange"),
     path("contTypeRangeTarjeta/<str:val>?<str:val2>?<str:val3>",views.contTypeRangeTarjeta,name="contTypeRangeTarjeta"),
     path("contAddPerson",views.contAddPerson,name="contAddPerson"),
