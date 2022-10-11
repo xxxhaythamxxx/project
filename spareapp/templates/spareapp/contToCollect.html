@@ -25,8 +25,6 @@
         <div class="my-2">
             <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %}>
             <label class="form-check-label" for="search1">Todos</label>
-            <!-- <input value="month" class="form-check-input" id="search2" type="radio" name="search" {% if searchMetodo == 'month' %} checked {$ else %} '' {% endif %}>
-            <label class="form-check-label" for="search2">Éste mes</label> -->
             <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %}>
             <input value="{{filtro}}" type="text" name="cod2" id="cod2" hidden>
             <label class="form-check-label" for="search4">Rango</label>
@@ -45,14 +43,10 @@
                 </div>
             </div>
             <button style="font-size: small;" class="btn btn-primary mt-2" type="submit">Aceptar</button>
-            <!-- <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger mt-2">Cancelar</a> -->
         </div>
-        
     </form>
     </div>
-    
 </div>
-
 </div>
 
 <div class="container mt-2">
@@ -101,38 +95,6 @@
                 <td class="p-2">${{facture.iva|stringformat:".2f"}}</td>
                 <td class="p-2">${{facture.total|stringformat:".2f"}}</td>
                 <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' facture.id request.get_full_path|cut:'/' %}">Editar</a> <a data-bs-toggle="modal" type="button" data-bs-target="#modalCobrar{{facture.id}}" style="font-size: small;color: aliceblue;" id="modalCobrar{{facture.id}}Id" class="btn btn-danger" href="javascript:void(0);">Cobrar</a></td>
-
-                <div tabindex="-1" id="modalCobrar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{facture.id}}Label" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalCobrar{{facture.id}}Label">Cobrar factura</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body"> 
-                                <form id="formCust" method="POST" action="{% url 'contCollectFac' facture.id %}">
-                                    {% csrf_token %}
-                                    <input value="{{filtro}}" name="filtro{{facture.id}}" id="filtro{{facture.id}}" type="text" hidden>
-                                    <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
-                                    <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
-                                    <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
-                                    <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
-                                    <div class="mb-3">
-                                        <div>¿Seguro que desea cobrar la factura número {{facture.num}}?</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" for="contNota">Nota</label>
-                                        <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
-                                    </div>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Cobrar</button>
-                                </form>
-                                
-                            </div>   
-                        </div>
-                    </div>
-                </div> 
-
             </tr>
             
             {% endfor %}
@@ -152,6 +114,38 @@
             
         </tbody>
     </table>
+    {% for facture in allFacturesModal %}
+    <div tabindex="-1" id="modalCobrar{{facture.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{facture.id}}Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCobrar{{facture.id}}Label">Cobrar factura</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <form id="formCust" method="POST" action="{% url 'contCollectFac' facture.id %}">
+                        {% csrf_token %}
+                        <input value="{{filtro}}" name="filtro{{facture.id}}" id="filtro{{facture.id}}" type="text" hidden>
+                        <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
+                        <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
+                        <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
+                        <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
+                        <div class="mb-3">
+                            <div>¿Seguro que desea cobrar la factura número {{facture.num}}?</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="contNota">Nota</label>
+                            <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Cobrar</button>
+                    </form>
+                    
+                </div>   
+            </div>
+        </div>
+    </div> 
+    {% endfor %}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>

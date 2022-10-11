@@ -74,67 +74,9 @@
                     {% endif %}
                     {% endif %}
             </tr>
-            <div tabindex="-1" id="modalCobrar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{fac.id}}Label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalCobrar{{fac.id}}Label">Tipo de pago</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body"> 
-                            <form id="formCust" method="POST" action="{% url 'contCollectFac' fac.id %}">
-                                {% csrf_token %}
-                                <div class="mb-3">
-                                    <div>¿Seguro que desea cobrar la factura número {{fac.num}}?</div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="contNota">Nota</label>
-                                    <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
-                                </div>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Cobrar</button>
-                            </form>
-                            
-                        </div>   
-                    </div>
-                </div>
-            </div> 
+            
 
-            <div tabindex="-1" id="modalPagar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{fac.id}}Label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalPagar{{fac.id}}Label">Tipo de pago</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body"> 
-                            <form id="formCust" method="POST" action="{% url 'contPayFacType' val typeDate fac.id %}">
-                                {% csrf_token %}
-                                <input value="{{filtro}}" name="filtro{{fac.id}}" id="filtro{{fac.id}}" type="text">
-                                <input value="{{filtro}}" name="cod2" id="cod2" type="text">
-                                <input id="entrySpendingFiltro{{fac.id}}" name="entrySpendingFiltro{{fac.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
-                                <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
-                                <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
-                                <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
-                                <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
-                                <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
-                                    <option value="" selected>Seleccione tipo de pago</option>
-                                    {% for type in allTypes %}
-                                    <option value="{{type.id}}">{{type.nombre}}</option>
-                                    {% endfor %}
-                                </select>
-                                <div class="mb-3">
-                                    <label class="form-label" for="contNota">Nota</label>
-                                    <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
-                                </div>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Pagar</button>
-                            </form>
-                            
-                        </div>   
-                    </div>
-                </div>
-            </div> 
+            
             {% endfor %}
         </tbody>
         <tfoot class="table-bordered invoice" style="font-size: small;" id="hInf">
@@ -151,6 +93,71 @@
             </tr>
         </tfoot>
     </table>
+
+    {% for fac in allFacturesModal %}
+    <div tabindex="-1" id="modalCobrar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalCobrar{{fac.id}}Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCobrar{{fac.id}}Label">Tipo de pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <form id="formCust" method="POST" action="{% url 'contCollectFacType' fac.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div>¿Seguro que desea cobrar la factura número {{fac.num}}?</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="contNota">Nota</label>
+                            <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Cobrar</button>
+                    </form>
+                    
+                </div>   
+            </div>
+        </div>
+    </div> 
+    {% endfor %}
+    {% for fac in allFacturesModal %}
+    <div tabindex="-1" id="modalPagar{{fac.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="modalPagar{{fac.id}}Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPagar{{fac.id}}Label">Tipo de pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> 
+                    <form id="formCust" method="POST" action="{% url 'contPayFacType' val typeDate fac.id %}">
+                        {% csrf_token %}
+                        <input value="{{filtro}}" name="filtro{{fac.id}}" id="filtro{{fac.id}}" type="text" hidden>
+                        <input value="{{filtro}}" name="cod2" id="cod2" type="text" hidden>
+                        <input id="entrySpendingFiltro{{fac.id}}" name="entrySpendingFiltro{{fac.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
+                        <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
+                        <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
+                        <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
+                        <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
+                        <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md mb-3" required>
+                            <option value="" selected>Seleccione tipo de pago</option>
+                            {% for type in allTypes %}
+                            <option value="{{type.id}}">{{type.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="mb-3">
+                            <label class="form-label" for="contNota">Nota</label>
+                            <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Pagar</button>
+                    </form>
+                </div>   
+            </div>
+        </div>
+    </div> 
+    {% endfor %}
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
@@ -247,8 +254,12 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).text()
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var filter = $("#cod").val().toLowerCase();
     // $("#cod").val(filter)
-    $("#cod2").val(filter)
+    // $("#cod2").val($("#cod").val().toLowerCase())
     // alert($("#cod2").val())
+
+    // $("#formCust input:first").val($("#cod").val().toLowerCase());
+    $(".modal").find("#cod2").val($("#cod").val().toLowerCase());
+
     var val1 = $("#val1").val()
     var val2 = $("#val2").val()
     var dateTo = $("#dateTo").val()
