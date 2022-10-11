@@ -103,8 +103,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body"> 
-                    <form id="formCust" method="POST" action="{% url 'contCollectFacType' fac.id %}">
+                    <form id="formCust" method="POST" action="{% url 'contCollectFacType' val typeDate fac.id %}">
                         {% csrf_token %}
+                        <input value="{{filtro}}" name="filtro{{fac.id}}" id="filtro{{fac.id}}" type="text" hidden>
+                        <input value="{{filtro}}" name="cod2" id="cod2" type="text" hidden>
+                        <input id="entrySpendingFiltro{{fac.id}}" name="entrySpendingFiltro{{fac.id}}" type="checkbox" {% if checkeado == True %} checked {% else %} '' {% endif %} hidden>
+                        <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %} hidden>
+                        <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %} hidden>
+                        <input name="dateTo" id="dateTo" value="{{dateTo}}" type="text" hidden>
+                        <input name="dateFrom" id="dateFrom" value="{{dateFrom}}" type="text" hidden>
                         <div class="mb-3">
                             <div>¿Seguro que desea cobrar la factura número {{fac.num}}?</div>
                         </div>
