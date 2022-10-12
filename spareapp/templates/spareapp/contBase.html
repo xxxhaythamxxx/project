@@ -27,17 +27,59 @@
     <body class="fondo-plata">
 
         <div style="height: 70px;" class="container-fluid color navbarcontainer sticky-top d-flex align-items-center">
-            <div class="row col-lg-12">
+            <div class="row col-lg-3">
+
+            </div>
+            <div class="row col-lg-6 d-flex justify-content-center">
                 <div class="col-lg-12 d-flex justify-content-center">
                     <div>
                         <a class="navbar-brand text-white" href="{% url 'contDay' %}">Auto Repuestos Interamericana</a>
                     </div>
                 </div>
             </div>
+
+            <!-- Inicio de login ----------------------------------------------------------->
+
+            <div class="col-lg-3 col-md-1 col-sm-12 col-12 d-none d-sm-block d-sm-none d-md-block">
+                <div class="row">
+                    
+                    {% if request.user.is_authenticated %}
+                    <div class="col-lg-5 col-md-0 col-sm-5 d-none d-sm-block">
+                        <div class="row">
+                            <div class="col-lg-12 text-white">
+                                <a class="nav-link text-white d-flex align-items-center justify-content-center" href="">
+                                    <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                    </svg>
+                                    {{request.user}}
+                                </a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-lg-3 col-md-0 col-sm-3 d-none d-sm-block">
+                        <a class="nav-link text-white d-flex justify-content-center" href="{% url 'contLogout' %}">Logout</a>
+                    </div>
+                    
+                    {% else %}
+                    <div class="col-lg-3 col-md-0 col-sm-3 d-none d-sm-block">
+                        <a class="nav-link text-white d-flex justify-content-center" href="{% url 'contLogin' %}">Login</a>
+                    </div>
+                    <div class="col-lg-3 col-md-0 col-sm-3 d-none d-sm-block">
+                        <a class="nav-link text-white d-flex justify-content-center" href="{% url 'register' %}">Register</a>
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            <!-- Fin de login ----------------------------------------------------------->
+
+
         </div>
 
         
-
+        
         {% block content %}{% endblock %}
 
     </body>

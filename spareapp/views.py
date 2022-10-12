@@ -21,6 +21,8 @@ from datetime import datetime, timezone
 from datetime import timedelta
 from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 # import numpy as np
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -30,6 +32,26 @@ from django.http import JsonResponse
 
 import locale
 # locale.setlocale(locale.LC_ALL, 'es_CR.UTF-8')
+
+
+def contLogin(request):
+
+    if request.method == "POST":
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("contDay")
+        else:
+            return redirect("contLogin")
+
+    return render(request,"spareapp/contLogin.html")
+
+def contLogout(request):
+    logout(request)
+    return redirect("contDay")
 
 def selectf(request):
 
@@ -2606,7 +2628,12 @@ def contBase(request):
 
     return render(request,"spareapp/contBase.html")
 
+@login_required
+# @login_required(redirect_field_name='contLogin')
 def contDay(request):
+
+    # if not request.user.is_authenticated:
+    #     return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     # pedido=factura.objects.filter(refPersona__nombre="PODEROSO") | factura.objects.filter(refPersona__nombre="SUPERCAR") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #1") | factura.objects.filter(refPersona__nombre="AUTO GLOBAL PARTS #2")
     # # # pedido=factura.objects.filter(refPersona__nombre="Luis Velasco")

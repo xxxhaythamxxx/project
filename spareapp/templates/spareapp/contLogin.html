@@ -1,0 +1,33 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Search {% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 col-lg-12 d-flex justify-content-center">
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Datos de ingreso</span></label>
+</div>
+
+
+<div class="container mt-4 col-lg-6">
+
+    <form class="form" action="" method="POST">
+    {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label" for="username">Ingrese nombre</label>
+            <input id="username" name="username" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="password">Ingrese password</label>
+            <input id="password" name="password" type="password">
+        </div>
+        <!-- {{form.as_p}} -->
+
+        <button style="font-size: small;" class="btn btn-primary" type="submit" id="submit">Ingresar</button>
+        <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
+    </form>
+
+</div>
+
+{% endblock %}
