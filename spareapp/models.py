@@ -125,6 +125,8 @@ class persona(models.Model):
 
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     documento = models.CharField(max_length=50, verbose_name="Documento",default="",blank=True,null=True)
+    ingreso = models.BooleanField(default=False,verbose_name="Ingreso",blank=True,null=True)
+    gasto = models.BooleanField(default=False,verbose_name="Gasto",blank=True,null=True)
 
     def __str__(self):
         return str(self.nombre)

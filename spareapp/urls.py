@@ -38,6 +38,7 @@ urlpatterns = [
     path("editspare/<str:val>",views.editspare,name="editspare"),
     path("listcar",views.listcar,name="listcar"),
     path("listspare",views.listspare,name="listspare"),
+    path("listList",views.listList,name="listList"),
     path("listengine",views.listengine,name="listengine"),
     path("deletecar/<str:val>",views.deletecar,name="deletecar"),
     path("deleteengine/<str:val>",views.deleteengine,name="deleteengine"),
