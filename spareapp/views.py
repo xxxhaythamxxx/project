@@ -9146,6 +9146,7 @@ def contAddPerson(request):
             personAux = persona()
             personAux.nombre = nombreaux
             personAux.documento = identificacionaux
+            personAux.gasto = True
             personAux.save()
 
             personLast = persona.objects.filter(id=personAux.id)
@@ -12538,6 +12539,7 @@ def contAddCliente(request):
         nuevaPersona.nombre = nombreCliente
         if identificacionCliente:
             nuevaPersona.documento = identificacionCliente
+        nuevaPersona.gasto = True
         nuevaPersona.save()
 
         allTablesNombres = persona.objects.all().order_by("nombre")
