@@ -6,6 +6,21 @@
 
 {% include "spareapp/fillsup.html" %}
 
+<!-- <div>
+    {{allSparesall}}
+</div> -->
+
+<div>
+    {% for br in allSparesall %}
+    <div>->{{br}}</div>
+        {% for c in allReferences %}
+            {% if c.referenceSpare == br %}
+            <div>{{c.referenceCode}}</div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
 <div class="container invoicecont mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-lg-5">
@@ -13,66 +28,93 @@
         </div>
     </div>
 
-    <table class="invoice invoicefill table-striped mt-3">
-        <thead>
-            <tr class="text-white">
-                <th class="trsup color">Code</th>
-                <th class="trsup color">Description</th>
-                <th class="trsup color">Category</th>
-                <!-- <th class="trsup color">Vendor</th> -->
-                <th class="trsup color">Ref. Codes</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for br in allSparesall %}
-            <tr>
-                {% if br.spare_code %}
-                    <td class="pr-0 py-2"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_code}}</a></td>
-                {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
-                {% endif %}
+    <div class="col-12">
 
-                {% if br.spare_name %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_name}}</a></td>
-                {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
-                {% endif %}
+        <div class="col-12">
+            <div class="row mt-2">
+                <div class="col-2 color text-white p-2" class="col">Code</div>
+                <div class="col-2 color text-white p-2" class="col">Brand</div>
+                <div class="col-2 color text-white p-2" class="col">Description</div>
+                <div class="col-2 color text-white p-2" class="col">Category</div>
+                <div class="col-2 color text-white p-2" class="col">Ref. Codes</div>
+                <div class="col-2 color text-white p-2" class="col">Quantity</div>
+            </div>
+        </div>
 
-                {% if br.spare_category %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_category}}</a></td>
-                {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
-                {% endif %}
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Accordion Item #1
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Accordion Item #2
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Accordion Item #3
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+          </div>
 
-                <!-- {% if br.spare_vendor.all %}
-                    <td class="pr-0">
-                {% for dim in allVendors %}
-                    {% for sp in br.spare_vendor.all %}
+        <!-- {% for br in allSparesall %}
 
-                        {% if sp.vendorName == dim.vendorName %}
-                            <div><a href="{% url 'editspare' br.spare_code %}">{{sp.vendorName}}</a></div>
-                        {% endif %}
-
-                    {% endfor %}
-                {% endfor %}
-                </td>
-                {% else %}
-                <td class="pr-0"><div><a id="vendorInfo" href=""></a></div></td>
-                {% endif %} -->
-
-                <td class="pr-0">
+        <div class="accordion" id="accordion">
+            <div class="card mt-2">
+                <div class="p-2 color card-head-a">
+                    <a style="text-decoration: none;" class="card-link text-white" data-toggle="collapse" data-parent="#accordion" href="#collapse{{br.id}}">
+                        {{br}}
+                    </a>
+                </div>
                 {% for c in allReferences %}
-                    {% if c.referenceSpare == br %}
-                        <div><a href="#">{{c.referenceCode}}</a></div>
-                    {% endif %}
+                <div id="collapse{{br.id}}" class="collapse">
+                    <div class="card-body">
+                        {% if c.referenceSpare == br %}
+                        <div class="row mt-2">
+                            <div class="col-2"><a href="#">{{br.spare_code}}</a></div>
+                            <div class="col-2"><a href="#">{{br.spare_brand}}</a></div>
+                            <div class="col-2"><a href="#">{{br.spare_name}}</a></div>
+                            <div class="col-2"><a href="#">{{br.category}}</a></div>
+                            <div class="col-2"><a href="#">{{c.referenceCode}}</a></div>
+                            <div class="col-2"><a href="#">{{c.referenceCode}}</a></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
                 {% endfor %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
+            </div>
+        </div>
+
+        {% endfor %} -->
+
+    </div>
 </div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 <script>
 

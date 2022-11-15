@@ -11,30 +11,7 @@
     <div class="container mt-3 col-lg-4">
         <form action="" method="POST">
             {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label" for="contFacType">Tipo de factura</label>
-                <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
-                    <option value="">Seleccione tipo de factura</option>
-                    {% if facAux.0.refCategory.ingreso == True %}
-                    <option value="entry" selected>Ingreso</option>
-                    {% else %}
-                    <option value="entry">Ingreso</option>
-                    {% endif %}
-                    {% if facAux.0.refCategory.egreso == True %}
-                    <option value="spending" selected>Gasto</option>
-                    {% else %}
-                    <option value="spending">Gasto</option>
-                    {% endif %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <input {% if facAux.0.nc == True %} checked {% else %} '' {% endif %} name="notaCredito" id="notaCredito" type="checkbox">
-                <label class="form-label" for="notaCredito">Nota de crédito</label>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="searchDateFrom">Cambiar fecha</label>
-                <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
-            </div>
+
             <div class="mb-3">
                 <div class="row">
                     <div class="col-lg-11">
@@ -61,6 +38,32 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="mb-3">
+                <label class="form-label" for="contFacType">Tipo de factura</label>
+                <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
+                    <option value="">Seleccione tipo de factura</option>
+                    {% if facAux.0.refCategory.ingreso == True %}
+                    <option value="entry" selected>Ingreso</option>
+                    {% else %}
+                    <option value="entry">Ingreso</option>
+                    {% endif %}
+                    {% if facAux.0.refCategory.egreso == True %}
+                    <option value="spending" selected>Gasto</option>
+                    {% else %}
+                    <option value="spending">Gasto</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <input {% if facAux.0.nc == True %} checked {% else %} '' {% endif %} name="notaCredito" id="notaCredito" type="checkbox">
+                <label class="form-label" for="notaCredito">Nota de crédito</label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="searchDateFrom">Cambiar fecha</label>
+                <input value="{{actual}}" name="searchDateFrom" id="searchDateFrom" class="form-control" type="date">
+            </div>
+            
             
             <div class="mb-3">
                 <label class="form-label" for="contNumFac">Número de factura</label>

@@ -1255,6 +1255,7 @@ def fillspare(request):
         sparrr = request.POST.getlist("toReg")
         spare1.spare_code = request.POST.get("cod")
         spare1.spare_name = request.POST.get("descriptio")
+        spare1.spare_brand = request.POST.get("brand")
 
         if "phot" in request.FILES:
             spare1.spare_photo = request.FILES['phot']
@@ -1522,6 +1523,11 @@ def editspare(request,val):
             spare1.spare_name = None
         else:
             spare1.spare_name = request.POST.get("descriptio")
+
+        if request.POST.get("brand") == "":
+            spare1.spare_brand = None
+        else:
+            spare1.spare_brand = request.POST.get("brand")
         
         if "phot" in request.FILES:
             spare1.spare_photo = request.FILES['phot']

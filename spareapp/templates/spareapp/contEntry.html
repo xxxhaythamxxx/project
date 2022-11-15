@@ -19,22 +19,6 @@
         <form id="formFact" main="{% url 'probarRepetido' %}" method="POST">
             {% csrf_token %}
 
-            <div id="tipoFactura" class="mb-3">
-                <label class="form-label" for="contFacType">Tipo de factura</label>
-                <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
-                    <option value="">Seleccione tipo de factura</option>
-                    <option value="entry">Ingreso</option>
-                    <option value="spending">Gasto</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <input name="notaCredito" id="notaCredito" type="checkbox">
-                <label class="form-label" for="notaCredito">Nota de crédito</label>
-            </div>
-            <div id="divFechaCreado" class="mb-3">
-                <label class="form-label" for="contFechaCreado">Fecha</label>
-                <input value="{{actualDay}}" class="form-control" id="contFechaCreado" type="date" name="contFechaCreado">
-            </div>
             <div class="mb-3">
                 <div class="row">
                     <div class="col-lg-11">
@@ -57,6 +41,24 @@
                     </div>
                 </div>
             </div>
+
+            <div id="tipoFactura" class="mb-3">
+                <label class="form-label" for="contFacType">Tipo de factura</label>
+                <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
+                    <option value="">Seleccione tipo de factura</option>
+                    <option value="entry">Ingreso</option>
+                    <option value="spending">Gasto</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <input name="notaCredito" id="notaCredito" type="checkbox">
+                <label class="form-label" for="notaCredito">Nota de crédito</label>
+            </div>
+            <div id="divFechaCreado" class="mb-3">
+                <label class="form-label" for="contFechaCreado">Fecha</label>
+                <input value="{{actualDay}}" class="form-control" id="contFechaCreado" type="date" name="contFechaCreado">
+            </div>
+            
             
             <div class="mb-3">
                 <label class="form-label" for="contNumFac">Número de factura</label>
