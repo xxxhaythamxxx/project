@@ -96,6 +96,7 @@ class reference(models.Model):
     referenceSpare = models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
     referenceCode = models.CharField(max_length=20, verbose_name="Code", blank=True,null=True)
     referenceNote = models.CharField(max_length=40, verbose_name="Note", blank=True,null=True)
+    cantidad = models.IntegerField(verbose_name="Quantity", blank=True,null=True)
 
     def __str__(self):
         return '%s - %s' %(self.referenceSpare, self.referenceCode)

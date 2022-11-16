@@ -1393,6 +1393,7 @@ def fillspare(request):
 # Reference ------------------------------------------------------
         codesList = request.POST.getlist("refcodes")
         notesList = request.POST.getlist("refcodesnote")
+        quantityList = request.POST.getlist("refquantity")
         i = 0
         for ref in codesList:
 
@@ -1405,6 +1406,7 @@ def fillspare(request):
                 reference1.referenceSpare = targetSpare
                 reference1.referenceCode = ref
                 reference1.referenceNote = notesList[i]
+                reference1.cantidad = quantityList[i]
                 reference1.save()
             i = i + 1
 
@@ -1777,6 +1779,7 @@ def editspare(request,val):
         # Reference ------------------------------------------------------
         codesList = request.POST.getlist("refcodes")
         notesList = request.POST.getlist("refcodesnote")
+        quantityList = request.POST.getlist("refquantity")
 
         auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
         if auxSp:
@@ -1798,6 +1801,7 @@ def editspare(request,val):
                 reference1.referenceSpare = targetSpare
                 reference1.referenceCode = ref
                 reference1.referenceNote = notesList[i]
+                reference1.cantidad = quantityList[i]
                 reference1.save()
             i = i + 1
 
@@ -1881,10 +1885,28 @@ def listspare(request):
 
 def listList(request):
 
-    allSparesall=spare.objects.all()
+    cantidad = {}
+    acum = 0
+
+    allSparesall=spare.objects.all().order_by("spare_code")
     allVendors=vendor.objects.all()
-    allReferences=reference.objects.all()
-    dic={"allReferences":allReferences,"allSparesall":allSparesall,"allVendors":allVendors}
+    allReferences=reference.objects.all().order_by("referenceCode")
+
+
+    for sp in allSparesall:
+
+        acum = 0
+
+        for ref in allReferences:
+
+            if ref.referenceSpare == sp:
+
+                acum = acum + ref.cantidad
+
+                # print(ref.referenceSpare)
+        cantidad[sp.id] = [acum]
+
+    dic={"cantidad":cantidad,"allReferences":allReferences,"allSparesall":allSparesall,"allVendors":allVendors}
 
     return render(request,"spareapp/listList.html",dic)
 

@@ -6,22 +6,7 @@
 
 {% include "spareapp/fillsup.html" %}
 
-<!-- <div>
-    {{allSparesall}}
-</div> -->
-
-<div>
-    {% for br in allSparesall %}
-    <div>->{{br}}</div>
-        {% for c in allReferences %}
-            {% if c.referenceSpare == br %}
-            <div>{{c.referenceCode}}</div>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-</div>
-
-<div class="container invoicecont mt-5">
+<div class="container invoicecont mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-lg-5">
             <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by code, description, category or vendor">
@@ -41,86 +26,64 @@
             </div>
         </div>
 
-        <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Accordion Item #1
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  Accordion Item #2
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  Accordion Item #3
-                </button>
-              </h2>
-              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                </div>
-              </div>
-            </div>
-          </div>
+        {% for br in allSparesall %}
 
-        <!-- {% for br in allSparesall %}
-
-        <div class="accordion" id="accordion">
-            <div class="card mt-2">
-                <div class="p-2 color card-head-a">
-                    <a style="text-decoration: none;" class="card-link text-white" data-toggle="collapse" data-parent="#accordion" href="#collapse{{br.id}}">
-                        {{br}}
-                    </a>
-                </div>
-                {% for c in allReferences %}
-                <div id="collapse{{br.id}}" class="collapse">
-                    <div class="card-body">
-                        {% if c.referenceSpare == br %}
-                        <div class="row mt-2">
-                            <div class="col-2"><a href="#">{{br.spare_code}}</a></div>
-                            <div class="col-2"><a href="#">{{br.spare_brand}}</a></div>
-                            <div class="col-2"><a href="#">{{br.spare_name}}</a></div>
-                            <div class="col-2"><a href="#">{{br.category}}</a></div>
-                            <div class="col-2"><a href="#">{{c.referenceCode}}</a></div>
-                            <div class="col-2"><a href="#">{{c.referenceCode}}</a></div>
+        <div class="col-12 accordion accordion-flush" id="accordionFlushExample">
+            <div class="row mt-2 accordion-item">
+                <div class="accordion-header color" id="flush-heading{{br.id}}">
+                    <div class="p-2 collapsed color text-white" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{br.id}}" aria-expanded="false" aria-controls="flush-collapse{{br.id}}">
+                        <div class="row">
+                            <div class="col-2">{{br.spare_code}}</div>
+                            <div class="col-2">{{br.spare_brand}}</div>
+                            <div class="col-2"></div>
+                            <div class="col-2"></div>
+                            <div class="col-2"></div>
+                            {% for key,value in cantidad.items %}
+                            {% if key == br.id %}
+                            <div class="col-2">{{value.0}}</div>
+                            {% endif %}
+                            {% endfor %}
                         </div>
-                        {% endif %}
+                        
                     </div>
                 </div>
+                
+                <div id="flush-collapse{{br.id}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{br.id}}" data-bs-parent="#accordionFlushExample">
+                {% for c in allReferences %}
+                {% if c.referenceSpare == br %}
+                    <div class="accordion-body">
+                        
+                        <div class="col-12">
+                        
+                            <div class="row mt-2">
+                                <div class="col-2"><a style="text-decoration: none;" href="#">{{br.spare_code}}</a></div>
+                                <div class="col-2"><a style="text-decoration: none;" href="#">{{br.spare_brand}}</a></div>
+                                <div class="col-2"><a style="text-decoration: none;" href="#">{{br.spare_name}}</a></div>
+                                <div class="col-2"><a style="text-decoration: none;" href="#">{{br.spare_category}}</a></div>
+                                <div class="col-2"><a style="text-decoration: none;" href="#">{{c.referenceCode}}</a></div>
+                                <div class="col-2"><a style="text-decoration: none;" href="#">{{c.cantidad}}</a></div>
+                            </div>
+                        
+                        </div>
+                        
+                    </div>
+                {% endif %}
                 {% endfor %}
+                </div>
+                
             </div>
         </div>
 
-        {% endfor %} -->
+        {% endfor %}
 
     </div>
 </div>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 <script>
 
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-    $(".invoicefill tbody tr").filter(function(){                             // 
+    $(".accordion-item").filter(function(){                             // 
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     })
 })
