@@ -1801,7 +1801,10 @@ def editspare(request,val):
                 reference1.referenceSpare = targetSpare
                 reference1.referenceCode = ref
                 reference1.referenceNote = notesList[i]
-                reference1.cantidad = quantityList[i]
+                if quantityList[i]:
+                    reference1.cantidad = quantityList[i]
+                else:
+                    reference1.cantidad = 0
                 reference1.save()
             i = i + 1
 
@@ -1891,7 +1894,7 @@ def listList(request):
     allSparesall=spare.objects.all().order_by("spare_code")
     allVendors=vendor.objects.all()
     allReferences=reference.objects.all().order_by("referenceCode")
-
+    
     if allSparesall:
 
         for sp in allSparesall:
@@ -1903,10 +1906,17 @@ def listList(request):
                 for ref in allReferences:
 
                     if ref.referenceSpare == sp:
+                        
+                        if ref.cantidad:
+                            
+                            acum = acum + ref.cantidad
 
-                        acum = acum + ref.cantidad
+                        else:
+                            
+                            acum = 0
 
                         # print(ref.referenceSpare)
+           
             cantidad[sp.id] = [acum]
 
     dic={"cantidad":cantidad,"allReferences":allReferences,"allSparesall":allSparesall,"allVendors":allVendors}
@@ -13822,6 +13832,7 @@ def contCargarDb(request):
         facturasDelete = factura.objects.all()
         factTypeDelete = factType.objects.all()
         factCategoryDelete = factCategory.objects.all()
+        spareDelete = spare.objects.all()
 
         for fac in facturasDelete:
 
@@ -13832,6 +13843,10 @@ def contCargarDb(request):
             fac.delete()
 
         for fac in factCategoryDelete:
+
+            fac.delete()
+
+        for fac in spareDelete:
 
             fac.delete()
 
