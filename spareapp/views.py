@@ -1892,19 +1892,22 @@ def listList(request):
     allVendors=vendor.objects.all()
     allReferences=reference.objects.all().order_by("referenceCode")
 
+    if allSparesall:
 
-    for sp in allSparesall:
+        for sp in allSparesall:
 
-        acum = 0
+            acum = 0
 
-        for ref in allReferences:
+            if allReferences:
 
-            if ref.referenceSpare == sp:
+                for ref in allReferences:
 
-                acum = acum + ref.cantidad
+                    if ref.referenceSpare == sp:
 
-                # print(ref.referenceSpare)
-        cantidad[sp.id] = [acum]
+                        acum = acum + ref.cantidad
+
+                        # print(ref.referenceSpare)
+            cantidad[sp.id] = [acum]
 
     dic={"cantidad":cantidad,"allReferences":allReferences,"allSparesall":allSparesall,"allVendors":allVendors}
 
