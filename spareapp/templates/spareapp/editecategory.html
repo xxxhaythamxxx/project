@@ -1,0 +1,22 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Category {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container mt-5 col-lg-4">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <input value="{{category}}" type="text" class="form-control" name="category" id="category" aria-describedby="categoryHelp" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+{% endblock %}

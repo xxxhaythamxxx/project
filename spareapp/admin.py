@@ -56,6 +56,12 @@ class categoryAdmin(admin.ModelAdmin):
     # autocomplete_fields = ("category",)
     # list_filter=("category",)
 
+class subcategoryAdmin(admin.ModelAdmin):
+    list_display=("subcategory",)
+    search_fields=("subcategory",)
+    # list_filter=("category",)
+    ordering = ('subcategory',)
+
 
 class dimensionAdmin(admin.ModelAdmin):
     list_display=("dimensionSpare","atributeName","atributeVal")
@@ -154,6 +160,7 @@ admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)
 admin.site.register(category,categoryAdmin)
+admin.site.register(subcategory,subcategoryAdmin)
 admin.site.register(vendor,vendorAdmin)
 admin.site.register(reference,referenceAdmin)
 admin.site.register(dimension,dimensionAdmin)

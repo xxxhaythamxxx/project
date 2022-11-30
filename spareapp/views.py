@@ -942,7 +942,6 @@ def filldb(request):
 
 def fillcar(request):
 
-    print("Entra a fillcar")
     dim=dimension.objects.values("atributeName").distinct()
     dim2=dimension.objects.all()
     atr=atribute.objects.values("atributeName").distinct()
@@ -959,7 +958,6 @@ def fillcar(request):
     dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
-        print("Entra a post de fillcar")
         car1 = car()
         car1.car_manufacturer = request.POST.get("manufactur")
         car1.car_model = request.POST.get("mode")
@@ -973,8 +971,6 @@ def fillcar(request):
             car1.carto = request.POST.get("yeart")
         car1.transmission = request.POST.get("chasi")
         car1.save()
-
-        print(request.POST.get("id"))
 
         if request.POST.get("id") == "secondForm":
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
@@ -1232,6 +1228,7 @@ def fillspare(request):
     atr2=atribute.objects.all()
     allSparesall=spare.objects.all()
     allCategories=category.objects.all()
+    allSubCategories=subcategory.objects.all()
     allEngines=engine.objects.all()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
@@ -1241,7 +1238,7 @@ def fillspare(request):
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
     spare1 = spare()
-    dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"allSubCategories":allSubCategories,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
         print("POST")
@@ -1456,6 +1453,251 @@ def fillspare(request):
     else:
         return render(request,"spareapp/fillspare.html",dic)
 
+def subCategoria(request):
+
+    # cobrarPagar = None
+    # cate = None
+    bandera = False
+
+    val = request.GET.get("val")
+    catAux = subcategory.objects.filter(category__category=val)
+
+    if catAux:
+        bandera = True
+
+    catAux = list(catAux.values())
+
+    # if request.GET.get("fecha") == "change":
+
+    #     creado = request.GET.get("creado")
+    #     creadoAux = datetime.strptime(creado,"%Y-%m-%d")
+    #     deadlineDefault=(creadoAux+timedelta(days=30)).date()
+    #     actualAux=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+
+    #     actual = actualAux
+
+    return JsonResponse({'bandera':bandera,'cat':val,'subcat':catAux})
+
+def fillcategoryadmin(request):
+
+    allCategories = category.objects.all().order_by("category")
+    deleteAux = {}
+
+    if request.method == "POST":
+
+        catAux = request.POST.get("category")
+
+        if category.objects.filter(category=catAux):
+
+            pass
+
+        else:
+
+            cat = category()
+            cat.category = catAux
+            cat.save()
+
+        for ty in allCategories:
+
+            catAux = spare.objects.filter(spare_category=ty)
+            if catAux:
+                deleteAux[ty.id] = "on"
+            else:
+                deleteAux[ty.id] = "off"
+
+        dic = {"deleteAux":deleteAux,"allCategories":allCategories}
+
+        if request.POST.get("otro"):
+
+            return render(request,"spareapp/fillcategoryadmin.html")
+
+        else:
+
+            return render(request,"spareapp/listcat.html",dic)
+    
+    return render(request,"spareapp/fillcategoryadmin.html")
+
+def listcat(request):
+
+    allCategories = category.objects.all().order_by("category")
+
+    deleteAux = {}
+
+    for ty in allCategories:
+
+        catAux = spare.objects.filter(spare_category=ty)
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"deleteAux":deleteAux,"allCategories":allCategories}
+
+    return render(request,"spareapp/listcat.html",dic)
+
+def editecategory(request,val):
+
+    catAux = category.objects.get(id=val)
+    allCategories = category.objects.all().order_by("category")
+    deleteAux = {}
+    dic = {"category":catAux}
+
+    if request.method == "POST":
+
+        cat = request.POST.get("category")
+        catAux.category = cat
+        catAux.save()
+
+        for ty in allCategories:
+
+            catAux = spare.objects.filter(spare_category=ty)
+            if catAux:
+                deleteAux[ty.id] = "on"
+            else:
+                deleteAux[ty.id] = "off"
+
+        dic = {"deleteAux":deleteAux,"allCategories":allCategories}
+
+        return render(request,"spareapp/listcat.html",dic)
+
+    return render(request,"spareapp/editecategory.html",dic)
+
+def deletecategory(request,val):
+
+    delete = category.objects.get(id=val)
+    delete.delete()
+    allCategories = category.objects.all().order_by("category")
+    deleteAux = {}
+
+    for ty in allCategories:
+
+        catAux = spare.objects.filter(spare_category=ty)
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"deleteAux":deleteAux,"allCategories":allCategories}
+
+    return render(request,"spareapp/listcat.html",dic)
+
+def listsubcat(request):
+
+    allCategories = category.objects.all().order_by("category")
+    allSubCategories = subcategory.objects.all().order_by("subcategory")
+    deleteAux = {}
+
+    for ty in allSubCategories:
+
+        catAux = spare.objects.filter(spare_subcategory=ty)
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"deleteAux":deleteAux,"allCategories":allCategories,"allSubCategories":allSubCategories}
+
+    return render(request,"spareapp/listsubcat.html",dic)
+
+def fillsubcategory(request):
+
+    allCategories = category.objects.all()
+    dic = {"allCategories":allCategories}
+
+    if request.method == "POST":
+
+        catAux = request.POST.get("category")
+        subAux = request.POST.get("subcategory")
+        categoryAux = category.objects.get(category=catAux)
+
+        subcat = subcategory()
+        subcat.category = categoryAux
+        subcat.subcategory = subAux
+        subcat.save()
+
+        if request.POST.get("otro"):
+
+            return render(request,"spareapp/fillsubcategory.html",dic)
+
+        else:
+
+            allCategories = category.objects.all().order_by("category")
+            allSubCategories = subcategory.objects.all().order_by("subcategory")
+            deleteAux = {}
+
+            for ty in allSubCategories:
+
+                catAux = spare.objects.filter(spare_subcategory=ty)
+                if catAux:
+                    deleteAux[ty.id] = "on"
+                else:
+                    deleteAux[ty.id] = "off"
+
+            dic = {"deleteAux":deleteAux,"allCategories":allCategories,"allSubCategories":allSubCategories}
+
+            return render(request,"spareapp/listsubcat.html",dic)
+    
+    return render(request,"spareapp/fillsubcategory.html",dic)
+
+def deletesubcategory(request,val):
+
+    subAux = subcategory.objects.get(id=val)
+
+    subAux.delete()
+
+    allCategories = category.objects.all().order_by("category")
+    allSubCategories = subcategory.objects.all().order_by("subcategory")
+    deleteAux = {}
+
+    for ty in allSubCategories:
+
+        catAux = spare.objects.filter(spare_subcategory=ty)
+
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"subcategory":subAux,"deleteAux":deleteAux,"allCategories":allCategories,"allSubCategories":allSubCategories}
+
+    return render(request,"spareapp/listsubcat.html",dic)
+
+def editesubcategory(request,val):
+
+    allCategories = category.objects.all().order_by("category")
+    allSubCategories = subcategory.objects.all().order_by("subcategory")
+    subAux = subcategory.objects.get(id=val)
+
+    if request.method == "POST":
+
+        catAux1 = request.POST.get("category")
+        catAux = category.objects.get(category=catAux1)
+        subAux2 = request.POST.get("subcategory")
+
+        subAux.category = catAux
+        subAux.subcategory = subAux2
+        subAux.save()
+
+        deleteAux = {}
+        allCategories = category.objects.all().order_by("category")
+        allSubCategories = subcategory.objects.all().order_by("subcategory")
+
+        for ty in allSubCategories:
+
+            catAux = spare.objects.filter(spare_subcategory=ty)
+            if catAux:
+                deleteAux[ty.id] = "on"
+            else:
+                deleteAux[ty.id] = "off"
+
+        dic = {"deleteAux":deleteAux,"allCategories":allCategories,"allSubCategories":allSubCategories}
+
+        return render(request,"spareapp/listsubcat.html",dic)
+
+    dic = {"allCategories":allCategories,"subcategory":subAux}
+
+    return render(request,"spareapp/editesubcategory.html",dic)
+
 def editspare(request,val):
 
     dim=dimension.objects.values("atributeName").distinct()
@@ -1464,6 +1706,7 @@ def editspare(request,val):
     atr2=atribute.objects.all()
     allSparesall=spare.objects.all()
     allCategories=category.objects.all()
+    allSubCategories=subcategory.objects.all()
     allEngines=engine.objects.all()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
@@ -1472,19 +1715,21 @@ def editspare(request,val):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    refAux = reference.objects.filter(referenceSpare__spare_code=val)
+    refAux = reference.objects.filter(referenceSpare__id=val)
 
-    spare1 = spare.objects.get(spare_code=val)
-    sparefind=spare.objects.filter(spare_code=val)
+    spare1 = spare.objects.get(id=val)
+    sparefind=spare.objects.filter(id=val)
+    # print(sparefind[0].spare_category)
+    allSubCategories=subcategory.objects.filter(category=sparefind[0].spare_category)
     # Con sparefind puedo enviar el mismo valor al final para seguir editando
 
-    auxCar = car.objects.filter(spare__spare_code = val)
-    auxEnegine = engine.objects.filter(spare__spare_code = val)
-    auxVendor = vendor.objects.filter(spare__spare_code = val)
-    auxAtributes = atribute.objects.filter(atributeSpare__spare_code = val)
-    auxDimensions = dimension.objects.filter(dimensionSpare__spare_code = val)
+    auxCar = car.objects.filter(spare__id = val)
+    auxEnegine = engine.objects.filter(spare__id = val)
+    auxVendor = vendor.objects.filter(spare__id = val)
+    auxAtributes = atribute.objects.filter(atributeSpare__id = val)
+    auxDimensions = dimension.objects.filter(dimensionSpare__id = val)
 
-    dic={"auxDimensions":auxDimensions,"auxAtributes":auxAtributes,"auxVendor":auxVendor,"auxEnegine":auxEnegine,"auxCar":auxCar,"refAux":refAux,"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"allSubCategories":allSubCategories,"auxDimensions":auxDimensions,"auxAtributes":auxAtributes,"auxVendor":auxVendor,"auxEnegine":auxEnegine,"auxCar":auxCar,"refAux":refAux,"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
 
@@ -1546,7 +1791,11 @@ def editspare(request,val):
             category1 = category.objects.get(category=request.POST.get("catSelect"))
             spare1.spare_category = category1
 
-
+        if request.POST.get("subcatSelect") == "" or request.POST.get("subcatSelect") == None:           
+            spare1.spare_subcategory = None
+        else:
+            category1 = subcategory.objects.get(subcategory=request.POST.get("subcatSelect"))            
+            spare1.spare_subcategory = category1
 
         # Prices ------------------------------------------------------
 
@@ -1880,7 +2129,7 @@ def editspare(request,val):
 
 def listspare(request):
 
-    allSparesall=spare.objects.all()
+    allSparesall=spare.objects.all().order_by("spare_code")
     allVendors=vendor.objects.all()
     dic={"allSparesall":allSparesall,"allVendors":allVendors}
 
@@ -12616,54 +12865,87 @@ def contListClienteTables(request):
             # print(request.POST.get("persona"+str(li.id)))
             # auxPer = persona.objects.filter(id=request.POST.get("persona"+str(li.id)))
             # print(auxPer)
+            principal = persona.objects.get(id=li.id)
 
             comparar = request.POST.get("nombre"+str(li.id))
             compIdentificacion = request.POST.get("identificacion"+str(li.id))
             compIngreso = request.POST.get("ingreso"+str(li.id))
             compEgreso = request.POST.get("egreso"+str(li.id))
-            # print(compIngreso)
-            # print(compEgreso)
+            perId = request.POST.get("identificador"+str(li.id))
+            print("........................")
+            print("Nombre: "+str(comparar))
+            print("Identificacion: "+str(compIdentificacion))
+            print("Ingreso: "+str(compIngreso))
             if compIngreso:
-                # print("Hay ingreso")
-                cambiar = persona.objects.get(id=li.id)
-                cambiar.ingreso = True
-                cambiar.save()
+                print("Es ingreso")
             else:
-                cambiar = persona.objects.get(id=li.id)
-                cambiar.ingreso = False
-                cambiar.save()
+                print("Es gasto")
+            print("Gasto: "+str(compEgreso))
+            print("Id: "+str(perId))
+
+            if principal.nombre == comparar:
+                pass
+            else:
+                principal.nombre = comparar
+
+            if principal.documento == compIdentificacion:
+                pass
+            else:
+                principal.documento = compIdentificacion
+
+            if compIngreso:
+                principal.ingreso = True
+            else:
+                principal.ingreso = False
+
             if compEgreso:
-                # print("Hay egreso")
-                cambiar = persona.objects.get(id=li.id)
-                cambiar.gasto = True
-                cambiar.save()
+                principal.gasto = True
             else:
-                cambiar = persona.objects.get(id=li.id)
-                cambiar.gasto = False
-                cambiar.save()
+                principal.gasto = False
 
-            if str(li.nombre) == str(comparar):
+            principal.save()
 
-                pass
+            # if compIngreso:
+            #     # print("Hay ingreso")
+            #     cambiar = persona.objects.get(id=li.id)
+            #     cambiar.ingreso = True
+            #     cambiar.save()
+            # else:
+            #     cambiar = persona.objects.get(id=li.id)
+            #     cambiar.ingreso = False
+            #     cambiar.save()
+            # if compEgreso:
+            #     # print("Hay egreso")
+            #     cambiar = persona.objects.get(id=li.id)
+            #     cambiar.gasto = True
+            #     cambiar.save()
+            # else:
+            #     cambiar = persona.objects.get(id=li.id)
+            #     cambiar.gasto = False
+            #     cambiar.save()
 
-            else:
+            # if str(li.nombre) == str(comparar):
 
-                cambiar = persona.objects.get(id=li.id)
-                cambiar.nombre = str(comparar)
-                cambiar.save()
+            #     pass
 
-            if str(li.documento) == str(compIdentificacion):
+            # else:
 
-                pass
+            #     cambiar = persona.objects.get(id=li.id)
+            #     cambiar.nombre = str(comparar)
+            #     cambiar.save()
 
-            else:
+            # if str(li.documento) == str(compIdentificacion):
 
-                cambiar = persona.objects.get(id=li.id)
-                if compIdentificacion:
-                    cambiar.documento = str(compIdentificacion)
-                else:
-                    cambiar.documento = ""
-                cambiar.save()
+            #     pass
+
+            # else:
+
+            #     cambiar = persona.objects.get(id=li.id)
+            #     if compIdentificacion:
+            #         cambiar.documento = str(compIdentificacion)
+            #     else:
+            #         cambiar.documento = ""
+            #     cambiar.save()
 
     allTablesNombres = persona.objects.all().order_by("nombre")
 

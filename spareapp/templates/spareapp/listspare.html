@@ -36,19 +36,19 @@
             {% for br in allSparesall %}
             <tr>
                 {% if br.spare_code %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_code}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_code}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.spare_name %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_name}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_name}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.spare_category %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.spare_code %}">{{br.spare_category}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_category}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
@@ -59,7 +59,7 @@
                     {% for sp in br.spare_vendor.all %}
 
                         {% if sp.vendorName == dim.vendorName %}
-                            <div><a href="{% url 'editspare' br.spare_code %}">{{sp.vendorName}}</a></div>
+                            <div><a href="{% url 'editspare' br.id %}">{{sp.vendorName}}</a></div>
                         {% endif %}
 
                     {% endfor %}
@@ -68,7 +68,7 @@
                 {% else %}
                 <td class="pr-0"><div><a id="vendorInfo" href=""></a></div></td>
                 {% endif %}
-                <td class="pr-0"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
+                <td class="pr-0"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
 
                 <div class="modal fade" id="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
                     <div class="modal-dialog">

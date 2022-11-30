@@ -135,7 +135,7 @@
         <div class="mb-3">
             <div class="row">
                 <div class="col-lg-11">
-                    <label for="cod" class="form-label">Category</label>
+                    <label for="" class="form-label">Category</label>
                     <select name="catSelect" id="catSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
                         <option value="" selected>Select category</option>
                         {% for sp in allCategories %}
@@ -155,6 +155,20 @@
                 </div>
             </div>
             
+        </div>
+
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Sub category</label>
+                    <select name="subcatSelect" id="subcatSelect" class="form-select form-select-md" aria-label=".form-select-sm example" disabled>
+                        <option value="" selected>Select sub category</option>
+                        {% for sp in allSubCategories %}
+                        <option value="{{sp}}">{{sp}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
 
         <!------------------------------------ Vendor ------------------------------------------>
@@ -656,6 +670,31 @@
 
 <script>
 
+$("#catSelect").change(function(){
+    val = $(this).find("option:selected").text()
+    $.ajax({
+        method: 'GET',
+        url: '/subCategoria',
+        data: {'val': val},
+        success:function(data){
+            
+            select = $("#subcatSelect")
+            select.empty()
+            select.append("<option value='' selected>Select sub category</option>")
+            for(var i=0;i<data.subcat.length;i++){
+                select.append("<option value='"+data.subcat[i].subcategory+"'>"+data.subcat[i].subcategory+"</option>")
+            }
+
+            if(data.bandera == true){
+                $("#subcatSelect").prop('disabled', false);
+            }else{
+                $("#subcatSelect").prop('disabled', true);
+            }
+
+        }
+    })
+})
+
 // Mostrar a ambos lados los car info que se tienen -------------------------------------
 $("#carcodPasar option").each(function(){
     var aux = $(this).text()
@@ -705,6 +744,13 @@ $("#enginecodPasar option").each(function(){
 jQuery(document).ready(function($){
     $(document).ready(function() {
         $('#catSelect').select2();
+    });
+});
+
+// Para filtrar por sub categoria
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#subcatSelect').select2();
     });
 });
 

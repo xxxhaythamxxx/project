@@ -43,6 +43,17 @@ class category(models.Model):
     def __str__(self):
         return '%s' %(self.category)
 
+class subcategory(models.Model):
+
+    category = models.ForeignKey(category,on_delete=CASCADE,verbose_name="Category",blank=True,null=True)
+    subcategory=models.CharField(max_length=40, verbose_name="Sub Category",blank=True,null=True)     #Ejemplo: Filter
+
+    class Meta:
+        verbose_name_plural = "Sub Categories"
+
+    def __str__(self):
+        return '%s' %(self.subcategory)
+
 class vendor(models.Model):
     vendorName=models.CharField(max_length=40, verbose_name="Vendor name",blank=True,null=True)
 
@@ -60,6 +71,7 @@ class spare(models.Model):
     #     chained_field="car_info",
     #     chained_model_field="car_engine_info",blank=True,null=True)
     spare_category = models.ForeignKey(category,on_delete=CASCADE,verbose_name="Category",blank=True,null=True)
+    spare_subcategory = models.ForeignKey(subcategory,on_delete=CASCADE,verbose_name="Sub Category",blank=True,null=True)
     spare_vendor = models.ManyToManyField(vendor,verbose_name="Vendor",blank=True,null=True)
     # spare_reference=models.ManyToManyField(reference,verbose_name="Reference code",blank=True,null=True)
     spare_photo=models.ImageField(upload_to="spares", verbose_name="Photo",blank=True,null=True)                           #Será ImageField()

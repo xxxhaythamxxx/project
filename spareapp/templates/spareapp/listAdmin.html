@@ -56,7 +56,7 @@
                 {% else %}
                 <td class="p-2"><input type="checkbox"></td>
                 {% endif %}
-                <td class="pr-0"><a data-bs-toggle="modal" data-bs-target="#exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
+                <td class="pr-0"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
 
                 <div class="modal fade" id="exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.username|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
                     <div class="modal-dialog">

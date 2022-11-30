@@ -27,10 +27,22 @@
             {% endif %}
             {% endif %}
 
+            {% if br.spare_brand %}
+            <td class="pr-0"><div><a id="brand" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_brand}}</a></div></td>
+            {% else %}
+            <td class="pr-0"><div><a id="brand" href="#"></a></div></td>
+            {% endif %}
+
             {% if br.spare_category %}
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>
             {% else %}
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="#"></a></td>
+            {% endif %}
+
+            {% if br.spare_subcategory %}
+            <td style="max-width: 120px;" class="pr-0"><a id="subcategoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_subcategory}}</a></td>
+            {% else %}
+            <td style="max-width: 120px;" class="pr-0"><a id="subcategoryInfo" href="#"></a></td>
             {% endif %}
 
             {% if br.spare_name %}
@@ -108,6 +120,7 @@
             <td class="pr-0" style="display: none;"><div><a id="vendorInfo" href="#"></a></div></td>
             {% endif %}
             {% endif %}
+            
             {% if request.user.is_authenticated %}
             <td><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
             {% endif %}

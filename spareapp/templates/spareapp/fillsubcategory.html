@@ -1,0 +1,42 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Car {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container mt-5 col-lg-4">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div id="" class="mb-3">
+            <label class="form-label" for="category">Categoría</label>
+            <select name="category" id="category" class="form-select form-select-md" required>
+                <option value="" selected>Seleccione categoría</option>
+                {% for cat in allCategories %}
+                <option value="{{cat}}">{{cat}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="subcategory" class="form-label mt-2">Sub-category</label>
+            <input type="text" class="form-control" name="subcategory" id="subcategory" aria-describedby="subcategoryHelp" required>
+        </div>
+        <button name="otro" value="otro" type="submit" class="btn btn-secondary">Save and add another</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+<script>
+
+// Para filtrar por categoria
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#category').select2();
+    });
+});
+
+</script>
+
+{% endblock %}
