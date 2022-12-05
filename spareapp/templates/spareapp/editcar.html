@@ -11,13 +11,108 @@
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="manufactur" class="form-label">Manufacturer</label>
-            <input value="{{sparefind.0.car_manufacturer}}" type="text" class="form-control" name="manufactur" id="manufactur" aria-describedby="manufacturerHelp">
-            <!-- <div id="manufacturerHelp" class="form-text">Ingrese nombre del manufacturer.</div> -->
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Make</label>
+                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example" required>
+                        <option value="" selected>Select car</option>
+                        {% for sp in allCars %}
+                        {% if sp.id == sparefind.0.id %}
+                        <option value="{{sp.car_manufacturer}}" selected>{{sp.car_manufacturer}}</option>
+                        {% else %}
+                        <option value="{{sp.car_manufacturer}}">{{sp.car_manufacturer}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal3" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal ------------------------- -->
+            <div tabindex="-1" id="categoryModal3" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="categoryModalLabel">Add a maker</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container col-lg-12">
+                                <div id="firstCategory" action="" method="POST">
+                                    <div class="mb-3">
+                                        <label for="categor" class="form-label">Maker name</label>
+                                        <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categorHelp">
+                                    </div>
+                                    <button id="" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="submitButton" type="button" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
-            <label for="mode" class="form-label">Model</label>
-            <input value="{{sparefind.0.car_model}}" type="text" class="form-control" name="mode" id="mode" aria-describedby="modeHelp">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Model</label>
+                    <select name="model" id="model" class="form-select form-select-md" aria-label=".form-select-sm example" required>
+                        <option value="" selected>Select model</option>
+                        {% for sp in allCars %}
+                        {% if sp.id == sparefind.0.id %}
+                        <option value="{{sp.car_model}}" selected>{{sp.car_model}}</option>
+                        {% else %}
+                        <option value="{{sp.car_model}}">{{sp.car_model}}</option>
+                        {% endif %}
+                        
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal4" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory4" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal ------------------------- -->
+            <div tabindex="-1" id="categoryModal4" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModal4Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="categoryModal4Label">Add a model</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container col-lg-12">
+                                <div id="firstCategory4">
+                                    <div class="mb-3">
+                                        <label for="mode" class="form-label">Model name</label>
+                                        <input type="text" class="form-control" name="mode" id="mode" aria-describedby="modeHelp">
+                                    </div>
+                                    <button id="" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="submitButton4" type="button" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="yearfro" class="form-label">Year from</label>
@@ -31,9 +126,65 @@
             <label for="chasi" class="form-label">Chasis</label>
             <input value="{{sparefind.0.transmission}}" type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
         </div>
-        <button id="formPass" type="submit" class="btn btn-primary">Save</button>
+        <button id="formPass" type="submit" class="btn btn-primary">Update</button>
     </form>
 
 </div>
+
+<script>
+// Para filtrar por sub categoria
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#manufactur').select2();
+    });
+});
+
+// Para filtrar por model
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#model').select2();
+    });
+});
+
+// Agregar modal Make
+$("#submitButton").click(function(e){
+    e.preventDefault()
+
+    cat = $("#categor").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+        
+        success: function(){
+            console.log("Success")
+
+            $("#manufactur").append("<option value='"+cat+"' selected>"+cat+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+
+// Agregar modal model
+$("#submitButton4").click(function(e){
+    e.preventDefault()
+
+    cat = $("#mode").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+        
+        success: function(){
+            console.log("Success")
+
+            $("#model").append("<option value='"+cat+"' selected>"+cat+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
+</script>
 
 {% endblock %}

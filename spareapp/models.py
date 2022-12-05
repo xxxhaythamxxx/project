@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class car(models.Model):
     car_manufacturer=models.CharField(max_length=20, verbose_name="Manufacturer", blank=True,null=True)    #Ejemplo: Audi
-    car_model=models.CharField(max_length=100, verbose_name="Model", unique=True, blank=True,null=True)           #Ejemplo: 100 C1 Coupe (817)
+    car_model=models.CharField(max_length=100, verbose_name="Model", blank=True,null=True)           #Ejemplo: 100 C1 Coupe (817)
     carfrom=models.IntegerField(verbose_name="From", blank=True,null=True)      #Ejemplo: 11/2015
     carto=models.IntegerField(verbose_name="To", blank=True,null=True)          #Ejemplo: 11/2018
     transmission=models.CharField(max_length=10, verbose_name="Chasis", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)

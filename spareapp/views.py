@@ -942,39 +942,32 @@ def filldb(request):
 
 def fillcar(request):
 
-    dim=dimension.objects.values("atributeName").distinct()
-    dim2=dimension.objects.all()
-    atr=atribute.objects.values("atributeName").distinct()
-    atr2=atribute.objects.all()
-    allSparesall=spare.objects.all()
-    allCategories=category.objects.all()
-    allEngines=engine.objects.all()
-    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
-    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
-    allVendors=vendor.objects.all()
-    ref=reference.objects.all().order_by("referenceSpare")
-    ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
-    dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic = {"allCars":allCars}
 
     if request.method == "POST":
+
+        manuAux = request.POST.get("manufactur")
+        modelAux = request.POST.get("model")
+        yearFromAux = request.POST.get("yearfro")
+        yeartToAux = request.POST.get("yeart")
+        transAux = request.POST.get("chasi")
+
         car1 = car()
-        car1.car_manufacturer = request.POST.get("manufactur")
-        car1.car_model = request.POST.get("mode")
-        if request.POST.get("yearfro") == "":
-            car1.carfrom = None
-        else:
-            car1.carfrom = request.POST.get("yearfro")
-        if request.POST.get("yeart") == "":
-            car1.carto = None
-        else:
-            car1.carto = request.POST.get("yeart")
-        car1.transmission = request.POST.get("chasi")
+        car1.car_manufacturer = manuAux
+        if modelAux:
+            car1.car_model = modelAux
+        if yearFromAux:
+            car1.carfrom = yearFromAux
+        if yeartToAux:
+            car1.carto = yeartToAux
+        if transAux:
+            car1.transmission = transAux
+
         car1.save()
 
         if request.POST.get("id") == "secondForm":
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-            # return render(request,"spareapp/fillengine.html",dic)
         else:
             return render(request,"spareapp/fillcar.html",dic)
         
@@ -982,37 +975,40 @@ def fillcar(request):
         return render(request,"spareapp/fillcar.html",dic)
 
 def editcar(request,val):
-    dim=dimension.objects.values("atributeName").distinct()
-    dim2=dimension.objects.all()
-    atr=atribute.objects.values("atributeName").distinct()
-    atr2=atribute.objects.all()
-    allSparesall=spare.objects.all()
-    allCategories=category.objects.all()
-    allEngines=engine.objects.all()
-    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
-    allCars=car.objects.all()
-    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
-    allVendors=vendor.objects.all()
-    ref=reference.objects.all().order_by("referenceSpare")
-    ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
+    
+    allCars=car.objects.all().order_by("car_manufacturer")
 
     sparefind=car.objects.filter(id=val)
     car1 = car.objects.get(id=val)
 
-    dic={"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"val":val,"sparefind":sparefind,"allCars":allCars}
     if request.method == "POST":
 
-        car1.car_manufacturer=request.POST.get("manufactur")
-        car1.car_model=request.POST.get("mode")
-        if request.POST.get("yearfro") == "":
-            car1.carfrom = None
+        manuAux = request.POST.get("manufactur")
+        modelAux = request.POST.get("model")
+        yearFromAux = request.POST.get("yearfro")
+        yeartToAux = request.POST.get("yeart")
+        transAux = request.POST.get("chasi")
+
+        car1.car_manufacturer = manuAux
+        car1.car_model=modelAux
+
+        if yearFromAux:
+            car1.carfrom=yearFromAux
         else:
-            car1.carfrom=request.POST.get("yearfro")
-        if request.POST.get("yeart") == "":
-            car1.carto = None
+            car1.carfrom=None
+        if yeartToAux:
+            car1.carto=yeartToAux
         else:
-            car1.carto=request.POST.get("yeart")
-        car1.transmission=request.POST.get("chasi")
+            car1.carfrom=None
+
+        if transAux.isspace():
+            car1.transmission=""
+        else:
+            if transAux:
+                car1.transmission=transAux
+            else:
+                car1.transmission=""
         
         car1.save()
         
@@ -2173,13 +2169,13 @@ def listList(request):
     return render(request,"spareapp/listList.html",dic)
 
 def listengine(request):
-    allEngines=engine.objects.all()
+    allEngines=engine.objects.all().order_by("engine_ide")
     dic={"allEngines":allEngines}
 
     return render(request,"spareapp/listengine.html",dic)
 
 def listcar(request):
-    allCars=car.objects.all()
+    allCars=car.objects.all().order_by("car_manufacturer")
     dic={"allCars":allCars}
 
     return render(request,"spareapp/listcar.html",dic)
