@@ -16,6 +16,9 @@
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="atributes" class="ml-2" type="checkbox"><label class="ml-1">Atributes</label></li>
                         {% endif %}
+                        {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
+                        <li style="margin:auto;" class=""><input name="brand" class="ml-2" type="checkbox"><label class="ml-1">Brand</label></li>
+                        {% endif %}
                         <li style="margin:auto;" class=""><input name="category" class="ml-2" type="checkbox"><label class="ml-1">Category</label></li>
                         {% if request.user.is_authenticated %}
                         <li style="margin:auto;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>

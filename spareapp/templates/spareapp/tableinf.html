@@ -27,11 +27,11 @@
             {% endif %}
             {% endif %}
 
-            <!-- {% if br.spare_brand %}
-            <td class="pr-0"><div><a id="brand" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_brand}}</a></div></td>
+            {% if br.spare_brand %}
+            <td class="pr-0" style="display: none;"><div><a id="brand" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_brand}}</a></div></td>
             {% else %}
-            <td class="pr-0"><div><a id="brand" href="#"></a></div></td>
-            {% endif %} -->
+            <td class="pr-0" style="display: none;"><div><a id="brand" href="#"></a></div></td>
+            {% endif %}
 
             {% if br.spare_category %}
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>

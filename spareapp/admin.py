@@ -38,7 +38,7 @@ class spareAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     list_filter=("spare_category",)
     ordering = ('spare_code',"spare_name")
     filter_horizontal=["car_info","engine_info","spare_spare","spare_vendor"]
-    exclude=("spare_brand","shape",)
+    exclude=("shape",)
     autocomplete_fields = ("spare_category",)
     resource_class = spareResource
 

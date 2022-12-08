@@ -19,11 +19,19 @@
         </div>
         <div class="mb-3">
             <label for="descriptio" class="form-label">Description</label>
+            {% if sparefind.0.spare_name %}
             <input value="{{sparefind.0.spare_name}}" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp" maxlength="80">
+            {% else %}
+            <input value="" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp" maxlength="80">
+            {% endif %}
         </div>
         <div class="mb-3">
             <label for="brand" class="form-label">Brand</label>
+            {% if sparefind.0.spare_brand %}
             <input value="{{sparefind.0.spare_brand}}" type="text" class="form-control" name="brand" id="brand" aria-describedby="descriptionHelp" maxlength="80">
+            {% else %}
+            <input value="" type="text" class="form-control" name="brand" id="brand" aria-describedby="descriptionHelp" maxlength="80">
+            {% endif %}
         </div>
 
         <!------------------------------- Car info ---------------------------------------------->

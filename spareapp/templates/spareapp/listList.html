@@ -17,12 +17,13 @@
 
         <div style="font-weight: bold;" class="col-12">
             <div class="row mt-3 ">
-                <div class="d-flex justify-content-center col-2 trsup color text-white p-2" class="col">Code</div>
-                <div class="d-flex justify-content-center col-2 trsup color text-white p-2" class="col">Brand</div>
-                <div class="d-flex justify-content-center col-2 trsup color text-white p-2" class="col">Description</div>
-                <div class="d-flex justify-content-center col-2 trsup color text-white p-2" class="col">Category</div>
-                <div class="d-flex justify-content-center col-2 trsup color text-white p-2" class="col">Ref. Codes</div>
-                <div class="d-flex justify-content-center col-2 trsup color text-white p-2" class="col">Quantity</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">Code</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">Brand</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">Description</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">Category</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">SubCategory</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">Ref. Codes</div>
+                <div class="d-flex justify-content-center col trsup color text-white p-2">Quantity</div>
             </div>
         </div>
 
@@ -34,9 +35,10 @@
                     <div class="collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{br.id}}" aria-expanded="false" aria-controls="flush-collapse{{br.id}}">
                         <div class="row">
                             <div class="col d-flex justify-content-center">{{br.spare_code}}</div>
-                            <div class="col d-flex justify-content-center">{{br.spare_brand}}</div>
-                            <div class="col d-flex justify-content-center">{{br.spare_name}}</div>
-                            <div class="col d-flex justify-content-center">{{br.spare_category}}</div>
+                            <div class="col d-flex justify-content-center">{% if br.spare_brand %}{{br.spare_brand}}{% else %}{% endif %}</div>
+                            <div class="col d-flex justify-content-center">{% if br.spare_name %}{{br.spare_name}}{% endif %}</div>
+                            <div class="col d-flex justify-content-center">{% if br.spare_category %}{{br.spare_category}}{% endif %}</div>
+                            <div class="col d-flex justify-content-center">{% if br.spare_subcategory %}{{br.spare_subcategory}}{% endif %}</div>
                             <div class="col d-flex justify-content-center"></div>
                             {% for key,value in cantidad.items %}
                             {% if key == br.id %}
@@ -57,9 +59,10 @@
                         
                             <div class="row">
                                 <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{br.spare_code}}</a></div>
-                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{br.spare_brand}}</a></div>
-                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{br.spare_name}}</a></div>
-                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{br.spare_category}}</a></div>
+                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{% if br.spare_brand %}{{br.spare_brand}}{% endif %}</a></div>
+                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{% if br.spare_name %}{{br.spare_name}}{% endif %}</a></div>
+                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{% if br.spare_category %}{{br.spare_category}}{% endif %}</a></div>
+                                <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{% if br.spare_subcategory %}{{br.spare_subcategory}}{% endif %}</a></div>
                                 <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{c.referenceCode}}</a></div>
                                 <div class="col d-flex justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{% if c.cantidad %}{{c.cantidad}}{% else %}0{% endif %}</a></div>
                             </div>

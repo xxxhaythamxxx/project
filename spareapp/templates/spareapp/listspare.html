@@ -28,6 +28,7 @@
                 <th class="trsup color">Code</th>
                 <th class="trsup color">Description</th>
                 <th class="trsup color">Category</th>
+                <th class="trsup color">SubCategory</th>
                 <th class="trsup color">Vendor</th>
                 <th class="trsup color">Action</th>
             </tr>
@@ -49,6 +50,12 @@
 
                 {% if br.spare_category %}
                     <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_category}}</a></td>
+                {% else %}
+                    <td class="pr-0"><a href="#"></a></td>
+                {% endif %}
+
+                {% if br.spare_subcategory %}
+                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_subcategory}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}

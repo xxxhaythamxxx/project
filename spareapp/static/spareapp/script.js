@@ -1007,7 +1007,7 @@ document.getElementById("default").addEventListener("click",function(){
     
     $("input:checkbox[name=photo]").prop("checked",true);
     $("input:checkbox[name=code]").prop("checked",true);
-    $("input:checkbox[name=brand]").prop("checked",true);
+    $("input:checkbox[name=brand]").prop("checked",false);
     $("input:checkbox[name=type]").prop("checked",true);
     $("input:checkbox[name=shape]").prop("checked",false);
     $("input:checkbox[name=dimensions]").prop("checked",true);
@@ -1041,8 +1041,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#priceD").index() + 1)+")").hide();
     $("#code").show();
     $("table td:nth-child("+($("#code").index() + 1)+")").show();
-    $("#brand").show();
-    $("table td:nth-child("+($("#brand").index() + 1)+")").show();
+    $("#brand").hide();
+    $("table td:nth-child("+($("#brand").index() + 1)+")").hide();
     $("#type").show();
     $("table td:nth-child("+($("#type").index() + 1)+")").show();
     $("#car").show();
@@ -1130,7 +1130,7 @@ const $cab = 5;
 $("input:checkbox[name=detail-id]").prop("checked",true);
 $("input:checkbox[name=photo]").prop("checked",true);
 $("input:checkbox[name=code]").prop("checked",true);
-$("input:checkbox[name=brand]").prop("checked",true);
+$("input:checkbox[name=brand]").prop("checked",false);
 $("input:checkbox[name=type]").prop("checked",true);
 $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",true);
@@ -1529,8 +1529,7 @@ $List5.change(function(){           // Activar filtro de Categories
             if(compCategories.length>0){
                 if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
                     for(var k=0;k<compCategories.length;k++){ 
-                        // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                        if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                        if(compCategories[k].toLowerCase() == $(this).text().split(" ").join("").toLowerCase()){    //.split(" ").join("") elimina todos los espacios en blanco de la cadena
                             bandShow = true
                             contCategory.push($(this).text())
                         }
@@ -1541,7 +1540,8 @@ $List5.change(function(){           // Activar filtro de Categories
             if(listadoPasar.length>0){  // Si se trae valores de Dimension o atributos
                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
                     for(var i=0; i<listadoPasar.length; i++){
-                        if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        if((listadoPasar[i].split(" ").join("").toLowerCase() == $(this).text().split(" ").join("").toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        // if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
                             contAtrFind = contAtrFind + 1
                             bandDimAtr = true
                         }
