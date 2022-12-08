@@ -3593,7 +3593,17 @@ def contEntry(request):
                     facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty)
 
                     for fac in facAuxAllCat:
-                        custAcum = custAcum + fac.total
+
+                        if ty.ingreso == True:
+                            if fac.nc == True:
+                                custAcum = custAcum - fac.total
+                            else:
+                                custAcum = custAcum + fac.total
+                        else:
+                            if fac.nc == True:
+                                custAcum = custAcum + fac.total
+                            else:
+                                custAcum = custAcum - fac.total
 
                     lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -3637,8 +3647,18 @@ def contEntry(request):
                 for ty in allTypesCustom:
                     facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty)
 
-                    for fac in facAuxAll:
-                        custAcum = custAcum + fac.total
+                    for fac in facAuxAllCat:
+
+                        if ty.ingreso == True:
+                            if fac.nc == True:
+                                custAcum = custAcum - fac.total
+                            else:
+                                custAcum = custAcum + fac.total
+                        else:
+                            if fac.nc == True:
+                                custAcum = custAcum + fac.total
+                            else:
+                                custAcum = custAcum - fac.total
 
                     lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -3888,17 +3908,33 @@ def contTypeCat(request,val,val2):
 
             for fac in allFacturesVal:
 
-                montoTotal = montoTotal + fac.monto
-                itbmTotal = itbmTotal + float(fac.iva)
-                totalTotal = totalTotal + fac.total
+                if fac.nc == True:
+
+                    montoTotal = montoTotal - fac.monto
+                    itbmTotal = itbmTotal - float(fac.iva)
+                    totalTotal = totalTotal - fac.total
+
+                else:
+
+                    montoTotal = montoTotal + fac.monto
+                    itbmTotal = itbmTotal + float(fac.iva)
+                    totalTotal = totalTotal + fac.total
 
         else:
 
             for fac in allFacturesVal:
 
-                montoTotal = montoTotal - fac.monto
-                itbmTotal = itbmTotal - float(fac.iva)
-                totalTotal = totalTotal - fac.total
+                if fac.nc == True:
+
+                    montoTotal = montoTotal + fac.monto
+                    itbmTotal = itbmTotal + float(fac.iva)
+                    totalTotal = totalTotal + fac.total
+
+                else:
+
+                    montoTotal = montoTotal - fac.monto
+                    itbmTotal = itbmTotal - float(fac.iva)
+                    totalTotal = totalTotal - fac.total
 
     if typeAux[0].facCobrada == True:
 
@@ -10212,7 +10248,17 @@ def editeFact(request,val,val2):
                     facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty)
 
                     for fac in facAuxAllCat:
-                        custAcum = custAcum + fac.total
+
+                        if ty.ingreso == True:
+                            if fac.nc == True:
+                                custAcum = custAcum - fac.total
+                            else:
+                                custAcum = custAcum + fac.total
+                        else:
+                            if fac.nc == True:
+                                custAcum = custAcum + fac.total
+                            else:
+                                custAcum = custAcum - fac.total
 
                     lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -10256,8 +10302,18 @@ def editeFact(request,val,val2):
                 for ty in allTypesCustom:
                     facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty)
 
-                    for fac in facAuxAll:
-                        custAcum = custAcum + fac.total
+                    for fac in facAuxAllCat:
+
+                        if ty.ingreso == True:
+                            if fac.nc == True:
+                                custAcum = custAcum - fac.total
+                            else:
+                                custAcum = custAcum + fac.total
+                        else:
+                            if fac.nc == True:
+                                custAcum = custAcum + fac.total
+                            else:
+                                custAcum = custAcum - fac.total
 
                     lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                     for nom in lista:
@@ -11387,13 +11443,15 @@ def customTables(request,val):
     toddy = val
     tod = val
 
+    # ----------- Operacion -------------------
+
     acum = 0
-    cantAuxOp = tableOperacion.objects.filter(fecha__date=toddy).values("tabNombre","principal").order_by("tabNombre").distinct()
-    factureAuxOp = factura.objects.filter(fechaCreado__date=toddy)
+    cantAuxOp = tableOperacion.objects.filter(fecha__date=tod).values("tabNombre").order_by("tabNombre").distinct()
+    factureAuxOp = factura.objects.filter(fechaCreado__date=tod)
     allTypesCustom = factType.objects.all()
     totalParcialOp = {}
     
-    tableAuxOp = tableOperacion.objects.filter(fecha__date=toddy)
+    tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabNombre","tabTipo")
 
     if factureAuxOp:
 
@@ -11402,7 +11460,7 @@ def customTables(request,val):
         if tableAuxOp:
 
             print("Hay tabla")
-            # ------------------------------------------------------------------------
+            toddy = datetime.now().date()
             allTypesCustom = factType.objects.all()
             custAcum = 0
             for ty in allTypesCustom:
@@ -11415,7 +11473,7 @@ def customTables(request,val):
                     facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.mercPagada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=False)
 
                 if ty.facCobrada == True:
 
@@ -11424,9 +11482,55 @@ def customTables(request,val):
                     else:
                         facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-                for fac in facAuxAll:
-                    custAcum = custAcum + fac.total
-                customType = tableOperacion.objects.filter(fecha__date=toddy,tabTipo=ty)
+                if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
+
+                else:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum - fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                        else:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum - fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                custAcum = abs(custAcum)
 
                 lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
@@ -11462,33 +11566,80 @@ def customTables(request,val):
                             costomInd.save()
                     
                 custAcum = 0
-
         else:
 
             print("No hay tabla")
 
             custAcum = 0
             for ty in allTypesCustom:
-                facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty)
+                facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty)
 
                 if ty.facCobrar == True:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
+                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,refType=ty,pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
 
                 if ty.mercPagar == True:
-                    facAuxAll = factura.objects.filter(fechaCreado__date=toddy,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
+                    facAuxAll = factura.objects.filter(fechaCreado__date=tod,pendiente=True,refType=ty,refCategory__egreso=True,refCategory__limite=True)
 
                 if ty.mercPagada == True:
-                    facAuxAll = factura.objects.filter(fechaCobrado=toddy,pendiente=False,refCategory__egreso=True,refCategory__limite=True)
+                    facAuxAll = factura.objects.filter(fechaCobrado=tod,pendiente=False,refCategory__egreso=True,refCategory__limite=False)
 
                 if ty.facCobrada == True:
 
                     if ty.nombre == "FACTURA CREDITO COBRADA (MAYORISTA)":
-                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
                     else:
-                        facAuxAll = factura.objects.filter(fechaCreado=toddy,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
+                        facAuxAll = factura.objects.filter(fechaCreado=tod,pendiente=False,refCategory__ingreso=True,refType__facCobrada=True).exclude(refType__nombre = "FACTURA CREDITO COBRADA (MAYORISTA)")
 
-                for fac in facAuxAll:
-                    custAcum = custAcum + fac.total
+                if ty.mercPagada == False and ty.mercPagar == False and ty.facCobrar == False and ty.facCobrada == False:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            custAcum = custAcum + fac.total
+
+                        else:
+
+                            custAcum = custAcum - fac.total
+
+                else:
+
+                    for fac in facAuxAll:
+
+                        if fac.nc == True:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum + fac.total
+
+                                else:
+
+                                    custAcum = custAcum - fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                        else:
+
+                            if fac.refCategory.nombre == "Mercancia credito pagada" or fac.refType.mercPagar == True:
+
+                                if fac.refCategory.nombre == "Mercancia credito pagada":
+
+                                    custAcum = custAcum - fac.total
+
+                                else:
+
+                                    custAcum = custAcum + fac.total
+
+                            else:
+
+                                custAcum = custAcum + fac.total
+
+                custAcum = abs(custAcum)
+
                 lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
                     prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
@@ -11496,7 +11647,7 @@ def customTables(request,val):
                     sumaAux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"]).values("suma").distinct()
                     if prob:
                         costomInd = tableOperacion()
-                        costomInd.fecha = toddy
+                        costomInd.fecha = tod
                         costomInd.tabNombre = nom["tabNombre"]
                         typeAux = factType.objects.get(nombre=ty)
                         costomInd.tabTipo = typeAux
@@ -11516,7 +11667,7 @@ def customTables(request,val):
 
         suma = 0
 
-        aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=toddy)
+        aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
 
         for a in aux:
 
@@ -11527,10 +11678,6 @@ def customTables(request,val):
             else:
 
                 acum = acum - a.tabTotal
-
-        if nom["principal"] == False:
-
-            acumTablaTotales = acumTablaTotales + acum
         
         totalParcialOp[nom["tabNombre"]] = acum
 
@@ -11565,7 +11712,17 @@ def customTables(request,val):
                 facAuxAllCat = factura.objects.filter(fechaCreado__date=toddy,refCategory=ty).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
                 for fac in facAuxAllCat:
-                    custAcum = custAcum + fac.total
+
+                    if ty.ingreso == True:
+                        if fac.nc == True:
+                            custAcum = custAcum - fac.total
+                        else:
+                            custAcum = custAcum + fac.total
+                    else:
+                        if fac.nc == True:
+                            custAcum = custAcum + fac.total
+                        else:
+                            custAcum = custAcum - fac.total
 
                 lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
@@ -11609,8 +11766,18 @@ def customTables(request,val):
             for ty in allTypesCustom:
                 facAuxAll = factura.objects.filter(fechaCreado__date=tod,refCategory=ty).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True)
 
-                for fac in facAuxAll:
-                    custAcum = custAcum + fac.total
+                for fac in facAuxAllCat:
+
+                    if ty.ingreso == True:
+                        if fac.nc == True:
+                            custAcum = custAcum - fac.total
+                        else:
+                            custAcum = custAcum + fac.total
+                    else:
+                        if fac.nc == True:
+                            custAcum = custAcum + fac.total
+                        else:
+                            custAcum = custAcum - fac.total
 
                 lista = tableOperacionCat.objects.all().values("tabNombre","suma","resta").distinct()
                 for nom in lista:
@@ -11634,6 +11801,8 @@ def customTables(request,val):
                         costomInd.save()
                 
                 custAcum = 0
+
+    custAcum = abs(custAcum)
 
     for nom in cantAuxCat:
 
