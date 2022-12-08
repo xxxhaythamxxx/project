@@ -40,11 +40,14 @@
                     {% if spare.0.spare_code %}
                     <div>Code</div>
                     {% endif %}
-                    <!-- {% if spare.0.spare_brand %}
+                    {% if spare.0.spare_brand %}
                     <div>Brand</div>
-                    {% endif %} -->
+                    {% endif %}
                     {% if spare.0.spare_category %}
                     <div>Category</div>
+                    {% endif %}
+                    {% if spare.0.spare_subcategory %}
+                    <div>SubCategory</div>
                     {% endif %}
                     {% if spare.0.spare_name %}
                     <div>Description</div>
@@ -58,11 +61,14 @@
                     {% if spare.0.spare_code %}
                     <div class="hover"><a href="">{{spare.0.spare_code}}</a></div>
                     {% endif %}
-                    <!-- {% if spare.0.spare_brand %}
+                    {% if spare.0.spare_brand %}
                     <div class="hover"><a href="{% url 'brand' spare.0.spare_brand %}">{{spare.0.spare_brand}}</a></div>
-                    {% endif %} -->
+                    {% endif %}
                     {% if spare.0.spare_name %}
                     <div class="hover"><a href="{% url 'categoryi' spare.0.spare_category %}">{{spare.0.spare_category}}</a></div>
+                    {% endif %}
+                    {% if spare.0.spare_subcategory %}
+                    <div class="hover"><a href="{% url 'categoryi' spare.0.spare_category %}">{{spare.0.spare_subcategory}}</a></div>
                     {% endif %}
                     {% if spare.0.spare_name %}
                     <div class="hover"><a href="{% url 'name' spare.0.spare_name %}">{{spare.0.spare_name}}</a></div>

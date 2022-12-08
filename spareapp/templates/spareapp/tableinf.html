@@ -1,7 +1,7 @@
 <html>
     <tbody id="myTable">
         {% for br in spare %}
-        <tr class="dnd-moved text-left">
+        <tr class="dnd-moved ">
 
             {% if br.spare_code %}
             <td class="pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
@@ -122,7 +122,7 @@
             {% endif %}
             
             {% if request.user.is_authenticated %}
-            <td><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
+            <td><input class="check d-flex justify-content-center" type="checkbox" name="toAdd" value="{{br.id}}"></td>
             {% endif %}
         </tr>
         {% endfor %}
