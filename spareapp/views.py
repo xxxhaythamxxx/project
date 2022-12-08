@@ -9954,6 +9954,8 @@ def editeFact(request,val,val2):
         if request.POST.get("contNumFac"):
             contNumFac = request.POST.get("contNumFac")
             factAux.num = contNumFac
+        else:
+            factAux.num = None
 
         contTypeIng = request.POST.get("contTypeIng")
         typeAux = factType.objects.get(id=contTypeIng)

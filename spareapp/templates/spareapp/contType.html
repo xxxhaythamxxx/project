@@ -57,7 +57,7 @@
         <tbody id="myTable">
             {% for fac in allFacturesVal %}
             <tr>
-                <td class="p-2">{{fac.num}}</td>
+                <td class="p-2">{% if fac.num %}{{fac.num}}{% endif %}</td>
                 <td class="p-2">{{fac.fechaCreado|date:'Y-m-d'}}</td>
                 <td class="p-2"><a href="{% url 'contIndividual' fac.refPersona.id %}">{{fac.refPersona}}</a></td>
                 <td class="p-2">{{fac.refCategory|upper}}</td>

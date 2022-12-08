@@ -67,7 +67,11 @@
             
             <div class="mb-3">
                 <label class="form-label" for="contNumFac">Número de factura</label>
-                <input value="{{facAux.0.num}}" class="form-control" id="contNumFac" type="text" name="contNumFac" required>
+                {% if facAux.0.num %}
+                <input value="{{facAux.0.num}}" class="form-control" id="contNumFac" type="text" name="contNumFac">
+                {% else %}
+                <input value="" class="form-control" id="contNumFac" type="text" name="contNumFac">
+                {% endif %}
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contCatIng">Categoría</label>
@@ -109,7 +113,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contTotal">Total</label>
-                <input value="{{facAux.0.total|stringformat:'.2f'}}" class="form-control" id="contTotal" name="contTotal" step="0.001" readonly>
+                <input value="{{facAux.0.total|stringformat:'.2f'}}" type="number" class="form-control" id="contTotal" name="contTotal" step="0.001" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="contNota">Nota</label>
