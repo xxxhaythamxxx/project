@@ -3249,6 +3249,7 @@ def contEntry(request):
     acum = 0
     banderaRepetido = False
     banderaNumero = ""
+    facAuxAllCat = ""
 
     dic = {"actualDay":actualDay,"actual":actual,"allCategoriesSpending":allCategoriesSpending,"allCategoriesEntry":allCategoriesEntry,"allCustomers":allCustomers,"allTypes":allTypes,"allCategories":allCategories}
 
@@ -5337,6 +5338,8 @@ def contByDay(request):
     noIncludeTotalGasto = 0
     contPagadoCobrado = 0
 
+    facAuxAllCat = ""
+
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)
     
@@ -5715,6 +5718,8 @@ def contByDayCustom(request):
 
     acumTablaTotales = 0
     acumTablaTotalesCat = 0
+
+    facAuxAllCat = ""
 
     if request.method == "POST":
 
@@ -6501,6 +6506,8 @@ def contCollectFac(request,val):
     # print(request.POST.get("filtro"+val))
     filtro = request.POST.get("filtro"+val)
 
+    facAuxAllCat = ""
+
     if factAux:
 
         factErase = factura.objects.get(id=val)
@@ -7023,6 +7030,7 @@ def contPayFac(request,val):
     # print(val)
     # print(request.POST.get("filtro"+val))
     filtro = request.POST.get("filtro"+val)
+    facAuxAllCat = ""
     # print(request.POST.get("entrySpendingFiltro"+val))
 
     acum = 0
@@ -7599,6 +7607,8 @@ def contPayFac(request,val):
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contPayFacType(request,val,val2,val3):
+
+    facAuxAllCat = ""
 
     if request.method == "POST":
 
@@ -8504,6 +8514,8 @@ def contCollectFacType(request,val,val2,val3):
     filtro = request.POST.get("filtro"+val3)
     print("filtro")
     print(filtro)
+
+    facAuxAllCat = ""
 
     if factAux:
 
@@ -9937,6 +9949,8 @@ def editeFact(request,val,val2):
 
         allCategories = factCategory.objects.filter(egreso=True)
 
+    facAuxAllCat = ""
+
     if request.method == "POST":
 
         returnPath = request.POST.get("returnPath")
@@ -11170,6 +11184,8 @@ def deleteFac(request,val):
 
     facAux.delete()
 
+    facAuxAllCat = ""
+
     tod = datetime.now().date()
     # ----------- Operacion -------------------
     toddy = datetime.now().date()
@@ -11444,6 +11460,8 @@ def customTables(request,val):
 
     toddy = val
     tod = val
+
+    facAuxAllCat = ""
 
     # ----------- Operacion -------------------
 
@@ -12239,6 +12257,8 @@ def contDayBack(request,val):
     facturesToPay = len(allFacturesToPay)
 
     tod = val
+
+    facAuxAllCat = ""
 
     # ----------- Operacion -------------------
 
@@ -13565,6 +13585,8 @@ def editeFactAccount(request,val,val1,val2):
 
         allCategories = factCategory.objects.filter(egreso=True)
 
+    facAuxAllCat = ""
+
     if request.method == "POST":
 
         searchMetodo = "all"
@@ -14326,6 +14348,8 @@ def cargarDb(request):
 import json
 
 def contCargarDb(request):
+
+    facAuxAllCat = ""
 
     if request.method == "POST":
 
