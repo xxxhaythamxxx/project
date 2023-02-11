@@ -23,6 +23,7 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 # import numpy as np
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -251,7 +252,7 @@ def home(request):
                 # cart = spareCart()
                 # cart.save()
                 # form = UserRegisterForm(request.POST)
-                print("Voy a entrar a list")
+                # print("Voy a entrar a list")
                 for a in list:
                     cart = spareCart()
                     cart.spareId = randomNum
@@ -1035,7 +1036,7 @@ def fillengine(request):
     dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
-        print("Entra en el POST de fillengine")
+        # print("Entra en el POST de fillengine")
         engine1 = engine()
         engine1.engine_l = request.POST.get("litresfill")
         engine1.engine_ide = request.POST.get("codefill")
@@ -1049,12 +1050,12 @@ def fillengine(request):
         else:
             engine1.engine_pistons = request.POST.get("pistonsfill")
         engine1.save()
-        print(request.POST.getlist("engcartoReg"))
+        # print(request.POST.getlist("engcartoReg"))
         cartoreg = request.POST.getlist("engcartoReg")
         carAux = []
         cartopass = request.POST.getlist("engcartoPass")
-        print(cartopass)
-        print(request.POST)
+        # print(cartopass)
+        # print(request.POST)
 
         if cartoreg == []:
             for c in allCars:
@@ -1163,7 +1164,7 @@ def editengine(request,val):
         #             idAux = c.id
         #     targetCar = car.objects.get(id=idAux)
         #     spare1.car_info.add(targetCar)
-        print(request.POST)
+        # print(request.POST)
 
         cartoreg = request.POST.getlist("engcartoReg")
         cartopass = request.POST.getlist("engcartoPass")
@@ -1186,12 +1187,12 @@ def editengine(request,val):
                     carAux.append(c)
         else:
             for c in allCars:
-                print("Carro")
-                print(c)
+                # print("Carro")
+                # print(c)
                 bandt = False
                 for ca in cartopass:
-                    print("cartopass")
-                    print(ca)
+                    # print("cartopass")
+                    # print(ca)
                     if str(c).replace("  ","") == str(ca).replace("  ",""):
                         bandt = True
                 if bandt == False:
@@ -1237,8 +1238,8 @@ def fillspare(request):
     dic={"allSubCategories":allSubCategories,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
-        print("POST")
-        print(request.POST)
+        # print("POST")
+        # print(request.POST)
 # Spare ------------------------------------------------------
         spareAux = spare.objects.filter(spare_code=request.POST.get("cod"))
         if spareAux:
@@ -1268,8 +1269,8 @@ def fillspare(request):
         if request.POST.get("catSelect") == "":
             pass
         else:
-            print("catSelect")
-            print(request.POST.get("catSelect"))
+            # print("catSelect")
+            # print(request.POST.get("catSelect"))
             category1 = category.objects.get(category=request.POST.get("catSelect"))
             spare1.spare_category = category1    
 
@@ -1426,8 +1427,8 @@ def fillspare(request):
 
         dimName = request.POST.getlist("dimensName")
         dimVal = request.POST.getlist("dimensVal")
-        print(dimName)
-        print(dimVal)
+        # print(dimName)
+        # print(dimVal)
         i = 0
         for ref in dimName:
 
@@ -1438,8 +1439,8 @@ def fillspare(request):
                     varId = sp.id
                 targetSpare = spare.objects.get(id=varId)
                 dimension1.dimensionSpare = targetSpare
-                print(ref)
-                print(dimVal[i])
+                # print(ref)
+                # print(dimVal[i])
                 dimension1.atributeName = ref
                 dimension1.atributeVal = dimVal[i]
                 dimension1.save()
@@ -2013,7 +2014,7 @@ def editspare(request,val):
             reference1 = reference.objects.filter(referenceSpare__spare_code=request.POST.get("cod"))
             reference1.delete()
         else:
-            print("No consigue codigo")
+            # print("No consigue codigo")
             reference1 = reference()
 
         i = 0
@@ -2045,7 +2046,7 @@ def editspare(request,val):
             atribute1 = atribute.objects.filter(atributeSpare__spare_code=request.POST.get("cod"))
             atribute1.delete()
         else:
-            print("No consigue codigo")
+            # print("No consigue codigo")
             atribute1 = reference()
 
         i = 0
@@ -2233,7 +2234,7 @@ def deletecar(request,val):
 
 def fillcategory(request):
 
-    print("Entra en fillCategory")
+    # print("Entra en fillCategory")
 
     dim=dimension.objects.values("atributeName").distinct()
     dim2=dimension.objects.all()
@@ -2249,10 +2250,10 @@ def fillcategory(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    print(request.POST)
+    # print(request.POST)
     category1 = category()
-    print("categor")
-    print(request.POST.get("categor"))
+    # print("categor")
+    # print(request.POST.get("categor"))
     category1.category = request.POST.get("categor")
     category1.save()
 
@@ -2276,7 +2277,7 @@ def fillvendor(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    print(request.POST.get("vendo"))
+    # print(request.POST.get("vendo"))
     vendor1 = vendor()    
     vendor1.vendorName = request.POST.get("vendo")
     vendor1.save()
@@ -2304,10 +2305,10 @@ def importCar(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    print(request.POST)
+    # print(request.POST)
 
     if "phot" in request.FILES:
-        print("Hay archivo")
+        # print("Hay archivo")
 
         FILE_PATH = request.FILES['phot']
         
@@ -2350,7 +2351,7 @@ def importCar(request):
                 j=j+1
             i=i+1
 
-        print(cont)
+        # print(cont)
         if cont > 0:
             i=0
             for fil in maxCol:
@@ -2527,7 +2528,7 @@ def importSpare(request):
                     spAttribute = j
                     cont = cont + 1
                 if col.value == "DIMENSION":
-                    print("Entra en dimension j")
+                    # print("Entra en dimension j")
                     spDimension = j
                     cont = cont + 1
                 if col.value == "CATEGORY":
@@ -2563,46 +2564,46 @@ def importSpare(request):
                 bandera = True
                 j=0
                 if i>0:
-                    print("Columna: "+str(i)+"----------------------------------------")
+                    # print("Columna: "+str(i)+"----------------------------------------")
                     spare1 = spare()
                     
                 for col in fil:
 
                     if i>0:
                         if j == spCode:
-                            print("Entra en codigo.....")
+                            # print("Entra en codigo.....")
                             if col.value == None:
-                                print("Codigo: "+CodeAux)
+                                # print("Codigo: "+CodeAux)
                                 bandera = False
                             else:
                                 # spare1 = spare()
-                                print("Codigo: "+str(col.value))
+                                # print("Codigo: "+str(col.value))
                                 CodeAux = col.value
                                 spare1.spare_code = col.value
                                 bandera = True
                         if j == spDesc:
-                            print("Entra en descripcion.....")
-                            print("Descripción: "+str(col.value))
+                            # print("Entra en descripcion.....")
+                            # print("Descripción: "+str(col.value))
                             if col.value != None:
                                 spare1.spare_name = col.value
                         if j == spPricem:
-                            print("Entra en Price M.....")
+                            # print("Entra en Price M.....")
                             # print(get_column_letter(col.value))
-                            print("Price M: "+str(col.value))
+                            # print("Price M: "+str(col.value))
                             if col.value != None:
                                 spare1.price_m = col.value
                         if j == spPriced:
-                            print("Price D: "+str(col.value))
+                            # print("Price D: "+str(col.value))
                             if col.value != None:
                                 spare1.price_d = col.value
                         if j == spNote:
-                            print("Note: "+str(col.value))
+                            # print("Note: "+str(col.value))
                             if col.value != None:
                                 spare1.note = col.value
                         if j == spCategory:
-                            print("Entra en category.....")
+                            # print("Entra en category.....")
                             if col.value != None:
-                                print("Category: "+str(col.value))
+                                # print("Category: "+str(col.value))
                                 if category.objects.filter(category=col.value):
                                     category1 = category.objects.get(category=col.value)
                                 else:
@@ -2611,9 +2612,9 @@ def importSpare(request):
                                     category1.save()
                                 spare1.spare_category = category1
                         if j == spVendor:
-                            print("Entra a vendor....")
+                            # print("Entra a vendor....")
                             if col.value != None:
-                                print("Vendor: "+str(col.value))
+                                # print("Vendor: "+str(col.value))
                                 # if vendor.objects.filter(category=col.value):
                                 #     vendor1 = vendor.objects.get(category=col.value)
                                 # else:
@@ -2626,11 +2627,11 @@ def importSpare(request):
                                 VenName = None
 
                         if j == spReference:
-                            print("Entra en referencia.....")
+                            # print("Entra en referencia.....")
                             if col.value != None:
                                 varRefAux = col.value.split("\n")
-                                print(varRefAux)
-                                print(len(varRefAux))
+                                # print(varRefAux)
+                                # print(len(varRefAux))
                                 # for varA in varRefAux:
 
                                 #     varA = col.value.split("=")
@@ -2647,7 +2648,7 @@ def importSpare(request):
                                 refName = None
                                 refDesc = None
                         if j == spAttribute:
-                            print("Entra en atributos.....")
+                            # print("Entra en atributos.....")
                             if col.value != None:
                                 varAtrAux = col.value.split("\n")
 
@@ -2660,7 +2661,7 @@ def importSpare(request):
                                 AtrName = None
                                 AtrDesc = None
                         if j == spDimension:
-                            print("Entra en dimensiones.....")
+                            # print("Entra en dimensiones.....")
                             if col.value != None:
                                 varDimAux = col.value.split("\n")
                                 # varA = col.value.split("=")
@@ -2673,13 +2674,13 @@ def importSpare(request):
                                 DimDesc = None
                         
                     j=j+1
-                print(bandera)
-                print(i)
+                # print(bandera)
+                # print(i)
                 if bandera == True and i>0:
-                    print("Guarda spare")
+                    # print("Guarda spare")
                     spare1.save()
                     # Agregamos referencias
-                    print("Agregamos referencias")
+                    # print("Agregamos referencias")
                     for var in varRefAux:
                         varA = var.split("=")
                         # print(varA)
@@ -2690,11 +2691,11 @@ def importSpare(request):
                             # print(varA[1])
                             refDesc = varA[1]
                         
-                        print("Reference: "+str(var))
+                        # print("Reference: "+str(var))
 
                         if refName != None:
                             reference1 = reference()
-                            print("Agregamos la referencia.....")
+                            # print("Agregamos la referencia.....")
                             # print(CodeAux)
                             auxSp = spare.objects.filter(spare_code=CodeAux)
                             # print("Crea el spare:.....")
@@ -2708,22 +2709,22 @@ def importSpare(request):
                             reference1.referenceNote = refDesc
                             reference1.save()
                     # Agregamos atributos
-                    print("Agregamos atributos")
+                    # print("Agregamos atributos")
                     for var in varAtrAux:
-                        print(var)
+                        # print(var)
                         varA = var.split("=")
                         AtrName = varA[0]
-                        print(AtrName)
+                        # print(AtrName)
                         AtrDesc = varA[1]
-                        print(AtrDesc)
+                        # print(AtrDesc)
 
                         if AtrName != None:
-                            print("Tiene un atributo para agregar.....")
+                            # print("Tiene un atributo para agregar.....")
                             if AtrName != "":
-                                print("Agregamos el atributo.....")
+                                # print("Agregamos el atributo.....")
                                 atribute1 = atribute()
                                 auxSp = spare.objects.filter(spare_code=CodeAux)
-                                print(auxSp)
+                                # print(auxSp)
                                 varId=0
                                 for sp in auxSp:
                                     varId = sp.id
@@ -2738,9 +2739,9 @@ def importSpare(request):
                         DimName = varA[0]
                         DimDesc = varA[1]
                         if DimName != None:
-                            print("Tiene una dimension para agregar")
+                            # print("Tiene una dimension para agregar")
                             if DimName != "":
-                                print("Agregamos la dimension.....")
+                                # print("Agregamos la dimension.....")
                                 dimension1 = dimension()
                                 auxSp = spare.objects.filter(spare_code=CodeAux)
                                 varId=0
@@ -2753,7 +2754,7 @@ def importSpare(request):
                                 dimension1.save()
                     # Agregamos vendor
                     if VenName != None:
-                        print("Agregamos vendor")
+                        # print("Agregamos vendor")
                         if vendor.objects.filter(vendorName=VenName):
                             vendor1 = vendor.objects.get(vendorName=VenName)
                         else:
@@ -2773,11 +2774,11 @@ def importSpare(request):
                         # dimension1.atributeVal = DimDesc
                         # dimension1.save()
                 else:
-                    print("No guarda Spare")
+                    # print("No guarda Spare")
                     # Pero puede guardar referencias
                     if refName != None and i>0:
-                        print("Hay reference Code.....")
-                        print(auxSp)
+                        # print("Hay reference Code.....")
+                        # print(auxSp)
                         # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
                         reference1 = reference()
                         auxSp = spare.objects.filter(spare_code=CodeAux)
@@ -2791,8 +2792,8 @@ def importSpare(request):
                         reference1.save()
                     if AtrName != None and i>0:
                         if AtrName != "":
-                            print("Hay Atributos.....")
-                            print(auxSp)
+                            # print("Hay Atributos.....")
+                            # print(auxSp)
                             # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
                             atribute1 = atribute()
                             auxSp = spare.objects.filter(spare_code=CodeAux)
@@ -2806,8 +2807,8 @@ def importSpare(request):
                             atribute1.save()
                     if DimName != None and i>0:
                         if DimName != "":
-                            print("Hay dimensiones.....")
-                            print(auxSp)
+                            # print("Hay dimensiones.....")
+                            # print(auxSp)
                             # reference1 = reference.objects.get(referenceSpare__spare_code=CodeAux)
                             dimension1 = dimension()
                             auxSp = spare.objects.filter(spare_code=CodeAux)
@@ -2820,7 +2821,7 @@ def importSpare(request):
                             dimension1.atributeVal = DimDesc
                             dimension1.save()
                     if VenName != None and i>0:
-                        print("Hay vendor.....")
+                        # print("Hay vendor.....")
                         if vendor.objects.filter(vendorName=VenName):
                             vendor1 = vendor.objects.get(vendorName=VenName)
                         else:
@@ -2855,12 +2856,12 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            print("Form is valid")
+            # print("Form is valid")
             username = form.cleaned_data["username"]
             userAux=User.objects.get(username=form.cleaned_data["username"])
-            print(username)
-            print(form)
-            print(type(form))
+            # print(username)
+            # print(form)
+            # print(type(form))
             profileAux = Profile()
             profileAux.ventas = False
             profileAux.bodega = False
@@ -2904,8 +2905,8 @@ def cart(request,val):
     cartIdPasar = request.POST.get("cartN")
     
     if request.method == "POST":
-        print("Entra al POST")
-        print(request.POST)
+        # print("Entra al POST")
+        # print(request.POST)
         if request.POST.get("cartN") == None:
             cartIdPasar = request.POST.get("cartPasar")
         else:
@@ -2914,24 +2915,24 @@ def cart(request,val):
         spCart = spareCart.objects.values("spareId","nameUser").filter(nameUser=val).distinct().order_by("spareId")
 
         # print(request.POST)
-        if request.POST.get("cartOpen"):
-            print("Manda a abrir")
+        # if request.POST.get("cartOpen"):
+        #     print("Manda a abrir")
         if request.POST.get("cartDelete"):
-            print("Manda a borrar")
+            # print("Manda a borrar")
             cartDelete=spareCart.objects.filter(spareId=request.POST.get("cartN"))
-            print(cartDelete)
+            # print(cartDelete)
             cartDelete.delete()
         # spCart = spareCart.objects.values("spareId","nameUser").filter(spareId=request.POST.get("cartN"),nameUser=val).distinct()
 
         delist = request.POST.getlist("toDel")
         if delist:
-            print("Entra a delist para borrar individualmente")
+            # print("Entra a delist para borrar individualmente")
             cartElementDelete=spareCart.objects.filter(spareId=request.POST.get("cartPasar"))
             for el in cartElementDelete:
                 for de in delist:
                     if el.spareCode == de:
-                        print("Debe borrar")
-                        print(de)
+                        # print("Debe borrar")
+                        # print(de)
                         el.delete()
             spCartPost = spareCart.objects.filter(spareId=request.POST.get("cartPasar"))
             
@@ -6245,6 +6246,7 @@ def contByRange(request):
     custAcum = 0
     acumTablaTotales = 0
     acumTablaTotalesCat = 0
+    totalcito = 0
 
     tod = request.POST.get("searchDate")
 
@@ -6276,6 +6278,8 @@ def contByRange(request):
         acum = 0
         allTypesCustom = factType.objects.all()
         totalParcialOp = {}
+
+        # ----------- Recorrido largo ----------------
         
         for ty in allTypesCustom:
             facAuxAll = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refType=ty).exclude(pendiente=False,refType__facCobrar=True)
@@ -6368,38 +6372,30 @@ def contByRange(request):
                     costomInd.save()
                 
             custAcum = 0
+
+        # ------- Termina recorrido largo -----------------
            
-        cantAuxOp = tableOperacion.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
+        cantAuxOp = tableOperacion.objects.all().values("tabNombre","principal","suma").order_by("tabNombre").distinct()
 
         realAcum = 0
 
         for nom in cantAuxOp:
 
-            aux1 = tableOperacion.objects.filter(tabNombre=nom["tabNombre"]).values("tabNombre","tabTipo__nombre","suma").distinct()
-            aux2 = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo).exclude(pendiente=False,refType__facCobrar=True)
-
+            aux1 = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date__gte=dateFrom,fecha__date__lte=dateTo).all()
+            print(aux1)
+            print("...")
+            # print(aux1[0])
             for a in aux1:
-
-                for b in aux2:
-
-                    if a["tabTipo__nombre"] == b.refType.nombre:
-
-                        acum = acum + b.total
-
-                if a["suma"]==True:
-                    realAcum = realAcum + acum
-                else:
-                    realAcum = realAcum - acum
-                    
-                acum = 0
-
-            if nom["principal"] == True:
-
-                acumTablaTotales = acumTablaTotales + realAcum
-
-            totalParcialOp[nom["tabNombre"]] = realAcum
-
-            realAcum = 0
+                print("Tipo: "+str(a.tabTipo)+" Total: "+str(a.tabTotal))
+            # print(aux1["tabNombre"])
+            totalcito = aux1.aggregate(Sum("tabTotal"))
+            print("Total: "+str(totalcito["tabTotal__sum"]))
+            print(totalcito["tabTotal__sum"])
+            if nom["suma"]:
+                totalParcialOp[nom["tabNombre"]] = totalcito["tabTotal__sum"]
+            else:
+                totalParcialOp[nom["tabNombre"]] = totalcito["tabTotal__sum"]*(-1)
+            print("-------------------------------------------")
 
         cantAuxOp = tableOperacionAux.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAuxOp = tableOperacionAux.objects.all().order_by("tabTipo__nombre")
@@ -6448,37 +6444,56 @@ def contByRange(request):
                 
             custAcum = 0
            
-        cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre","principal").distinct()
+        cantAuxOpCat = tableOperacionCat.objects.all().values("tabNombre","principal","suma").distinct()
 
         realAcum = 0
 
         for nom in cantAuxOpCat:
 
-            aux1 = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"]).values("tabNombre","tabCat__nombre","suma").distinct()
-            aux2 = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
-
+            aux1 = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],fecha__date__gte=dateFrom,fecha__date__lte=dateTo).all().distinct()
+            totalcito = aux1.aggregate(Sum("tabTotal"))
+            print("Tabla: "+nom["tabNombre"])
+            print(aux1)
             for a in aux1:
+                print(a.tabNombre)
+                print(a.tabCat)
+                print(a.tabTotal)
+                # print("Cat: "+str(aux1.tabCat__nombre))
+                # print("Total: "+str(aux1.suma))
+            print("..")
+            print("totalcito: "+str(totalcito))
+            if nom["suma"]:
+                totalParcialOpCat[nom["tabNombre"]] = totalcito["tabTotal__sum"]
+            else:
+                totalParcialOpCat[nom["tabNombre"]] = totalcito["tabTotal__sum"]*(-1)
 
-                for b in aux2:
+        # for nom in cantAuxOpCat:
 
-                    if a["tabCat__nombre"] == b.refCategory.nombre:
+        #     aux1 = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"]).values("tabNombre","tabCat__nombre","suma").distinct()
+        #     aux2 = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo)
 
-                        acum = acum + b.total
+        #     for a in aux1:
 
-                if a["suma"]==True:
-                    realAcum = realAcum + acum
-                else:
-                    realAcum = realAcum - acum
+        #         for b in aux2:
+
+        #             if a["tabCat__nombre"] == b.refCategory.nombre:
+
+        #                 acum = acum + b.total
+
+        #         if a["suma"]==True:
+        #             realAcum = realAcum + acum
+        #         else:
+        #             realAcum = realAcum - acum
                     
-                acum = 0
+        #         acum = 0
 
-            if nom["principal"] == True:
+        #     if nom["principal"] == True:
 
-                acumTablaTotalesCat = acumTablaTotalesCat + realAcum
+        #         acumTablaTotalesCat = acumTablaTotalesCat + realAcum
 
-            totalParcialOpCat[nom["tabNombre"]] = realAcum
+        #     totalParcialOpCat[nom["tabNombre"]] = realAcum
 
-            realAcum = 0
+        #     realAcum = 0
 
         cantAuxOpCat = tableOperacionAuxCat.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAuxOpCat = tableOperacionAuxCat.objects.all().order_by("tabCat__nombre")
@@ -11114,17 +11129,30 @@ def accountDay(request):
 
     tod = datetime.now().date()
 
+    dayAux = tod
+
+    dateFrom = tod
+    dateTo = tod
+
+    searchMetodo = "today"
+
     factureName = factura.objects.filter(fechaCreado=tod).order_by("refType__nombre","refCategory__nombre","total")
 
     if request.method == "POST":
 
         if request.POST.get("search") == "byDay":
 
-            dayAux = request.POST.get("searchDateFrom")
+            searchMetodo = "day"
 
-            tod = dayAux
+            tod = request.POST.get("searchDateFrom")
 
-            factureName = factura.objects.filter(fechaCreado=dayAux).order_by("refType__nombre","refCategory__nombre","total")
+            # tod = dayAux
+
+            factureName = factura.objects.filter(fechaCreado=tod).order_by("refType__nombre","refCategory__nombre","total")
+
+            dayAux = factureName[0].fechaCreado.date()
+            # dayAux = tod
+            # tod = request.POST.get("searchDateFrom")
 
     cont = 0
     cont2 = 0
@@ -11152,9 +11180,131 @@ def accountDay(request):
     facturesToCollect = len(allFacturesToCollect)
     facturesToPay = len(allFacturesToPay)
 
-    dic = {"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
+    dic = {"dayAux":dayAux,"searchMetodo":searchMetodo,"dateFrom":dateFrom,"dateTo":dateTo,"tod":tod,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"balanceTotal":balanceTotal,"balance":balance,"factureName":factureName}
 
     return render(request,"spareapp/accountDay.html",dic)
+
+def filterAccountDay(request):
+
+    print("Entra en filterAccountDay --------------------------------")
+
+    print(request.GET)
+
+    dateFrom = request.GET.get("dateFrom")
+    dateTo = request.GET.get("dateTo")
+    tod = datetime.now().date()
+
+    if request.GET.get("searchDay"):
+        tod = dateFrom
+    else:
+        tod = tod
+
+    # fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
+    # fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
+
+    # print("dateFrom")
+    # print(dateFrom)
+    # print("tod")
+    # print(tod)
+
+    factureName = factura.objects.filter(fechaCreado__date=tod).order_by("fechaCreado","id")
+
+    total = 0
+    cont = 0
+    cont2 = 0
+    balanceFacMerc = 0
+    balance = {}
+    acumTotal = 0
+    deadlineDic = []
+    dateDic = []
+
+    for fac in factureName:
+
+        deadline = datetime.now().date() - fac.fechaCreado.date()
+        deadlineDic.append(deadline.days)
+        dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+        if (fac.refType.ingreso == True and fac.refType.facCobrar == False) or fac.refType.mercPagar == True:
+
+            cont = cont + float(str(fac.total).replace(",","."))
+            cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
+
+        else:
+
+            cont = cont - float(str(fac.total).replace(",","."))
+            cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
+        
+        balance[fac.id] = cont
+
+    acumTotal = cont2
+
+
+    # for fac in factureName:
+
+        # deadline = datetime.now().date() - fac.fechaCreado.date()
+        # deadlineDic.append(deadline.days)
+        # dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
+
+    #     if fac.refCategory.ingreso:
+
+    #         # cont = cont
+    #         cont = cont + fac.total
+
+    #         if fac.refType.facCobrar==True:
+
+    #             cont = cont + fac.total
+    #             if fac.pendiente == True:
+    #                 balanceFacMerc = balanceFacMerc + fac.total
+
+    #         if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
+
+    #             cont = cont - fac.total
+        
+    #     else:
+
+    #         cont = cont - fac.total
+    #         # cont = cont
+
+    #         if fac.refType.mercPagar==True:
+
+    #             if fac.nc == True:
+    #                 cont = cont + fac.total
+    #             else:
+    #                 cont = cont - fac.total
+
+    #             # cont = cont - fac.total
+    #             if fac.pendiente == True:
+    #                 balanceFacMerc = balanceFacMerc - fac.total
+            
+    #         if fac.refCategory.nombre=="Mercancia credito pagada":
+
+    #             cont = cont + fac.total
+
+    #     balance[fac.id] = [cont,fac.total]
+    #     acumTotal = cont
+
+    print("acumTotal")
+    print(acumTotal)
+
+    if factureName:
+
+        dayFrom = factureName[0].fechaCreado.date()
+        dayTo = factureName[len(factureName)-1].fechaCreado.date()
+
+    allFacturesQuery = list(factureName.values())
+
+    factureName = factura.objects.filter(fechaCreado__date=tod).values("refPersona__nombre","refCategory__nombre","refType__nombre").order_by("fechaCreado","id")
+
+    allTypesQuery = list(factureName)
+
+    # print(allTypesQuery)
+    # print("..........")
+    # for fac in allTypesQuery:
+    #     print(fac.refPersona)
+
+    return JsonResponse({"allTypesQuery":allTypesQuery,"dateDic":dateDic,"dayFrom":dayFrom,"dayTo":dayTo,"dateTo":dateTo,"dateFrom":dateFrom,"acumTotal":acumTotal,"allFacturesQuery":allFacturesQuery})
+
+    
 
 def deleteFac(request,val):
 
@@ -14356,25 +14506,25 @@ def contCargarDb(request):
         facturasDelete = factura.objects.all()
         factTypeDelete = factType.objects.all()
         factCategoryDelete = factCategory.objects.all()
-        spareDelete = spare.objects.all()
-
-        for fac in facturasDelete:
-
-            fac.delete()
-
-        for fac in factTypeDelete:
-
-            fac.delete()
-
-        for fac in factCategoryDelete:
-
-            fac.delete()
-
-        for fac in spareDelete:
-
-            fac.delete()
+        spareDelete = spare.objects.all()        
 
         if request.FILES.get("cargar"):
+
+            for fac in facturasDelete:
+
+                fac.delete()
+
+            for fac in factTypeDelete:
+
+                fac.delete()
+
+            for fac in factCategoryDelete:
+
+                fac.delete()
+
+            for fac in spareDelete:
+
+                fac.delete()
 
             archivo = request.FILES['cargar'].read()
             data = json.loads(archivo)
