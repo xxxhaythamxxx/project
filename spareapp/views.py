@@ -13238,6 +13238,8 @@ def contListClienteTables(request):
 
     if request.method == "POST":
 
+        print("Entra en POST")
+
         lista = persona.objects.all().order_by("nombre")
 
         for li in lista:
