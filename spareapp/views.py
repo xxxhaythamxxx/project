@@ -10432,6 +10432,10 @@ def contTotalDay(request):
 
 def contIndividual(request,val):
 
+    print("Id: "+str(val))
+    dayFrom = ""
+    dayTo = ""
+
     tod = datetime.now().date()
     acumTotal = 0
     balanceFacMerc = 0
@@ -10443,7 +10447,11 @@ def contIndividual(request,val):
 
     allCustomers = persona.objects.all().order_by("nombre")
     personaAux = persona.objects.get(id=val)
+    print(personaAux)
+    print(personaAux.id)
+    print(type(personaAux))
     factureName = factura.objects.filter(refPersona=personaAux).order_by("fechaCreado","id")
+    print(factureName)
     balance = {}
     cont = 0
     balanceTotal = 0
@@ -10483,8 +10491,9 @@ def contIndividual(request,val):
 
     balanceTotal = cont
 
-    dayFrom = factureName[0].fechaCreado.date()
-    dayTo = factureName[len(factureName)-1].fechaCreado.date()
+    if factureName:
+        dayFrom = factureName[0].fechaCreado.date()
+        dayTo = factureName[len(factureName)-1].fechaCreado.date()
 
     # acumTotal = 0
 
@@ -13005,7 +13014,7 @@ def contDayBackRange(request,val,val2):
 def searchTable(request):
 
     pos = 0
-
+    cont = 0
     personaVarios = ""
 
     factureName = ""
@@ -13230,7 +13239,9 @@ def contAddCliente(request):
 
         dic = {"borrar":borrar,"allTablesNombres":allTablesNombres}
 
-        return render(request,"spareapp/contListClienteTables.html",dic)
+        return redirect("contListClienteTables")
+
+        # return render(request,"spareapp/contListClienteTables.html",dic)
 
     return render(request,"spareapp/contAddCliente.html")
 
@@ -13238,15 +13249,10 @@ def contListClienteTables(request):
 
     if request.method == "POST":
 
-        print("Entra en POST")
-
         lista = persona.objects.all().order_by("nombre")
 
         for li in lista:
 
-            # print(request.POST.get("persona"+str(li.id)))
-            # auxPer = persona.objects.filter(id=request.POST.get("persona"+str(li.id)))
-            # print(auxPer)
             principal = persona.objects.get(id=li.id)
 
             comparar = request.POST.get("nombre"+str(li.id))
@@ -13254,16 +13260,6 @@ def contListClienteTables(request):
             compIngreso = request.POST.get("ingreso"+str(li.id))
             compEgreso = request.POST.get("egreso"+str(li.id))
             perId = request.POST.get("identificador"+str(li.id))
-            print("........................")
-            print("Nombre: "+str(comparar))
-            print("Identificacion: "+str(compIdentificacion))
-            print("Ingreso: "+str(compIngreso))
-            if compIngreso:
-                print("Es ingreso")
-            else:
-                print("Es gasto")
-            print("Gasto: "+str(compEgreso))
-            print("Id: "+str(perId))
 
             if principal.nombre == comparar:
                 pass
@@ -13408,7 +13404,9 @@ def deleteClienteTable(request,val):
 
     dic = {"borrar":borrar,"allTablesNombres":allTablesNombres}
 
-    return render(request,"spareapp/contListClienteTables.html",dic)
+    return redirect("contListClienteTables")
+
+    # return render(request,"spareapp/contListClienteTables.html",dic)
 
 def contAddOperacion(request):
 
