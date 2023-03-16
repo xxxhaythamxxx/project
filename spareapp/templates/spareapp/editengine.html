@@ -68,6 +68,59 @@
         </div>
 
         <div class="mb-3">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Make</label>
+                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example" required>
+                        <option value="" selected>Select manufacturer</option>
+                        {% for sp in allEnginesMake %}
+                        {% if sp.id == sparefind.0.id %}
+                        <option value="{{sp.engine_manufacturer}}" selected>{{sp.engine_manufacturer}}</option>
+                        {% else %}
+                        <option value="{{sp.engine_manufacturer}}">{{sp.engine_manufacturer}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal3" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal ------------------------- -->
+            <div tabindex="-1" id="categoryModal3" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="categoryModalLabel">Add a maker</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container col-lg-12">
+                                <div id="firstCategory" action="" method="POST">
+                                    <div class="mb-3">
+                                        <label for="categor" class="form-label">Maker name</label>
+                                        <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categorHelp">
+                                    </div>
+                                    <button id="" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="submitButton" type="button" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
             <label for="litresfill" class="form-label">Litres</label>
             <input value="{{sparefind.0.engine_l}}" type="text" class="form-control" name="litresfill" id="litresfill" aria-describedby="litresfillHelp">
         </div>
@@ -147,7 +200,25 @@
 </div>
 
 <script>
+// Agregar modal Make
+$("#submitButton").click(function(e){
+    e.preventDefault()
 
+    cat = $("#categor").val()
+
+    $.ajax({
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+        
+        success: function(){
+            console.log("Success")
+
+            $("#manufactur").append("<option value='"+cat+"' selected>"+cat+"</option>")
+            $(".btn-close").click()
+        }
+    })
+})
 
 // Mostrar a ambos lados los car info que se tienen -------------------------------------
 $("#carcodPasar option").each(function(){

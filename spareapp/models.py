@@ -22,6 +22,7 @@ class car(models.Model):
 
 class engine(models.Model):
     car_engine_info=models.ManyToManyField(car,blank=True,null=True)
+    engine_manufacturer=models.CharField(max_length=30, verbose_name="Manufacturer", blank=True,null=True)
     engine_l=models.CharField(max_length=10, verbose_name="Litre",blank=True,null=True)             #Ejemplo: 1.8 D
     engine_ide=models.CharField(max_length=80, verbose_name="Code",blank=True,null=True)          #Ejemplo: 1GRFE
     engine_type=models.CharField(max_length=15, verbose_name="Type",blank=True,null=True)         #Ejemplo: Diesel, Petrol

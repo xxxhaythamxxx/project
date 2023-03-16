@@ -1027,17 +1027,20 @@ def fillengine(request):
     allSparesall=spare.objects.all()
     allCategories=category.objects.all().order_by("category")
     allEngines=engine.objects.all()
+    allEnginesMake=engine.objects.all().exclude(engine_manufacturer=None).values("id","engine_manufacturer").distinct()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
-    dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"allEnginesMake":allEnginesMake,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
         # print("Entra en el POST de fillengine")
         engine1 = engine()
+        engine1.engine_manufacturer = request.POST.get("manufactur")
+        print(request.POST.get("manufactur"))
         engine1.engine_l = request.POST.get("litresfill")
         engine1.engine_ide = request.POST.get("codefill")
         engine1.engine_type = request.POST.get("typefill")
@@ -1107,6 +1110,7 @@ def editengine(request,val):
     allSparesall=spare.objects.all()
     allCategories=category.objects.all().order_by("category")
     allEngines=engine.objects.all()
+    allEnginesMake=engine.objects.all().exclude(engine_manufacturer=None).values("id","engine_manufacturer").distinct()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
@@ -1118,7 +1122,7 @@ def editengine(request,val):
     auxCar = car.objects.filter(engine__engine_ide = val)
 
     sparefind = engine.objects.filter(engine_ide=val)
-    dic={"auxCar":auxCar,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"allEnginesMake":allEnginesMake,"auxCar":auxCar,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
         engine1.engine_l = request.POST.get("litresfill")
@@ -7030,9 +7034,9 @@ def contCollectFac(request,val):
 
     # return redirect("/contToPay",dic)
     # return redirect("/contToCollect")
-    return render(request,"spareapp/contToCollect.html",dic)
+    # return render(request,"spareapp/contToCollect.html",dic)
 
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contPayFac(request,val):
 
@@ -7617,9 +7621,9 @@ def contPayFac(request,val):
 
     dic = {"allFacturesModal":allFacturesModal,"dateFrom":dateFrom,"dateTo":dateTo,"dayFrom":dayFrom,"dayTo":dayTo,"iva":acumIva,"searchMetodo":searchMetodo,"filtro":filtro,"checkeado":checkeado,"deadlineDic":deadlineDic,"totalTotal":acum2,"montoTotal":acum,"allTypes":allTypes,"allFacturesPay":allFacturesPay,"totalParcialOpCat":totalParcialOpCat,"tableAuxCat":tableAuxCat,"tableAuxOpCat":tableAuxOpCat,"cantAuxOpCat":cantAuxOpCat,"tableAuxOp":tableAuxOp,"cantAuxOp":cantAuxOp,"contTotal":contTotal,"factAux":factAux,"tod":tod,"allTypes":allTypes,"editPrueba":editPrueba,"allFacturesToPay":allFacturesToPay,"allFacturesToCollect":allFacturesToCollect,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect}
 
-    return render(request,"spareapp/contToPay.html",dic)
+    # return render(request,"spareapp/contToPay.html",dic)
     # return redirect("/contToPay",dic)
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contPayFacType(request,val,val2,val3):
 
@@ -9717,7 +9721,12 @@ def accountStat(request):
                     
                     if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                        cont = cont + fac.total
+                        if fac.nc == False:
+                            cont = cont + fac.total
+                        else:
+                            cont = cont - fac.total
+
+                        # cont = cont + fac.total
 
                 balance[fac.id] = [cont,fac.total]
 
@@ -9766,6 +9775,9 @@ def accountStat(request):
     facturesToPay = len(allFacturesToPay)
 
     tod = datetime.now().date()
+
+    # print(acumTotal)
+    # print(balance)
 
     dic = {"dateFrom":dateFrom,"dateTo":dateTo,"searchMetodo":searchMetodo,"auxNombre":auxNombre,"acumTotal":acumTotal,"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
@@ -10476,11 +10488,21 @@ def contIndividual(request,val):
 
             if fac.refType.mercPagar==True:
 
-                cont = cont - fac.total
+                if fac.nc == True:
+                    cont = cont + fac.total
+                else:
+                    cont = cont - fac.total
+
+                # cont = cont - fac.total
             
             if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                cont = cont + fac.total
+                if fac.nc == False:
+                    cont = cont + fac.total
+                else:
+                    cont = cont - fac.total
+
+                # cont = cont + fac.total
 
         # if fac.pendiente == True and  fac.refType.gasto == True:
         #     balance[fac.id] = [cont,fac.total*(-1)]
@@ -10561,13 +10583,23 @@ def contIndividual(request,val):
 
                 if fac.refType.mercPagar==True:
 
-                    cont = cont - fac.total
+                    if fac.nc == True:
+                        cont = cont + fac.total
+                    else:
+                        cont = cont - fac.total
+
+                    # cont = cont - fac.total
                     if fac.pendiente == True:
                         balanceFacMerc = balanceFacMerc - fac.total
                 
                 if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                    cont = cont + fac.total
+                    if fac.nc == False:
+                        cont = cont + fac.total
+                    else:
+                        cont = cont - fac.total
+
+                    # cont = cont + fac.total
 
             # if fac.pendiente == True and fac.refType.gasto == True:
             #     balance[fac.id] = [cont,fac.total*(-1)]
@@ -10670,29 +10702,23 @@ def contIndividual(request,val):
 
                     cont = cont
 
-                    if fac.nc == True:
+                    if fac.refType.mercPagar==True:
 
-                        if fac.refType.mercPagar==True:
-
+                        if fac.nc == True:
                             cont = cont + fac.total
-                            if fac.pendiente == True:
-                                balanceFacMerc = balanceFacMerc - fac.total
+                        else:
+                            cont = cont - fac.total
+
+                        # cont = cont - fac.total
+                        if fac.pendiente == True:
+                            balanceFacMerc = balanceFacMerc - fac.total
                     
-                        if fac.refCategory.nombre=="Mercancia credito pagada":
+                    if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                            cont = cont - fac.total
-
-                    else:
-
-                        if fac.refType.mercPagar==True:
-
-                            cont = cont - fac.total
-                            if fac.pendiente == True:
-                                balanceFacMerc = balanceFacMerc - fac.total
-                        
-                        if fac.refCategory.nombre=="Mercancia credito pagada":
-
+                        if fac.nc == False:
                             cont = cont + fac.total
+                        else:
+                            cont = cont - fac.total
 
                 # if fac.pendiente == True and fac.refType.gasto == True:
                 #     balance[fac.id] = [cont,fac.total*(-1)]
@@ -13059,11 +13085,21 @@ def searchTable(request):
 
                 if fac.refType.mercPagar==True:
 
-                    cont = cont - fac.total
+                    if fac.nc == True:
+                        cont = cont + fac.total
+                    else:
+                        cont = cont - fac.total
+
+                    # cont = cont - fac.total
+                    if fac.pendiente == True:
+                        balanceFacMerc = balanceFacMerc - fac.total
                 
                 if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                    cont = cont + fac.total
+                    if fac.nc == False:
+                        cont = cont + fac.total
+                    else:
+                        cont = cont - fac.total
 
             balance[fac.id] = [cont,fac.total]
 
@@ -13172,11 +13208,21 @@ def searchTable(request):
 
                         if fac.refType.mercPagar==True:
 
-                            cont = cont - fac.total
+                            if fac.nc == True:
+                                cont = cont + fac.total
+                            else:
+                                cont = cont - fac.total
+
+                            # cont = cont - fac.total
+                            if fac.pendiente == True:
+                                balanceFacMerc = balanceFacMerc - fac.total
                         
                         if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                            cont = cont + fac.total
+                            if fac.nc == False:
+                                cont = cont + fac.total
+                            else:
+                                cont = cont - fac.total
 
                     balance[fac.id] = [cont,fac.total]
 
@@ -13846,11 +13892,21 @@ def editeFactAccount(request,val,val1,val2):
 
                         if fac.refType.mercPagar==True:
 
-                            cont = cont - fac.total
+                            if fac.nc == True:
+                                cont = cont + fac.total
+                            else:
+                                cont = cont - fac.total
+
+                            # cont = cont - fac.total
+                            if fac.pendiente == True:
+                                balanceFacMerc = balanceFacMerc - fac.total
                         
                         if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                            cont = cont + fac.total
+                            if fac.nc == False:
+                                cont = cont + fac.total
+                            else:
+                                cont = cont - fac.total
 
                     # if fac.pendiente == True and  fac.refType.gasto == True:
                     #     balance[fac.id] = [cont,fac.total*(-1)]
@@ -16465,7 +16521,12 @@ def filterAccountStat(request):
                 
                 if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                    cont = cont + fac.total
+                    if fac.nc == False:
+                        cont = cont + fac.total
+                    else:
+                        cont = cont - fac.total
+
+                    # cont = cont + fac.total
 
             balance[fac.id] = [cont,fac.total]
             acumTotal = cont
@@ -16796,7 +16857,12 @@ def filterAccountStat(request):
             
             if fac.refCategory.nombre=="Mercancia credito pagada":
 
-                cont = cont + fac.total
+                if fac.nc == False:
+                    cont = cont + fac.total
+                else:
+                    cont = cont - fac.total
+
+                # cont = cont + fac.total
 
         balance[fac.id] = [cont,fac.total]
         acumTotal = cont
