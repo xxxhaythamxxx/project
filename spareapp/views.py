@@ -1040,7 +1040,7 @@ def fillengine(request):
         # print("Entra en el POST de fillengine")
         engine1 = engine()
         engine1.engine_manufacturer = request.POST.get("manufactur")
-        print(request.POST.get("manufactur"))
+        # print(request.POST.get("manufactur"))
         engine1.engine_l = request.POST.get("litresfill")
         engine1.engine_ide = request.POST.get("codefill")
         engine1.engine_type = request.POST.get("typefill")
@@ -2308,23 +2308,34 @@ def importCar(request):
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
+    checkear = 0
+    linea=""
 
     # print(request.POST)
 
     if "phot" in request.FILES:
+        checkear = 0
         # print("Hay archivo")
 
         FILE_PATH = request.FILES['phot']
+        # print(FILE_PATH)
         
         # FILE_PATH = "prueba.xlsx"
 
         workbook = load_workbook(FILE_PATH)
+        # print(workbook)
         sheet = workbook.active
+        # print(sheet)
+        # print(sheet.calculate_dimension())
 
         maxCol = []
         maxRow = []
 
         for col in sheet.iter_rows():
+            # print(col)
+            # if col:
+                # print(col)
+            # print(col)
             maxCol.append(col)
         
         i=0
@@ -2332,25 +2343,35 @@ def importCar(request):
         poscar_model = -1
         poscarfrom = -1
         poscarto = -1
+        postchasis = -1
         postransmission = -1
+        postengine = -1
         cont = 0
+        # print(maxCol)
         for fil in maxCol:
+            # print(fil)
             j=0
             for col in fil:
-                if col.value == "manufacturer":
+                if col.value == "MAKE":
                     poscar_manufacturer = j
                     cont = cont + 1
-                if col.value == "model":
+                if col.value == "MODEL":
                     poscar_model = j
                     cont = cont + 1
-                if col.value == "from":
+                if col.value == "FROM":
                     poscarfrom = j
                     cont = cont + 1
-                if col.value == "to":
+                if col.value == "TO":
                     poscarto = j
                     cont = cont + 1
-                if col.value == "chasis":
+                if col.value == "CHASIS":
+                    postchasis = j
+                    cont = cont + 1
+                if col.value == "TRANSMISION":
                     postransmission = j
+                    cont = cont + 1
+                if col.value == "ENGINE(LITERS/CODE/VALVES/OHC)":
+                    postengine = j
                     cont = cont + 1
                 j=j+1
             i=i+1
@@ -2363,19 +2384,49 @@ def importCar(request):
                 if i>0:
                     car1 = car()
                 for col in fil:
+                    # print(col.value)
                     if i>0:
+                        # print("Valor de i: "+str(i))
                         if j == poscar_manufacturer:
+                            # print(col.value)
                             car1.car_manufacturer = col.value
+                            if car.objects.filter(car_manufacturer=col.value):
+                                # print("Entra en MAKE")
+                                checkear = checkear + 1
                         if j == poscar_model:
                             car1.car_model = col.value
+                            if car.objects.filter(car_model=col.value):
+                                # print("Entra en MODEL")
+                                checkear = checkear + 1
                         if j == poscarfrom:
                             car1.carfrom = col.value
                         if j == poscarto:
                             car1.carto = col.value
-                        if j == postransmission:
+                        if j == postchasis:
                             car1.transmission = col.value
-                        car1.save()
+                            if car.objects.filter(transmission=col.value):
+                                # print("Entra en CHASIS")
+                                checkear = checkear + 1
+                        # if j == postransmission:
+                        #     car1.transmission = col.value
+                            # if car.objects.filter(transmission=col.value):
+                            #     print("Entra en TRANSMISION")
+                            #     print(col.value)
+                                # checkear = checkear + 1
+                        if j == postengine:
+                            print("Entra en Engine")
+                            print(col.value)
+                            # print(type(col.value))
+                            linea = col.value.split("\n")
+                            print(linea)
+                            # car1.carto = col.value
+                        # print("checkear")
+                        # print(checkear)
+                        
                     j=j+1
+                # if checkear<3 and i>0:
+                #     car1.save()
+                checkear = 0
                 i=i+1
 
     dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
@@ -13047,7 +13098,11 @@ def searchTable(request):
     auxNombre = ""
     searchMetodo = ""
 
+    balanceFacMerc = 0
+
     if request.method == "POST":
+
+        balanceFacMerc = 0
 
         tod = datetime.now().date()
         print("Entra a searchTable POST")
@@ -13752,6 +13807,8 @@ def editeFactAccount(request,val,val1,val2):
     print(val1)
     print(val2)
 
+    balanceFacMerc = 0
+
     dayFrom = ""
     dayTo = ""
     auxNombre = ""
@@ -13784,6 +13841,8 @@ def editeFactAccount(request,val,val1,val2):
     facAuxAllCat = ""
 
     if request.method == "POST":
+
+        balanceFacMerc = 0
 
         searchMetodo = "all"
 
