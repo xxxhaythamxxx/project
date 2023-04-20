@@ -9,17 +9,105 @@
 <div class="container invoicecont mt-5">
     <div class="row d-flex justify-content-center">
         <div class="col-lg-5">
-            <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by code, description, category or vendor">
+            <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by code, litres, type or valve">
         </div>
     </div>
 
-    <table class="invoice invoicefill table-striped mt-3">
+    <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
+
+    <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
+        <div style="font-size: small; font-weight: bold;" id="Code" onclick="filtrar('Code')" class="trsup color col-3 py-2">Code</div>
+        <div style="font-size: small; font-weight: bold;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-2 py-2">Litre</div>
+        <div style="font-size: small; font-weight: bold;" id="Type" onclick="filtrar('Type')" class="trsup color col-3 py-2">Type</div>
+        <div style="font-size: small; font-weight: bold;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-2 py-2">Valve</div>
+        <div style="font-size: small; font-weight: bold;" class="trsup color col-2 py-2">Action</div>
+    </div>
+    <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
+        {% for br in allEngines %}
+        <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0">
+            {% if br.engine_ide %}
+                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_ide}}</a></div>
+            {% else %}
+                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if br.engine_l %}
+                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_l}}</a></div>
+            {% else %}
+                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if br.engine_type %}
+                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_type}}</a></div>
+            {% else %}
+                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if br.engine_cylinder %}
+                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_cylinder}}</a></div>
+            {% else %}
+                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            <div class="col-2"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div>
+            <!-- <div class="col"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div> -->
+        </div>
+
+        {% for a in allCarsEngines %}
+        {% if br.id == a.engine__id %}
+        <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_manufacturer}}</a></div>
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.chasis}}</a></div>
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_model}}</a></div>
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.carfrom}}</a></div>
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">
+            {% for b in allTrans %}
+            {% if a.id == b.car__id %}
+                {{b.trans}}
+            {% endif %}
+            {% endfor %}
+            </a></div>
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </div>
+    {% for br in allEngines %}
+    <div class="modal fade" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label">Caution</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Are you sure to eliminate the spare {{br.engine_ide}} ?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a id="deleteengine" class="btn btn-primary" href="{% url 'deleteengine' br.engine_ide %}">Delete</a>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+
+
+
+
+
+
+    <!-- <table class="invoice invoicefill table-striped mt-2">
         <thead>
             <tr class="text-white">
-                <th class="trsup color">Code</th>
-                <th class="trsup color">Litre</th>
-                <th class="trsup color">Type</th>
-                <th class="trsup color">Valve</th>
+                <th id="Code" onclick="filtrar('Code')" class="trsup color">Code</th>
+                <th id="Litre" onclick="filtrar('Litre')" class="trsup color">Litre</th>
+                <th id="Type" onclick="filtrar('Type')" class="trsup color">Type</th>
+                <th id="Valve" onclick="filtrar('Valve')" class="trsup color">Valve</th>
                 <th class="trsup color">Action</th>
             </tr>
         </thead>
@@ -73,7 +161,7 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+    </table> -->
 
 </div>
 
@@ -84,6 +172,181 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
     $(".invoicefill tbody tr").filter(function(){                             // 
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     })
+})
+
+function filtrar(a){
+
+    $("#cabeza div").each(function(f){
+        
+        $(this).html($(this).attr("id"))
+        
+        if(a==$(this).html()){
+            $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+        }
+        
+    })
+
+    $("#cabeza div input").each(function(){
+        $(this).select();
+    })
+    $("#cabeza div").each(function(f){
+        if($(this).find("input").attr("id")=="inputCode"){
+            $("#inputCode").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#cuerpo div div").filter(function(){
+                    if($(this).index()==0){
+                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    }
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputLitre"){
+            $("#inputLitre").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#cuerpo div div").filter(function(){
+                    if($(this).index()==1){
+                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    }
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputType"){
+            $("#inputType").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#cuerpo div div").filter(function(){
+                    if($(this).index()==2){
+                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    }
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputValve"){
+            $("#inputValve").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#cuerpo div div").filter(function(){
+                    if($(this).index()==3){
+                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    }
+                })
+            })
+        }
+    })
+}
+
+// function filtrar(a){
+
+//     $("table th input").each(function(){
+//         $(this).select();
+//     })
+
+//     $("table th").each(function(f){
+
+//         $(this).html($(this).attr("id"))
+
+//         if(a==$(this).html()){
+//             $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+//         }
+//     })
+//     $("table th input").each(function(){
+//         $(this).select();
+//     })
+
+//     $("table th").each(function(f){
+//         if($(this).find("input").attr("id")=="inputCode"){
+//             $("#inputCode").on("keyup",function(){
+//                 var value = $(this).val().toLowerCase()
+//                 $(".invoicefill tbody tr").filter(function(){
+//                     $(this).find("td").each(function(){
+//                         if($(this).index()==0){
+//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//                         }
+//                     })
+//                 })
+//             })
+//         }
+//         if($(this).find("input").attr("id")=="inputLitre"){
+//             $("#inputLitre").on("keyup",function(){
+//                 var value = $(this).val().toLowerCase()
+//                 $(".invoicefill tbody tr").filter(function(){
+//                     $(this).find("td").each(function(){
+//                         if($(this).index()==1){
+//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//                         }
+//                     })
+//                 })
+//             })
+//         }
+//         if($(this).find("input").attr("id")=="inputType"){
+//             $("#inputType").on("keyup",function(){
+//                 var value = $(this).val().toLowerCase()
+//                 $(".invoicefill tbody tr").filter(function(){
+//                     $(this).find("td").each(function(){
+//                         if($(this).index()==2){
+//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//                         }
+//                     })
+//                 })
+//             })
+//         }
+//         if($(this).find("input").attr("id")=="inputValve"){
+//             $("#inputValve").on("keyup",function(){
+//                 var value = $(this).val().toLowerCase()
+//                 $(".invoicefill tbody tr").filter(function(){
+//                     $(this).find("td").each(function(){
+//                         if($(this).index()==3){
+//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//                         }
+//                     })
+//                 })
+//             })
+//         }
+//     })
+// }
+
+function defecto(){
+    $("#cabeza div").each(function(f){
+        if($(this).attr("id")=="Code"){
+            $(this).html("Code")
+        }
+        if($(this).attr("id")=="Litre"){
+            $(this).html("Litre")
+        }
+        if($(this).attr("id")=="Type"){
+            $(this).html("Type")
+        }
+        if($(this).attr("id")=="Valve"){
+            $(this).html("Valve")
+        }
+        $("#cuerpo div").each(function(){
+            $(this).show()
+        })
+    })
+}
+
+// function defecto(){
+//     $("table th").each(function(f){
+//         if($(this).attr("id")=="Code"){
+//             $(this).html("Code")
+//         }
+//         if($(this).attr("id")=="Litre"){
+//             $(this).html("Litre")
+//         }
+//         if($(this).attr("id")=="Type"){
+//             $(this).html("Type")
+//         }
+//         if($(this).attr("id")=="Valve"){
+//             $(this).html("Valve")
+//         }        
+//     })
+//     $(".invoicefill tbody tr").each(function(){
+//         $(this).show()
+//     })
+// }
+
+$("#cuerpo").find("div").each(function(){
+    $(this).click(function(){
+        $("div[data-bs-toggle='"+$(this).attr('id')+"']").toggle(500)
+    });
 })
 </script>
 {% endblock %}

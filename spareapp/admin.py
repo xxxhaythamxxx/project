@@ -17,10 +17,11 @@ class spareResource(resources.ModelResource):
         model = spare
 
 class carAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    list_display=("car_manufacturer","car_model","transmission","carfrom","carto")
+    list_display=("car_manufacturer","car_model","carfrom","carto")
     search_fields=("car_manufacturer","car_model")
     list_filter=("car_manufacturer",)
     ordering = ('car_manufacturer', 'car_model')
+    filter_horizontal=["transmission"]
     resource_class = carResource
 
 class engineAdmin(admin.ModelAdmin):
@@ -156,6 +157,7 @@ class spareCartAdmin(admin.ModelAdmin):
     list_display=("spareId","spareCode","nameUser",)
     search_fields=("spareCode",)
 
+admin.site.register(transmission)
 admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)

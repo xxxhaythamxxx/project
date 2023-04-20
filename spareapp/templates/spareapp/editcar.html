@@ -6,7 +6,7 @@
 
 {% include "spareapp/fillsup.html" %}
 
-<div class="container mt-5 col-lg-4">
+<div class="container mt-5 col-lg-7">
 
     <form method="POST">
         {% csrf_token %}
@@ -122,13 +122,115 @@
             <label for="yeart" class="form-label">Year to</label>
             <input value="{{sparefind.0.carto}}" type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
         </div>
+
+        <!-- Transmision ---------------------------------------- -->
+        <div class="mb-3">
+            <label for="trans" class="form-label">Transmission</label>
+            <input placeholder="Search by transmission" type="text" class="form-control" name="trans" id="trans" aria-describedby="transHelp">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="color text-white p-2 m-2">Available Transmissions</div>
+                    <div class="container">
+                        <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
+                            {% for spr in allTrans|dictsort:"trans" %}
+                                <option class="p-1">{{spr}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="color text-white p-2 m-2">Chosen Transmisisons</div>
+                    <div class="container">
+                        <select class="form-select" multiple aria-label="multiple select example" name="engcartoReg" id="engcarcodPasado" size="5">
+                            {% for spr in auxTrans %}
+                                <option class="p-1">{{spr}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-1 d-flex align-items-center">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-10">
+                <div class="container d-flex justify-content-center">
+                    <div class="m-2">
+                        <a onClick="engcarpasar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                        </a>
+                    </div>
+                    <div class="m-2">
+                        <a onClick="engcarregresar()" href="javascript:void(0);" class="text-red" style="text-decoration: none;color: rgb(136,12,12);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                                </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="mb-3">
+            <label for="trans" class="form-label">Transmission</label>
+            {% if sparefind.0.transmission %}
+            <input value="{{sparefind.0.transmission}}" type="text" class="form-control" name="trans" id="trans" aria-describedby="transHelp">
+            {% else %}
+            <input value="" type="text" class="form-control" name="trans" id="trans" aria-describedby="transHelp">
+            {% endif %}
+        </div> -->
+
         <div class="mb-3">
             <label for="chasi" class="form-label">Chasis</label>
-            <input value="{{sparefind.0.transmission}}" type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
+            {% if sparefind.0.chasis %}
+            <input value="{{sparefind.0.chasis}}" type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
+            {% else %}
+            <input value="" type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
+            {% endif %}
         </div>
         <button id="formPass" type="submit" class="btn btn-primary">Update</button>
     </form>
+    <!-- Modal ------------------------------------------------------------------------------------->
+    <div tabindex="-1" id="categoryModal" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add a transmission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <!-- Agregar transmision --------------------------------------------------------------------- -->
+                    
+                    <div class="container mt-3 col-lg-12">
 
+                        <form action="{% url 'filltrans' %}" data-url="{% url 'filltrans' %}" id="secondForm" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="transmission" class="form-label">Transmision</label>
+                                <input type="text" class="form-control" name="transmission" id="transmission" aria-describedby="transmissionHelp" required>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button from="secondForm" id="secondFormSubmit" type="submit" class="btn btn-primary">Save</button>
+                            <input type="hidden" name="id" value="secondForm">
+                        </form>
+                    </div>
+                    <!-- ----------------------------------------------------------------------------------- -->
+                </div>
+                
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -183,6 +285,16 @@ $("#submitButton4").click(function(e){
             $("#model").append("<option value='"+cat+"' selected>"+cat+"</option>")
             $(".btn-close").click()
         }
+    })
+})
+
+// Arreglar los valores que se pasarán ------------------------------------------------
+$("#formPass").on("click",function(){
+    $("#engcarcodPasado option").each(function(){
+        $(this).attr("selected",true)
+    })
+    $("#engcarcodPasar option").each(function(){
+        $(this).attr("selected",true)
     })
 })
 </script>

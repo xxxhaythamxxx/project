@@ -194,7 +194,7 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
     $("#myTable tr:not(.tfoot)").each(function(){
         if ($(this).is(":visible")){
             $(this).find("td:not(.exclude)").each(function(){
-                if ($(this).index() == $("#thBalance").index()) {
+                if ($(this).index() == $("#Balance").index()) {
                     cont2 = cont2
 
                     if($(this).attr("auxIngreso")=="True"){
@@ -460,7 +460,7 @@ $("#entrySpending").change(function(){
         $("#myTable tr:not(.tfoot)").each(function(){
             if ($(this).is(":visible")){
                 $(this).find("td:not(.exclude)").each(function(){
-                    if ($(this).index() == $("#thBalance").index()) {
+                    if ($(this).index() == $("#Balance").index()) {
                         if($(this).attr("auxIngreso")=="True" && $(this).attr("auxCobrar")=="False" || $(this).attr("auxPagar")=="True"){
                             totalTotal = totalTotal + Math.abs(parseFloat($(this).attr("auxTotal").replace(',', '.')))
                             cont2 = cont2

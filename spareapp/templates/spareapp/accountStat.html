@@ -119,8 +119,13 @@
 </div>
 
 <div class="mt-2">
-    <div class="col-lg-5">
-        <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filtro... ">
+    <div class="row">
+        <div class="col-lg-5">
+            <input style="font-size: small;" type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Filtro... ">
+        </div>
+        <div class="col">
+            <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
+        </div>
     </div>
 </div>
 
@@ -139,14 +144,14 @@
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
     <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
-            <th style="position: sticky;top: 70;" class="p-2 include">Fecha</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Cliente</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Fact #</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Categoría</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Tipo de pago</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Monto</th>
-            <th id="thBalance" style="position: sticky;top: 70;" class="p-2 include">Balance</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Nota</th>
+            <th id="Fecha" ondblclick="filtrar('Fecha')" style="position: sticky;top: 70;" class="p-2 include">Fecha</th>
+            <th id="Cliente" ondblclick="filtrar('Cliente')" style="position: sticky;top: 70;" class="p-2 include">Cliente</th>
+            <th id="Fact" ondblclick="filtrar('Fact #')" style="position: sticky;top: 70;" class="p-2 include">Fact #</th>
+            <th id="Categoría" ondblclick="filtrar('Categoría')" style="position: sticky;top: 70;" class="p-2 include">Categoría</th>
+            <th id="Tipo" ondblclick="filtrar('Tipo de pago')" style="position: sticky;top: 70;" class="p-2 include">Tipo de pago</th>
+            <th id="Monto" ondblclick="filtrar('Monto')" style="position: sticky;top: 70;" class="p-2 include">Monto</th>
+            <th ondblclick="filtrar('Balance')" id="Balance" style="position: sticky;top: 70;" class="p-2 include">Balance</th>
+            <th id="Nota" ondblclick="filtrar('Nota')" style="position: sticky;top: 70;" class="p-2 include">Nota</th>
             <th style="position: sticky;top: 70;" id="check" class="p-2 exclude">Acción</th>
         </tr>
     </thead>
@@ -309,6 +314,9 @@ $("#cod").on("keyup",function(){
             $(".tfoot thead").empty()
             // alert(data.cont)
             for(var i = 0; i<data.allFacturesQuery.length;i++){
+                if(data.allFacturesQuery[i].num==null){
+                    data.allFacturesQuery[i].num=""
+                }
                 if(data.allFacturesQuery[i].pendiente == true){
                     if(data.allTypesQuery[i].refType__ingreso == true){
                         if(data.allFacturesQuery[i].nc == true){
@@ -740,6 +748,161 @@ $("input[name=search]").change(function(){
 
 $("#invoice").dragtable()
 
+function filtrar(a){
+
+    $("table th").each(function(f){
+
+        if($(this).attr("id")=="Fact"){
+            $(this).html("Fact #")
+        }else{
+            if($(this).attr("id")=="Tipo"){
+                $(this).html("Tipo de pago")
+            }else{
+                $(this).html($(this).attr("id"))
+            }
+        }
+
+        if(a==$(this).html()){
+            $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+        }
+    })
+    
+    $("table th input").each(function(){
+        $(this).select();
+    })
+    
+    $("table th").each(function(f){
+        if($(this).find("input").attr("id")=="inputFecha"){
+            $("#inputFecha").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==0){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputCliente"){
+            $("#inputCliente").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==1){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputFact"){
+            $("#inputFact").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==2){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputCategoría"){
+            $("#inputCategoría").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==3){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputTipo"){
+            $("#inputTipo").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==4){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputMonto"){
+            $("#inputMonto").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==5){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputBalance"){
+            $("#inputBalance").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==5){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputNota"){
+            $("#inputNota").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#myTable tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==5){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+    })
+
+}
+
+function defecto(){
+    $("table th").each(function(f){
+        if($(this).attr("id")=="Fecha"){
+            $(this).html("Fecha")
+        }
+        if($(this).attr("id")=="Cliente"){
+            $(this).html("Cliente")
+        }
+        if($(this).attr("id")=="Fact"){
+            $(this).html("Fact #")
+        }
+        if($(this).attr("id")=="Categoría"){
+            $(this).html("Categoría")
+        }
+        if($(this).attr("id")=="Tipo"){
+            $(this).html("Tipo de pago")
+        }
+        if($(this).attr("id")=="Monto"){
+            $(this).html("Monto")
+        }
+        if($(this).attr("id")=="Balance"){
+            $(this).html("Balance")
+        }
+        if($(this).attr("id")=="Nota"){
+            $(this).html("Nota")
+        }
+        $("#myTable tr").each(function(){
+            $(this).show()
+        })
+    })
+}
 
 </script>
 {% endif %}

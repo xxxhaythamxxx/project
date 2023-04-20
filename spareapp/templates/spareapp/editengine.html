@@ -71,7 +71,7 @@
             <div class="row">
                 <div class="col-lg-11">
                     <label for="" class="form-label">Make</label>
-                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example" required>
+                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example">
                         <option value="" selected>Select manufacturer</option>
                         {% for sp in allEnginesMake %}
                         {% if sp.id == sparefind.0.id %}
@@ -130,7 +130,11 @@
         </div>
         <div class="mb-3">
             <label for="typefill" class="form-label">Type</label>
+            {% if sparefind.0.engine_type %}
             <input value="{{sparefind.0.engine_type}}" type="text" class="form-control" name="typefill" id="typefill" aria-describedby="typefillHelp">
+            {% else %}
+            <input value="" type="text" class="form-control" name="typefill" id="typefill" aria-describedby="typefillHelp">
+            {% endif %}
             <div id="typefillHelp" class="form-text">Eg. Diesel, Petrol...</div>
         </div>
         <div class="mb-3">

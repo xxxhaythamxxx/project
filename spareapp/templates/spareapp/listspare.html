@@ -22,14 +22,16 @@
         </div> -->
     </div>
 
-    <table class="invoice invoicefill table-striped mt-3">
+    <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
+
+    <table class="invoice invoicefill table-striped mt-2 mb-3">
         <thead>
             <tr class="text-white">
-                <th class="trsup color">Code</th>
-                <th class="trsup color">Description</th>
-                <th class="trsup color">Category</th>
-                <th class="trsup color">SubCategory</th>
-                <th class="trsup color">Vendor</th>
+                <th id="Code" onclick="filtrar('Code')" style="max-width: 80;" class="trsup color">Code</th>
+                <th id="Description" onclick="filtrar('Description')" style="max-width: 150px;" class="trsup color">Description</th>
+                <th id="Category" onclick="filtrar('Category')" class="trsup color">Category</th>
+                <th id="SubCategory" onclick="filtrar('SubCategory')" class="trsup color">SubCategory</th>
+                <th id="Vendor" onclick="filtrar('Vendor')" class="trsup color">Vendor</th>
                 <th class="trsup color">Action</th>
             </tr>
         </thead>
@@ -37,15 +39,15 @@
             {% for br in allSparesall %}
             <tr>
                 {% if br.spare_code %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_code}}</a></td>
+                    <td style="max-width: 80;" class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_code}}</a></td>
                 {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
+                    <td style="max-width: 80;" class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.spare_name %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_name}}</a></td>
+                    <td style="max-width: 150px;" class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_name}}</a></td>
                 {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
+                    <td style="max-width: 150px;" class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.spare_category %}
@@ -117,5 +119,106 @@ $("#cod").on("keyup",function(){                                // Cuando se tec
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     })
 })
+
+function filtrar(a){
+
+    $("table th").each(function(f){
+
+        $(this).html($(this).attr("id"))
+
+        if(a==$(this).html()){
+            $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+        }
+    })
+    $("table th input").each(function(){
+        $(this).select();
+    })
+
+    $("table th").each(function(f){
+        if($(this).find("input").attr("id")=="inputCode"){
+            $("#inputCode").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $(".invoicefill tbody tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==0){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputDescription"){
+            $("#inputDescription").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $(".invoicefill tbody tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==1){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputCategory"){
+            $("#inputCategory").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $(".invoicefill tbody tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==2){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputSubCategory"){
+            $("#inputSubCategory").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $(".invoicefill tbody tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==3){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+        if($(this).find("input").attr("id")=="inputVendor"){
+            $("#inputVendor").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $(".invoicefill tbody tr").filter(function(){
+                    $(this).find("td").each(function(){
+                        if($(this).index()==3){
+                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        }
+                    })
+                })
+            })
+        }
+    })
+}
+
+function defecto(){
+    $("table th").each(function(f){
+        if($(this).attr("id")=="Code"){
+            $(this).html("Code")
+        }
+        if($(this).attr("id")=="Description"){
+            $(this).html("Description")
+        }
+        if($(this).attr("id")=="Category"){
+            $(this).html("Category")
+        }
+        if($(this).attr("id")=="SubCategory"){
+            $(this).html("SubCategory")
+        }
+        if($(this).attr("id")=="Vendor"){
+            $(this).html("Vendor")
+        }  
+    })
+    $(".invoicefill tbody tr").each(function(){
+        $(this).show()
+    })
+}
 </script>
 {% endblock %}

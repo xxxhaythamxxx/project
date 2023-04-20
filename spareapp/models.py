@@ -10,15 +10,22 @@ from django.contrib.auth.models import User
 # from flask_sqlalchemy import SQLAlchemy
 
 # Create your models here.
+class transmission(models.Model):
+    trans=models.CharField(max_length=20, verbose_name="Transmission", blank=True,null=True)
+
+    def __str__(self):
+        return '%s' %(self.trans)
+
 class car(models.Model):
     car_manufacturer=models.CharField(max_length=20, verbose_name="Manufacturer", blank=True,null=True)    #Ejemplo: Audi
     car_model=models.CharField(max_length=100, verbose_name="Model", blank=True,null=True)           #Ejemplo: 100 C1 Coupe (817)
     carfrom=models.IntegerField(verbose_name="From", blank=True,null=True)      #Ejemplo: 11/2015
     carto=models.IntegerField(verbose_name="To", blank=True,null=True)          #Ejemplo: 11/2018
-    transmission=models.CharField(max_length=10, verbose_name="Chasis", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
+    transmission=models.ManyToManyField(transmission, verbose_name="Transmision", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
+    chasis=models.CharField(max_length=10, verbose_name="Chasis", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
 
     def __str__(self):
-        return '%s %s,(%s / %s)' %(self.car_manufacturer, self.car_model, self.carfrom, self.carto)
+        return '%s %s %s' %(self.car_manufacturer, self.car_model, self.chasis)
 
 class engine(models.Model):
     car_engine_info=models.ManyToManyField(car,blank=True,null=True)
@@ -62,9 +69,9 @@ class vendor(models.Model):
         return '%s' %(self.vendorName)
 
 class spare(models.Model):
-    spare_code=models.CharField(max_length=15, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
-    spare_brand=models.CharField(max_length=20, verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
-    spare_name=models.CharField(max_length=80, verbose_name="Description",blank=True,null=True)          #Ejemplo: Oil filter
+    spare_code=models.CharField(max_length=40, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
+    spare_brand=models.CharField(max_length=40, verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
+    spare_name=models.CharField(max_length=400, verbose_name="Description",blank=True,null=True)          #Ejemplo: Oil filter
     car_info=models.ManyToManyField(car,blank=True,null=True)
     engine_info=models.ManyToManyField(engine,blank=True,null=True)
     # ChainedManyToManyField(

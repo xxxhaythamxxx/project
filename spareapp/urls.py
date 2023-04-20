@@ -9,7 +9,8 @@ urlpatterns = [
     path('', views.home,name='home'),
     path('find', views.find,name='find'),
     # path('chaining/', include('smart_selects.urls')),
-    path("sparedetails/<str:val>?<str:val2>",views.sparedetails,name="sparedetails"),
+    path("sparedetails/<str:val>",views.sparedetails,name="sparedetails"),
+    # path("sparedetails/<str:val>?<str:val2>",views.sparedetails,name="sparedetails"),
     path("brand/<str:val>",views.brand,name="brand"),
     path("name/<str:val>",views.name,name="name"),
     path("manuf/<str:val>",views.manuf,name="manuf"),
@@ -157,6 +158,7 @@ urlpatterns = [
     path("filterAccountStat",views.filterAccountStat,name="filterAccountStat"),
     path("filterAccountDay",views.filterAccountDay,name="filterAccountDay"),
     path("subCategoria",views.subCategoria,name="subCategoria"),
+    path("filltrans",views.filltrans,name="filltrans"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

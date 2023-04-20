@@ -18,10 +18,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 d-flex justify-content-lg-start">
-                        <a href="{% url 'prev' spare.0.spare_code spareAux %}" class="btn btn-primary pl-4 pr-4">Prev</a>
+                        <a href="{% url 'prev' spare.0.id prev.0.id %}" class="btn btn-primary pl-4 pr-4">Prev</a>
                     </div>
                     <div class="col-lg-6 d-flex justify-content-lg-end">
-                        <a href="{% url 'next' spare.0.spare_code spareAux %}" class="btn btn-primary pl-4 pr-4">Next</a>
+                        <a href="{% url 'next' spare.0.id next.0.id %}" class="btn btn-primary pl-4 pr-4">Next</a>
                     </div>
                 </div>
             </div>
