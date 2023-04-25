@@ -10,6 +10,8 @@
 
 {% include "spareapp/accountStatSuperior.html" %}
 
+<div id="prueba1"></div>
+
 <input id="dateTo" value="{{dateTo}}" type="text" hidden>
 <input id="dateFrom" value="{{dateFrom}}" type="text" hidden>
 <input id="requestP" value="{{request.path}}" type="text" hidden>
@@ -750,9 +752,12 @@ $("#invoice").dragtable()
 
 function filtrar(a){
 
-    $("table th").each(function(f){
+    var columna
+
+    $("#invoice th").each(function(f){
 
         if($(this).attr("id")=="Fact"){
+            
             $(this).html("Fact #")
         }else{
             if($(this).attr("id")=="Tipo"){
@@ -764,14 +769,15 @@ function filtrar(a){
 
         if(a==$(this).html()){
             $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+            columna = $(this).attr("id")
         }
     })
     
-    $("table th input").each(function(){
+    $("#invoice th input").each(function(){
         $(this).select();
     })
     
-    $("table th").each(function(f){
+    $("#invoice th").each(function(f){
         if($(this).find("input").attr("id")=="inputFecha"){
             $("#inputFecha").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
@@ -870,6 +876,34 @@ function filtrar(a){
         }
     })
 
+    var dateTo = $("#dateTo").val()
+    var dateFrom = $("#dateFrom").val()
+    var all = $("#search1").attr('checked')
+    var month = $("#search2").attr('checked')
+    var range = $("#search4").attr('checked')
+    var balance = $("#search5").attr('checked')
+    var soloFac = $("#entrySpending").is(':checked')
+    var nombre = $("#contNombre option:selected").val()
+    var dateTo = $("#dateTo").val()
+    var dateFrom = $("#dateFrom").val()
+
+    $("#invoice th input").on("keyup",function(){
+        var filtro = $("#invoice th input").val()
+        $.ajax({
+            method: 'GET',
+            url: '/totalAccountStat',
+            data: {"columna":columna,"filtro":filtro,"dateFrom":dateFrom,"dateTo":dateTo,"all":all,"month":month,"range":range,"balance":balance,"soloFac":soloFac,"nombre":nombre},
+            success:function(data){
+                $(".tfoot thead tr th").empty()
+                if(data.acumTotal>0){
+                    $(".tfoot thead tr th").append("TOTAL $"+data.acumTotal.toFixed(2)).css("color","#1029b9")
+                }else{
+                    $(".tfoot thead tr th").append("TOTAL $"+data.acumTotal.toFixed(2)).css("color","#a00a0a")
+                }
+            }
+        })
+    })
+    
 }
 
 function defecto(){

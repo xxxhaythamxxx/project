@@ -156,6 +156,7 @@ urlpatterns = [
     path("filterContTypeCat",views.filterContTypeCat,name="filterContTypeCat"),
     path("totalTablasType",views.totalTablasType,name="totalTablasType"),
     path("filterAccountStat",views.filterAccountStat,name="filterAccountStat"),
+    path("totalAccountStat",views.totalAccountStat,name="totalAccountStat"),
     path("filterAccountDay",views.filterAccountDay,name="filterAccountDay"),
     path("subCategoria",views.subCategoria,name="subCategoria"),
     path("filltrans",views.filltrans,name="filltrans"),
