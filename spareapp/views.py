@@ -1223,7 +1223,7 @@ def editengine(request,val):
     allSparesall=spare.objects.all()
     allCategories=category.objects.all().order_by("category")
     allEngines=engine.objects.all()
-    allEnginesMake=engine.objects.all().exclude(engine_manufacturer=None).values("id","engine_manufacturer").distinct()
+    allEnginesMake=engine.objects.all().exclude(engine_manufacturer=None).values("engine_manufacturer").distinct()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
     allCars=car.objects.all()
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
@@ -1241,6 +1241,8 @@ def editengine(request,val):
         engine1.engine_l = request.POST.get("litresfill")
         engine1.engine_ide = request.POST.get("codefill")
         engine1.engine_type = request.POST.get("typefill")
+        if request.POST.get("manufactur"):
+            engine1.engine_manufacturer=request.POST.get("manufactur")
         if request.POST.get("valvefill")=="":
             engine1.engine_cylinder = None
         else:
@@ -11241,8 +11243,8 @@ def accountDay(request):
 
             factureName = factura.objects.filter(fechaCreado=tod).order_by("refType__nombre","refCategory__nombre","total")
 
-            dayAux = factureName[0].fechaCreado.date()
-            # dayAux = tod
+            # dayAux = factureName[0].fechaCreado.date()
+            dayAux = tod
             # tod = request.POST.get("searchDateFrom")
 
     cont = 0
@@ -11284,6 +11286,8 @@ def filterAccountDay(request):
     dateFrom = request.GET.get("dateFrom")
     dateTo = request.GET.get("dateTo")
     tod = datetime.now().date()
+    dayOption=request.GET.get("searchDay")
+    filtro=request.GET.get("filter")
 
     if request.GET.get("searchDay"):
         tod = dateFrom
@@ -11299,6 +11303,8 @@ def filterAccountDay(request):
     # print(tod)
 
     factureName = factura.objects.filter(fechaCreado__date=tod).order_by("fechaCreado","id")
+
+    print(factureName)
 
     total = 0
     cont = 0

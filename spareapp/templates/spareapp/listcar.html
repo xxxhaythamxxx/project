@@ -76,10 +76,10 @@
         {% for a in allEnginesCars %}
         {% if br.id == a.car_engine_info__id %}
         <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_ide}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_l}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_type}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{engine_pistons}}</a></div>
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_ide}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
@@ -302,106 +302,6 @@ function filtrar(a){
     })
 }
 
-// function filtrar(a){
-
-//     $("table th").each(function(f){
-        
-//         if($(this).attr("id")=="from"){
-//             $(this).html("Year from")
-//         }
-//         else{
-//             if($(this).attr("id")=="to"){
-//                 $(this).html("Year to")
-//             }else{
-//                 $(this).html($(this).attr("id"))
-//             }
-//         }
-        
-//         if(a==$(this).html()){
-//             $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
-//         }
-        
-//     })
-
-//     $("table th input").each(function(){
-//         $(this).select();
-//     })
-//     $("table th").each(function(f){
-//         if($(this).find("input").attr("id")=="inputMake"){
-//             $("#inputMake").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==0){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputModel"){
-//             $("#inputModel").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==1){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputfrom"){
-//             $("#inputfrom").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==2){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputto"){
-//             $("#inputto").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==3){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputChasis"){
-//             $("#inputChasis").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==4){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputTrans"){
-//             $("#inputTrans").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==5){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//     })
-// }
-
 function defecto(){
     $("#cabeza div").each(function(f){
         if($(this).attr("id")=="Make"){
@@ -426,33 +326,10 @@ function defecto(){
             $(this).show()
         })
     })
+    $(".carEngine").each(function(){
+        $(this).hide()
+    })
 }
-
-// function defecto(){
-//     $("table th").each(function(f){
-//         if($(this).attr("id")=="Make"){
-//             $(this).html("Make")
-//         }
-//         if($(this).attr("id")=="Model"){
-//             $(this).html("Model")
-//         }
-//         if($(this).attr("id")=="from"){
-//             $(this).html("Year from")
-//         }
-//         if($(this).attr("id")=="to"){
-//             $(this).html("Year to")
-//         }
-//         if($(this).attr("id")=="Chasis"){
-//             $(this).html("Chasis")
-//         }
-//         if($(this).attr("id")=="Trans"){
-//             $(this).html("Trans")
-//         }
-//         $(".invoicefill tbody tr").each(function(){
-//             $(this).show()
-//         })
-//     })
-// }
 
 $("#cuerpo").find("div").each(function(){
     $(this).click(function(){

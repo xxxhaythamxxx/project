@@ -233,76 +233,6 @@ function filtrar(a){
     })
 }
 
-// function filtrar(a){
-
-//     $("table th input").each(function(){
-//         $(this).select();
-//     })
-
-//     $("table th").each(function(f){
-
-//         $(this).html($(this).attr("id"))
-
-//         if(a==$(this).html()){
-//             $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
-//         }
-//     })
-//     $("table th input").each(function(){
-//         $(this).select();
-//     })
-
-//     $("table th").each(function(f){
-//         if($(this).find("input").attr("id")=="inputCode"){
-//             $("#inputCode").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==0){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputLitre"){
-//             $("#inputLitre").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==1){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputType"){
-//             $("#inputType").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==2){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//         if($(this).find("input").attr("id")=="inputValve"){
-//             $("#inputValve").on("keyup",function(){
-//                 var value = $(this).val().toLowerCase()
-//                 $(".invoicefill tbody tr").filter(function(){
-//                     $(this).find("td").each(function(){
-//                         if($(this).index()==3){
-//                             $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//                         }
-//                     })
-//                 })
-//             })
-//         }
-//     })
-// }
-
 function defecto(){
     $("#cabeza div").each(function(f){
         if($(this).attr("id")=="Code"){
@@ -321,27 +251,10 @@ function defecto(){
             $(this).show()
         })
     })
+    $(".carEngine").each(function(){
+        $(this).hide()
+    })
 }
-
-// function defecto(){
-//     $("table th").each(function(f){
-//         if($(this).attr("id")=="Code"){
-//             $(this).html("Code")
-//         }
-//         if($(this).attr("id")=="Litre"){
-//             $(this).html("Litre")
-//         }
-//         if($(this).attr("id")=="Type"){
-//             $(this).html("Type")
-//         }
-//         if($(this).attr("id")=="Valve"){
-//             $(this).html("Valve")
-//         }        
-//     })
-//     $(".invoicefill tbody tr").each(function(){
-//         $(this).show()
-//     })
-// }
 
 $("#cuerpo").find("div").each(function(){
     $(this).click(function(){

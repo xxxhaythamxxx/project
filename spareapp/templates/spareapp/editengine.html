@@ -74,7 +74,7 @@
                     <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example">
                         <option value="" selected>Select manufacturer</option>
                         {% for sp in allEnginesMake %}
-                        {% if sp.id == sparefind.0.id %}
+                        {% if sp.engine_manufacturer == sparefind.0.engine_manufacturer %}
                         <option value="{{sp.engine_manufacturer}}" selected>{{sp.engine_manufacturer}}</option>
                         {% else %}
                         <option value="{{sp.engine_manufacturer}}">{{sp.engine_manufacturer}}</option>

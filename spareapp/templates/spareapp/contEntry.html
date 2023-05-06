@@ -15,91 +15,124 @@
 {% endif %}
 
 <div class="d-flex justify-content-center">
-    <div class="container mt-3 col-lg-4">
+    <div class="container mt-3 col-lg-10">
         <form id="formFact" main="{% url 'probarRepetido' %}" method="POST">
             {% csrf_token %}
 
-            <div class="mb-3">
-                <div class="row">
-                    <div class="col-lg-11">
-                        <label class="form-label" for="contNombre">Cliente</label>
-                        <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
-                            <option value="" selected>Seleccione cliente</option>
-                            {% for cust in allCustomers %}
-                            <option ingreso="{{cust.ingreso}}" gasto="{{cust.gasto}}" value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
-                            {% endfor %}
-                        </select>
+            <div class="row d-flex justify-content-center">
+
+                <!-- Inicio de la parte izquierda -->
+                <div class="col-lg-5 mx-3">
+
+                    <div id="divFechaCreado" class="mb-3">
+                        <label class="form-label" for="contFechaCreado">Fecha</label>
+                        <input value="{{actualDay}}" class="form-control" id="contFechaCreado" type="date" name="contFechaCreado">
                     </div>
-                    <div class="col-lg-1 d-flex align-items-end">
-                        <div>
-                            <a data-bs-toggle="modal" data-bs-target="#contNombreModal" style="text-decoration: none;color: rgb(136,12,12);" id="contNombreModalId" class="" href="javascript:void(0);">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                                </svg>
-                            </a>
+
+                    <div class="mb-3">
+                        <input name="notaCredito" id="notaCredito" type="checkbox">
+                        <label class="form-label" for="notaCredito">Nota de crédito</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-lg-11">
+                                <label class="form-label" for="contNombre">Cliente</label>
+                                <select name="contNombre" id="contNombre" class="form-select form-select-md" aria-label=".form-select-md example" required>
+                                    <option value="" selected>Seleccione cliente</option>
+                                    {% for cust in allCustomers %}
+                                    <option ingreso="{{cust.ingreso}}" gasto="{{cust.gasto}}" value="{{cust.id}}">{{cust.nombre}} - {{cust.documento}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-lg-1 d-flex align-items-end">
+                                <div>
+                                    <a data-bs-toggle="modal" data-bs-target="#contNombreModal" style="text-decoration: none;color: rgb(136,12,12);" id="contNombreModalId" class="" href="javascript:void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div id="tipoFactura" class="mb-3">
+                        <label class="form-label" for="contFacType">Tipo de factura</label>
+                        <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
+                            <option value="">Seleccione tipo de factura</option>
+                            <option value="entry">Ingreso</option>
+                            <option value="spending">Gasto</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="contNumFac">Número de factura</label>
+                        <input class="form-control" id="contNumFac" type="text" name="contNumFac">
+                    </div>
+
                 </div>
+                <!-- Fin de la parte izquierda -->
+
+                <!-- Inicio de la parte derecha -->
+                <div class="col-lg-5 mx-3">
+
+                
+                    <div id="categoryEntry" class="mb-3">
+                        <label class="form-label" for="contCatIng">Categoría</label>
+                        <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
+                            <option limit="false" value="" selected>Seleccione categoría</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="contTypeIng">Tipo de pago</label>
+                        <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
+                            <option value="" selected>Seleccione tipo de pago</option>
+                        </select>
+                    </div>
+                    
+                    <div id="divFechaTope" class="mb-3" style="display: none;">
+                        <label class="form-label" for="contFechaTope">Fecha límite</label>
+                        <input value="{{actual}}" class="form-control" id="contFechaTope" type="date" name="contFechaTope">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="contMonto">Sub total</label>
+                        <input class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="contItbm">ITBM</label>
+                        <input class="form-control" id="contItbm" type="number" name="contItbm" step="0.001">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="contTotal">Total</label>
+                        <input class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
+                    </div>
+                
+                </div>
+                <!-- Fin de la parte derecha -->
+
+                <div class="">
+
+                    <div class="mb-3">
+                        <label class="form-label" for="contNota">Nota</label>
+                        <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+    
+                        <button id="buttonAccept" style="font-size: small;" value="otro" name="entryOption" class="btn btn-primary mx-1" type="submit">Aceptar</button>
+                        <button style="font-size: small;" class="btn btn-primary mx-1" type="submit">Aceptar y agregar otra</button>
+                        <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger mx-1">Cancelar</a>
+
+                    </div>
+    
+                </div>
+
             </div>
 
-            <div id="tipoFactura" class="mb-3">
-                <label class="form-label" for="contFacType">Tipo de factura</label>
-                <select name="contFacType" id="contFacType" class="form-select form-select-md" aria-label=".form-select-md example">
-                    <option value="">Seleccione tipo de factura</option>
-                    <option value="entry">Ingreso</option>
-                    <option value="spending">Gasto</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <input name="notaCredito" id="notaCredito" type="checkbox">
-                <label class="form-label" for="notaCredito">Nota de crédito</label>
-            </div>
-            <div id="divFechaCreado" class="mb-3">
-                <label class="form-label" for="contFechaCreado">Fecha</label>
-                <input value="{{actualDay}}" class="form-control" id="contFechaCreado" type="date" name="contFechaCreado">
-            </div>
             
+
             
-            <div class="mb-3">
-                <label class="form-label" for="contNumFac">Número de factura</label>
-                <input class="form-control" id="contNumFac" type="text" name="contNumFac">
-            </div>
-            <div id="categoryEntry" class="mb-3">
-                <label class="form-label" for="contCatIng">Categoría</label>
-                <select name="contCatIng" id="contCatIng" class="form-select form-select-md" required>
-                    <option limit="false" value="" selected>Seleccione categoría</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="contTypeIng">Tipo de pago</label>
-                <select name="contTypeIng" id="contTypeIng" class="form-select form-select-md" required>
-                    <option value="" selected>Seleccione tipo de pago</option>
-                </select>
-            </div>
-            
-            <div id="divFechaTope" class="mb-3" style="display: none;">
-                <label class="form-label" for="contFechaTope">Fecha límite</label>
-                <input value="{{actual}}" class="form-control" id="contFechaTope" type="date" name="contFechaTope">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="contMonto">Sub total</label>
-                <input class="form-control" id="contMonto" type="number" name="contMonto" step="0.001" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="contItbm">ITBM</label>
-                <input class="form-control" id="contItbm" type="number" name="contItbm" step="0.001">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="contTotal">Total</label>
-                <input class="form-control" id="contTotal" type="number" name="contTotal" step="0.001" readonly>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="contNota">Nota</label>
-                <textarea class="form-control" id="contNota" type="textarea" name="contNota"></textarea>
-            </div>
-            <button id="buttonAccept" style="font-size: small;" value="otro" name="entryOption" class="btn btn-primary" type="submit">Aceptar</button>
-            <button style="font-size: small;" class="btn btn-primary" type="submit">Aceptar y agregar otra</button>
-            <a style="font-size: small;" href="{% url 'contDay' %}" class="btn btn-danger">Cancelar</a>
         </form>
     </div>
 </div>
