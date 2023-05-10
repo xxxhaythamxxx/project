@@ -33,7 +33,7 @@ from django.db.models import Sum
 
 import locale
 # locale.setlocale(locale.LC_ALL, 'es_CR.UTF-8')
-
+from django.db.models import Q
 
 def contLogin(request):
 
@@ -2540,6 +2540,15 @@ def importCar(request):
                     if auxChasis:
                         car1.chasis = auxChasis
                     car1.save()
+                    for a in lineaTrans:
+                        if transmission.objects.filter(trans=a):
+                            targetCar = transmission.objects.get(trans=a)
+                        else:
+                            trans1 = transmission()
+                            trans1.trans = a
+                            trans1.save()
+                            targetCar = transmission.objects.get(trans=a)
+                        car1.transmission.add(targetCar)
                 else:
                     if i>0 and (auxMake or auxModel):
                         car1 = car.objects.get(car_manufacturer=auxMake,car_model=auxModel,chasis=auxChasis)
@@ -11229,7 +11238,7 @@ def accountDay(request):
 
     searchMetodo = "today"
 
-    factureName = factura.objects.filter(fechaCreado=tod).order_by("refType__nombre","refCategory__nombre","total")
+    factureName = factura.objects.filter(fechaCreado=tod).order_by("fechaCreado","id","refType__nombre","refCategory__nombre","total")
 
     if request.method == "POST":
 
@@ -11241,7 +11250,7 @@ def accountDay(request):
 
             # tod = dayAux
 
-            factureName = factura.objects.filter(fechaCreado=tod).order_by("refType__nombre","refCategory__nombre","total")
+            factureName = factura.objects.filter(fechaCreado=tod).order_by("fechaCreado","id","refType__nombre","refCategory__nombre","total")
 
             # dayAux = factureName[0].fechaCreado.date()
             dayAux = tod
@@ -11288,6 +11297,19 @@ def filterAccountDay(request):
     tod = datetime.now().date()
     dayOption=request.GET.get("searchDay")
     filtro=request.GET.get("filter")
+    # frag=filtro.split(" ")
+    frag=filtro
+    factureNameVal=""
+
+    dayFrom = datetime.now().date()
+    dayTo = datetime.now().date()
+
+    print("filter: "+str(filtro))
+
+    if len(filtro.split(" "))>1:
+        print("Se puede separar")
+    else:
+        print("No se puede separar")
 
     if request.GET.get("searchDay"):
         tod = dateFrom
@@ -11297,14 +11319,10 @@ def filterAccountDay(request):
     # fecha_from = datetime.strptime(dateFrom, '%Y-%m-%d')
     # fecha_to = datetime.strptime(dateTo, '%Y-%m-%d')
 
-    # print("dateFrom")
-    # print(dateFrom)
-    # print("tod")
-    # print(tod)
-
-    factureName = factura.objects.filter(fechaCreado__date=tod).order_by("fechaCreado","id")
-
-    print(factureName)
+    # Filtro por fecha
+    factureName = factura.objects.filter(fechaCreado__date=tod).order_by("fechaCreado","id").order_by("fechaCreado","id")
+    # Filtro por filtro
+    factureName = factureName.filter(Q(refPersona__nombre__icontains=frag) | Q(num__icontains=frag) | Q(refCategory__nombre__icontains=frag) | Q(refType__nombre__icontains=frag) | Q(note__icontains=frag)).order_by("fechaCreado","id")
 
     total = 0
     cont = 0
@@ -11380,9 +11398,6 @@ def filterAccountDay(request):
     #     balance[fac.id] = [cont,fac.total]
     #     acumTotal = cont
 
-    print("acumTotal")
-    print(acumTotal)
-
     if factureName:
 
         dayFrom = factureName[0].fechaCreado.date()
@@ -11390,9 +11405,9 @@ def filterAccountDay(request):
 
     allFacturesQuery = list(factureName.values())
 
-    factureName = factura.objects.filter(fechaCreado__date=tod).values("refPersona__nombre","refCategory__nombre","refType__nombre").order_by("fechaCreado","id")
+    factureNameVal = factureName.values("refPersona__nombre","refCategory__nombre","refType__nombre").order_by("fechaCreado","id")
 
-    allTypesQuery = list(factureName)
+    allTypesQuery = list(factureNameVal)
 
     # print(allTypesQuery)
     # print("..........")
@@ -16514,7 +16529,7 @@ def totalTablasType(request):
 
     return render(request,"spareapp/totalTablasType.html",dic)
 
-from django.db.models import Q
+
 
 def filterAccountStat(request):
 
