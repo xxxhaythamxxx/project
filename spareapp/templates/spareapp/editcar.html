@@ -118,13 +118,13 @@
             <label for="yearfro" class="form-label">Year from</label>
             <input value="{{sparefind.0.carfrom}}" type="number" class="form-control" name="yearfro" id="yearfro" aria-describedby="yearfroHelp">
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="yeart" class="form-label">Year to</label>
             <input value="{{sparefind.0.carto}}" type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
-        </div>
+        </div> -->
 
         <!-- Transmision ---------------------------------------- -->
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="trans" class="form-label">Transmission</label>
             <input placeholder="Search by transmission" type="text" class="form-control" name="trans" id="trans" aria-describedby="transHelp">
             <div class="row">
@@ -179,7 +179,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- <div class="mb-3">
             <label for="trans" class="form-label">Transmission</label>
@@ -198,8 +198,29 @@
             <input value="" type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
             {% endif %}
         </div>
-        <button id="formPass" type="submit" class="btn btn-primary">Update</button>
+        <button style="font-size: small;" id="formPass" type="submit" class="btn btn-primary">Update</button>
+        <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{sparefind.0.id}}" class="btn btn-danger text-white">Delete</a>
     </form>
+    <!-- Modal de deletecar -->
+    {% for br in allCars %}
+        <div class="modal fade" id="exampleModal{{br.id}}" tabindex="-1" aria-labelledby="exampleModal{{br.id}}Label" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal{{br.id}}Label">Caution</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Are you sure to eliminate the car {{br.car_manufacturer}} {{br.car_model}} {{br.chasis}}?
+                </div>
+                <div class="modal-footer">
+                <button style="font-size: small;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a style="font-size: small;" id="deleteengine" class="btn btn-primary" href="{% url 'deletecar' br.id %}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
     <!-- Modal ------------------------------------------------------------------------------------->
     <div tabindex="-1" id="categoryModal" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
         <div class="modal-dialog">

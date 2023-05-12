@@ -19,45 +19,45 @@
         <div style="font-size: small; font-weight: bold;" id="Make" onclick="filtrar('Make')" class="trsup color col py-2">Make</div>
         <div style="font-size: small; font-weight: bold;" id="Model" onclick="filtrar('Model')" class="trsup color col py-2">Model</div>
         <div style="font-size: small; font-weight: bold;" id="from" onclick="filtrar('Year from')" class="trsup color col py-2">Year from</div>
-        <div style="font-size: small; font-weight: bold;" id="to" onclick="filtrar('Year to')" class="trsup color col py-2">Year to</div>
+        <!-- <div style="font-size: small; font-weight: bold;" id="to" onclick="filtrar('Year to')" class="trsup color col py-2">Year to</div> -->
         <div style="font-size: small; font-weight: bold;" id="Chasis" onclick="filtrar('Chasis')" class="trsup color col py-2">Chasis</div>
-        <div style="font-size: small; font-weight: bold;" id="Trans" onclick="filtrar('Trans')" class="trsup color col py-2">Trans</div>
-        <div style="font-size: small; font-weight: bold;" class="trsup color col py-2">Action</div>
+        <!-- <div style="font-size: small; font-weight: bold;" id="Trans" onclick="filtrar('Trans')" class="trsup color col py-2">Trans</div> -->
+        <!-- <div style="font-size: small; font-weight: bold;" class="trsup color col py-2">Action</div> -->
     </div>
     <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
         {% for br in allCars %}
         <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0">
             {% if br.car_manufacturer %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.car_manufacturer}}</a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.car_manufacturer}}</a></div>
             {% else %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
             {% if br.car_model %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.car_model}}</a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.car_model}}</a></div>
             {% else %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
             {% if br.carfrom %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.carfrom}}</a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.carfrom}}</a></div>
             {% else %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
-            {% if br.carto %}
+            <!-- {% if br.carto %}
                 <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.carto}}</a></div>
             {% else %}
                 <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
+            {% endif %} -->
 
             {% if br.chasis %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.chasis}}</a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.chasis}}</a></div>
             {% else %}
-                <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
-            <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">
+            <!-- <div class="col d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">
             {% for a in allCarsAll %}
                 {% if br.id == a.id %}
                     {% for tr in allTrans %}
@@ -67,9 +67,9 @@
                     {% endfor %}
                 {% endif %}
             {% endfor %}
-            </a></div>
+            </a></div> -->
             
-            <div class="col"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div>
+            <!-- <div class="col"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div> -->
 
         </div>
         
@@ -90,7 +90,7 @@
         
         
     </div>
-    {% for br in allCars %}
+    <!-- {% for br in allCars %}
         <div class="modal fade" id="exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -108,7 +108,7 @@
             </div>
         </div>
     </div>
-    {% endfor %}
+    {% endfor %} -->
 
 
 

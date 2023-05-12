@@ -16,40 +16,47 @@
     <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
 
     <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
+        <div style="font-size: small; font-weight: bold;" id="Make" onclick="filtrar('Make')" class="trsup color col-3 py-2">Make</div>
         <div style="font-size: small; font-weight: bold;" id="Code" onclick="filtrar('Code')" class="trsup color col-3 py-2">Code</div>
-        <div style="font-size: small; font-weight: bold;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-2 py-2">Litre</div>
+        <!-- <div style="font-size: small; font-weight: bold;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-3 py-2">Litre</div> -->
         <div style="font-size: small; font-weight: bold;" id="Type" onclick="filtrar('Type')" class="trsup color col-3 py-2">Type</div>
-        <div style="font-size: small; font-weight: bold;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-2 py-2">Valve</div>
-        <div style="font-size: small; font-weight: bold;" class="trsup color col-2 py-2">Action</div>
+        <div style="font-size: small; font-weight: bold;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-3 py-2">Valve</div>
+        <!-- <div style="font-size: small; font-weight: bold;" class="trsup color col-2 py-2">Action</div> -->
     </div>
     <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
         {% for br in allEngines %}
         <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0">
-            {% if br.engine_ide %}
-                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_ide}}</a></div>
+            {% if br.engine_manufacturer %}
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_manufacturer}}</a></div>
             {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
-            {% if br.engine_l %}
-                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_l}}</a></div>
+            {% if br.engine_ide %}
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_ide}}</a></div>
             {% else %}
-                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
+
+            <!-- {% if br.engine_l %}
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_l}}</a></div>
+            {% else %}
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %} -->
 
             {% if br.engine_type %}
-                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_type}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_type}}</a></div>
             {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
             {% if br.engine_cylinder %}
-                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_cylinder}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_cylinder}}</a></div>
             {% else %}
-                <div class="col-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
-            <div class="col-2"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div>
+            <!-- <div class="col-2"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div> -->
             <!-- <div class="col"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div> -->
         </div>
 
@@ -73,7 +80,7 @@
         {% endfor %}
         {% endfor %}
     </div>
-    {% for br in allEngines %}
+    <!-- {% for br in allEngines %}
     <div class="modal fade" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
@@ -91,7 +98,7 @@
         </div>
         </div>
     </div>
-    {% endfor %}
+    {% endfor %} -->
 
 
 
