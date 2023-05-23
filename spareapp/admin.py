@@ -158,6 +158,7 @@ class spareCartAdmin(admin.ModelAdmin):
     search_fields=("spareCode",)
 
 admin.site.register(transmission)
+admin.site.register(manufacturer)
 admin.site.register(car,carAdmin)
 admin.site.register(engine,engineAdmin)
 admin.site.register(spare,spareAdmin)

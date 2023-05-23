@@ -27,6 +27,26 @@
             {% endif %}
             {% endif %}
 
+            {% if br.car_info.all %}
+                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                    {% for a in br.car_info.all %}
+                    <a style="display: block;" id="spareCar" href="#">{{a}}</a>
+                    {% endfor %}
+                </td>
+            {% else %}
+            <td style="min-width: 80px;max-width: 90px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.engine_info.all %}
+                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                    {% for a in br.engine_info.all %}
+                    <a style="display: block;" id="spareEngine" href="#">{{a}}</a>
+                    {% endfor %}
+                </td>
+            {% else %}
+            <td style="min-width: 80px;max-width: 90px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
             {% if br.spare_brand %}
             <td class="pr-0" style="display: none;"><div><a id="brand" href="{% url 'sparedetails' br.id %}">{{br.spare_brand}}</a></div></td>
             {% else %}

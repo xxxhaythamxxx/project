@@ -1007,6 +1007,7 @@ document.getElementById("default").addEventListener("click",function(){
     
     $("input:checkbox[name=photo]").prop("checked",true);
     $("input:checkbox[name=code]").prop("checked",true);
+    $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=brand]").prop("checked",false);
     $("input:checkbox[name=type]").prop("checked",true);
     $("input:checkbox[name=shape]").prop("checked",false);
@@ -1017,7 +1018,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=priceD]").prop("checked",false);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
-    $("input:checkbox[name=reference]").prop("checked",true);
+    $("input:checkbox[name=reference]").prop("checked",false);
+    $("input:checkbox[name=engine]").prop("checked",true);
     $("input:checkbox[name=ecode]").prop("checked",true);
 
     $("#headerList2").each(function(){              // Dimensions
@@ -1041,6 +1043,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#priceD").index() + 1)+")").hide();
     $("#code").show();
     $("table td:nth-child("+($("#code").index() + 1)+")").show();
+    $("#car").show();
+    $("table td:nth-child("+($("#car").index() + 1)+")").show();
     $("#brand").hide();
     $("table td:nth-child("+($("#brand").index() + 1)+")").hide();
     $("#type").show();
@@ -1055,8 +1059,10 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#dimensions").index() + 1)+")").show();
     $("#atributes").show();
     $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
-    $("#reference").show();
-    $("table td:nth-child("+($("#reference").index() + 1)+")").show();
+    $("#reference").hide();
+    $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
+    $("#engine").show();
+    $("table td:nth-child("+($("#engine").index() + 1)+")").show();
     $("#category").show();
     $("table td:nth-child("+($("#category").index() + 1)+")").show();
     $("#ecode").show();
@@ -1130,12 +1136,14 @@ const $cab = 5;
 $("input:checkbox[name=detail-id]").prop("checked",true);
 $("input:checkbox[name=photo]").prop("checked",true);
 $("input:checkbox[name=code]").prop("checked",true);
+$("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=brand]").prop("checked",false);
 $("input:checkbox[name=type]").prop("checked",true);
 $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",true);
 $("input:checkbox[name=atributes]").prop("checked",true);
-$("input:checkbox[name=reference]").prop("checked",true);
+$("input:checkbox[name=reference]").prop("checked",false);
+$("input:checkbox[name=engine]").prop("checked",true);
 $("input:checkbox[name=priceM]").prop("checked",false);
 $("input:checkbox[name=priceD]").prop("checked",false);
 $("input:checkbox[name=car]").prop("checked",true);
@@ -1158,6 +1166,7 @@ $List.change(function(){
     let priceDi = $("#priceD").index();
     let priceMi = $("#priceM").index();
     let referencei = $("#reference").index();
+    let enginei = $("#engine").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
     let categoryi = $("#category").index();
@@ -1265,6 +1274,14 @@ $List.change(function(){
     }else{
         $("#reference").hide();
         $("table td:nth-child("+(referencei + 1)+")").hide();
+    }
+
+    if ($("input:checkbox[name=engine]:checked").val()){
+        $("#engine").show();
+        $("table td:nth-child("+(enginei + 1)+")").show();
+    }else{
+        $("#engine").hide();
+        $("table td:nth-child("+(enginei + 1)+")").hide();
     }
 
     if ($("input:checkbox[name=ecode]:checked").val()){

@@ -1,0 +1,22 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Manufacturer {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container mt-5 col-lg-4">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="make" class="form-label">Manufacturer</label>
+            <input value="{{make}}" type="text" class="form-control" name="make" id="make" aria-describedby="makeHelp" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+{% endblock %}

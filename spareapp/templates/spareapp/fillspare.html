@@ -18,15 +18,63 @@
             <label for="descriptio" class="form-label">Description</label>
             <input value="" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp" maxlength="80">
         </div>
+
         <div class="mb-3">
-            <label for="brand" class="form-label">Brand</label>
-            <input value="" type="text" class="form-control" name="brand" id="brand" aria-describedby="brandHelp" maxlength="80">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Brand</label>
+                    <select name="brand" id="brand" class="form-select form-select-md" aria-label=".form-select-sm example" required>
+                        <option value="" selected>Select brand</option>
+                        {% for sp in allBrands %}
+                        <option value="{{sp.brand}}">{{sp.brand}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#brandModal" style="text-decoration: none;color: rgb(136,12,12);" id="addBrand" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal ------------------------- -->
+            <div tabindex="-1" id="brandModal" class="modal fade modal-dialog-scrollable" aria-labelledby="brandModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="brandModalLabel">Add a brand</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container col-lg-12">
+                                <div id="firstBrand" action="" method="POST">
+                                    <div class="mb-3">
+                                        <label for="brand" class="form-label">Brand name</label>
+                                        <input type="text" class="form-control" name="brandm" id="brandm" aria-describedby="brandHelp">
+                                    </div>
+                                    <button id="" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="submitButton" type="button" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- <label for="brand" class="form-label">Brand</label>
+            <input value="" type="text" class="form-control" name="brand" id="brand" aria-describedby="brandHelp" maxlength="80"> -->
         </div>
 
 
         <!------------------------------- Car info ---------------------------------------------->
 
-        <div class="mb-3">
+        <div class="mb-3 mt-3">
             <label for="carinf" class="form-label">Car info</label>
             <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="carinf" id="carinf" aria-describedby="carinfHelp">
             <div class="row">
@@ -157,7 +205,7 @@
             
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <div class="row">
                 <div class="col-lg-11">
                     <label for="" class="form-label">Sub category</label>
@@ -169,7 +217,7 @@
                     </select>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!------------------------------------ Vendor ------------------------------------------>
 
@@ -376,6 +424,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="vin" class="form-label">VIN</label>
+            <textarea value="" type="textarea" class="form-control" name="vin" id="vin" aria-describedby="vinHelp"></textarea>
         </div>
         
         <button id="formPass" type="submit" class="btn btn-primary">Save</button>
@@ -670,30 +723,49 @@
 
 <script>
 
-$("#catSelect").change(function(){
-    val = $(this).find("option:selected").text()
+// Agregar modal Brand
+$("#submitButton").click(function(e){
+    e.preventDefault()
+
+    cat = $("#brandm").val()
+
     $.ajax({
-        method: 'GET',
-        url: '/subCategoria',
-        data: {'val': val},
-        success:function(data){
-            
-            select = $("#subcatSelect")
-            select.empty()
-            select.append("<option value='' selected>Select sub category</option>")
-            for(var i=0;i<data.subcat.length;i++){
-                select.append("<option value='"+data.subcat[i].subcategory+"'>"+data.subcat[i].subcategory+"</option>")
-            }
+        url: $(this).attr("action"),
+        type: $(this).attr("method"),
+        data: $(this).serialize(),
+        
+        success: function(){
+            console.log("Success")
 
-            if(data.bandera == true){
-                $("#subcatSelect").prop('disabled', false);
-            }else{
-                $("#subcatSelect").prop('disabled', true);
-            }
-
+            $("#brand").append("<option value='"+cat+"' selected>"+cat+"</option>")
+            $(".btn-close").click()
         }
     })
 })
+// $("#catSelect").change(function(){
+//     val = $(this).find("option:selected").text()
+//     $.ajax({
+//         method: 'GET',
+//         url: '/subCategoria',
+//         data: {'val': val},
+//         success:function(data){
+            
+//             select = $("#subcatSelect")
+//             select.empty()
+//             select.append("<option value='' selected>Select sub category</option>")
+//             for(var i=0;i<data.subcat.length;i++){
+//                 select.append("<option value='"+data.subcat[i].subcategory+"'>"+data.subcat[i].subcategory+"</option>")
+//             }
+
+//             if(data.bandera == true){
+//                 $("#subcatSelect").prop('disabled', false);
+//             }else{
+//                 $("#subcatSelect").prop('disabled', true);
+//             }
+
+//         }
+//     })
+// })
 
 // Mostrar a ambos lados los car info que se tienen -------------------------------------
 $("#carcodPasar option").each(function(){

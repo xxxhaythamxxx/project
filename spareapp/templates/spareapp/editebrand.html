@@ -1,0 +1,22 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Brand {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container mt-5 col-lg-4">
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="category" class="form-label">Brand</label>
+            <input value="{{brand}}" type="text" class="form-control" name="brand" id="brand" aria-describedby="brandHelp" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -16,8 +16,8 @@
                     <label for="" class="form-label">Make</label>
                     <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example" required>
                         <option value="" selected>Select car</option>
-                        {% for sp in allCarsDistinct %}
-                        <option value="{{sp.car_manufacturer}}">{{sp.car_manufacturer}}</option>
+                        {% for sp in allManu %}
+                        <option value="{{sp.manufacturer}}">{{sp.manufacturer}}</option>
                         {% endfor %}
                     </select>
                 </div>

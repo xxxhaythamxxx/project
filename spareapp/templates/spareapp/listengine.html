@@ -16,65 +16,78 @@
     <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
 
     <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
-        <div style="font-size: small; font-weight: bold;" id="Make" onclick="filtrar('Make')" class="trsup color col-3 py-2">Make</div>
-        <div style="font-size: small; font-weight: bold;" id="Code" onclick="filtrar('Code')" class="trsup color col-3 py-2">Code</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make" onclick="filtrar('Make')" class="trsup color col-3 py-2">Make</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Code" onclick="filtrar('Code')" class="trsup color col-3 py-2">Chasis</div>
         <!-- <div style="font-size: small; font-weight: bold;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-3 py-2">Litre</div> -->
-        <div style="font-size: small; font-weight: bold;" id="Type" onclick="filtrar('Type')" class="trsup color col-3 py-2">Type</div>
-        <div style="font-size: small; font-weight: bold;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-3 py-2">Valve</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Type" onclick="filtrar('Type')" class="trsup color col-3 py-2">Type</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-3 py-2">Valve</div>
         <!-- <div style="font-size: small; font-weight: bold;" class="trsup color col-2 py-2">Action</div> -->
     </div>
     <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
         {% for br in allEngines %}
         <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0">
             {% if br.engine_manufacturer %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_manufacturer}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_manufacturer}}</a></div>
             {% else %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
             {% if br.engine_ide %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_ide}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_ide}}</a></div>
             {% else %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
             <!-- {% if br.engine_l %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_l}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_l}}</a></div>
             {% else %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %} -->
 
             {% if br.engine_type %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_type}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_type}}</a></div>
             {% else %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
             {% if br.engine_cylinder %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.engine_ide %}">{{br.engine_cylinder}}</a></div>
+                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_cylinder}}</a></div>
             {% else %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
-            <!-- <div class="col-2"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div> -->
-            <!-- <div class="col"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.car_manufacturer|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}{{br.car_model|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></div> -->
         </div>
 
         {% for a in allCarsEngines %}
         {% if br.id == a.engine__id %}
         <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% if a.car_manufacturer %}
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_manufacturer}}</a></div>
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.chasis}}</a></div>
+            {% else %}
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if a.car_model %}
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_model}}</a></div>
+            {% else %}
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if a.carfrom %}
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.carfrom}}</a></div>
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">
+            {% else %}
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+            
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
+            <!-- <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">
             {% for b in allTrans %}
             {% if a.id == b.car__id %}
                 {{b.trans}}
             {% endif %}
             {% endfor %}
-            </a></div>
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
+            </a></div> -->
         </div>
         {% endif %}
         {% endfor %}
@@ -93,7 +106,6 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <a id="deleteengine" class="btn btn-primary" href="{% url 'deleteengine' br.engine_ide %}">Delete</a>
             </div>
         </div>
         </div>
@@ -122,30 +134,29 @@
             {% for br in allEngines %}
             <tr>
                 {% if br.engine_ide %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.engine_ide %}">{{br.engine_ide}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_ide}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.engine_l %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.engine_ide %}">{{br.engine_l}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_l}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.engine_type %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.engine_ide %}">{{br.engine_type}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_type}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
                 {% if br.engine_cylinder %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.engine_ide %}">{{br.engine_cylinder}}</a></td>
+                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_cylinder}}</a></td>
                 {% else %}
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
                 
-                <td class="pr-0"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td>
 
                 <div class="modal fade" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
                     <div class="modal-dialog">
@@ -159,7 +170,6 @@
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a id="deleteengine" class="btn btn-primary" href="{% url 'deleteengine' br.engine_ide %}">Delete</a>
                         </div>
                     </div>
                     </div>
@@ -197,24 +207,30 @@ function filtrar(a){
         $(this).select();
     })
     $("#cabeza div").each(function(f){
-        if($(this).find("input").attr("id")=="inputCode"){
-            $("#inputCode").on("keyup",function(){
+        if($(this).find("input").attr("id")=="inputMake"){
+            $("#inputMake").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
                 $("#cuerpo div div").filter(function(){
                     if($(this).index()==0){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
-        if($(this).find("input").attr("id")=="inputLitre"){
-            $("#inputLitre").on("keyup",function(){
+        if($(this).find("input").attr("id")=="inputCode"){
+            $("#inputCode").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
                 $("#cuerpo div div").filter(function(){
                     if($(this).index()==1){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
         if($(this).find("input").attr("id")=="inputType"){
@@ -225,6 +241,9 @@ function filtrar(a){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
         if($(this).find("input").attr("id")=="inputValve"){
@@ -235,6 +254,9 @@ function filtrar(a){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
     })

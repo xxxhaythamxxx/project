@@ -12,21 +12,21 @@
             <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by make, model, year, chasis or transmission">
         </div>
     </div>
-
+    
     <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
 
     <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
-        <div style="font-size: small; font-weight: bold;" id="Make" onclick="filtrar('Make')" class="trsup color col py-2">Make</div>
-        <div style="font-size: small; font-weight: bold;" id="Model" onclick="filtrar('Model')" class="trsup color col py-2">Model</div>
-        <div style="font-size: small; font-weight: bold;" id="from" onclick="filtrar('Year from')" class="trsup color col py-2">Year from</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make" onclick="filtrar('Make')" class="trsup color col py-2">Make</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Model" onclick="filtrar('Model')" class="trsup color col py-2">Model</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="from" onclick="filtrar('Year from')" class="trsup color col py-2">Year from</div>
         <!-- <div style="font-size: small; font-weight: bold;" id="to" onclick="filtrar('Year to')" class="trsup color col py-2">Year to</div> -->
-        <div style="font-size: small; font-weight: bold;" id="Chasis" onclick="filtrar('Chasis')" class="trsup color col py-2">Chasis</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Chasis" onclick="filtrar('Chasis')" class="trsup color col py-2">Chasis</div>
         <!-- <div style="font-size: small; font-weight: bold;" id="Trans" onclick="filtrar('Trans')" class="trsup color col py-2">Trans</div> -->
         <!-- <div style="font-size: small; font-weight: bold;" class="trsup color col py-2">Action</div> -->
     </div>
     <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
         {% for br in allCars %}
-        <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0">
+        <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0 headEngine">
             {% if br.car_manufacturer %}
                 <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editcar' br.id %}">{{br.car_manufacturer}}</a></div>
             {% else %}
@@ -76,11 +76,11 @@
         {% for a in allEnginesCars %}
         {% if br.id == a.car_engine_info__id %}
         <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
+            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_ide}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_l}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.engine_type}}</a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{engine_pistons}}</a></div>
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
             <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
         </div>
@@ -206,6 +206,19 @@
 
 <script>
 
+$(".carEngine").each(function(){
+    // alert($(this).attr("id").split("fila2")[1])
+    var prueba = $(this).attr("id").split("fila2")[1]
+    $(".headEngine").each(function(){
+        if(prueba == $(this).attr("id").split("fila")[1]){
+            // alert($(this).attr("id"))
+            // alert($(this).find("div").html())
+            // $(this).find("div").first().prepend("Hola")
+            // $(this).find("div")
+        }
+    })
+})
+
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
     $(".invoicefill tbody tr").filter(function(){                             // 
@@ -247,6 +260,9 @@ function filtrar(a){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
         if($(this).find("input").attr("id")=="inputModel"){
@@ -257,6 +273,9 @@ function filtrar(a){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
         if($(this).find("input").attr("id")=="inputfrom"){
@@ -267,18 +286,21 @@ function filtrar(a){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
-        if($(this).find("input").attr("id")=="inputto"){
-            $("#inputto").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $("#cuerpo div div").filter(function(){
-                    if($(this).index()==3){
-                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                })
-            })
-        }
+        // if($(this).find("input").attr("id")=="inputto"){
+        //     $("#inputto").on("keyup",function(){
+        //         var value = $(this).val().toLowerCase()
+        //         $("#cuerpo div div").filter(function(){
+        //             if($(this).index()==3){
+        //                 $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        //             }
+        //         })
+        //     })
+        // }
         if($(this).find("input").attr("id")=="inputChasis"){
             $("#inputChasis").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
@@ -287,6 +309,9 @@ function filtrar(a){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
+                if(value==""){
+                    defecto()
+                }
             })
         }
         if($(this).find("input").attr("id")=="inputTrans"){
@@ -300,6 +325,8 @@ function filtrar(a){
             })
         }
     })
+
+    
 }
 
 function defecto(){

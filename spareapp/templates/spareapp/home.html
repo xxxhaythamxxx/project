@@ -31,6 +31,8 @@
 </div>
 
 <script>
+$("#reference").hide();
+$("table td:nth-child("+($("#reference").index() + 1)+")").hide();
 
 // $("#headerList").change(function(){
 //     $(this).find("li input:checkbox:checked").each(function(){

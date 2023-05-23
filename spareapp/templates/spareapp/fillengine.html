@@ -15,14 +15,10 @@
             <div class="row">
                 <div class="col-lg-11">
                     <label for="" class="form-label">Make</label>
-                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example">
+                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example" required>
                         <option value="" selected>Select manufacturer</option>
-                        {% for sp in allEnginesMake %}
-                        {% if sp.id == sparefind.0.id %}
-                        <option value="{{sp.engine_manufacturer}}" selected>{{sp.engine_manufacturer}}</option>
-                        {% else %}
-                        <option value="{{sp.engine_manufacturer}}">{{sp.engine_manufacturer}}</option>
-                        {% endif %}
+                        {% for sp in allManu %}
+                        <option value="{{sp.manufacturer}}">{{sp.manufacturer}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -64,6 +60,59 @@
             </div>
         </div>
 
+        <!-- <div class="mb-3">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Make</label>
+                    <select name="manufactur" id="manufactur" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select manufacturer</option>
+                        {% for sp in allEnginesMake %}
+                        {% if sp.id == sparefind.0.id %}
+                        <option value="{{sp.engine_manufacturer}}" selected>{{sp.engine_manufacturer}}</option>
+                        {% else %}
+                        <option value="{{sp.engine_manufacturer}}">{{sp.engine_manufacturer}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal3" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Modal ------------------------- -->
+            <!-- <div tabindex="-1" id="categoryModal3" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="categoryModalLabel">Add a maker</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container col-lg-12">
+                                <div id="firstCategory" action="" method="POST">
+                                    <div class="mb-3">
+                                        <label for="categor" class="form-label">Maker name</label>
+                                        <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categorHelp">
+                                    </div>
+                                    <button id="" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="submitButton" type="button" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div> -->
+        <!-- </div> -->
+
         <div class="mb-3">
             <label for="engcarinf" class="form-label">Car info</label>
             <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="engcarinf" id="engcarinf" aria-describedby="engcarinfHelp">
@@ -72,7 +121,7 @@
                     <div class="color text-white p-2 m-2">Available Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
-                            {% for spr in allCars|dictsort:"car_manufacturer" %}
+                            {% for spr in allCars %}
                                 <option class="p-1">{{spr}}</option>
                             {% endfor %}
                         </select>
@@ -119,8 +168,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="codefill" class="form-label">Code</label>
-            <input type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp" required>
+            <label for="codefill" class="form-label">Chasis</label>
+            <input type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp">
         </div>
 
         <div class="mb-3">

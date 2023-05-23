@@ -1,11 +1,24 @@
 <html>
     <div class="container d-flex justify-content-center mt-4">
         <div>
+            <a style="font-size: small;" href="{% url 'listAdmin' %}" class="btn color text-white">List users</a>
+            <a style="font-size: small;" href="{% url 'listcar' %}" class="btn color text-white">List cars</a>
+            <a style="font-size: small;" href="{% url 'listengine' %}" class="btn color text-white">List engines</a>
+            <a style="font-size: small;" href="{% url 'listspare' %}" class="btn color text-white">List spares</a>
+            <a style="font-size: small;" href="{% url 'listcat' %}" class="btn color text-white">List categories</a>
+            <a style="font-size: small;" href="{% url 'listmake' %}" class="btn color text-white">List make</a>
+            <a style="font-size: small;" href="{% url 'listbrand' %}" class="btn color text-white">List brand</a>
+            <!-- <a style="font-size: small;" href="{% url 'listList' %}" class="btn color text-white">List example</a> -->
+            
+        </div>
+    </div>
+    <div class="container d-flex justify-content-center mt-1">
+        <div>
             <a style="font-size: small;" href="{% url 'fillcar' %}" class="btn btn-success">Register car</a>
             <a style="font-size: small;" href="{% url 'fillengine' %}" class="btn btn-success">Register engine</a>
             <a style="font-size: small;" href="{% url 'fillspare' %}" class="btn btn-success">Register spare</a>
             <a style="font-size: small;" href="{% url 'fillcategoryadmin' %}" class="btn btn-success">Register category</a>
-            <a style="font-size: small;" href="{% url 'fillsubcategory' %}" class="btn btn-success">Register sub category</a>
+            <!-- <a style="font-size: small;" href="{% url 'fillsubcategory' %}" class="btn btn-success">Register sub category</a> -->
             
         </div>
     </div>

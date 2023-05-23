@@ -16,8 +16,26 @@ class transmission(models.Model):
     def __str__(self):
         return '%s' %(self.trans)
 
+class manufacturer(models.Model):
+    manufacturer=models.CharField(max_length=40, verbose_name="Manufacturer",blank=True,null=True)
+
+    class Meta:
+        verbose_name_plural = "Manufacturers"
+
+    def __str__(self):
+        return '%s' %(self.manufacturer)
+
+class branddb(models.Model):
+    brand=models.CharField(max_length=100, verbose_name="Brand",blank=True,null=True)
+
+    class Meta:
+        verbose_name_plural = "Brands"
+
+    def __str__(self):
+        return '%s' %(self.brand)
+
 class car(models.Model):
-    car_manufacturer=models.CharField(max_length=20, verbose_name="Manufacturer", blank=True,null=True)    #Ejemplo: Audi
+    car_manufacturer = models.ForeignKey(manufacturer,on_delete=CASCADE,verbose_name="Manufacturer",blank=True,null=True)
     car_model=models.CharField(max_length=100, verbose_name="Model", blank=True,null=True)           #Ejemplo: 100 C1 Coupe (817)
     carfrom=models.IntegerField(verbose_name="From", blank=True,null=True)      #Ejemplo: 11/2015
     carto=models.IntegerField(verbose_name="To", blank=True,null=True)          #Ejemplo: 11/2018
@@ -25,11 +43,11 @@ class car(models.Model):
     chasis=models.CharField(max_length=10, verbose_name="Chasis", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
 
     def __str__(self):
-        return '%s %s %s' %(self.car_manufacturer, self.car_model, self.chasis)
+        return '%s %s %s' %(self.car_manufacturer, self.car_model, self.carfrom)
 
 class engine(models.Model):
     car_engine_info=models.ManyToManyField(car,blank=True,null=True)
-    engine_manufacturer=models.CharField(max_length=30, verbose_name="Manufacturer", blank=True,null=True)
+    engine_manufacturer = models.ForeignKey(manufacturer,on_delete=CASCADE,verbose_name="Manufacturer",blank=True,null=True)
     engine_l=models.CharField(max_length=10, verbose_name="Litre",blank=True,null=True)             #Ejemplo: 1.8 D
     engine_ide=models.CharField(max_length=80, verbose_name="Code",blank=True,null=True)          #Ejemplo: 1GRFE
     engine_type=models.CharField(max_length=15, verbose_name="Type",blank=True,null=True)         #Ejemplo: Diesel, Petrol
@@ -39,7 +57,7 @@ class engine(models.Model):
     engine_power_hp=models.IntegerField(verbose_name="Power (hp)",blank=True,null=True)               #Ejemplo: 85 hp
 
     def __str__(self):
-        return '%s %s %s %s %s pistons' %(self.engine_ide, self.engine_l, self.engine_type, self.engine_cylinder, self.engine_pistons)
+        return '%s %s' %(self.engine_ide, self.engine_l)
     
 
 class category(models.Model):
@@ -70,7 +88,7 @@ class vendor(models.Model):
 
 class spare(models.Model):
     spare_code=models.CharField(max_length=40, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
-    spare_brand=models.CharField(max_length=40, verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
+    spare_brand=models.ForeignKey(branddb,on_delete=CASCADE,verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
     spare_name=models.CharField(max_length=400, verbose_name="Description",blank=True,null=True)          #Ejemplo: Oil filter
     car_info=models.ManyToManyField(car,blank=True,null=True)
     engine_info=models.ManyToManyField(engine,blank=True,null=True)
@@ -88,7 +106,7 @@ class spare(models.Model):
     price_m=models.FloatField(verbose_name="Price M",blank=True,null=True)
     price_d=models.FloatField(verbose_name="Price D",blank=True,null=True)
     spare_spare = models.ManyToManyField("self",verbose_name="Spare target",blank=True,null=True)
-    note = models.TextField(max_length=100, verbose_name="Note",blank=True,null=True)
+    note = models.TextField(max_length=400, verbose_name="VIN",blank=True,null=True)
 
     def __str__(self):
         return '%s %s' %(self.spare_code, self.spare_name)

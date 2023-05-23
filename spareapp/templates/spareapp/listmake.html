@@ -1,0 +1,75 @@
+{% extends "spareapp/fillbase.html" %}
+
+{% block title %} Edit Admin {% endblock %}
+
+{% block content %}
+
+{% include "spareapp/fillsup.html" %}
+
+<div class="container invoicecont mt-5 d-flex justify-content-center">
+    
+
+    <div class="row col-lg-6  d-flex justify-content-center">
+        <div class="">
+            <div class="">
+                <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by category name">
+            </div>
+        </div>
+        <table class="invoice invoicefill table-striped mt-3 mb-3">
+            <thead>
+                <tr class="text-white">
+                    <th class="trsup color">Manufacturer</th>                
+                    <th class="trsup color">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for br in allMake %}
+                {% for key,value in deleteAux.items %}
+                {% if key == br.id %}
+                <tr>
+                    <td class="p-2"><a href="{% url 'editemake' br.id %}">{{br.manufacturer}}</a></td>                
+                    {% if value == "off" %}
+                    <td class="pr-0"><a style="font-size: small;" class="btn btn-secondary text-white mx-2" href="{% url 'editemake' br.id %}">Edite</a><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.id}}" class="btn btn-danger text-white">Delete</a></td>
+                    {% else %}
+                    <td class="pr-0"><a style="font-size: small;" class="btn btn-secondary text-white mx-2" href="{% url 'editemake' br.id %}">Edite</a></td>
+                    {% endif %}
+                </tr>
+
+                <div class="modal fade" id="exampleModal{{br.id}}" tabindex="-1" aria-labelledby="exampleModal{{br.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModal{{br.id}}Label">Caution</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Are you sure to eliminate the category {{br.category}}?
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        
+                        <a id="deletecategory" class="btn btn-primary" href="{% url 'deletecategory' br.id %}">Delete</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+
+$("#cod").on("keyup",function(){                                // Cuando se teclea algo
+    var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
+    $(".invoicefill tbody tr").filter(function(){                             // 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    })
+})
+</script>
+
+{% endblock %}
