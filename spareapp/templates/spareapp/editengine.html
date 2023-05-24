@@ -72,7 +72,7 @@
                     <div class="color text-white p-2 m-2">Available Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
-                            {% for spr in allCars|dictsort:"car_manufacturer" %}
+                            {% for spr in allCars %}
                                 <option class="p-1">{{spr}}</option>
                             {% endfor %}
                         </select>
@@ -121,8 +121,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="codefill" class="form-label">Chasis</label>
-            <input value="{{sparefind.0.engine_ide}}" type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp" required>
+            <label for="codefill" class="form-label">Engine</label>
+            <input value="{{sparefind.0.engine_ide}}" type="text" class="form-control" name="codefill" id="codefill" aria-describedby="codefillHelp">
         </div>
 
         <div class="mb-3">
@@ -203,12 +203,12 @@
                                 <label for="yearfro" class="form-label">Year from</label>
                                 <input type="number" class="form-control" name="yearfro" id="yearfro" aria-describedby="yearfroHelp">
                             </div>
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="yeart" class="form-label">Year to</label>
                                 <input type="number" class="form-control" name="yeart" id="yeart" aria-describedby="yeartHelp">
-                            </div>
+                            </div> -->
                             <div class="mb-3">
-                                <label for="chasi" class="form-label">Chasis</label>
+                                <label for="chasi" class="form-label">Engine</label>
                                 <input type="text" class="form-control" name="chasi" id="chasi" aria-describedby="chasiHelp">
                             </div>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

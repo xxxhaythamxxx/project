@@ -14,12 +14,64 @@
             <label for="cod" class="form-label">Code</label>
             <input value="" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp" maxlength="15" required>
         </div>
-        <div class="mb-3">
-            <label for="descriptio" class="form-label">Description</label>
-            <input value="" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp" maxlength="80">
-        </div>
+        
+        <!------------------------------------ Category ------------------------------------------>
 
         <div class="mb-3">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Category</label>
+                    <select name="catSelect" id="catSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select category</option>
+                        {% for sp in allCategories %}
+                        <option value="{{sp}}">{{sp}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="col-lg-1 d-flex align-items-end">
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#categoryModal3" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- ----------------- Brands ----------------------------------------------->
+
+        <!-- <div class="mb-3" id="">
+            <label for="brands" class="form-label">Brands</label>
+            <div id="brands-content" class="row">
+                <div id="ref-val" class="ref-val row">
+                    <div class="col-lg-11">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input placeholder="Add the brand name" value="" type="text" class="form-control" name="brandName" id="brandName" aria-describedby="brandNameHelp" maxlength="80">
+                            </div>
+                            <div class="col-lg-6">
+                                <input placeholder="Add the brand price" value="" type="text" class="form-control" name="brandVal" id="brandVal" aria-describedby="brandValHelp" maxlength="80">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                        <div>
+                            <a style="text-decoration: none;color: rgb(136,12,12);" id="brandaddRef" class="p-2" href="javascript:void(0);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div class="mb-3">
             <div class="row">
                 <div class="col-lg-11">
                     <label for="" class="form-label">Brand</label>
@@ -43,7 +95,7 @@
             </div>
 
             <!-- Modal ------------------------- -->
-            <div tabindex="-1" id="brandModal" class="modal fade modal-dialog-scrollable" aria-labelledby="brandModalLabel" aria-hidden="true">
+            <!-- <div tabindex="-1" id="brandModal" class="modal fade modal-dialog-scrollable" aria-labelledby="brandModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -66,10 +118,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <label for="brand" class="form-label">Brand</label>
-            <input value="" type="text" class="form-control" name="brand" id="brand" aria-describedby="brandHelp" maxlength="80"> -->
-        </div>
+        </div> -->
 
 
         <!------------------------------- Car info ---------------------------------------------->
@@ -82,7 +131,7 @@
                     <div class="color text-white p-2 m-2">Available Cars</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="cartoPass" id="carcodPasar" size="5">
-                            {% for spr in allCars|dictsort:"car_manufacturer" %}
+                            {% for spr in allCars %}
                                 <option class="p-1">{{spr}}</option>
                             {% endfor %}
                         </select>
@@ -135,7 +184,7 @@
                     <div class="color text-white p-2 m-2">Available Engines</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="enginetoPass" id="enginecodPasar" size="5">
-                            {% for spr in allEngines|dictsort:"engine_ide" %}
+                            {% for spr in allEngines %}
                                 <option class="p-1">{{spr}}</option>
                             {% endfor %}
                         </select>
@@ -178,32 +227,7 @@
             </div>
         </div>
 
-        <!------------------------------------ Category ------------------------------------------>
-
-        <div class="mb-3">
-            <div class="row">
-                <div class="col-lg-11">
-                    <label for="" class="form-label">Category</label>
-                    <select name="catSelect" id="catSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
-                        <option value="" selected>Select category</option>
-                        {% for sp in allCategories %}
-                        <option value="{{sp}}">{{sp}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-    
-                <div class="col-lg-1 d-flex align-items-end">
-                    <div>
-                        <a data-bs-toggle="modal" data-bs-target="#categoryModal3" style="text-decoration: none;color: rgb(136,12,12);" id="addCategory1" class="p-2" href="javascript:void(0);">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
+        
 
         <!-- <div class="mb-3">
             <div class="row">
@@ -221,7 +245,7 @@
 
         <!------------------------------------ Vendor ------------------------------------------>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="vendorinf" class="form-label">Vendor</label>
             <input placeholder="Search by name" type="text" class="form-control" name="vendorinf" id="vendorinf" aria-describedby="vendorinfHelp">
             <div class="row">
@@ -270,7 +294,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!--------------------------------- Reference Codes -------------------------------------->
 
@@ -282,7 +306,7 @@
                     <div class="col-lg-11">
                         <input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
                         <input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
-                        <input placeholder="Add quantity" value="" type="number" class="form-control" name="refquantity" id="refquantity" aria-describedby="refquantityHelp" maxlength="80">
+                        <!-- <input placeholder="Add quantity" value="" type="number" class="form-control" name="refquantity" id="refquantity" aria-describedby="refquantityHelp" maxlength="80"> -->
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
                         <div>
@@ -357,7 +381,7 @@
             <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
             <!-- <div id="photoHelp" class="form-text">{{sparefind.0.spare_photo}}</div> -->
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="pricem" class="form-label">Price Mayor</label>
             <input value="" type="number" class="form-control" name="pricem" id="pricem" aria-describedby="pricemHelp">
             <div id="pricemHelp" class="form-text">Mayor price.</div>
@@ -366,7 +390,7 @@
             <label for="priced" class="form-label">Price Detail</label>
             <input value="" type="number" class="form-control" name="priced" id="priced" aria-describedby="pricedHelp">
             <div id="pricedHelp" class="form-text">Detail price.</div>
-        </div>
+        </div> -->
 
         <!--------------------------------- Atributes -------------------------------------->
 
@@ -429,6 +453,11 @@
         <div class="mb-3">
             <label for="vin" class="form-label">VIN</label>
             <textarea value="" type="textarea" class="form-control" name="vin" id="vin" aria-describedby="vinHelp"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="descriptio" class="form-label">Description</label>
+            <input value="" type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptionHelp" maxlength="80">
         </div>
         
         <button id="formPass" type="submit" class="btn btn-primary">Save</button>
@@ -722,6 +751,14 @@
 </div>
 
 <script>
+
+// Agregar Brands
+$("#brandaddRef").click(function(){
+    $("#brands-content")
+    .append(
+        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
 
 // Agregar modal Brand
 $("#submitButton").click(function(e){

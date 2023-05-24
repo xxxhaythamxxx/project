@@ -1079,7 +1079,6 @@ def editcar(request,val):
         carAux = []
         idAux = ""
         targetCar = ""
-        print(yearFromAux)
 
         if manufacturer.objects.filter(manufacturer__icontains=manuAux2):
             manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
@@ -1217,7 +1216,7 @@ def fillengine(request):
             for c in allCars:
                 bandt = False
                 for ca in cartopass:
-                    if str(c) == str(ca):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == False:
                     carAux.append(c)
@@ -1225,14 +1224,14 @@ def fillengine(request):
         if cartoreg == []:
             for sp in carAux:
                 for c in allCars:
-                    if str(c) == str(sp):
+                    if str(c).replace(" ","") == str(sp).replace(" ",""):
                         idAux = c.id
                 targetCar = car.objects.get(id=idAux)
                 engine1.car_engine_info.add(targetCar)
         else:
             for sp in cartoreg:
                 for c in allCars:
-                    if str(c) == str(sp):
+                    if str(c).replace(" ","") == str(sp).replace(" ",""):
                         idAux = c.id
                 targetCar = car.objects.get(id=idAux)
                 engine1.car_engine_info.add(targetCar)
@@ -1267,7 +1266,7 @@ def editengine(request,val):
     allEngines=engine.objects.all()
     allEnginesMake=engine.objects.all().exclude(engine_manufacturer=None).values("engine_manufacturer").distinct()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
-    allCars=car.objects.all()
+    allCars=car.objects.all().order_by("car_manufacturer__manufacturer")
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
@@ -1283,8 +1282,22 @@ def editengine(request,val):
         engine1.engine_l = request.POST.get("litresfill")
         engine1.engine_ide = request.POST.get("codefill")
         engine1.engine_type = request.POST.get("typefill")
-        if request.POST.get("manufactur"):
-            engine1.engine_manufacturer=request.POST.get("manufactur")
+
+        manuAux2=request.POST.get("manufactur")
+
+        if manufacturer.objects.filter(manufacturer__icontains=manuAux2):
+            manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
+        else:
+            manuNew = manufacturer()
+            manuNew.manufacturer = manuAux2
+            manuNew.save()
+
+        manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
+
+        engine1.engine_manufacturer=manuAux
+
+        # if request.POST.get("manufactur"):
+        #     engine1.engine_manufacturer=request.POST.get("manufactur")
         if request.POST.get("valvefill")=="":
             engine1.engine_cylinder = None
         else:
@@ -1342,7 +1355,7 @@ def editengine(request,val):
             for c in allCars:
                 bandt = False
                 for ca in cartoreg:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == True:
                     carAux.append(c)
@@ -1354,7 +1367,7 @@ def editengine(request,val):
                 for ca in cartopass:
                     # print("cartopass")
                     # print(ca)
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == False:
                     carAux.append(c)
@@ -1369,7 +1382,7 @@ def editengine(request,val):
         # else:
         for sp in carAux:
             for c in allCars:
-                if str(c).replace("  ","") == str(sp).replace("  ",""):
+                if str(c).replace(" ","") == str(sp).replace(" ",""):
                     idAux = c.id
             targetCar = car.objects.get(id=idAux)
             engine1.car_engine_info.add(targetCar)
@@ -1395,6 +1408,8 @@ def fillspare(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
     allBrands=branddb.objects.all().order_by("brand")
+    cartoreg = ""
+    cartopass = ""
 
     spare1 = spare()
     dic={"allBrands":allBrands,"allSubCategories":allSubCategories,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
@@ -1403,6 +1418,8 @@ def fillspare(request):
         # print("POST")
         # print(request.POST)
 # Spare ------------------------------------------------------
+        cartoreg = ""
+        cartopass = ""
         spareAux = spare.objects.filter(spare_code=request.POST.get("cod"))
         if spareAux:
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
@@ -1412,40 +1429,57 @@ def fillspare(request):
         spare1.spare_code = request.POST.get("cod")
         spare1.spare_name = request.POST.get("descriptio")
         # spare1.spare_brand = request.POST.get("brand")
-        manuAux2 = request.POST.get("brand")
-        if branddb.objects.filter(brand__icontains=manuAux2):
-            manuAux = branddb.objects.get(brand__icontains=manuAux2)
-        else:
-            manuNew = branddb()
-            manuNew.brand = manuAux2
-            manuNew.save()
+        # manuAux2 = request.POST.get("brand")
+        # if branddb.objects.filter(brand__icontains=manuAux2):
+        #     manuAux = branddb.objects.get(brand__icontains=manuAux2)
+        # else:
+        #     manuNew = branddb()
+        #     manuNew.brand = manuAux2
+        #     manuNew.save()
 
-        manuAux = branddb.objects.get(brand__icontains=manuAux2)
+        # manuAux = branddb.objects.get(brand__icontains=manuAux2)
 
-        spare1.spare_brand = manuAux
+        # spare1.spare_brand = manuAux
 
         if "phot" in request.FILES:
             spare1.spare_photo = request.FILES['phot']
         else:
             pass
 
-        if request.POST.get("pricem")=="":
-            pass
-        else:
-            spare1.price_m = request.POST.get("pricem")
+        # if request.POST.get("pricem")=="":
+        #     pass
+        # else:
+        #     spare1.price_m = request.POST.get("pricem")
 
-        if request.POST.get("priced")=="":
-            pass
-        else:
-            spare1.price_d = request.POST.get("priced")
+        # if request.POST.get("priced")=="":
+        #     pass
+        # else:
+        #     spare1.price_d = request.POST.get("priced")
 
-        if request.POST.get("catSelect") == "":
-            pass
+        manuAux2 = request.POST.get("catSelect")
+
+        if manuAux2:
+            if category.objects.filter(category=manuAux2):
+                manuAux = category.objects.get(category=manuAux2)
+            else:
+                manuNew = category()
+                manuNew.category = manuAux2
+                manuNew.save()
+
+            manuAux = category.objects.get(category=manuAux2)
+            spare1.spare_category = manuAux
         else:
-            # print("catSelect")
-            # print(request.POST.get("catSelect"))
-            category1 = category.objects.get(category=request.POST.get("catSelect"))
-            spare1.spare_category = category1    
+            spare1.spare_category = None
+
+        
+
+        # if request.POST.get("catSelect") == "":
+        #     pass
+        # else:
+        #     # print("catSelect")
+        #     # print(request.POST.get("catSelect"))
+        #     category1 = category.objects.get(category=request.POST.get("catSelect"))
+        #     spare1.spare_category = category1    
 
         spare1.save()
 
@@ -1459,7 +1493,7 @@ def fillspare(request):
             for c in allCars:
                 bandt = False
                 for ca in cartoreg:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == True:
                     carAux.append(c)
@@ -1467,17 +1501,71 @@ def fillspare(request):
             for c in allCars:
                 bandt = False
                 for ca in cartopass:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == False:
                     carAux.append(c)
 
         for sp in carAux:
             for c in allCars:
-                if str(c).replace("  ","") == str(sp).replace("  ",""):
+                if str(c).replace(" ","") == str(sp).replace(" ",""):
                     idAux = c.id
             targetCar = car.objects.get(id=idAux)
             spare1.car_info.add(targetCar)
+
+        # cartoreg = request.POST.getlist("cartoReg")
+        # cartopass = request.POST.getlist("cartoPass")
+        # carAux = []
+
+        # if cartoreg == []:
+        #     for c in allCars:
+        #         bandt = False
+        #         for ca in cartopass:
+        #             if str(c).replace(" ","") == str(ca).replace(" ",""):
+        #                 bandt = True
+        #         if bandt == False:
+        #             carAux.append(c)
+
+        # if cartoreg == []:
+        #     for sp in carAux:
+        #         for c in allCars:
+        #             if str(c).replace("  ","") == str(sp).replace("  ",""):
+        #                 idAux = c.id
+        #         targetCar = car.objects.get(id=idAux)
+        #         spare1.car_info.add(targetCar)
+        # else:
+        #     for sp in cartoreg:
+        #         for c in allCars:
+        #             if str(c).replace("  ","") == str(sp).replace("  ",""):
+        #                 idAux = c.id
+        #         targetCar = car.objects.get(id=idAux)
+        #         spare1.car_info.add(targetCar)
+
+        
+
+        # if cartoreg:
+        #     for c in allCars:
+        #         bandt = False
+        #         for ca in cartoreg:
+        #             if str(c).replace("  ","") == str(ca).replace("  ",""):
+        #                 bandt = True
+        #         if bandt == True:
+        #             carAux.append(c)
+        # else:
+        #     for c in allCars:
+        #         bandt = False
+        #         for ca in cartopass:
+        #             if str(c).replace("  ","") == str(ca).replace("  ",""):
+        #                 bandt = True
+        #         if bandt == False:
+        #             carAux.append(c)
+
+        # for sp in carAux:
+        #     for c in allCars:
+        #         if str(c).replace("  ","") == str(sp).replace("  ",""):
+        #             idAux = c.id
+        #     targetCar = car.objects.get(id=idAux)
+        #     spare1.car_info.add(targetCar)
         
         # cartoreg = request.POST.getlist("cartoReg")
         # for sp in cartoreg:
@@ -1507,7 +1595,7 @@ def fillspare(request):
             for c in allEngines:
                 bandt = False
                 for ca in enginetoReg:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == True:
                     engineAux.append(c)
@@ -1515,14 +1603,14 @@ def fillspare(request):
             for c in allEngines:
                 bandt = False
                 for ca in enginetopass:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == False:
                     engineAux.append(c)
 
         for sp in engineAux:
             for c in allEngines:
-                if str(c).replace("  ","") == str(sp).replace("  ",""):
+                if str(c).replace(" ","") == str(sp).replace(" ",""):
                     idAux = c.id
             targetEngine = engine.objects.get(id=idAux)
             spare1.engine_info.add(targetEngine)
@@ -1537,13 +1625,13 @@ def fillspare(request):
 
 # Vendor -----------------------------------------------
 
-        vendortoReg = request.POST.getlist("vendortoReg")
-        for sp in vendortoReg:
-            for c in allVendors:
-                if str(c) == str(sp):
-                    idAux = c.id
-            targetVendor = vendor.objects.get(id=idAux)
-            spare1.spare_vendor.add(targetVendor)
+        # vendortoReg = request.POST.getlist("vendortoReg")
+        # for sp in vendortoReg:
+        #     for c in allVendors:
+        #         if str(c) == str(sp):
+        #             idAux = c.id
+        #     targetVendor = vendor.objects.get(id=idAux)
+        #     spare1.spare_vendor.add(targetVendor)
 
 # Spare targets -----------------------------------------------
         for sp in sparrr:
@@ -1560,7 +1648,7 @@ def fillspare(request):
 # Reference ------------------------------------------------------
         codesList = request.POST.getlist("refcodes")
         notesList = request.POST.getlist("refcodesnote")
-        quantityList = request.POST.getlist("refquantity")
+        # quantityList = request.POST.getlist("refquantity")
         i = 0
         for ref in codesList:
 
@@ -1999,7 +2087,7 @@ def editspare(request,val):
     spare1 = spare.objects.get(id=val)
     sparefind=spare.objects.filter(id=val)
     # print(sparefind[0].spare_category)
-    allSubCategories=subcategory.objects.filter(category=sparefind[0].spare_category)
+    # allSubCategories=subcategory.objects.filter(category=sparefind[0].spare_category)
     # Con sparefind puedo enviar el mismo valor al final para seguir editando
 
     auxCar = car.objects.filter(spare__id = val)
@@ -2032,10 +2120,10 @@ def editspare(request,val):
         else:
             spare1.spare_name = request.POST.get("descriptio")
 
-        if request.POST.get("brand") == "":
-            spare1.spare_brand = None
-        else:
-            spare1.spare_brand = request.POST.get("brand")
+        # if request.POST.get("brand") == "":
+        #     spare1.spare_brand = None
+        # else:
+        #     spare1.spare_brand = request.POST.get("brand")
         
         if "phot" in request.FILES:
             spare1.spare_photo = request.FILES['phot']
@@ -2044,31 +2132,46 @@ def editspare(request,val):
 
         # Cagetory ----------------------------------------------------
 
-        if request.POST.get("catSelect") == "":
-            # print("Entra")
-            # category1 = category.objects.get(category=request.POST.get("catSelect"))
-            spare1.spare_category = None
-        else:
-            category1 = category.objects.get(category=request.POST.get("catSelect"))
-            spare1.spare_category = category1
+        manuAux2 = request.POST.get("catSelect")
 
-        if request.POST.get("subcatSelect") == "" or request.POST.get("subcatSelect") == None:           
-            spare1.spare_subcategory = None
+        if manuAux2:
+            if category.objects.filter(category=manuAux2):
+                print("QUERY")
+                print(category.objects.filter(category=manuAux2))
+                manuAux = category.objects.get(category=manuAux2)
+            else:
+                manuNew = category()
+                manuNew.category = manuAux2
+                manuNew.save()
+
+            manuAux = category.objects.get(category=manuAux2)
+            spare1.spare_category = manuAux
         else:
-            category1 = subcategory.objects.get(subcategory=request.POST.get("subcatSelect"))            
-            spare1.spare_subcategory = category1
+            spare1.spare_category = None
+
+        # if request.POST.get("catSelect") == "":
+        #     spare1.spare_category = None
+        # else:
+        #     category1 = category.objects.get(category=request.POST.get("catSelect"))
+        #     spare1.spare_category = category1
+
+        # if request.POST.get("subcatSelect") == "" or request.POST.get("subcatSelect") == None:           
+        #     spare1.spare_subcategory = None
+        # else:
+        #     category1 = subcategory.objects.get(subcategory=request.POST.get("subcatSelect"))            
+        #     spare1.spare_subcategory = category1
 
         # Prices ------------------------------------------------------
 
-        if request.POST.get("pricem")=="":
-            spare1.price_m = None
-        else:
-            spare1.price_m = request.POST.get("pricem")
+        # if request.POST.get("pricem")=="":
+        #     spare1.price_m = None
+        # else:
+        #     spare1.price_m = request.POST.get("pricem")
 
-        if request.POST.get("priced")=="":
-            spare1.price_d = None
-        else:
-            spare1.price_d = request.POST.get("priced")
+        # if request.POST.get("priced")=="":
+        #     spare1.price_d = None
+        # else:
+        #     spare1.price_d = request.POST.get("priced")
         spare1.save()
 
         # Car info ----------------------------------------------------
@@ -2076,11 +2179,6 @@ def editspare(request,val):
         cartoreg = request.POST.getlist("cartoReg")
         cartopass = request.POST.getlist("cartoPass")
         carAux = []
-
-        print("cartoreg")
-        print(cartoreg)
-        print("cartopass")
-        print(cartopass)
 
         spAux = spare.objects.filter(id=val)
 
@@ -2112,30 +2210,21 @@ def editspare(request,val):
         #             carAux.append(c)
 
         if cartoreg:
-            print("Entra en cartoreg")
             for c in allCars:
                 bandt = False
                 for ca in cartoreg:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == True:
                     carAux.append(c)
         else:
-            print("Entra en no hay cartoreg")
             for c in allCars:
                 bandt = False
-                print("Compara "+str(c))
                 for ca in cartopass:
-                    print("Compara "+str(c).replace("  ","")+" con "+str(ca).replace("  ",""))
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
-                        print("Son iguales")
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
-                print("Fin de compara")
                 if bandt == False:
                     carAux.append(c)
-
-        print("carAux")
-        print(carAux)
 
         # for sp in carAux:
         #     for c in allCars:
@@ -2145,9 +2234,8 @@ def editspare(request,val):
         #     engine1.car_engine_info.add(targetCar)
 
         for sp in carAux:
-            print("Recorro carAux")
             for c in allCars:
-                if str(c).replace("  ","") == str(sp).replace("  ",""):
+                if str(c).replace(" ","") == str(sp).replace(" ",""):
                     idAux = c.id
             targetCar = car.objects.get(id=idAux)
             spare1.car_info.add(targetCar)
@@ -2162,11 +2250,7 @@ def editspare(request,val):
         idAux = None
         engineAux = []
 
-        spAux = spare.objects.filter(spare_code = val)
-
-        # enginesAuxiliar = spare.objects.filter(engine_info=enginetopass)
-        # print("enginesAuxiliar")
-        # print(enginesAuxiliar)
+        spAux = spare.objects.filter(id = val)
 
         for sp in spAux:
             for a in sp.engine_info.all():
@@ -2177,7 +2261,7 @@ def editspare(request,val):
             for c in allEngines:
                 bandt = False
                 for ca in enginetoReg:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == True:
                     engineAux.append(c)
@@ -2185,7 +2269,7 @@ def editspare(request,val):
             for c in allEngines:
                 bandt = False
                 for ca in enginetopass:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
+                    if str(c).replace(" ","") == str(ca).replace(" ",""):
                         bandt = True
                 if bandt == False:
                     engineAux.append(c)
@@ -2211,46 +2295,46 @@ def editspare(request,val):
 
         for sp in engineAux:
             for c in allEngines:
-                if str(c).replace("  ","") == str(sp).replace("  ",""):
+                if str(c).replace(" ","") == str(sp).replace(" ",""):
                     idAux = c.id
             targetEngine = engine.objects.get(id=idAux)
             spare1.engine_info.add(targetEngine)
 
         # Vendors ----------------------------------------------------
 
-        vendortoreg = request.POST.getlist("vendortoReg")
-        vendortopass = request.POST.getlist("vendortoPass")
-        vendorAux = []
+        # vendortoreg = request.POST.getlist("vendortoReg")
+        # vendortopass = request.POST.getlist("vendortoPass")
+        # vendorAux = []
 
-        spAux = spare.objects.filter(spare_code = val)
+        # spAux = spare.objects.filter(spare_code = val)
 
-        for sp in spAux:
-            for a in sp.spare_vendor.all():
-                spare1.spare_vendor.remove(a.id)
+        # for sp in spAux:
+        #     for a in sp.spare_vendor.all():
+        #         spare1.spare_vendor.remove(a.id)
 
-        if vendortoreg:
-            for c in allVendors:
-                bandt = False
-                for ca in vendortoreg:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
-                        bandt = True
-                if bandt == True:
-                    vendorAux.append(c)
-        else:
-            for c in allVendors:
-                bandt = False
-                for ca in vendortopass:
-                    if str(c).replace("  ","") == str(ca).replace("  ",""):
-                        bandt = True
-                if bandt == False:
-                    vendorAux.append(c)
+        # if vendortoreg:
+        #     for c in allVendors:
+        #         bandt = False
+        #         for ca in vendortoreg:
+        #             if str(c).replace("  ","") == str(ca).replace("  ",""):
+        #                 bandt = True
+        #         if bandt == True:
+        #             vendorAux.append(c)
+        # else:
+        #     for c in allVendors:
+        #         bandt = False
+        #         for ca in vendortopass:
+        #             if str(c).replace("  ","") == str(ca).replace("  ",""):
+        #                 bandt = True
+        #         if bandt == False:
+        #             vendorAux.append(c)
 
-        for sp in vendorAux:
-            for c in allVendors:
-                if str(c).replace("  ","") == str(sp).replace("  ",""):
-                    idAux = c.id
-            targetVendor = vendor.objects.get(id=idAux)
-            spare1.spare_vendor.add(targetVendor)
+        # for sp in vendorAux:
+        #     for c in allVendors:
+        #         if str(c).replace("  ","") == str(sp).replace("  ",""):
+        #             idAux = c.id
+        #     targetVendor = vendor.objects.get(id=idAux)
+        #     spare1.spare_vendor.add(targetVendor)
         
         # if vendortoreg == []:
         #     for c in allVendors:
@@ -2310,7 +2394,7 @@ def editspare(request,val):
         # Reference ------------------------------------------------------
         codesList = request.POST.getlist("refcodes")
         notesList = request.POST.getlist("refcodesnote")
-        quantityList = request.POST.getlist("refquantity")
+        # quantityList = request.POST.getlist("refquantity")
 
         auxSp = spare.objects.filter(spare_code=request.POST.get("cod"))
         if auxSp:
@@ -2511,7 +2595,7 @@ def deletespare(request,val):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    spare1 = spare.objects.get(spare_code=val)
+    spare1 = spare.objects.get(id=val)
     spare1.delete()
     # sparefind=spare.objects.filter(spare_code=val)
     dic={"val":val,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
