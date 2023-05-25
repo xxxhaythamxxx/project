@@ -1932,6 +1932,25 @@ def deletecategory(request,val):
 
     return render(request,"spareapp/listcat.html",dic)
 
+def deletemake(request,val):
+
+    delete = manufacturer.objects.get(id=val)
+    delete.delete()
+    allMakes = manufacturer.objects.all().order_by("manufacturer")
+    deleteAux = {}
+
+    for ty in allMakes:
+
+        catAux = car.objects.filter(car_manufacturer=ty)
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"deleteAux":deleteAux,"allMakes":allMakes}
+
+    return render(request,"spareapp/listmake.html",dic)
+
 # REVISAR
 def deletebrand(request,val):
 

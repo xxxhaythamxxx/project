@@ -55,6 +55,7 @@ urlpatterns = [
     path("deleteengine/<str:val>",views.deleteengine,name="deleteengine"),
     path("deletespare/<str:val>",views.deletespare,name="deletespare"),
     path("deletecategory/<str:val>",views.deletecategory,name="deletecategory"),
+    path("deletemake/<str:val>",views.deletemake,name="deletemake"),
     path("deletebrand/<str:val>",views.deletebrand,name="deletebrand"),
     path("deletesubcategory/<str:val>",views.deletesubcategory,name="deletesubcategory"),
     path("fillcategory",views.fillcategory,name="fillcategory"),
