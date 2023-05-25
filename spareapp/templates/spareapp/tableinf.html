@@ -48,7 +48,7 @@
             {% endif %}
 
             {% if br.spare_brand %}
-            <td class="pr-0" style="display: none;"><div><a id="brand" href="{% url 'sparedetails' br.id %}">{{br.spare_brand}}</a></div></td>
+            <td class="pr-0" style="display: none;"><div><a id="brand" href="{% url 'sparedetails' br.id %}"></a></div></td>
             {% else %}
             <td class="pr-0" style="display: none;"><div><a id="brand" href="#"></a></div></td>
             {% endif %}
