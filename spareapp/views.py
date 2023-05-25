@@ -312,7 +312,7 @@ def home(request):
             # alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             # from typing import List
             # alls = list(spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct())
-            alls = [x for x in spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct()]
+            alls = [x for x in spare.objects.all().order_by("spare_name","spare_code").distinct()]
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
