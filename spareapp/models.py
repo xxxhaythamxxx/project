@@ -41,7 +41,7 @@ class car(models.Model):
     carfrom=models.IntegerField(verbose_name="From", blank=True,null=True)      #Ejemplo: 11/2015
     carto=models.IntegerField(verbose_name="To", blank=True,null=True)          #Ejemplo: 11/2018
     transmission=models.ManyToManyField(transmission, verbose_name="Transmision", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
-    chasis=models.CharField(max_length=10, verbose_name="Chasis", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
+    chasis=models.CharField(max_length=50, verbose_name="Chasis", blank=True,null=True)        #Ejemplo: ATM, MTM (Automatic, Manual)
 
     def __str__(self):
         return '%s %s %s %s' %(self.car_manufacturer, self.car_model, self.carfrom, self.chasis)
