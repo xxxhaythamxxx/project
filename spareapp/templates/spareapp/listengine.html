@@ -18,9 +18,9 @@
     <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
         <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make" onclick="filtrar('Make')" class="trsup color col-3 py-2">Make</div>
         <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Code" onclick="filtrar('Code')" class="trsup color col-3 py-2">Chasis</div>
-        <!-- <div style="font-size: small; font-weight: bold;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-3 py-2">Litre</div> -->
-        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Type" onclick="filtrar('Type')" class="trsup color col-3 py-2">Type</div>
-        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-3 py-2">Valve</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-2 py-2">Litre</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Type" onclick="filtrar('Type')" class="trsup color col-2 py-2">Type</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-2 py-2">Valve</div>
         <!-- <div style="font-size: small; font-weight: bold;" class="trsup color col-2 py-2">Action</div> -->
     </div>
     <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
@@ -38,11 +38,11 @@
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
             {% endif %}
 
-            <!-- {% if br.engine_l %}
+            {% if br.engine_l %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_l}}</a></div>
             {% else %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %} -->
+            {% endif %}
 
             {% if br.engine_type %}
                 <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_type}}</a></div>
@@ -247,11 +247,24 @@ function filtrar(a){
                 }
             })
         }
+        if($(this).find("input").attr("id")=="inputLitre"){
+            $("#inputLitre").on("keyup",function(){
+                var value = $(this).val().toLowerCase()
+                $("#cuerpo div div").filter(function(){
+                    if($(this).index()==2){
+                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    }
+                })
+                if(value==""){
+                    defecto()
+                }
+            })
+        }
         if($(this).find("input").attr("id")=="inputType"){
             $("#inputType").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
                 $("#cuerpo div div").filter(function(){
-                    if($(this).index()==2){
+                    if($(this).index()==3){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })
@@ -264,7 +277,7 @@ function filtrar(a){
             $("#inputValve").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
                 $("#cuerpo div div").filter(function(){
-                    if($(this).index()==3){
+                    if($(this).index()==4){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })

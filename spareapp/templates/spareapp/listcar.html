@@ -313,7 +313,7 @@ function filtrar(a){
             $("#inputChasis").on("keyup",function(){
                 var value = $(this).val().toLowerCase()
                 $("#cuerpo div div").filter(function(){
-                    if($(this).index()==4){
+                    if($(this).index()==3){
                         $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     }
                 })

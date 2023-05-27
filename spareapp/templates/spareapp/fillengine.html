@@ -467,5 +467,18 @@ $("#formPass").on("click",function(){
     })
 })
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type=number]').forEach( node => node.addEventListener('keypress', e => {
+        if(e.keyCode == 13) {
+            e.preventDefault();
+        }
+    }))
+
+    document.querySelectorAll('input[type=text]').forEach( node => node.addEventListener('keypress', e => {
+        if(e.keyCode == 13) {
+            e.preventDefault();
+        }
+    }))
+});
 </script>
 {% endblock %}
