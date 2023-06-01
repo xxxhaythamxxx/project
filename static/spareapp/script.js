@@ -871,71 +871,71 @@ function engineregresar(){
 }
 
 // Arreglar los valores que se pasarán ------------------------------------------------
-$("#formPass").on("click",function(){
-    $("#codPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#codPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#carcodPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#carcodPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#enginecodPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#enginecodPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#vendorPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#vendorPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#engcarcodPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#engcarcodPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-})
+// $("#formPass").on("click",function(){
+//     $("#codPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#codPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#carcodPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#carcodPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#enginecodPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#enginecodPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#vendorPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#vendorPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#engcarcodPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#engcarcodPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+// })
 
-$("#formPass2").on("click",function(){
-    $("#codPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#codPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#carcodPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#carcodPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#enginecodPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#enginecodPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#vendorPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#vendorPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#engcarcodPasado option").each(function(){
-        $(this).attr("selected",true)
-    })
-    $("#engcarcodPasar option").each(function(){
-        $(this).attr("selected",true)
-    })
-})
+// $("#formPass2").on("click",function(){
+//     $("#codPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#codPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#carcodPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#carcodPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#enginecodPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#enginecodPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#vendorPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#vendorPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#engcarcodPasado option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+//     $("#engcarcodPasar option").each(function(){
+//         $(this).attr("selected",true)
+//     })
+// })
 
 
 // reftam = 1
@@ -956,16 +956,16 @@ $("#reference-content").on("click","#deleteRef",function(a){
 
 // atrtam = 1
 // Agregar Atributos
-$("#atributaddRef").click(function(){
-    // alert("Entra")
-    // atrtam++
-    $("#atribute-content")
-    .append(
-        // '<div>HOla</div>')
-        // '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"><input placeholder="Add the atribute valor" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
-        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
-        )
-})
+// $("#atributaddRef").click(function(){
+//     // alert("Entra")
+//     // atrtam++
+//     $("#atribute-content")
+//     .append(
+//         // '<div>HOla</div>')
+//         // '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"><input placeholder="Add the atribute valor" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+//         '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+//         )
+// })
 // Eliminar Atributes
 $("#atribute-content").on("click","#atributdeleteRef",function(a){
     a.preventDefault()
@@ -1007,17 +1007,19 @@ document.getElementById("default").addEventListener("click",function(){
     
     $("input:checkbox[name=photo]").prop("checked",true);
     $("input:checkbox[name=code]").prop("checked",true);
-    $("input:checkbox[name=brand]").prop("checked",true);
-    $("input:checkbox[name=type]").prop("checked",true);
+    $("input:checkbox[name=car]").prop("checked",true);
+    $("input:checkbox[name=brand]").prop("checked",false);
+    $("input:checkbox[name=type]").prop("checked",false);
     $("input:checkbox[name=shape]").prop("checked",false);
-    $("input:checkbox[name=dimensions]").prop("checked",true);
+    $("input:checkbox[name=dimensions]").prop("checked",false);
     $("input:checkbox[name=atributes]").prop("checked",true);
     $("input:checkbox[name=category]").prop("checked",true);
     $("input:checkbox[name=priceM]").prop("checked",false);
     $("input:checkbox[name=priceD]").prop("checked",false);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
-    $("input:checkbox[name=reference]").prop("checked",true);
+    $("input:checkbox[name=reference]").prop("checked",false);
+    $("input:checkbox[name=engine]").prop("checked",true);
     $("input:checkbox[name=ecode]").prop("checked",true);
 
     $("#headerList2").each(function(){              // Dimensions
@@ -1041,22 +1043,26 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#priceD").index() + 1)+")").hide();
     $("#code").show();
     $("table td:nth-child("+($("#code").index() + 1)+")").show();
-    $("#brand").show();
-    $("table td:nth-child("+($("#brand").index() + 1)+")").show();
-    $("#type").show();
-    $("table td:nth-child("+($("#type").index() + 1)+")").show();
+    $("#car").show();
+    $("table td:nth-child("+($("#car").index() + 1)+")").show();
+    $("#brand").hide();
+    $("table td:nth-child("+($("#brand").index() + 1)+")").hide();
+    $("#type").hide();
+    $("table td:nth-child("+($("#type").index() + 1)+")").hide();
     $("#car").show();
     $("table td:nth-child("+($("#car").index() + 1)+")").show();
     $("#check").show();
     $("table td:nth-child("+($("#check").index() + 1)+")").show();
     $("#shape").hide();
     $("table td:nth-child("+($("#shape").index() + 1)+")").hide();
-    $("#dimensions").show();
-    $("table td:nth-child("+($("#dimensions").index() + 1)+")").show();
+    $("#dimensions").hide();
+    $("table td:nth-child("+($("#dimensions").index() + 1)+")").hide();
     $("#atributes").show();
     $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
-    $("#reference").show();
-    $("table td:nth-child("+($("#reference").index() + 1)+")").show();
+    $("#reference").hide();
+    $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
+    $("#engine").show();
+    $("table td:nth-child("+($("#engine").index() + 1)+")").show();
     $("#category").show();
     $("table td:nth-child("+($("#category").index() + 1)+")").show();
     $("#ecode").show();
@@ -1130,12 +1136,14 @@ const $cab = 5;
 $("input:checkbox[name=detail-id]").prop("checked",true);
 $("input:checkbox[name=photo]").prop("checked",true);
 $("input:checkbox[name=code]").prop("checked",true);
-$("input:checkbox[name=brand]").prop("checked",true);
-$("input:checkbox[name=type]").prop("checked",true);
+$("input:checkbox[name=car]").prop("checked",true);
+$("input:checkbox[name=brand]").prop("checked",false);
+$("input:checkbox[name=type]").prop("checked",false);
 $("input:checkbox[name=shape]").prop("checked",false);
-$("input:checkbox[name=dimensions]").prop("checked",true);
+$("input:checkbox[name=dimensions]").prop("checked",false);
 $("input:checkbox[name=atributes]").prop("checked",true);
-$("input:checkbox[name=reference]").prop("checked",true);
+$("input:checkbox[name=reference]").prop("checked",false);
+$("input:checkbox[name=engine]").prop("checked",true);
 $("input:checkbox[name=priceM]").prop("checked",false);
 $("input:checkbox[name=priceD]").prop("checked",false);
 $("input:checkbox[name=car]").prop("checked",true);
@@ -1158,6 +1166,7 @@ $List.change(function(){
     let priceDi = $("#priceD").index();
     let priceMi = $("#priceM").index();
     let referencei = $("#reference").index();
+    let enginei = $("#engine").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
     let categoryi = $("#category").index();
@@ -1265,6 +1274,14 @@ $List.change(function(){
     }else{
         $("#reference").hide();
         $("table td:nth-child("+(referencei + 1)+")").hide();
+    }
+
+    if ($("input:checkbox[name=engine]:checked").val()){
+        $("#engine").show();
+        $("table td:nth-child("+(enginei + 1)+")").show();
+    }else{
+        $("#engine").hide();
+        $("table td:nth-child("+(enginei + 1)+")").hide();
     }
 
     if ($("input:checkbox[name=ecode]:checked").val()){
@@ -1529,8 +1546,7 @@ $List5.change(function(){           // Activar filtro de Categories
             if(compCategories.length>0){
                 if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
                     for(var k=0;k<compCategories.length;k++){ 
-                        // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                        if(compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
+                        if(compCategories[k].toLowerCase() == $(this).text().split(" ").join("").toLowerCase()){    //.split(" ").join("") elimina todos los espacios en blanco de la cadena
                             bandShow = true
                             contCategory.push($(this).text())
                         }
@@ -1541,7 +1557,8 @@ $List5.change(function(){           // Activar filtro de Categories
             if(listadoPasar.length>0){  // Si se trae valores de Dimension o atributos
                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
                     for(var i=0; i<listadoPasar.length; i++){
-                        if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        if((listadoPasar[i].split(" ").join("").toLowerCase() == $(this).text().split(" ").join("").toLowerCase()) && ($(this).text() != "") && ($(this).text())){
+                        // if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
                             contAtrFind = contAtrFind + 1
                             bandDimAtr = true
                         }
