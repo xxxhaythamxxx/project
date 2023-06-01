@@ -779,30 +779,79 @@ $("#submitButton").click(function(e){
         }
     })
 })
-// $("#catSelect").change(function(){
-//     val = $(this).find("option:selected").text()
-//     $.ajax({
-//         method: 'GET',
-//         url: '/subCategoria',
-//         data: {'val': val},
-//         success:function(data){
-            
-//             select = $("#subcatSelect")
-//             select.empty()
-//             select.append("<option value='' selected>Select sub category</option>")
-//             for(var i=0;i<data.subcat.length;i++){
-//                 select.append("<option value='"+data.subcat[i].subcategory+"'>"+data.subcat[i].subcategory+"</option>")
-//             }
+// Valores de atributos por default dependiendo de la categoría
+$("#catSelect").change(function(){
+    val = $(this).find("option:selected").text()
+    $.ajax({
+        method: 'GET',
+        url: '/spareCat',
+        data: {'val': val},
+        success:function(data){
 
-//             if(data.bandera == true){
-//                 $("#subcatSelect").prop('disabled', false);
-//             }else{
-//                 $("#subcatSelect").prop('disabled', true);
-//             }
+            if(data.atributesSpare){
+                $("#atribute-content").empty()
+                for(let i = 0; i < data.atributesSpare.length; i++){
+                    if(i==0){
+                    
+                        $("#atribute-content").append('\
+                        <div id="ref-val" class="ref-val row">\
+                            <div class="col-lg-11">\
+                                <div class="row">\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atributeName+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                    </div>\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">\
+                                <div>\
+                                    <a style="text-decoration: none;color: rgb(136,12,12);" id="atributaddRef" class="p-2" href="javascript:void(0);">\
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">\
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>\
+                                        </svg>\
+                                    </a>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        ')
 
-//         }
-//     })
-// })
+                    }else{
+
+                        $("#atribute-content").append('\
+                        <div id="ref-val" class="ref-val row">\
+                            <div class="col-lg-11">\
+                                <div class="row">\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atributeName+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                    </div>\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">\
+                                <div>\
+                                    <a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);">\
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">\
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>\
+                                </svg>\
+                            </a>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        ')
+
+                    }
+                }
+            }else{
+                console.log("No tiene atributos")
+            }
+
+        }
+    })
+})
 
 // Mostrar a ambos lados los car info que se tienen -------------------------------------
 $("#carcodPasar option").each(function(){
@@ -1194,6 +1243,15 @@ $("#reference-content").on("click","#deleteRef",function(a){
     // reftam--
 })
 
+
+// Agregar Atributos
+// $("#atributaddRef").click(function(){
+$("#atribute-content").on("click","#atributaddRef",function(a){
+    $("#atribute-content")
+    .append(
+        '<div class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+        )
+})
 // atrtam = 1
 // Agregar Atributos
 // $("#atributaddRef").click(function(){

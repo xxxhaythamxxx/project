@@ -53,11 +53,10 @@
                         <form action="{% url 'importCar' %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <label for="phot" class="form-label">Parameters:</label>
-                            <div>manufacturer</div>
-                            <div>model</div>
-                            <div>from</div>
-                            <div>to</div>
-                            <div class="mb-3">chasis</div>
+                            <div>MAKE</div>
+                            <div>MODEL</div>
+                            <div>YEAR</div>
+                            <div class="mb-3">CHASIS</div>
                             <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
                         </div>
                         <div class="mt-4">

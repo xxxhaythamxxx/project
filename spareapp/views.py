@@ -1737,6 +1737,34 @@ def subCategoria(request):
 
     return JsonResponse({'bandera':bandera,'cat':val,'subcat':catAux})
 
+def spareCat(request):
+
+    atributesSpare = None
+
+    val = request.GET.get("val")
+    # print(val)
+    atAux = atribute.objects.filter(atributeSpare__spare_category__category=val)
+    # print(atAux)
+    # catAux = subcategory.objects.filter(category__category=val)
+    if atAux:
+        print("Hay atributos")
+        atributesSpare = list(atAux.values())
+    else:
+        print("No hay nada")
+
+    print(atributesSpare)
+
+    # if request.GET.get("fecha") == "change":
+
+    #     creado = request.GET.get("creado")
+    #     creadoAux = datetime.strptime(creado,"%Y-%m-%d")
+    #     deadlineDefault=(creadoAux+timedelta(days=30)).date()
+    #     actualAux=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
+
+    #     actual = actualAux
+
+    return JsonResponse({'cat':val,'atributesSpare':atributesSpare})
+
 def fillcategoryadmin(request):
 
     allCategories = category.objects.all().order_by("category")
@@ -2729,14 +2757,17 @@ def importCar(request):
     valve=""
     motor=""
     verificador = False
-    auxMake = ""
-    auxModel = ""
+    auxMake = None
+    auxModel = None
     auxFrom = ""
     auxTo = ""
-    auxChasis = ""
+    auxChasis = None
+    auxYear = None
     lineaTrans = ""
     trans1 = ""
     targetCar = ""
+    auxCar = None
+    aux = None
 
     if "phot" in request.FILES:
         checkear = 0
@@ -2755,6 +2786,7 @@ def importCar(request):
         poscar_model = -1
         poscarfrom = -1
         poscarto = -1
+        postyear = -1
         postchasis = -1
         postransmission = -1
         postengine = -1
@@ -2768,155 +2800,310 @@ def importCar(request):
                 if col.value == "MODEL":
                     poscar_model = j
                     cont = cont + 1
-                if col.value == "FROM":
-                    poscarfrom = j
-                    cont = cont + 1
-                if col.value == "TO":
-                    poscarto = j
+                if col.value == "YEAR":
+                    postyear = j
                     cont = cont + 1
                 if col.value == "CHASIS":
                     postchasis = j
                     cont = cont + 1
-                if col.value == "TRANSMISION":
-                    postransmission = j
-                    cont = cont + 1
-                if col.value == "ENGINE(LITERS/CODE/VALVES/OHC)":
-                    postengine = j
-                    cont = cont + 1
                 j=j+1
             i=i+1
         if cont > 0:
+            print("Contador mayor a 0")
             i=0
             for fil in maxCol:
                 j=0
                 for col in fil:
                     if i>0:
+                        # COLUMNA MANUFACTURER
                         if j == poscar_manufacturer:
+                            # print(col.value)
                             auxMake = col.value
-                            if car.objects.filter(car_manufacturer=col.value):
-                                checkear = checkear + 1
+                            # if car.objects.filter(car_manufacturer=col.value):
+                            #     checkear = checkear + 1
+                        # COLUMNA MODEL
                         if j == poscar_model:
                             auxModel = col.value
-                            if car.objects.filter(car_model=col.value):
-                                checkear = checkear + 1
-                        if j == poscarfrom:
-                            auxFrom = col.value
-                        if j == poscarto:
-                            auxTo = col.value
+                            # if car.objects.filter(car_model=col.value):
+                            #     checkear = checkear + 1
+                        # COLUMNA YEAR
+                        if j == postyear:
+                            auxYear = col.value
+                        # COLUMNA CHASIS
                         if j == postchasis:
                             auxChasis = col.value
-                            if car.objects.filter(chasis=col.value):
-                                checkear = checkear + 1
-                        if j == postransmission:
-                            auxTransmision = col.value
-                            if col.value:
-                                lineaTrans = col.value.split("\n")
-                        if j == postengine:
-                            if col.value:
-                                linea = col.value.split("\n")
+                            # if car.objects.filter(chasis=col.value):
+                            #     checkear = checkear + 1
                         
                     j=j+1
                 
-                if checkear<3 and i>0 and (auxMake or auxModel):
-                    
-                    car1 = car()
-                    if auxMake:
-                        car1.car_manufacturer = auxMake
-                    if auxModel:
-                        car1.car_model = auxModel
-                    if auxFrom:
-                        car1.carfrom = auxFrom
-                    if auxTo:
-                        car1.carto = auxTo
-                    if auxChasis:
-                        car1.chasis = auxChasis
-                    car1.save()
-                    for a in lineaTrans:
-                        if transmission.objects.filter(trans=a):
-                            targetCar = transmission.objects.get(trans=a)
-                        else:
-                            trans1 = transmission()
-                            trans1.trans = a
-                            trans1.save()
-                            targetCar = transmission.objects.get(trans=a)
-                        car1.transmission.add(targetCar)
+                if auxMake:
+                    # print(auxMake)
+                    aux = manufacturer.objects.filter(manufacturer=auxMake)
+                    if aux:
+                        pass
+                    else:
+                        newManu = manufacturer()
+                        newManu.manufacturer = auxMake
+                        newManu.save()
+                    aux = manufacturer.objects.get(manufacturer=auxMake)
+                    auxCar=car.objects.filter(car_manufacturer__manufacturer=auxMake)
+                        # print("Car: "+str(auxMake))
+                    # car1.car_manufacturer = auxMake
+                if auxModel:
+                    # print(auxModel)
+                    # aux = car.objects.filter(car_model=auxModel)
+                    auxCar=auxCar.filter(car_model=auxModel)
+                    if aux:
+                        pass
+                    else:
+                        pass
+                    # print("Model: "+str(auxModel))
+                    # car1.car_model = auxModel
+                if auxYear:
+                    # print(auxYear)
+                    auxCar=auxCar.filter(carfrom=auxYear)
+                    # print("Year: "+str(auxYear))
+                    # car1.caryear = auxYear
+                if auxChasis:
+                    # print(auxChasis)
+                    auxCar=auxCar.filter(chasis=auxChasis)
+                    # print("Chasis: "+str(auxChasis))
+                    # car1.chasis = auxChasis
+                if auxCar:
+                    pass
                 else:
-                    if i>0 and (auxMake or auxModel):
-                        car1 = car.objects.get(car_manufacturer=auxMake,car_model=auxModel,chasis=auxChasis)
-                        if car1.carfrom:
-                            pass
-                        else:
-                            if auxFrom:
-                                car1.carfrom = auxFrom
-                        car1.save()
-                        for a in lineaTrans:
-                            if transmission.objects.filter(trans=a):
-                                targetCar = transmission.objects.get(trans=a)
-                            else:
-                                trans1 = transmission()
-                                trans1.trans = a
-                                trans1.save()
-                                targetCar = transmission.objects.get(trans=a)
-                            car1.transmission.add(targetCar)
-                checkear = 0
-                i=i+1
-                for n in linea:
-                    linea2 = n.split(" ")
-                    if len(linea2)>0:
-                        litros = linea2[0]
-                    else:
-                        litros = None
-                    if len(linea2)>1:
-                        codigo = linea2[1]
-                    else:
-                        codigo = None
-                    if len(linea2)>2:
-                        valve = linea2[2].split("VALVE")[0]
-                    else:
-                        valve = None
-
                     if i>0:
-                        if litros:
-                            if codigo:
-                                if valve:
-                                    if engine.objects.filter(engine_l=litros,engine_ide=codigo,engine_cylinder=valve):
-                                        verificador=True
-                                else:
-                                    if engine.objects.filter(engine_l=litros,engine_ide=codigo):
-                                        verificador=True
-                            else:
-                                if valve:
-                                    if engine.objects.filter(engine_l=litros,engine_cylinder=valve):
-                                        verificador=True
-                        else:
-                            if codigo:
-                                if valve:
-                                    if engine.objects.filter(engine_ide=codigo,engine_cylinder=valve):
-                                        verificador=True
-                                else:
-                                    if engine.objects.filter(engine_ide=codigo):
-                                        verificador=True
-                            else:
-                                if valve:
-                                    if engine.objects.filter(engine_cylinder=valve):
-                                        verificador=True
-
-                        if verificador:
-                            pass
-                        else:
-                            motor = engine()
-                            if litros:
-                                motor.engine_l = litros
-                            if codigo:
-                                motor.engine_ide = codigo
-                            if valve:
-                                motor.engine_cylinder = valve
-                            motor.save()
-                        verificador=False
+                        pass
+                        # print(aux)
+                        # print(auxModel)
+                        # print(auxYear)
+                        # print(auxChasis)
+                        car1=car()
+                        car1.car_manufacturer=aux
+                        car1.car_model=auxModel
+                        car1.carfrom=auxYear
+                        car1.chasis=auxChasis
+                        car1.save()
+                 
+                i=i+1
 
     dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     return render(request,"spareapp/fillspare.html",dic)
+
+# def importCar(request):
+    
+#     dim=dimension.objects.values("atributeName").distinct()
+#     dim2=dimension.objects.all()
+#     atr=atribute.objects.values("atributeName").distinct()
+#     atr2=atribute.objects.all()
+#     allSparesall=spare.objects.all()
+#     allCategories=category.objects.all().order_by("category")
+#     allEngines=engine.objects.all()
+#     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+#     allCars=car.objects.all()
+#     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+#     allVendors=vendor.objects.all()
+#     ref=reference.objects.all().order_by("referenceSpare")
+#     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
+#     checkear = 0
+#     linea=""
+#     linea2=""
+#     lineaTrans=""
+#     litros=""
+#     codigo=""
+#     valve=""
+#     motor=""
+#     verificador = False
+#     auxMake = ""
+#     auxModel = ""
+#     auxFrom = ""
+#     auxTo = ""
+#     auxChasis = ""
+#     lineaTrans = ""
+#     trans1 = ""
+#     targetCar = ""
+
+#     if "phot" in request.FILES:
+#         checkear = 0
+
+#         FILE_PATH = request.FILES['phot']
+#         workbook = load_workbook(FILE_PATH)
+#         sheet = workbook.active
+
+#         maxCol = []
+
+#         for col in sheet.iter_rows():
+#             maxCol.append(col)
+        
+#         i=0
+#         poscar_manufacturer = -1
+#         poscar_model = -1
+#         poscarfrom = -1
+#         poscarto = -1
+#         postchasis = -1
+#         postransmission = -1
+#         postengine = -1
+#         cont = 0
+#         for fil in maxCol:
+#             j=0
+#             for col in fil:
+#                 if col.value == "MAKE":
+#                     poscar_manufacturer = j
+#                     cont = cont + 1
+#                 if col.value == "MODEL":
+#                     poscar_model = j
+#                     cont = cont + 1
+#                 if col.value == "FROM":
+#                     poscarfrom = j
+#                     cont = cont + 1
+#                 if col.value == "TO":
+#                     poscarto = j
+#                     cont = cont + 1
+#                 if col.value == "CHASIS":
+#                     postchasis = j
+#                     cont = cont + 1
+#                 if col.value == "TRANSMISION":
+#                     postransmission = j
+#                     cont = cont + 1
+#                 if col.value == "ENGINE(LITERS/CODE/VALVES/OHC)":
+#                     postengine = j
+#                     cont = cont + 1
+#                 j=j+1
+#             i=i+1
+#         if cont > 0:
+#             i=0
+#             for fil in maxCol:
+#                 j=0
+#                 for col in fil:
+#                     if i>0:
+#                         if j == poscar_manufacturer:
+#                             auxMake = col.value
+#                             if car.objects.filter(car_manufacturer=col.value):
+#                                 checkear = checkear + 1
+#                         if j == poscar_model:
+#                             auxModel = col.value
+#                             if car.objects.filter(car_model=col.value):
+#                                 checkear = checkear + 1
+#                         if j == poscarfrom:
+#                             auxFrom = col.value
+#                         if j == poscarto:
+#                             auxTo = col.value
+#                         if j == postchasis:
+#                             auxChasis = col.value
+#                             if car.objects.filter(chasis=col.value):
+#                                 checkear = checkear + 1
+#                         if j == postransmission:
+#                             auxTransmision = col.value
+#                             if col.value:
+#                                 lineaTrans = col.value.split("\n")
+#                         if j == postengine:
+#                             if col.value:
+#                                 linea = col.value.split("\n")
+                        
+#                     j=j+1
+                
+#                 if checkear<3 and i>0 and (auxMake or auxModel):
+                    
+#                     car1 = car()
+#                     if auxMake:
+#                         car1.car_manufacturer = auxMake
+#                     if auxModel:
+#                         car1.car_model = auxModel
+#                     if auxFrom:
+#                         car1.carfrom = auxFrom
+#                     if auxTo:
+#                         car1.carto = auxTo
+#                     if auxChasis:
+#                         car1.chasis = auxChasis
+#                     car1.save()
+#                     for a in lineaTrans:
+#                         if transmission.objects.filter(trans=a):
+#                             targetCar = transmission.objects.get(trans=a)
+#                         else:
+#                             trans1 = transmission()
+#                             trans1.trans = a
+#                             trans1.save()
+#                             targetCar = transmission.objects.get(trans=a)
+#                         car1.transmission.add(targetCar)
+#                 else:
+#                     if i>0 and (auxMake or auxModel):
+#                         car1 = car.objects.get(car_manufacturer=auxMake,car_model=auxModel,chasis=auxChasis)
+#                         if car1.carfrom:
+#                             pass
+#                         else:
+#                             if auxFrom:
+#                                 car1.carfrom = auxFrom
+#                         car1.save()
+#                         for a in lineaTrans:
+#                             if transmission.objects.filter(trans=a):
+#                                 targetCar = transmission.objects.get(trans=a)
+#                             else:
+#                                 trans1 = transmission()
+#                                 trans1.trans = a
+#                                 trans1.save()
+#                                 targetCar = transmission.objects.get(trans=a)
+#                             car1.transmission.add(targetCar)
+#                 checkear = 0
+#                 i=i+1
+#                 for n in linea:
+#                     linea2 = n.split(" ")
+#                     if len(linea2)>0:
+#                         litros = linea2[0]
+#                     else:
+#                         litros = None
+#                     if len(linea2)>1:
+#                         codigo = linea2[1]
+#                     else:
+#                         codigo = None
+#                     if len(linea2)>2:
+#                         valve = linea2[2].split("VALVE")[0]
+#                     else:
+#                         valve = None
+
+#                     if i>0:
+#                         if litros:
+#                             if codigo:
+#                                 if valve:
+#                                     if engine.objects.filter(engine_l=litros,engine_ide=codigo,engine_cylinder=valve):
+#                                         verificador=True
+#                                 else:
+#                                     if engine.objects.filter(engine_l=litros,engine_ide=codigo):
+#                                         verificador=True
+#                             else:
+#                                 if valve:
+#                                     if engine.objects.filter(engine_l=litros,engine_cylinder=valve):
+#                                         verificador=True
+#                         else:
+#                             if codigo:
+#                                 if valve:
+#                                     if engine.objects.filter(engine_ide=codigo,engine_cylinder=valve):
+#                                         verificador=True
+#                                 else:
+#                                     if engine.objects.filter(engine_ide=codigo):
+#                                         verificador=True
+#                             else:
+#                                 if valve:
+#                                     if engine.objects.filter(engine_cylinder=valve):
+#                                         verificador=True
+
+#                         if verificador:
+#                             pass
+#                         else:
+#                             motor = engine()
+#                             if litros:
+#                                 motor.engine_l = litros
+#                             if codigo:
+#                                 motor.engine_ide = codigo
+#                             if valve:
+#                                 motor.engine_cylinder = valve
+#                             motor.save()
+#                         verificador=False
+
+#     dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+#     return render(request,"spareapp/fillspare.html",dic)
 
 def importEngine(request):
 

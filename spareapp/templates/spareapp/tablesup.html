@@ -10,12 +10,12 @@
             <th id="brand" class="trsup color" style="position: sticky;top: 70;display: none;">Brand</th>
             <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
             <!-- <th id="subcategory" class="trsup color" style="position: sticky;top: 70;">Sub-Category</th> -->
-            <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+            <th id="type" class="trsup color" style="position: sticky;top: 70;display: none;">Description</th>
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
             {% endif %}
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-            <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
+            <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
             {% endif %}
             {% if request.user.is_superuser %}
             <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;">Price Major</th>

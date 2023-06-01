@@ -956,16 +956,16 @@ $("#reference-content").on("click","#deleteRef",function(a){
 
 // atrtam = 1
 // Agregar Atributos
-$("#atributaddRef").click(function(){
-    // alert("Entra")
-    // atrtam++
-    $("#atribute-content")
-    .append(
-        // '<div>HOla</div>')
-        // '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"><input placeholder="Add the atribute valor" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
-        '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
-        )
-})
+// $("#atributaddRef").click(function(){
+//     // alert("Entra")
+//     // atrtam++
+//     $("#atribute-content")
+//     .append(
+//         // '<div>HOla</div>')
+//         // '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"><input placeholder="Add the atribute valor" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+//         '<div id="ref-val" class="ref-val row"><div class="col-lg-11"><div class="row"><div class="col-lg-6"><input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80"></div><div class="col-lg-6"><input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80"></div></div></div><div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div></div>'
+//         )
+// })
 // Eliminar Atributes
 $("#atribute-content").on("click","#atributdeleteRef",function(a){
     a.preventDefault()
@@ -1009,9 +1009,9 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=code]").prop("checked",true);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=brand]").prop("checked",false);
-    $("input:checkbox[name=type]").prop("checked",true);
+    $("input:checkbox[name=type]").prop("checked",false);
     $("input:checkbox[name=shape]").prop("checked",false);
-    $("input:checkbox[name=dimensions]").prop("checked",true);
+    $("input:checkbox[name=dimensions]").prop("checked",false);
     $("input:checkbox[name=atributes]").prop("checked",true);
     $("input:checkbox[name=category]").prop("checked",true);
     $("input:checkbox[name=priceM]").prop("checked",false);
@@ -1047,16 +1047,16 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#car").index() + 1)+")").show();
     $("#brand").hide();
     $("table td:nth-child("+($("#brand").index() + 1)+")").hide();
-    $("#type").show();
-    $("table td:nth-child("+($("#type").index() + 1)+")").show();
+    $("#type").hide();
+    $("table td:nth-child("+($("#type").index() + 1)+")").hide();
     $("#car").show();
     $("table td:nth-child("+($("#car").index() + 1)+")").show();
     $("#check").show();
     $("table td:nth-child("+($("#check").index() + 1)+")").show();
     $("#shape").hide();
     $("table td:nth-child("+($("#shape").index() + 1)+")").hide();
-    $("#dimensions").show();
-    $("table td:nth-child("+($("#dimensions").index() + 1)+")").show();
+    $("#dimensions").hide();
+    $("table td:nth-child("+($("#dimensions").index() + 1)+")").hide();
     $("#atributes").show();
     $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
     $("#reference").hide();
@@ -1138,9 +1138,9 @@ $("input:checkbox[name=photo]").prop("checked",true);
 $("input:checkbox[name=code]").prop("checked",true);
 $("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=brand]").prop("checked",false);
-$("input:checkbox[name=type]").prop("checked",true);
+$("input:checkbox[name=type]").prop("checked",false);
 $("input:checkbox[name=shape]").prop("checked",false);
-$("input:checkbox[name=dimensions]").prop("checked",true);
+$("input:checkbox[name=dimensions]").prop("checked",false);
 $("input:checkbox[name=atributes]").prop("checked",true);
 $("input:checkbox[name=reference]").prop("checked",false);
 $("input:checkbox[name=engine]").prop("checked",true);
