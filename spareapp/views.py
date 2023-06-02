@@ -976,6 +976,7 @@ def fillcar(request):
     allCars=car.objects.all()
     allCarsDistinct=car.objects.values("car_manufacturer").distinct()
     allModelsDistinct=car.objects.values("car_model").distinct()
+    auxiliarCar = None
     dic = {"allManu":allManu,"allTrans":allTrans,"allCars":allCars,"allCarsDistinct":allCarsDistinct,"allModelsDistinct":allModelsDistinct}
 
     if request.method == "POST":
@@ -986,65 +987,45 @@ def fillcar(request):
         yearFromAux = request.POST.get("yearfro")
         yeartToAux = request.POST.get("yeart")
         chasiAux = request.POST.get("chasi")
-        # transAux = request.POST.get("trans")
         cartoreg = request.POST.getlist("engcartoReg")
         cartopass = request.POST.getlist("engcartoPass")
         carAux = []
         idAux = ""
         targetCar = ""
 
-        if manufacturer.objects.filter(manufacturer__icontains=manuAux2):
-            manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
-        else:
-            manuNew = manufacturer()
-            manuNew.manufacturer = manuAux2
-            manuNew.save()
+        auxiliarCar = car.objects.filter(car_manufacturer__manufacturer=manuAux,car_model=modelAux)
 
-        manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
-
-        car1 = car()
-        car1.car_manufacturer = manuAux
-        if modelAux:
-            car1.car_model = modelAux
         if yearFromAux:
-            car1.carfrom = yearFromAux
-        # if yeartToAux:
-        #     car1.carto = yeartToAux
+            auxiliarCar = auxiliarCar.filter(carfrom=yearFromAux)
+        
         if chasiAux:
-            car1.chasis = chasiAux
+            auxiliarCar = auxiliarCar.filter(chasis=chasiAux)
 
-        # if transAux:
-        #     car1.transmission = transAux
+        if auxiliarCar:
 
-        # cartoreg = request.POST.getlist("engcartoReg")
-        # carAux = []
-        # cartopass = request.POST.getlist("engcartoPass")
+            pass
 
-        car1.save()
+        else:
 
-        # if cartoreg == []:
-        #     for c in allTrans:
-        #         bandt = False
-        #         for ca in cartopass:
-        #             if str(c.trans) == str(ca):
-        #                 bandt = True
-        #         if bandt == False:
-        #             carAux.append(c.trans)
+            if manufacturer.objects.filter(manufacturer__icontains=manuAux2):
+                manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
+            else:
+                manuNew = manufacturer()
+                manuNew.manufacturer = manuAux2
+                manuNew.save()
 
-        # if cartoreg == []:
-        #     for sp in carAux:
-        #         for c in allTrans:
-        #             if str(c.trans) == str(sp):
-        #                 idAux = c.id
-        #         targetCar = transmission.objects.get(id=idAux)
-        #         car1.transmission.add(targetCar)
-        # else:
-        #     for sp in cartoreg:
-        #         for c in allTrans:
-        #             if str(c.trans) == str(sp):
-        #                 idAux = c.id
-        #         targetCar = transmission.objects.get(id=idAux)
-        #         car1.transmission.add(targetCar)
+            manuAux = manufacturer.objects.get(manufacturer__icontains=manuAux2)
+
+            car1 = car()
+            car1.car_manufacturer = manuAux
+            if modelAux:
+                car1.car_model = modelAux
+            if yearFromAux:
+                car1.carfrom = yearFromAux
+            if chasiAux:
+                car1.chasis = chasiAux
+
+            car1.save()
 
         if request.POST.get("id") == "secondForm":
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
