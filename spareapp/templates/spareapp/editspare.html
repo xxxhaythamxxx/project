@@ -269,13 +269,14 @@
                 {% for ref in refAux %}
                 <div id="ref-val" class="ref-val row">
                     <div class="col-lg-11">
-                        <input placeholder="Add the reference code" value="{{ref.referenceCode}}" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
-                        <input placeholder="Add a note" value="{{ref.referenceNote}}" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
-                        <!-- {% if ref.cantidad %}
-                        <input placeholder="Add quantity" value="{{ref.cantidad}}" type="number" class="form-control" name="refquantity" id="refquantity" aria-describedby="refquantityHelp" maxlength="80">
-                        {% else %}
-                        <input placeholder="Add quantity" value="0" type="number" class="form-control" name="refquantity" id="refquantity" aria-describedby="refquantityHelp" maxlength="80">
-                        {% endif %} -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input placeholder="Add the reference code" value="{{ref.referenceCode}}" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
+                            </div>
+                            <div class="col-lg-6">
+                                <input placeholder="Add a note" value="{{ref.referenceNote}}" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
                         <div>
@@ -300,9 +301,14 @@
             {% else %}
                 <div id="ref-val" class="ref-val row">
                     <div class="col-lg-11">
-                        <input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
-                        <input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
-                        <!-- <input placeholder="Add quantity" value="" type="number" class="form-control" name="refquantity" id="refquantity" aria-describedby="refquantityHelp" maxlength="80"> -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
+                            </div>
+                            <div class="col-lg-6">
+                                <input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
                         <div>
