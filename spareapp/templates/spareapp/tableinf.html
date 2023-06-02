@@ -9,6 +9,8 @@
             <td class="pr-0"><a href="#"></a></td>
             {% endif %}
 
+            <td class="pr-0"><a style="color:rgb(136,12,12);" id="spareEdit" href="{% url 'editspare' br.id %}">{{br.spare_code}}</a></td>
+
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
             {% if reference %}
             <td style="max-width: 120px;" class="pr-0">

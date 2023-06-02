@@ -29,6 +29,7 @@
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="ml-1">Dimensions</label></li>
                         {% endif %}
+                        <li style="margin:auto;" class=""><input name="editSpare" class="ml-2" type="checkbox"><label class="ml-1">Edite</label></li>
                         <li style="margin:auto;" class=""><input name="engine" class="ml-2" type="checkbox"><label class="ml-1">Engine</label></li>
                         {% if request.user.is_superuser %}
                         <li style="margin:auto;" class=""><input name="priceM" class="ml-2" type="checkbox"><label class="ml-1">Price Major</label></li>

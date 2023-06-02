@@ -1743,12 +1743,14 @@ def spareCat(request):
 
     val = request.GET.get("val")
     # print(val)
-    atAux = atribute.objects.filter(atributeSpare__spare_category__category=val)
+    atAux = atribute.objects.values("atributeName").filter(atributeSpare__spare_category__category=val).distinct()
+    print(atAux)
     # print(atAux)
     # catAux = subcategory.objects.filter(category__category=val)
     if atAux:
         print("Hay atributos")
-        atributesSpare = list(atAux.values())
+        atributesSpare = list(atAux)
+        # atributesSpare = list(atAux.values())
     else:
         print("No hay nada")
 
@@ -2153,6 +2155,8 @@ def editspare(request,val):
         
         # Spare ------------------------------------------------------
         sparrr = request.POST.getlist("toReg")
+        print("sparrr")
+        print(sparrr)
         sparrrPasar = request.POST.getlist("toPass")
         sparrrAux = []
         varcont = 0
@@ -2160,11 +2164,13 @@ def editspare(request,val):
             for sp in allSparesall:
                 bandt = False
                 for sp2 in sparrrPasar:
-                    if str(sp) == str(sp2):
+                    if str(sp).replace(" ","") == str(sp2).replace(" ",""):
                         varcont = varcont + 1
                         bandt = True
                 if bandt == False:
                     sparrrAux.append(sp)
+        print("sparrrAux")
+        print(sparrrAux)
         spare1.spare_code = request.POST.get("cod")
         if request.POST.get("descriptio") == "":
             spare1.spare_name = None
@@ -2187,8 +2193,8 @@ def editspare(request,val):
 
         if manuAux2:
             if category.objects.filter(category=manuAux2):
-                print("QUERY")
-                print(category.objects.filter(category=manuAux2))
+                # print("QUERY")
+                # print(category.objects.filter(category=manuAux2))
                 manuAux = category.objects.get(category=manuAux2)
             else:
                 manuNew = category()
@@ -2419,6 +2425,10 @@ def editspare(request,val):
             for a in sp.spare_spare.all():
                 spare1.spare_spare.remove(a.id)
 
+        print("sparrr: ")
+        print(sparrr)
+        print("sparrrAux: ")
+        print(sparrrAux)
         if sparrr == []:
             for sp in sparrrAux:
                 varId = 0

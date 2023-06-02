@@ -2,6 +2,7 @@
     <thead class="">
         <tr class="color text-white dnd-moved">
             <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
+            <th id="editSpare" class="trsup color" style="position: sticky;top: 70;">Edit</th>
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
             <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
             {% endif %}
