@@ -2136,22 +2136,26 @@ def editspare(request,val):
         
         # Spare ------------------------------------------------------
         sparrr = request.POST.getlist("toReg")
-        print("sparrr")
-        print(sparrr)
+        # print("sparrr")
+        # print(sparrr)
         sparrrPasar = request.POST.getlist("toPass")
+        print("To Reg")
+        print(request.POST.getlist("toReg"))
+        print("To Pass")
+        print(request.POST.getlist("toPass"))
         sparrrAux = []
         varcont = 0
         if sparrr == []:
             for sp in allSparesall:
                 bandt = False
                 for sp2 in sparrrPasar:
-                    if str(sp).replace(" ","") == str(sp2).replace(" ",""):
+                    if str(sp.spare_code).replace(" ","") == str(sp2).replace(" ",""):
                         varcont = varcont + 1
                         bandt = True
                 if bandt == False:
-                    sparrrAux.append(sp)
-        print("sparrrAux")
-        print(sparrrAux)
+                    sparrrAux.append(sp.spare_code)
+        # print("sparrrAux")
+        # print(sparrrAux)
         spare1.spare_code = request.POST.get("cod")
         if request.POST.get("descriptio") == "":
             spare1.spare_name = None
@@ -2400,16 +2404,18 @@ def editspare(request,val):
 
         # Spare targets -----------------------------------------------
 
-        spAux = spare.objects.filter(spare_code=val)
+        spAux = spare.objects.filter(id=val)
+        print("spAux")
+        print(spAux)
 
         for sp in spAux:
             for a in sp.spare_spare.all():
                 spare1.spare_spare.remove(a.id)
 
-        print("sparrr: ")
-        print(sparrr)
-        print("sparrrAux: ")
-        print(sparrrAux)
+        # print("sparrr: ")
+        # print(sparrr)
+        # print("sparrrAux: ")
+        # print(sparrrAux)
         if sparrr == []:
             for sp in sparrrAux:
                 varId = 0
@@ -2422,12 +2428,21 @@ def editspare(request,val):
                 targetCode = spare.objects.get(id=varId)
                 spare1.spare_spare.add(targetCode)
         else:
+            print("Entra en contrario")
+            print("sparr")
+            print(sparrr)
             for sp in sparrr:
                 varId = 0
                 aux = sp.split(" ")
+                print("Valor de aux")
+                print(aux)
                 code = (aux[0])
+                print("Valor de code")
+                print(code)
 
                 auxSp = spare.objects.filter(spare_code=code)
+                print("auxSp")
+                print(auxSp)
                 for sp in auxSp:
                     varId = sp.id
                 targetCode = spare.objects.get(id=varId)
@@ -2581,7 +2596,7 @@ def listList(request):
     return render(request,"spareapp/listList.html",dic)
 
 def listengine(request):
-    allEngines=engine.objects.all().order_by("engine_ide")
+    allEngines=engine.objects.all().order_by("engine_manufacturer__manufacturer","engine_ide","engine_l")
     allCarsEngines=car.objects.all().values("id","engine__id","car_manufacturer","car_model","chasis","carfrom","carto").order_by("car_manufacturer")
     allTrans=transmission.objects.all().values("trans","car__id")
     dic={"allEngines":allEngines,"allCarsEngines":allCarsEngines,"allTrans":allTrans}
@@ -2589,8 +2604,8 @@ def listengine(request):
     return render(request,"spareapp/listengine.html",dic)
 
 def listcar(request):
-    allCars=car.objects.all().order_by("car_manufacturer__manufacturer")
-    allCarsAll=car.objects.all().values("id","transmission__id").order_by("car_manufacturer")
+    allCars=car.objects.all().order_by("car_manufacturer__manufacturer","car_model","carfrom","chasis")
+    allCarsAll=car.objects.all().values("id","transmission__id").order_by("car_manufacturer__manufacturer","car_model","carfrom","chasis")
     allTrans=transmission.objects.all()
     allEngines=engine.objects.all().order_by("engine_ide")
     allEnginesCars=engine.objects.all().values("id","car_engine_info__id","engine_ide","engine_l","engine_type","engine_pistons").order_by("engine_ide")

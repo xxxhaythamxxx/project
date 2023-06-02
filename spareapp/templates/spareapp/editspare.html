@@ -335,7 +335,7 @@
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="toPass" id="codPasar" size="5">
                             {% for spr in allSparesall %}
-                                <option class="p-1">{{spr}}</option>
+                                <option class="p-1">{{spr.spare_code}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -344,12 +344,8 @@
                     <div class="color text-white p-2 m-2">Chosen Spare target</div>
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="toReg" id="codPasado" size="5">
-                            {% for spr in allSparesall %}
-                                {% if spr.spare_code == val %}
-                                    {% for sp in spr.spare_spare.all %}
-                                    <option id="spareTargetOption" value="{{sp}}" class="p-1">{{sp}}</option>
-                                    {% endfor %}
-                                {% endif %}
+                            {% for sp in sparefind.0.spare_spare.all %}
+                                    <option id="spareTargetOption" value="{{sp.spare_code}}" class="p-1">{{sp.spare_code}}</option>
                             {% endfor %}
                         </select>
 

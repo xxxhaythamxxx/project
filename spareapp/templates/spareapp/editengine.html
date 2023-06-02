@@ -73,7 +73,7 @@
                     <div class="container">
                         <select class="form-select" multiple aria-label="multiple select example" name="engcartoPass" id="engcarcodPasar" size="5">
                             {% for spr in allCars %}
-                                <option class="p-1">{{spr}}</option>
+                                <option class="p-1">{{spr.car_manufacturer}} {{spr.car_model}} {{spr.carfrom}} {{spr.chasis}}</option>
                             {% endfor %}
                         </select>
                     </div>
