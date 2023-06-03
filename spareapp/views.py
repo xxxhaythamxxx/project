@@ -1433,10 +1433,10 @@ def fillspare(request):
         # else:
         #     spare1.price_m = request.POST.get("pricem")
 
-        # if request.POST.get("priced")=="":
-        #     pass
-        # else:
-        #     spare1.price_d = request.POST.get("priced")
+        if request.POST.get("priced")=="":
+            spare1.price_d = None
+        else:
+            spare1.price_d = request.POST.get("priced")
 
         manuAux2 = request.POST.get("catSelect")
 
@@ -2210,10 +2210,11 @@ def editspare(request,val):
         # else:
         #     spare1.price_m = request.POST.get("pricem")
 
-        # if request.POST.get("priced")=="":
-        #     spare1.price_d = None
-        # else:
-        #     spare1.price_d = request.POST.get("priced")
+        if request.POST.get("priced")=="":
+            spare1.price_d = None
+        else:
+            print(request.POST.get("priced"))
+            spare1.price_d = float(request.POST.get("priced"))
         spare1.save()
 
         # Car info ----------------------------------------------------

@@ -380,12 +380,12 @@
             <label for="pricem" class="form-label">Price Mayor</label>
             <input value="{{sparefind.0.price_m}}" type="number" class="form-control" name="pricem" id="pricem" aria-describedby="pricemHelp">
             <div id="pricemHelp" class="form-text">Mayor price.</div>
-        </div>
+        </div>-->
         <div class="mb-3">
             <label for="priced" class="form-label">Price Detail</label>
-            <input value="{{sparefind.0.price_d}}" type="number" class="form-control" name="priced" id="priced" aria-describedby="pricedHelp">
+            <input id="priced" step="0.01" value="{{sparefind.0.price_d|floatformat:"2u"}}" type="number" class="form-control" name="priced" aria-describedby="pricedHelp">
             <div id="pricedHelp" class="form-text">Detail price.</div>
-        </div> -->
+        </div> 
 
         <!--------------------------------- Atributes -------------------------------------->
 
