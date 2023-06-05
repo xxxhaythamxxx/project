@@ -80,10 +80,10 @@
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
                         <div class="">
                             <a id="{{dim.atributeName|cut:' '}}Value" href="#">
-                                <div class="cantainer">
+                                <div style="overflow:hidden" class="">
                                     <div class="row">
-                                        <div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div>
-                                        <div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}}</div>
+                                        <div id="AtrName" class="col-lg-6 col-md-6 text-right px-0 pr-1">{{dim.atributeName}}:</div>
+                                        <div id="AtrVal" class="col-lg-6 col-md-6 text-left px-0">{{dim.atributeVal}}</div>
                                     </div>
                                 </div>
                             </a>
