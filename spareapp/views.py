@@ -2437,7 +2437,8 @@ def editspare(request,val):
                 aux = sp.split(" ")
                 print("Valor de aux")
                 print(aux)
-                code = (aux[0])
+                # code = (aux[0])
+                code = sp
                 print("Valor de code")
                 print(code)
 
