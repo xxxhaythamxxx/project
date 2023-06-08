@@ -6,33 +6,86 @@
 
 {% include "spareapp/fillsup.html" %}
 
-<div class="container invoicecont mt-5">
+<div class="container invoicecont mt-5 mb-4">
     <div class="row d-flex justify-content-center">
         <div class="col-lg-5">
             <input type="text" class="form-control" name="cod" id="cod" aria-describedby="codHelp" placeholder="Search by code, description, category or vendor">
         </div>
-        <!-- <div class="col-lg-3">
-            <input type="text" class="form-control" name="descriptio" id="descriptio" aria-describedby="descriptioHelp" placeholder="Search by description">
-        </div>
-        <div class="col-lg-3">
-            <input type="text" class="form-control" name="categor" id="categor" aria-describedby="categorHelp" placeholder="Search by category">
-        </div>
-        <div class="col-lg-3">
-            <input type="text" class="form-control" name="vendo" id="vendo" aria-describedby="vendoHelp" placeholder="Search by vendor">
-        </div> -->
     </div>
 
     <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
 
-    <table class="invoice invoicefill table-striped mt-2 mb-3">
+    <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
+        
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Code"  class="trsup color col py-2 th"><div onclick="sort(0,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Code')">Code</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Description" class="trsup color col py-2 th"><div onclick="sort(1,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Description')">Description</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Category" class="trsup color col py-2 th"><div onclick="sort(2,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Category')">Category</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Vendor" class="trsup color col py-2 th"><div onclick="sort(3,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Vendor')">Vendor</div></div>
+
+    </div>
+    <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
+        {% for br in allSparesall %}
+        <div class="unique">
+        <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0 headEngine td">
+            {% if br.spare_code %}
+                <div class="col d-flex align-items-center justify-content-center py-2">
+                    <a class="text-dark" style="text-decoration: none;" href="{% url 'editspare' br.id %}">{{br.spare_code}}</a>
+                </div>
+            {% else %}
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if br.spare_name %}
+                <div class="col d-flex align-items-center justify-content-center py-2">
+                    <a class="text-dark" style="text-decoration: none;" href="{% url 'editspare' br.id %}">{{br.spare_name}}</a>
+                </div>
+            {% else %}
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if br.spare_category %}
+                <div class="col d-flex align-items-center justify-content-center py-2">
+                    <a class="text-dark" style="text-decoration: none;" href="{% url 'editspare' br.id %}">{{br.spare_category}}</a>
+                </div>
+            {% else %}
+            <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+
+            {% if br.spare_vendor.all %}
+                <div class="col d-flex align-items-center justify-content-center py-2">
+                {% for dim in allVendors %}
+                    {% for sp in br.spare_vendor.all %}
+                        {% if sp.vendorName == dim.vendorName %}
+                            <div><a class="text-dark" style="text-decoration: none;" href="{% url 'editspare' br.id %}"">{{sp.vendorName}}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+            {% endif %}
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <table class="invoice invoicefill table-striped mt-2 mb-3">
         <thead>
             <tr class="text-white">
                 <th id="Code" onclick="filtrar('Code')" style="max-width: 80;position: sticky;top: 70;" class="trsup color">Code</th>
                 <th id="Description" onclick="filtrar('Description')" style="max-width: 150px;position: sticky;top: 70;" class="trsup color">Description</th>
                 <th style="position: sticky;top: 70;" id="Category" onclick="filtrar('Category')" class="trsup color">Category</th>
-                <!-- <th id="SubCategory" onclick="filtrar('SubCategory')" class="trsup color">SubCategory</th> -->
                 <th style="position: sticky;top: 70;" id="Vendor" onclick="filtrar('Vendor')" class="trsup color">Vendor</th>
-                <!-- <th style="position: sticky;top: 70;" class="trsup color">Action</th> -->
             </tr>
         </thead>
         <tbody>
@@ -56,12 +109,6 @@
                     <td class="pr-0"><a href="#"></a></td>
                 {% endif %}
 
-                <!-- {% if br.spare_subcategory %}
-                    <td class="pr-0"><a href="{% url 'editspare' br.id %}">{{br.spare_subcategory}}</a></td>
-                {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
-                {% endif %} -->
-
                 {% if br.spare_vendor.all %}
                     <td class="pr-0">
                 {% for dim in allVendors %}
@@ -77,7 +124,6 @@
                 {% else %}
                 <td class="pr-0"><div><a id="vendorInfo" href=""></a></div></td>
                 {% endif %}
-                <!-- <td class="pr-0"><a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" class="btn btn-danger text-white">Delete</a></td> -->
 
                 <div class="modal fade" id="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.spare_code|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
                     <div class="modal-dialog">
@@ -100,125 +146,141 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+    </table> -->
 
-    <!-- Modal -------------------------------------------------------------------------- -->
-      
-      <!-- Modal -->
-      
-
-    <!-- -------------------------------------------------------------------------------- -->
-    
 </div>
 
 <script>
 
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-    $(".invoicefill tbody tr").filter(function(){                             // 
+    $(".unique").filter(function(){                             // 
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     })
 })
 
+function sort(a,b){
+
+    var table, rows, switching, i, x, y, shouldSwitch, change;
+    table = document.getElementsByClassName("unique");
+    switching = true;
+    var name = $("#cabeza .th")[a].getElementsByTagName("div")[1].innerHTML+""
+    $("#cabeza .th")[a].innerHTML = "";
+    if (b == 'desc'){
+        $("#cabeza .th")[a].innerHTML = '<div onclick="sort('+a+',\'asc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\''+$("#cabeza .th")[a].getAttribute("id")+'\')">'+name+'</div>'
+    }else{
+        $("#cabeza .th")[a].innerHTML = '<div onclick="sort('+a+',\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\''+$("#cabeza .th")[a].getAttribute("id")+'\')">'+name+'</div>'
+    }
+    while (switching) {
+        switching = false;
+        rows = table.length;
+        for (i = 0; i < rows -1; i++) {
+            shouldSwitch = false;
+            x = table[i].getElementsByTagName("a")[a].innerHTML.toLowerCase()
+            y = table[i + 1].getElementsByTagName("a")[a].innerHTML.toLowerCase()
+            if(b == 'desc'){
+                if (x > y) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }else{
+                if (x < y) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            table[i].parentNode.insertBefore(table[i + 1], table[i]);
+            switching = true;
+        }
+    }
+}
+
 function filtrar(a){
 
-    $("table th").each(function(f){
-
-        $(this).html($(this).attr("id"))
-
+    $("#cabeza div").each(function(f){
+        
         if(a==$(this).html()){
-            $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+            $(this).html("<input name='input"+$(this).parent().attr('id')+"' id='input"+$(this).parent().attr('id')+"' style='max-width: 100px;' type='text'>")
         }
+        
     })
-    $("table th input").each(function(){
-        $(this).select();
-    })
+    $("#input"+a).select();
 
-    $("table th").each(function(f){
-        if($(this).find("input").attr("id")=="inputCode"){
-            $("#inputCode").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $(".invoicefill tbody tr").filter(function(){
-                    $(this).find("td").each(function(){
-                        if($(this).index()==0){
-                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        }
-                    })
-                })
+    $("#cabeza div").each(function(f){
+        var bandCode = false
+        var bandDesc = false
+        var bandCat = false
+        var bandVend = false
+
+        $("#cabeza div input").on("keyup",function(){
+            var valueCode = false
+            var valueDesc = false
+            var valueCat = false
+            var valueVend = false
+            $("#cabeza div input").each(function(){
+                if($(this).attr("id")=="inputCode"){
+                    valueCode = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputDescription"){
+                    valueDesc = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputCategory"){
+                    valueCat = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputVendor"){
+                    valueVend = $(this).val().toLowerCase()
+                }
             })
-        }
-        if($(this).find("input").attr("id")=="inputDescription"){
-            $("#inputDescription").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $(".invoicefill tbody tr").filter(function(){
-                    $(this).find("td").each(function(){
-                        if($(this).index()==1){
-                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        }
-                    })
+            $(".td").each(function(){
+                bandCode = false
+                bandDesc = false
+                bandCat = false
+                bandVend = false
+                $(this).find("div").each(function(){
+                    if($(this).index()==0 && $(this).text().toLowerCase().indexOf(valueCode) > -1 || valueCode == false){
+                        bandCode = true
+                    }
+                    if($(this).index()==1 && $(this).text().toLowerCase().indexOf(valueDesc) > -1 || valueDesc == false){
+                        bandDesc = true
+                    }
+                    if($(this).index()==2 && $(this).text().toLowerCase().indexOf(valueCat) > -1 || valueCat == false){
+                        bandCat = true
+                    }
+                    if($(this).index()==3 && $(this).text().toLowerCase().indexOf(valueVend) > -1 || valueVend == false){
+                        bandVend = true
+                    }
                 })
+                $(this).parent().toggle(bandCode && bandDesc && bandCat && bandVend)
             })
-        }
-        if($(this).find("input").attr("id")=="inputCategory"){
-            $("#inputCategory").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $(".invoicefill tbody tr").filter(function(){
-                    $(this).find("td").each(function(){
-                        if($(this).index()==2){
-                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        }
-                    })
-                })
-            })
-        }
-        if($(this).find("input").attr("id")=="inputSubCategory"){
-            $("#inputSubCategory").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $(".invoicefill tbody tr").filter(function(){
-                    $(this).find("td").each(function(){
-                        if($(this).index()==3){
-                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        }
-                    })
-                })
-            })
-        }
-        if($(this).find("input").attr("id")=="inputVendor"){
-            $("#inputVendor").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $(".invoicefill tbody tr").filter(function(){
-                    $(this).find("td").each(function(){
-                        if($(this).index()==3){
-                            $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                        }
-                    })
-                })
-            })
-        }
+        })
     })
 }
 
 function defecto(){
-    $("table th").each(function(f){
+
+    $("#cabeza div").each(function(f){
         if($(this).attr("id")=="Code"){
-            $(this).html("Code")
+            $(this).html('<div onclick="sort(0,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Code\')">Code</div>')
         }
         if($(this).attr("id")=="Description"){
-            $(this).html("Description")
+            $(this).html('<div onclick="sort(1,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Description\')">Description</div>')
         }
         if($(this).attr("id")=="Category"){
-            $(this).html("Category")
-        }
-        if($(this).attr("id")=="SubCategory"){
-            $(this).html("SubCategory")
+            $(this).html('<div onclick="sort(2,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Category\')">Category</div>')
         }
         if($(this).attr("id")=="Vendor"){
-            $(this).html("Vendor")
-        }  
+            $(this).html('<div onclick="sort(3,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Vendor\')">Vendor</div>')
+        }
+        $("#cuerpo div").each(function(){
+            $(this).show()
+        })
     })
-    $(".invoicefill tbody tr").each(function(){
-        $(this).show()
+    $(".carEngine").each(function(){
+        $(this).hide()
     })
+    sort(0,'desc')
 }
 </script>
 {% endblock %}

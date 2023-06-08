@@ -153,7 +153,7 @@ $(".headEngine").each(function(){
 
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
     var value = $(this).val().toLowerCase();                        // Toma el valor del input en minuscula
-    $(".invoicefill tbody tr").filter(function(){                             // 
+    $(".unique").filter(function(){                             // 
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     })
 })
