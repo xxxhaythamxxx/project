@@ -16,173 +16,126 @@
     <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button>
 
     <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
-        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make" onclick="filtrar('Make')" class="trsup color col-3 py-2">Make</div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make"  class="trsup color col-3 py-2 th"><div onclick="sort(0,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Make')">Make</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Code"  class="trsup color col-3 py-2 th"><div onclick="sort(1,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Code')">Code</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Litre"  class="trsup color col-2 py-2 th"><div onclick="sort(2,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Litre')">Litre</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Type"  class="trsup color col-2 py-2 th"><div onclick="sort(3,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Type')">Type</div></div>
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Valve"  class="trsup color col-2 py-2 th"><div onclick="sort(4,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Valve')">Valve</div></div>
+
+        <!-- <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make" onclick="filtrar('Make')" class="trsup color col-3 py-2">Make</div>
         <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Code" onclick="filtrar('Code')" class="trsup color col-3 py-2">Chasis</div>
         <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Litre" onclick="filtrar('Litre')" class="trsup color col-2 py-2">Litre</div>
         <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Type" onclick="filtrar('Type')" class="trsup color col-2 py-2">Type</div>
-        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-2 py-2">Valve</div>
-        <!-- <div style="font-size: small; font-weight: bold;" class="trsup color col-2 py-2">Action</div> -->
+        <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Valve" onclick="filtrar('Valve')" class="trsup color col-2 py-2">Valve</div> -->
     </div>
     <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
         {% for br in allEngines %}
-        <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0 headEngine">
-            {% if br.engine_manufacturer %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_manufacturer}}</a></div>
-            {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-            {% if br.engine_ide %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_ide}}</a></div>
-            {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-            {% if br.engine_l %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_l}}</a></div>
-            {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-            {% if br.engine_type %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_type}}</a></div>
-            {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-            {% if br.engine_cylinder %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_cylinder}}</a></div>
-            {% else %}
-                <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-        </div>
-
-        {% for a in allCarsEngines %}
-        {% if br.id == a.engine__id %}
-        <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% if a.car_manufacturer %}
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_manufacturer}}</a></div>
-            {% else %}
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-            {% if a.car_model %}
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_model}}</a></div>
-            {% else %}
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-
-            {% if a.carfrom %}
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.carfrom}}</a></div>
-            {% else %}
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-            {% endif %}
-            
-            <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
-            <!-- <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">
-            {% for b in allTrans %}
-            {% if a.id == b.car__id %}
-                {{b.trans}}
-            {% endif %}
-            {% endfor %}
-            </a></div> -->
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endfor %}
-    </div>
-    <!-- {% for br in allEngines %}
-    <div class="modal fade" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label">Caution</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ¿Are you sure to eliminate the spare {{br.engine_ide}} ?
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-        </div>
-    </div>
-    {% endfor %} -->
-
-
-
-
-
-
-
-
-
-    <!-- <table class="invoice invoicefill table-striped mt-2">
-        <thead>
-            <tr class="text-white">
-                <th id="Code" onclick="filtrar('Code')" class="trsup color">Code</th>
-                <th id="Litre" onclick="filtrar('Litre')" class="trsup color">Litre</th>
-                <th id="Type" onclick="filtrar('Type')" class="trsup color">Type</th>
-                <th id="Valve" onclick="filtrar('Valve')" class="trsup color">Valve</th>
-                <th class="trsup color">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for br in allEngines %}
-            <tr>
-                {% if br.engine_ide %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_ide}}</a></td>
+        <div class="unique">
+            <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0 headEngine td">
+                {% if br.engine_manufacturer %}
+                    <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_manufacturer}}</a></div>
                 {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
+                    <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                {% endif %}
+
+                {% if br.engine_ide %}
+                    <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_ide}}</a></div>
+                {% else %}
+                    <div class="col-3 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
                 {% endif %}
 
                 {% if br.engine_l %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_l}}</a></td>
+                    <div class="col-2 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_l}}</a></div>
                 {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
+                    <div class="col-2 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
                 {% endif %}
 
                 {% if br.engine_type %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_type}}</a></td>
+                    <div class="col-2 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_type}}</a></div>
                 {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
+                    <div class="col-2 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
                 {% endif %}
 
                 {% if br.engine_cylinder %}
-                    <td class="pr-0"><a href="{% url 'editengine' br.id %}">{{br.engine_cylinder}}</a></td>
+                    <div class="col-2 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="{% url 'editengine' br.id %}">{{br.engine_cylinder}}</a></div>
                 {% else %}
-                    <td class="pr-0"><a href="#"></a></td>
+                    <div class="col-2 d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
                 {% endif %}
-                
 
-                <div class="modal fade" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}" tabindex="-1" aria-labelledby="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label" aria-hidden="true">
-                    <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModal{{br.engine_ide|cut:'.'|cut:','|cut:' '|cut:'('|cut:')'}}Label">Caution</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ¿Are you sure to eliminate the spare {{br.engine_ide}} ?
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                    </div>
+            </div>
+
+            {% for a in allCarsEngines %}
+                {% if br.id == a.engine__id %}
+                <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                    {% if a.car_manufacturer %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_manufacturer}}</a></div>
+                    {% else %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                    {% endif %}
+
+                    {% if a.car_model %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_model}}</a></div>
+                    {% else %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                    {% endif %}
+
+                    {% if a.carfrom %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.carfrom}}</a></div>
+                    {% else %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
+                    {% endif %}
+                    
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href=""></a></div>
+                    
                 </div>
-
-            </tr>
+                {% endif %}
             {% endfor %}
-        </tbody>
-    </table> -->
+        </div>
+        {% endfor %}
+    </div>
 
 </div>
 
 <script>
+
+function sort(a,b){
+
+    var table, rows, switching, i, x, y, shouldSwitch, change;
+    table = document.getElementsByClassName("unique");
+    switching = true;
+    var name = $("#cabeza .th")[a].getElementsByTagName("div")[1].innerHTML+""
+    $("#cabeza .th")[a].innerHTML = "";
+    if (b == 'desc'){
+        $("#cabeza .th")[a].innerHTML = '<div onclick="sort('+a+',\'asc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\''+$("#cabeza .th")[a].getAttribute("id")+'\')">'+name+'</div>'
+    }else{
+        $("#cabeza .th")[a].innerHTML = '<div onclick="sort('+a+',\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\''+$("#cabeza .th")[a].getAttribute("id")+'\')">'+name+'</div>'
+    }
+    while (switching) {
+        switching = false;
+        rows = table.length;
+        for (i = 0; i < rows -1; i++) {
+            shouldSwitch = false;
+            x = table[i].getElementsByTagName("a")[a].innerHTML.toLowerCase()
+            y = table[i + 1].getElementsByTagName("a")[a].innerHTML.toLowerCase()
+            if(b == 'desc'){
+                if (x > y) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }else{
+                if (x < y) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            table[i].parentNode.insertBefore(table[i + 1], table[i]);
+            switching = true;
+        }
+    }
+}
 
 $(".headEngine").each(function(){
     var prueba = $(this).attr("id").split("fila")[1]
@@ -209,99 +162,89 @@ function filtrar(a){
 
     $("#cabeza div").each(function(f){
         
-        $(this).html($(this).attr("id"))
-        
         if(a==$(this).html()){
-            $(this).html("<input name='input"+$(this).attr('id')+"' id='input"+$(this).attr('id')+"' style='max-width: 100px;' type='text'>")
+            $(this).html("<input name='input"+$(this).parent().attr('id')+"' id='input"+$(this).parent().attr('id')+"' style='max-width: 100px;' type='text'>")
         }
         
     })
+    $("#input"+a).select();
 
-    $("#cabeza div input").each(function(){
-        $(this).select();
-    })
     $("#cabeza div").each(function(f){
-        if($(this).find("input").attr("id")=="inputMake"){
-            $("#inputMake").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $("#cuerpo div div").filter(function(){
-                    if($(this).index()==0){
-                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                })
-                if(value==""){
-                    defecto()
+        var bandMake = false
+        var bandCode = false
+        var bandLitre = false
+        var bandType = false
+        var bandValve = false
+
+        $("#cabeza div input").on("keyup",function(){
+            var valueMake = false
+            var valueCode = false
+            var valueLitre = false
+            var valueType = false
+            var valueValve = false
+            $("#cabeza div input").each(function(){
+                if($(this).attr("id")=="inputMake"){
+                    valueMake = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputCode"){
+                    valueCode = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputLitre"){
+                    valueLitre = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputType"){
+                    valueType = $(this).val().toLowerCase()
+                }
+                if($(this).attr("id")=="inputValve"){
+                    valueValve = $(this).val().toLowerCase()
                 }
             })
-        }
-        if($(this).find("input").attr("id")=="inputCode"){
-            $("#inputCode").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $("#cuerpo div div").filter(function(){
-                    if($(this).index()==1){
-                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            $(".td").each(function(){
+                bandMake = false
+                bandCode = false
+                bandLitre = false
+                bandType = false
+                bandValve = false
+                $(this).find("div").each(function(){
+                    if($(this).index()==0 && $(this).text().toLowerCase().indexOf(valueMake) > -1 || valueMake == false){
+                        bandMake = true
+                    }
+                    if($(this).index()==1 && $(this).text().toLowerCase().indexOf(valueCode) > -1 || valueCode == false){
+                        bandCode = true
+                    }
+                    if($(this).index()==2 && $(this).text().toLowerCase().indexOf(valueLitre) > -1 || valueLitre == false){
+                        bandLitre = true
+                    }
+                    if($(this).index()==3 && $(this).text().toLowerCase().indexOf(valueType) > -1 || valueType == false){
+                        bandType = true
+                    }
+                    if($(this).index()==4 && $(this).text().toLowerCase().indexOf(valueValve) > -1 || valueValve == false){
+                        bandValve = true
                     }
                 })
-                if(value==""){
-                    defecto()
-                }
+                $(this).parent().toggle(bandMake && bandCode && bandLitre && bandType && bandValve)
             })
-        }
-        if($(this).find("input").attr("id")=="inputLitre"){
-            $("#inputLitre").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $("#cuerpo div div").filter(function(){
-                    if($(this).index()==2){
-                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                })
-                if(value==""){
-                    defecto()
-                }
-            })
-        }
-        if($(this).find("input").attr("id")=="inputType"){
-            $("#inputType").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $("#cuerpo div div").filter(function(){
-                    if($(this).index()==3){
-                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                })
-                if(value==""){
-                    defecto()
-                }
-            })
-        }
-        if($(this).find("input").attr("id")=="inputValve"){
-            $("#inputValve").on("keyup",function(){
-                var value = $(this).val().toLowerCase()
-                $("#cuerpo div div").filter(function(){
-                    if($(this).index()==4){
-                        $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    }
-                })
-                if(value==""){
-                    defecto()
-                }
-            })
-        }
+        })
     })
 }
 
 function defecto(){
+
     $("#cabeza div").each(function(f){
+        if($(this).attr("id")=="Make"){
+            $(this).html('<div onclick="sort(0,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Make\')">Make</div>')
+        }
         if($(this).attr("id")=="Code"){
-            $(this).html("Code")
+            $(this).html('<div onclick="sort(1,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Code\')">Code</div>')
         }
         if($(this).attr("id")=="Litre"){
-            $(this).html("Litre")
+            $(this).html('<div onclick="sort(2,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Litre\')">Litre</div>')
         }
         if($(this).attr("id")=="Type"){
-            $(this).html("Type")
+            $(this).html('<div onclick="sort(3,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Type\')">Type</div>')
         }
         if($(this).attr("id")=="Valve"){
-            $(this).html("Valve")
+            $(this).html('<div onclick="sort(4,\'desc\')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar(\'Valve\')">Valve</div>')
         }
         $("#cuerpo div").each(function(){
             $(this).show()
@@ -310,7 +253,31 @@ function defecto(){
     $(".carEngine").each(function(){
         $(this).hide()
     })
+    sort(0,'desc')
 }
+
+// function defecto(){
+//     $("#cabeza div").each(function(f){
+//         if($(this).attr("id")=="Code"){
+//             $(this).html("Code")
+//         }
+//         if($(this).attr("id")=="Litre"){
+//             $(this).html("Litre")
+//         }
+//         if($(this).attr("id")=="Type"){
+//             $(this).html("Type")
+//         }
+//         if($(this).attr("id")=="Valve"){
+//             $(this).html("Valve")
+//         }
+//         $("#cuerpo div").each(function(){
+//             $(this).show()
+//         })
+//     })
+//     $(".carEngine").each(function(){
+//         $(this).hide()
+//     })
+// }
 
 $("#cuerpo").find("div").each(function(){
     $(this).click(function(){
