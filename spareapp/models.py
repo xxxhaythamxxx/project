@@ -89,7 +89,7 @@ class vendor(models.Model):
 
 class spare(models.Model):
     spare_code=models.CharField(max_length=40, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
-    spare_brand=models.ManyToManyField(branddb,verbose_name="Brand",blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
+    spare_brand=models.ManyToManyField(branddb,blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
     spare_name=models.CharField(max_length=400, verbose_name="Description",blank=True,null=True)          #Ejemplo: Oil filter
     car_info=models.ManyToManyField(car,blank=True,null=True)
     engine_info=models.ManyToManyField(engine,blank=True,null=True)
