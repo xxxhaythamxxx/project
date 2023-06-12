@@ -157,6 +157,7 @@ class spareCartAdmin(admin.ModelAdmin):
     list_display=("spareId","spareCode","nameUser",)
     search_fields=("spareCode",)
 
+admin.site.register(branddb)
 admin.site.register(transmission)
 admin.site.register(manufacturer)
 admin.site.register(car,carAdmin)
