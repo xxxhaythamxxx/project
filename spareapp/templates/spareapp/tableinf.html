@@ -147,7 +147,7 @@
             {% endif %}
             
             {% if request.user.is_authenticated %}
-            <td><input class="check d-flex justify-content-center" type="checkbox" name="toAdd" value="{{br.id}}"></td>
+            <td class="justify-content-center"><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
             {% endif %}
         </tr>
         {% endfor %}
