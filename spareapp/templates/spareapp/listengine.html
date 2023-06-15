@@ -163,7 +163,7 @@ function filtrar(a){
     $("#cabeza div").each(function(f){
         
         if(a==$(this).html()){
-            $(this).html("<input name='input"+$(this).parent().attr('id')+"' id='input"+$(this).parent().attr('id')+"' style='max-width: 100px;' type='text'>")
+            $(this).html("<input placeholder='"+$(this).parent().attr('id')+"' name='input"+$(this).parent().attr('id')+"' id='input"+$(this).parent().attr('id')+"' style='max-width: 100px;' type='text'>")
         }
         
     })
