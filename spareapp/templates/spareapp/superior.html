@@ -40,7 +40,7 @@
                         {% endif %}
                         <li style="margin:auto;" class=""><input name="photo" class="ml-2" type="checkbox"><label class="ml-1">Photo</label></li>
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
-                        <li style="margin:auto;" class=""><input name="reference" class="ml-2" type="checkbox"><label class="ml-1">Reference Code</label></li>
+                        <li style="margin:auto;" class=""><input name="referenceC" class="ml-2" type="checkbox"><label class="ml-1">Reference Code</label></li>
                         {% endif %}
                         <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="ml-2" type="checkbox"></label></li> -->
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
@@ -50,14 +50,14 @@
                 </div>
                 <!-- Boton filter dimensiones -->
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-                <div style="display: inline-block;" class="">
+                <!-- <div style="display: inline-block;" class="">
                     <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel2" data-toggle="dropdown" href="#">Dimensions</a>
                     <ul style="font-size: small;" id="headerList2" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel2">            
                         {% for dim in dimension|dictsort:"atributeName" %}
                             <li style="margin:auto;" class=""><input name="check{{dim.atributeName|cut:' '|cut:'/'}}" class="ml-2" type="checkbox"><label class="ml-1">{{dim.atributeName}}</label></li>
                         {% endfor %}
                     </ul>
-                </div>
+                </div> -->
                 {% endif %}
                 <!-- Boton filter atribute -->
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}

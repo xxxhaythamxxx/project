@@ -54,25 +54,16 @@
     </table>
 
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable">
-    <thead id="">
+    <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
             <th style="position: sticky;top: 70;" class="p-2 include">Fecha</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Cliente</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Fact #</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Categoría</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Tipo de pago</th>
-            <th style="position: sticky;top: 70;" class="p-2 include">Monto</th>
-            <!-- <th id="thBalance" style="position: sticky;top: 70;" class="p-2 include">Balance</th> -->
-            <th style="position: sticky;top: 70;" class="p-2 include">Nota</th>
+            <th style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(1,'asc')" class="bi bi-arrow-up-short"></i><span>Cliente</span></th>
+            <th style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(2,'asc')" class="bi bi-arrow-up-short"></i><span>Fact #</span></th>
+            <th style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(3,'asc')" class="bi bi-arrow-up-short"></i><span>Categoría</span></th>
+            <th style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(4,'asc')" class="bi bi-arrow-up-short"></i><span>Tipo de pago</span></th>
+            <th style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(5,'asc')" class="bi bi-arrow-up-short"></i><span>Monto</span></th>
+            <th style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(6,'asc')" class="bi bi-arrow-up-short"></i><span>Nota</span></th>
             <th style="position: sticky;top: 70;" id="check" class="p-2 exclude">Acción</th>
-            <!-- <th class="p-2 include">Fecha</th>
-            <th class="p-2 include">Categoría</th>
-            <th class="p-2 include">Tipo de pago</th>
-            <th class="p-2 include">Cliente</th>
-            <th class="p-2 include">Fact #</th>
-            <th id="facTotal" class="p-2 include">Total</th>
-            <th class="p-2 include">Nota</th>
-            <th id="check" class="p-2 exclude">Acción</th> -->
         </tr>
     </thead>
     {% if factureName %}
@@ -87,48 +78,13 @@
             <td style="max-width: 100px;" class="p-2"><a {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre|upper}}</a></td>
             <td style="max-width: 100px;" class="p-2"><a {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre|upper}}</a></td>
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} id="auxMonto" class="p-2"><div {% if fact.pendiente == True %} style="font-weight: bold;" {% else %} "" {% endif %}>${{fact.total|stringformat:".2f"}}</div></td>
-            <!-- <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} auxCatPagada="{{fact.refCategory.nombre|upper}}" auxPendiente="{{fact.pendiente}}" auxCatCobrada="{{fact.refCategory.nombre|upper}}" auxTotal="{{value.1|floatformat:2}}" auxNc="{{fact.nc}}" auxIngreso="{{fact.refType.ingreso}}" auxCobrar="{{fact.refType.facCobrar}}" auxPagar="{{fact.refType.mercPagar}}" auxCobrada="{{fact.refType.facCobrada}}" auxPagada="{{fact.refType.mercPagada}}" id="auxBalance" class="p-2">${{value.0|stringformat:".2f"}}</td> -->
             <td {% if fact.refType.ingreso == True %}  {% if fact.nc == True %} {% if fact.refType.mercPagar == False %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} {% endif %} {% else %} {% if fact.nc == True %} {% if fact.refType.mercPagar == True %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% else %} {% if fact.refType.facCobrar == True or fact.refType.mercPagar == False %} style="color: #a00a0a;" {% else %} style="color: #1029b9;" {% endif %} {% endif %} {% endif %} style="max-width: 100px;" class="p-2">{{fact.note}}</td>
             <td id="check" class="exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
-                <!-- <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a> -->
             </td>
         </tr>
-        <!-- <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="deleteFacLabel{{fact.id}}">Precaución</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        ¿Seguro/a que deseas eliminar la factura {{fact.num}}?
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a id="deleteFacture" class="btn btn-primary" href="{% url 'deleteFac' fact.id %}">Borrar</a>
-                    </div>
-                </div>
-                </div>
-        </div>  -->
         {% endif %}
         {% endfor %}
         {% endfor %}
-        <!-- {% for fact in factureName %}
-        {% for key,value in balance.items %}
-        {% if key == fact.id %}
-        <tr>
-            <td {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">{{fact.fechaCreado|date:"M d, Y"}}</td>
-            <td class="p-2"><a {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contListByCategory' fact.refCategory.nombre %}">{{fact.refCategory.nombre}}</a></td>
-            <td class="p-2"><a {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contListByType' fact.refType.nombre %}">{{fact.refType.nombre}}</a></td>
-            <td class="p-2"><a {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} href="{% url 'contIndividual' fact.refPersona.id %}">{{fact.refPersona.nombre}}</a></td>
-            <td {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">{% if fact.num %}{{fact.num}}{% endif %}</td>
-            <td auxPagar="{{fact.refType.mercPagar}}" auxCobrar="{{fact.refType.facCobrar}}" auxIngreso="{{fact.refType.ingreso}}" {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} class="p-2">${{fact.total|stringformat:".2f"}}</td>
-            <td {% if fact.refType.ingreso == True and fact.refType.facCobrar == False or fact.refType.mercPagar == True %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %} style="max-width: 200px;" class="p-2">{{fact.note}}</td>
-            <td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary mx-1" href="{% url 'editeFact' fact.id request.get_full_path|cut:'/' %}">Editar</a>
-        </tr>
-        {% endif %}
-        {% endfor %}
-        {% endfor %} -->
     </tbody>
 </table>
 <table class="table-bordered invoice mb-2 tfoot" style="font-size: small;" id="hInf">
@@ -157,6 +113,75 @@
 <script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
 
 <script type="text/javascript">
+
+function sort(a,b){
+    // alert(a)
+    // alert(b)
+    var table, rows, switching, i, x, y, shouldSwitch, change;
+    table = document.getElementById("myTable").getElementsByTagName("tr")
+    // alert(table.length)
+    // alert($("#hMain th")[a].innerHTML)
+    if(b == 'desc'){
+        $("#hMain th")[a].innerHTML = '<i onclick="sort('+a+',\'asc\')" class="bi bi-arrow-up-short"></i><span>'+$("#hMain th")[a].getElementsByTagName("span")[0].innerHTML+'</span>'
+    }else{
+        $("#hMain th")[a].innerHTML = '<i onclick="sort('+a+',\'desc\')" class="bi bi-arrow-down-short"></i><span>'+$("#hMain th")[a].getElementsByTagName("span")[0].innerHTML+'</span>'
+    }
+    switching = true;
+    i = 0
+    while (switching){
+        switching = false;
+        rows = table.length;
+        for (i = 0; i < (rows -1); i++){
+            shouldSwitch = false;
+            if($("#hMain th")[a].getAttribute("id")=="Fecha"){
+                var fechax = new Date(table[i].getElementsByTagName("td")[a].innerHTML.toLowerCase())
+                var fechay = new Date(table[i + 1].getElementsByTagName("td")[a].innerHTML.toLowerCase())
+                var dx = fechax.getDate()
+                var dy = fechay.getDate()
+                if(dx<10)
+                    dx = "0"+dx
+                if(dy<10)
+                    dy = "0"+dy
+                var mx =  fechax.getMonth()
+                var my =  fechay.getMonth()
+                mx += 1
+                if(mx<10)
+                    mx = "0"+mx
+                my += 1
+                if(my<10)
+                    my = "0"+my
+                x = fechax.getFullYear()+""+mx+""+dx
+                y = fechay.getFullYear()+""+my+""+dy
+            }else{
+                x = table[i].getElementsByTagName("td")[a].innerHTML.toLowerCase()
+                y = table[i + 1].getElementsByTagName("td")[a].innerHTML.toLowerCase()
+            }
+            console.log("Compara:")
+            console.log(x)
+            console.log(y)
+            if (b == 'desc'){
+                console.log("desc")
+                if (x > y) {
+                    console.log("Entra en x > y")
+                    shouldSwitch = true;
+                    break;
+                }
+            }else{
+                console.log("asc")
+                if(x < y){
+                    console.log("Entra en x < y")
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch){
+            table[i].parentNode.insertBefore(table[i + 1], table[i]);
+            switching = true;
+        }
+}
+}
+
 $("#downloadexcela").click(function(){
 
     var body = document.getElementsByTagName("body")[0];
@@ -208,7 +233,7 @@ $("#downloadexcela").click(function(){
 })
 </script>
 
-<script>
+<!-- <script>
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
 $('th').not("#check").click(function(){
@@ -226,7 +251,7 @@ function comparer(index) {
     }
 }
 function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
-</script>
+</script> -->
 
 <script>
 

@@ -146,14 +146,14 @@
 <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
     <thead id="hMain">
         <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
-            <th id="Fecha" style="position: sticky;top: 70;" class="p-2 include">Fecha</th>
-            <th id="Cliente" style="position: sticky;top: 70;" class="p-2 include">Cliente</th>
-            <th id="Fact" style="position: sticky;top: 70;" class="p-2 include">Fact #</th>
-            <th id="Categoría" style="position: sticky;top: 70;" class="p-2 include">Categoría</th>
-            <th id="Tipo" style="position: sticky;top: 70;" class="p-2 include">Tipo de pago</th>
-            <th id="Monto" style="position: sticky;top: 70;" class="p-2 include">Monto</th>
-            <th id="Balance" style="position: sticky;top: 70;" class="p-2 include">Balance</th>
-            <th id="Nota" style="position: sticky;top: 70;" class="p-2 include">Nota</th>
+            <th id="Fecha" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(0,'asc')" class="bi bi-arrow-up-short"></i><span>Fecha</span></th>
+            <th id="Cliente" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(1,'asc')" class="bi bi-arrow-up-short"></i><span>Cliente</span></th>
+            <th id="Fact" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(2,'asc')" class="bi bi-arrow-up-short"></i><span>Fact #</span></th>
+            <th id="Categoría" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(3,'asc')" class="bi bi-arrow-up-short"></i><span>Categoría</span></th>
+            <th id="Tipo" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(4,'asc')" class="bi bi-arrow-up-short"></i><span>Tipo de pago</span></th>
+            <th id="Monto" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(5,'asc')" class="bi bi-arrow-up-short"></i><span>Monto</span></th>
+            <th id="Balance" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(6,'asc')" class="bi bi-arrow-up-short"></i><span>Balance</span></th>
+            <th id="Nota" style="position: sticky;top: 70;" class="p-2 include"><i onclick="sort(7,'asc')" class="bi bi-arrow-up-short"></i><span>Nota</span></th>
             <th style="position: sticky;top: 70;" id="check" class="p-2 exclude">Acción</th>
         </tr>
     </thead>
@@ -174,23 +174,7 @@
                 <a data-bs-toggle="modal" data-bs-target="#deleteFac{{fact.id}}" style="text-decoration: none;color: rgb(136,12,12);font-size: small;" id="deleteFacId" class="btn btn-danger text-white" href="javascript:void(0);">Eliminar</a>
             </td>
         </tr>
-        <div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="deleteFacLabel{{fact.id}}">Precaución</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        ¿Seguro/a que deseas eliminar la factura {{fact.num}}?
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a id="deleteFacture" class="btn btn-primary" href="{% url 'deleteFac' fact.id %}">Borrar</a>
-                    </div>
-                </div>
-                </div>
-        </div> 
+        
         {% endif %}
         {% endfor %}
         {% endfor %}
@@ -203,8 +187,32 @@
         </tr>
     </thead>
 </table>
+{% for fact in factureName %}
+{% for key,value in balance.items %}
+{% if key == fact.id %}
+<div tabindex="-1" id="deleteFac{{fact.id}}" class="modal fade modal-dialog-scrollable" aria-labelledby="deleteFacLabel{{fact.id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="deleteFacLabel{{fact.id}}">Precaución</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Seguro/a que deseas eliminar la factura {{fact.num}}?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a id="deleteFacture" class="btn btn-primary" href="{% url 'deleteFac' fact.id %}">Borrar</a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endif %}
+{% endfor %}
+{% endfor %}
 </div>
 </div>
+{% endif %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
@@ -221,6 +229,74 @@
 <script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
 
 <script type="text/javascript">
+
+function sort(a,b){
+
+    // alert($("#hMain th")[a].getAttribute("id"))
+    var table, rows, switching, i, x, y, shouldSwitch, change;
+    table = document.getElementById("myTable").getElementsByTagName("tr")
+    // alert(new Date((table[4].getElementsByTagName("td")[a].innerHTML.toLowerCase())))
+    if(b == 'desc'){
+        $("#hMain th")[a].innerHTML = '<i onclick="sort('+a+',\'asc\')" class="bi bi-arrow-up-short"></i><span>'+$("#hMain th")[a].getElementsByTagName("span")[0].innerHTML+'</span>'
+    }else{
+        $("#hMain th")[a].innerHTML = '<i onclick="sort('+a+',\'desc\')" class="bi bi-arrow-down-short"></i><span>'+$("#hMain th")[a].getElementsByTagName("span")[0].innerHTML+'</span>'
+    }
+    switching = true;
+    i = 0
+    while (switching){
+        switching = false;
+        rows = table.length;
+        for (i = 0; i < (rows -1); i++){
+            shouldSwitch = false;
+            if($("#hMain th")[a].getAttribute("id")=="Fecha"){
+                var fechax = new Date(table[i].getElementsByTagName("td")[a].innerHTML.toLowerCase())
+                var fechay = new Date(table[i + 1].getElementsByTagName("td")[a].innerHTML.toLowerCase())
+                var dx = fechax.getDate()
+                var dy = fechay.getDate()
+                if(dx<10)
+                    dx = "0"+dx
+                if(dy<10)
+                    dy = "0"+dy
+                var mx =  fechax.getMonth()
+                var my =  fechay.getMonth()
+                mx += 1
+                if(mx<10)
+                    mx = "0"+mx
+                my += 1
+                if(my<10)
+                    my = "0"+my
+                x = fechax.getFullYear()+""+mx+""+dx
+                y = fechay.getFullYear()+""+my+""+dy
+            }else{
+                x = table[i].getElementsByTagName("td")[a].innerHTML.toLowerCase()
+                y = table[i + 1].getElementsByTagName("td")[a].innerHTML.toLowerCase()
+            }
+            console.log("Compara:")
+            console.log(x)
+            console.log(y)
+            if (b == 'desc'){
+                console.log("desc")
+                if (x > y) {
+                    console.log("Entra en x > y")
+                    shouldSwitch = true;
+                    break;
+                }
+            }else{
+                console.log("asc")
+                if(x < y){
+                    console.log("Entra en x < y")
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch){
+            table[i].parentNode.insertBefore(table[i + 1], table[i]);
+            switching = true;
+        }
+    }
+}
+
 $("#downloadexcela").click(function(){
 
     var body = document.getElementsByTagName("body")[0];
@@ -275,21 +351,21 @@ $("#downloadexcela").click(function(){
 <script>
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
-$('th').not("#check").click(function(){
-    var table = $(this).parents('table').eq(0)
-    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-    this.asc = !this.asc
-    if (!this.asc){rows = rows.reverse()}
-    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+// $('th').not("#check").click(function(){
+//     var table = $(this).parents('table').eq(0)
+//     var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+//     this.asc = !this.asc
+//     if (!this.asc){rows = rows.reverse()}
+//     for (var i = 0; i < rows.length; i++){table.append(rows[i])}
 
-})
-function comparer(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    }
-}
-function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+// })
+// function comparer(index) {
+//     return function(a, b) {
+//         var valA = getCellValue(a, index), valB = getCellValue(b, index)
+//         return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+//     }
+// }
+// function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 </script>
 
 <script>
@@ -752,6 +828,8 @@ $("#invoice").dragtable()
 
 function filtrar(a){
 
+    alert(a)
+
     var columna
 
     $("#invoice th").each(function(f){
@@ -939,6 +1017,6 @@ function defecto(){
 }
 
 </script>
-{% endif %}
+
 
 {% endblock %}

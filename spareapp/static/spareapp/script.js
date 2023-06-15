@@ -1025,7 +1025,7 @@ $("#dimension-content").on("click","#dimesdeleteRef",function(a){
 document.getElementById("default").addEventListener("click",function(){
     
     $("input:checkbox[name=photo]").prop("checked",true);
-    $("input:checkbox[name=code]").prop("checked",true);
+    $("input:checkbox[name=code]").prop("checked",false);
     $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=brand]").prop("checked",false);
     $("input:checkbox[name=type]").prop("checked",false);
@@ -1035,9 +1035,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=category]").prop("checked",true);
     $("input:checkbox[name=priceM]").prop("checked",false);
     $("input:checkbox[name=priceD]").prop("checked",false);
-    $("input:checkbox[name=car]").prop("checked",true);
     $("input:checkbox[name=check]").prop("checked",true);
-    $("input:checkbox[name=reference]").prop("checked",false);
+    $("input:checkbox[name=referenceC]").prop("checked",true);
     $("input:checkbox[name=engine]").prop("checked",true);
     $("input:checkbox[name=ecode]").prop("checked",true);
 
@@ -1060,8 +1059,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#priceM").index() + 1)+")").hide();
     $("#priceD").hide();
     $("table td:nth-child("+($("#priceD").index() + 1)+")").hide();
-    $("#code").show();
-    $("table td:nth-child("+($("#code").index() + 1)+")").show();
+    $("#code").hide();
+    $("table td:nth-child("+($("#code").index() + 1)+")").hide();
     $("#car").show();
     $("table td:nth-child("+($("#car").index() + 1)+")").show();
     $("#brand").hide();
@@ -1078,8 +1077,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#dimensions").index() + 1)+")").hide();
     $("#atributes").show();
     $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
-    $("#reference").hide();
-    $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
+    $("#referenceC").show();
+    $("table td:nth-child("+($("#referenceC").index() + 1)+")").show();
     $("#engine").show();
     $("table td:nth-child("+($("#engine").index() + 1)+")").show();
     $("#category").show();
@@ -1152,20 +1151,20 @@ $spshape.change(function(){
 const $HeaderB = $("#dLabel");
 const $List = $("#headerList");
 const $cab = 5;
+
 $("input:checkbox[name=detail-id]").prop("checked",true);
 $("input:checkbox[name=photo]").prop("checked",true);
-$("input:checkbox[name=code]").prop("checked",true);
+$("input:checkbox[name=code]").prop("checked",false);
 $("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=brand]").prop("checked",false);
 $("input:checkbox[name=type]").prop("checked",false);
 $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",false);
 $("input:checkbox[name=atributes]").prop("checked",true);
-$("input:checkbox[name=reference]").prop("checked",false);
+$("input:checkbox[name=referenceC]").prop("checked",true);
 $("input:checkbox[name=engine]").prop("checked",true);
 $("input:checkbox[name=priceM]").prop("checked",false);
 $("input:checkbox[name=priceD]").prop("checked",false);
-$("input:checkbox[name=car]").prop("checked",true);
 $("input:checkbox[name=check]").prop("checked",true);
 $("input:checkbox[name=ecode]").prop("checked",true);
 $("input:checkbox[name=category]").prop("checked",true);
@@ -1184,7 +1183,7 @@ $List.change(function(){
     let atributesi = $("#atributes").index();
     let priceDi = $("#priceD").index();
     let priceMi = $("#priceM").index();
-    let referencei = $("#reference").index();
+    let referencei = $("#referenceC").index();
     let enginei = $("#engine").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
@@ -1287,11 +1286,11 @@ $List.change(function(){
         $("table td:nth-child("+(checki + 1)+")").hide();
     }
 
-    if ($("input:checkbox[name=reference]:checked").val()){
-        $("#reference").show();
+    if ($("input:checkbox[name=referenceC]:checked").val()){
+        $("#referenceC").show();
         $("table td:nth-child("+(referencei + 1)+")").show();
     }else{
-        $("#reference").hide();
+        $("#referenceC").hide();
         $("table td:nth-child("+(referencei + 1)+")").hide();
     }
 
@@ -2786,8 +2785,8 @@ $("#maxRows").on("change",function(){
 
  // Para mostrar solo 5 codigos de referencia por Spare
 //  "#myTable tr"
- $("table").find("tr").each(function(){
-cont = 0
+$("table").find("tr").each(function(){
+    cont = 0
     $(this).find("td").each(function(){
 
         // if($(this).attr("id")=="reference"){

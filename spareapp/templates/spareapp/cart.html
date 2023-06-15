@@ -53,7 +53,6 @@
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="atributes" class="ml-2" type="checkbox"><label class="ml-1">Atributes</label></li>
                         {% endif %}
-                        <!-- <li style="margin:auto;" class=""><label class="">Brand<input name="brand" class="ml-2" type="checkbox"></label></li> -->
                         <li style="margin:auto;" class=""><input name="car" class="ml-2" type="checkbox"><label class="ml-1">Car</label></li>
                         <li style="margin:auto;" class=""><input name="check" class="ml-2" type="checkbox"><label class="ml-1">Check</label></li>
                         <li style="margin:auto;" class=""><input name="code" class="ml-2" type="checkbox"><label class="ml-1">Code</label></li>
@@ -178,19 +177,23 @@
 
     <table style="font-size: small;" id="invoice" class="invoice draggable forget-ordering table-bordered">
         <thead>
-            <tr class="trsup color text-white">
+            <tr class="color text-white dnd-moved">
                 <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
                 <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
                 <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
                 {% endif %}
+                <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
+                <th id="engine" class="trsup color" style="position: sticky;top: 70;">Engine</th>
+                <th id="brand" class="trsup color" style="position: sticky;top: 70;display: none;">Brand</th>
                 <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
-                <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+                <!-- <th id="subcategory" class="trsup color" style="position: sticky;top: 70;">Sub-Category</th> -->
+                <th id="type" class="trsup color" style="position: sticky;top: 70;display: none;">Description</th>
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
                 {% endif %}
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-                <th id="dimensions" class="trsup color" style="position: sticky;top: 70;">Dimensions</th>
+                <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
                 {% endif %}
                 {% if request.user.is_superuser %}
                 <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;">Price Major</th>
@@ -203,6 +206,9 @@
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
                 {% endif %}
+                {% if request.user.is_authenticated %}
+                <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
+                {% endif %}
                 <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
             </tr>
         </thead>
@@ -210,11 +216,11 @@
         {% for car in spCartMain %}
         {% for br in spare %}
         {% if car.spareCode|add:"0" == br.id|add:"0" %}
-        <tr class="text-left">
-            <td class="pr-0"><a href=""></a></div></td>
+        <tr class="dnd-moved">
+            <td class="pr-0"><a href="#"></a></div></td>
 
             {% if br.spare_code %}
-            <td class="pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_code}}</a></td>
+            <td class="pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.id %}">{{br.spare_code}}</a></td>
             {% else %}
             <td class="pr-0"><a href="#"></a></td>
             {% endif %}
@@ -222,9 +228,13 @@
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
             {% if reference %}
             <td style="max-width: 120px;" class="pr-0">
-                {% for dim in reference|slice:":5" %}
+                {% for dim in reference %}
+                <!-- {% with name=1 %}  -->
+                <!-- <div>{{name}}</div> -->
+                <!-- {% endwith %} -->
+                <!-- |slice:":5" -->
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
-                    <div><a id="spareCodeInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{dim.referenceCode}}</a></div>
+                    <div><a id="spareCodeInfo" href="#">{{dim.referenceCode}} {{dim.referenceNote}}</a></div>
                     {% endif %}
                 {% endfor %}
             </td>
@@ -233,14 +243,34 @@
             {% endif %}
             {% endif %}
 
+            {% if br.car_info.all %}
+                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                    {% for a in br.car_info.all %}
+                    <a style="display: block;" id="spareCar" href="#">{{a}}</a>
+                    {% endfor %}
+                </td>
+            {% else %}
+            <td style="min-width: 80px;max-width: 90px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
+            {% if br.engine_info.all %}
+                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                    {% for a in br.engine_info.all %}
+                    <a style="display: block;" id="spareEngine" href="#">{{a}}</a>
+                    {% endfor %}
+                </td>
+            {% else %}
+            <td style="min-width: 80px;max-width: 90px;" class="pr-0"><a href="#"></a></td>
+            {% endif %}
+
             {% if br.spare_category %}
-            <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_category}}</a></td>
+            <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.id %}">{{br.spare_category}}</a></td>
             {% else %}
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="#"></a></td>
             {% endif %}
 
             {% if br.spare_name %}
-            <td style="max-width: 120px;" class="pr-0"><a href="{% url 'sparedetails' br.spare_code spare %}">{{br.spare_name}}</a></td>
+            <td style="max-width: 120px;" class="pr-0"><a href="{% url 'sparedetails' br.id %}">{{br.spare_name}}</a></td>
             {% else %}
             <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
@@ -250,7 +280,16 @@
                 <td style="max-width: 120px;" class="pr-0">
                     {% for dim in allAtributes|dictsort:"atributeName" %}
                         {% if br.spare_code == dim.atributeSpare.spare_code %}
-                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}}</div></div></div></a></div>
+                        <div class="">
+                            <a id="{{dim.atributeName|cut:' '}}Value" href="#">
+                                <div style="overflow:hidden" class="">
+                                    <div class="row">
+                                        <div id="AtrName" class="col-lg-6 col-md-6 text-right px-0 pr-1">{{dim.atributeName}}:</div>
+                                        <div id="AtrVal" class="col-lg-6 col-md-6 text-left px-0">{{dim.atributeVal}}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -261,27 +300,27 @@
 
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if allDimensions %}
-                <td style="max-width: 120px;" class="">
+                <td style="max-width: 120px;display: none;" class="">
                     {% for dim in allDimensions|dictsort:"atributeName" %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
-                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="{% url 'sparedetails' br.spare_code spare %}"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal}} mm</div></div></div></a></div>
+                        <div class=""><a id="{{dim.atributeName|cut:' '}}Value" href="#"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal|floatformat:2}} mm</div></div></div></a></div>
                         {% endif %}
                     {% endfor %}
                 </td>
             {% else %}
-                <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
+                <td style="max-width: 120px;display: none;" class="pr-0"><a href="#"></a></td>
             {% endif %}
             {% endif %}
             
             {% if request.user.is_superuser %}
             {% if br.price_m %}
-            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m}}</a></td>
+            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m|floatformat:2}}</a></td>
             {% else %}
             <td class="pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
 
             {% if br.price_d %}
-            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_d}}</a></td>
+            <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_d|floatformat:2}}</a></td>
             {% else %}
             <td class="pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}

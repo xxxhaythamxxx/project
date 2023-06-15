@@ -10001,6 +10001,9 @@ def accountStat(request):
     auxNombre = ""
     searchMetodo = "all"
 
+    allCars=car.objects.all().order_by("car_manufacturer__manufacturer","car_model","carfrom","chasis")
+    allEnginesCars=engine.objects.all().values("id","car_engine_info__id","engine_ide","engine_l","engine_type","engine_pistons").order_by("engine_ide")
+
     if request.method == "POST":
 
         auxNombre = request.POST.get("contNombre")
@@ -10332,7 +10335,7 @@ def accountStat(request):
     # print(acumTotal)
     # print(balance)
 
-    dic = {"dateFrom":dateFrom,"dateTo":dateTo,"searchMetodo":searchMetodo,"auxNombre":auxNombre,"acumTotal":acumTotal,"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
+    dic = {"allCars":allCars,"allEnginesCars":allEnginesCars,"dateFrom":dateFrom,"dateTo":dateTo,"searchMetodo":searchMetodo,"auxNombre":auxNombre,"acumTotal":acumTotal,"tod":tod,"balanceFacMerc":balanceFacMerc,"facturesToPay":facturesToPay,"facturesToCollect":facturesToCollect,"dayFrom":dayFrom,"dayTo":dayTo,"balanceTotal":balanceTotal,"balance":balance,"allCustomers":allCustomers,"factureName":factureName}
 
     return render(request,"spareapp/accountStat.html",dic)
 
