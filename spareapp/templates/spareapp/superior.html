@@ -1,3 +1,4 @@
+{% load static %}
 <html>
    
 <body>
@@ -105,7 +106,7 @@
                         <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel4" data-toggle="dropdown" href="#">Options</a>
                         <ul style="font-size: small;" id="headerList4" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel4">            
                             <li><a class="dropdown-item" href="#" onClick="viewPDF()">View</a></li>
-                            <li><a class="dropdown-item" href="#" onClick="generatePDF()">PDF</a></li>
+                            <li><a class="dropdown-item" href="#" onClick="generatePDF2()">PDF</a></li>
                             <li><a class="dropdown-item" href="#" id="downloadexcel">Excel</a></li>
                         </ul>
                     </div>
@@ -144,6 +145,19 @@
     </div>  
 
 </body>
+
+<!-- Para generar PDF con js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/pdfmake.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/vfs_fonts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.4/fonts/Roboto/Roboto-Medium.ttf"></script>
+<script type="text/javascript" src="{% static 'spareapp/html2canvas.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'spareapp/dragtable.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
+
 <script>
 
 $(function () {
@@ -151,3 +165,112 @@ $(function () {
 })
 </script>
 </html>
+<script>
+function generatePDF2(){
+
+    // var tableHeaderTextSup = [...document.querySelectorAll('.excludeFooter th')].map(thElement => ({ text: thElement.textContent, style: 'tableHeaderSup' }));
+    var tableHeaderText = [...document.querySelectorAll('#invoice thead tr th:not([style*="display: none"]):not([id="check"])')].map(thElement => ({ text: thElement.textContent, style: 'tableHeader' }));
+    var tableRowCells = [...document.querySelectorAll('#invoice tbody tr td:not([style*="display: none"]):not([class="check justify-content-center"])')].map(tdElement => ({ text: tdElement.textContent, style: 'tableData' }));
+    // var tableFooterCells = [...document.querySelectorAll('.tfoot tr th:not(.exclude)')].map(thElement => ({ text: thElement.textContent, style: 'tableFooter' }));
+    // alert(tableHeaderText.length)
+    // alert(tableRowCells.length)
+    var rows = []
+    var fila = []
+    var footerFooter = []
+    var footerAux = []
+    var cont = 0
+    var linea = []
+
+    $("#myTable tr:not([style*='display: none'])").each(function(){
+        if ($(this).is(":visible")){
+            $(this).find("td:not([style*='display: none']):not([class='check justify-content-center'])").each(function(){
+                if($(this).index()==1){
+                    fila.push($(this).find("a").text())
+                }else{
+                    if($(this).index()==8){
+                        $(this).find(".row").each(function(){
+                            linea.push($(this).find("#AtrName").text()+" "+$(this).find("#AtrVal").text())
+                        })
+                        fila.push(linea)
+                        linea = []
+                    }else{
+                        if($(this).index()==2 || $(this).index()==3){
+                            $(this).find("div").each(function(){
+                                linea.push($(this).text())
+                            })
+                            fila.push(linea)
+                            linea = []
+                        }else{
+                            fila.push($(this).find("div").text())
+                        }
+                    }
+                }
+                cont = cont + 1
+            })
+            if ((cont==tableHeaderText.length)){
+                rows.push(fila)
+                fila = []
+                cont = 0
+            }
+        }
+    })
+
+    var docDefinition = {
+        content: [
+            {
+            layout: 'lightHorizontalLines', // optional
+            style: 'tableExample',
+            table: {
+                headerRows: 1,
+                body: [
+                tableHeaderText,
+                ...rows,
+                ],
+            },
+            layout: {
+
+                fillColor: function(rowIndex) {
+                    if (rowIndex === 0) {
+                    return '#D42D0A';
+                    }
+                    if (rowIndex === (rows.length + 2)) {
+                        return '#E77C7C';
+                    }
+                    return (rowIndex % 2 === 0) ? '#f2f2f2' : null;
+                }
+                },
+            },
+        ],
+        styles: {
+            tableExample: {
+                // margin: [0, 20, 0, 80],
+                margin: [0, 1, 0, 1],
+                fontSize: 8,
+            },
+            tableHeaderSup: {
+                margin: 1,
+                color: 'white',
+                fontSize: 8,
+            },
+            tableHeader: {
+                margin: 1,
+                color: 'white',
+                fontSize: 8,
+            },
+            tableData: {
+                margin: 1,
+                // fontSize: 10,
+            },
+            fuente: {
+                margin: 1,
+                fontSize: 8,
+            },
+        },
+    };
+
+    var nombrePersona = "spareList"
+
+    pdfMake.createPdf(docDefinition).download(nombrePersona);
+
+}
+</script>
