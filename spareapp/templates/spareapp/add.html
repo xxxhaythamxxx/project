@@ -19,7 +19,7 @@
 
                     {% if request.user.is_authenticated %}
                     <div class="d-flex ml-auto">
-                        <select style="font-size: small;" name="cartNumber" id="cartNumber" class="form-control">
+                        <select style="font-size: small;" name="cartNumber" id="cartNumber" class="form-control mx-1">
                             <option value="">New Cart</option>
                             {% for c in spCart %}
                                 {% if request.user|cut:" " == c.nameUser|cut:" " %}

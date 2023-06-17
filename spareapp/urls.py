@@ -109,6 +109,7 @@ urlpatterns = [
     path("contTotalDay",views.contTotalDay,name="contTotalDay"),
     path("contIndividual/<str:val>",views.contIndividual,name="contIndividual"),
     path("factTypeES",views.factTypeES,name="factTypeES"),
+    path("sortMain",views.sortMain,name="sortMain"),
     path("contListByType/<str:val>",views.contListByType,name="contListByType"),
     path("contListByTypeZero",views.contListByTypeZero,name="contListByTypeZero"),
     re_path("contListByCategory/(?P<val>.*)$",views.contListByCategory,name="contListByCategory"),

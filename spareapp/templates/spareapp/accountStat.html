@@ -271,20 +271,13 @@ function sort(a,b){
                 x = table[i].getElementsByTagName("td")[a].innerHTML.toLowerCase()
                 y = table[i + 1].getElementsByTagName("td")[a].innerHTML.toLowerCase()
             }
-            console.log("Compara:")
-            console.log(x)
-            console.log(y)
             if (b == 'desc'){
-                console.log("desc")
                 if (x > y) {
-                    console.log("Entra en x > y")
                     shouldSwitch = true;
                     break;
                 }
             }else{
-                console.log("asc")
                 if(x < y){
-                    console.log("Entra en x < y")
                     shouldSwitch = true;
                     break;
                 }

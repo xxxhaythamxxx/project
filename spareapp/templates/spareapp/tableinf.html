@@ -4,7 +4,7 @@
         <tr class="dnd-moved ">
 
             {% if br.spare_code %}
-            <td style="display: none;" class="pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.id %}">{{br.spare_code}}</a></td>
+            <td style="display: none;" class="pr-0"><a id="spareCode" href="{% url 'sparedetails' br.id %}">{{br.spare_code}}</a></td>
             {% else %}
             <td style="display: none;" class="pr-0"><a href="#"></a></td>
             {% endif %}
@@ -76,8 +76,8 @@
                             <div id="{{dim.atributeName|cut:' '}}Value">
                                 <div style="overflow:hidden" class="">
                                     <div class="row">
-                                        <div id="AtrName" class="col-lg-6 col-md-6 text-right px-0 pr-1">{{dim.atributeName}}:</div>
-                                        <div id="AtrVal" class="col-lg-6 col-md-6 text-left px-0">{{dim.atributeVal}}</div>
+                                        <div id="AtrName" class="col-lg-6 col-md-6 text-end px-0">{{dim.atributeName}}:</div>
+                                        <div id="AtrVal" class="col-lg-6 col-md-6 text-start px-1">{{dim.atributeVal}}</div>
                                     </div>
                                 </div>
                             </div>

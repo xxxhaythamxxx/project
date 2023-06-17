@@ -47,271 +47,297 @@ var contTotalTable = []
 
 
 // Funcion para filtrar por medidas y atributos -------------------------------------------------------------------
-function measureFilter(){
+// function measureFilter(){
 
-    listado = []
-    listadoAll = 0
+//     // alert("Entra")
+//     atributes = []
 
-    $("#myTable tr").each(function(){
-        $(this).hide();
-    })
+//     $(".filterDim:visible").each(function(){
+//         // alert($(this).find(".atrUnique").attr("id"))
+//         // alert($(this).find(".atrUnique").val())
+//         atributes.push($(this).find(".atrUnique").attr("id")+":"+$(this).find(".atrUnique").val())
+//     })
 
-    $(".filterDim").each(function(){
-        var indexVal = $(this).attr("id")                           // id = DiameterFilter
-        var atribute = indexVal.split("Filter")                     // Dim8, - Dim2, - LaDimension,
-        var dimAtribute = atribute[0]                               // Diameter - Height - Atr1
-        var AtributeMin
-        var AtributeMax
-        var AtributeString
+//     // alert(atributes)
+
+//     $.ajax({
+//         method: 'GET',
+//         url: '/sortMain',
+//         data: {'atributes': atributes},
+//         success:function(data){
+
+//         }
+//     });
+
+//     // $("#myTable tr").each(function(){
+//     //     $(this).find("input").each(function(){
+//     //         alert($(this).val().toLowerCase())
+//     //     })
+//     // })
+
+//     // listado = []
+//     // listadoAll = 0
+
+//     // $("#myTable tr").each(function(){
+//     //     $(this).hide();
+//     // })
+
+//     // $(".filterDim").each(function(){
+//     //     var indexVal = $(this).attr("id")                           // id = DiameterFilter
+//     //     var atribute = indexVal.split("Filter")                     // Dim8, - Dim2, - LaDimension,
+//     //     var dimAtribute = atribute[0]                               // Diameter - Height - Atr1
+//     //     var AtributeMin
+//     //     var AtributeMax
+//     //     var AtributeString
         
-        $(this).find("input").each(function(){
-            var comp = $(this).val().toLowerCase()                                // 1 - 5 - off - on
-            if(comp){
-                listadoAll++
-            }
-            var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
-            if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
-                AtributeString = comp                       // on - off
-                if(AtributeString!=""){
-                    listadoAll++
-                }
-            }
-            if(dimAtribute === innerAtribute){
-                AtributeMin = comp
-            }else{
-                AtributeMax = comp
-            }
-        })
+//     //     $(this).find("input").each(function(){
+//     //         var comp = $(this).val().toLowerCase()                                // 1 - 5 - off - on
+//     //         if(comp){
+//     //             listadoAll++
+//     //         }
+//     //         var innerAtribute = $(this).attr("id").split("Min")[0]  // Diameter - Height - Atr1
+//     //         if(!($(this).attr("id").split("Min")[1]=="" || $(this).attr("id").split("Max")[1]=="")){
+//     //             AtributeString = comp                       // on - off
+//     //             if(AtributeString!=""){
+//     //                 listadoAll++
+//     //             }
+//     //         }
+//     //         if(dimAtribute === innerAtribute){
+//     //             AtributeMin = comp
+//     //         }else{
+//     //             AtributeMax = comp
+//     //         }
+//     //     })
 
-        // $('#myTable tr a').each(function(){
-        $("#myTable tr").each(function(){
-            $(this).find("a").each(function(){
+//     //     // $('#myTable tr a').each(function(){
+//     //     $("#myTable tr").each(function(){
+//     //         $(this).find("a").each(function(){
 
 
-                if($(this).attr("id")===(dimAtribute+"Value")){
-                    $(this).find(".cantainer").each(function(){
-                        var varSplit = $(this).find("#AtrName").text()
-                        var valor = $(this).find("#AtrVal").text()      // 88.0 mm - on - FOAM
-                        aux = valor.split(" mm")
-                        if(aux.length>1){
-                            var VarFloat = parseFloat(valor)
-                        }else{
-                            var varString = valor
-                        }
-                        if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
-                            indexDiameter=$(this).text()
-                            listado.push(indexDiameter)
-                        }
+//     //             if($(this).attr("id")===(dimAtribute+"Value")){
+//     //                 $(this).find(".cantainer").each(function(){
+//     //                     var varSplit = $(this).find("#AtrName").text()
+//     //                     var valor = $(this).find("#AtrVal").text()      // 88.0 mm - on - FOAM
+//     //                     aux = valor.split(" mm")
+//     //                     if(aux.length>1){
+//     //                         var VarFloat = parseFloat(valor)
+//     //                     }else{
+//     //                         var varString = valor
+//     //                     }
+//     //                     if(AtributeMin<=VarFloat & AtributeMax>=VarFloat){  // Almaceno en listado las dimensiones que se encuentren en el rango
+//     //                         indexDiameter=$(this).text()
+//     //                         listado.push(indexDiameter)
+//     //                     }
 
-                        if(AtributeString){
-                            if(varString.toLowerCase().indexOf(AtributeString.toLowerCase()) > -1){
-                                indexDiameter=$(this).text()
-                                listado.push(indexDiameter)
-                            }
-                        }
-                    })
-                }
+//     //                     if(AtributeString){
+//     //                         if(varString.toLowerCase().indexOf(AtributeString.toLowerCase()) > -1){
+//     //                             indexDiameter=$(this).text()
+//     //                             listado.push(indexDiameter)
+//     //                         }
+//     //                     }
+//     //                 })
+//     //             }
 
-            })
+//     //         })
 
-        })
+//     //     })
 
-    })
+//     // })
 
-    for(var i = listado.length -1; i >=0; i--){
-        if(listado.indexOf(listado[i]) !== i) listado.splice(i,1);
-    }
+//     // for(var i = listado.length -1; i >=0; i--){
+//     //     if(listado.indexOf(listado[i]) !== i) listado.splice(i,1);
+//     // }
 
-    listadoAll=listadoAll/2
+//     // listadoAll=listadoAll/2
 
-    for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
-        $("#myTable tr").each(function(){
-            $(this).find("td").each(function(){
-                if($(this).index()===$("#detail-id").index()){
-                    if($(this).parent().is(":visible")){
-                        $(this).text(""+(i+1)+"")
-                        i=i+1;
-                    }
-                }
-            })
-        })
-    }
+//     // for(var i=0; i<listado.length; i++){            // Recorro para volver a numerar
+//     //     $("#myTable tr").each(function(){
+//     //         $(this).find("td").each(function(){
+//     //             if($(this).index()===$("#detail-id").index()){
+//     //                 if($(this).parent().is(":visible")){
+//     //                     $(this).text(""+(i+1)+"")
+//     //                     i=i+1;
+//     //                 }
+//     //             }
+//     //         })
+//     //     })
+//     // }
 
-    // Paginado
-    $(".pagination").html("")
-    var trnum = 0
-    // Guarda la cantidad de filas seleccionadas
-    var maxRows = parseInt($("#maxRows").val())
-    var semiTotalRows = $(table+" tbody tr").length
-    // totalRows = listado.length
-    var rev = false
-    var is = false
-    // var listCont = 0
-    var listTot = 0
-    var aCont = 0
-    $("tbody tr").each(function(){
-        trnum++
-        var listCont = 0
-        band2 = false
-        band3 = false
+//     // // Paginado
+//     // $(".pagination").html("")
+//     // var trnum = 0
+//     // // Guarda la cantidad de filas seleccionadas
+//     // var maxRows = parseInt($("#maxRows").val())
+//     // var semiTotalRows = $(table+" tbody tr").length
+//     // // totalRows = listado.length
+//     // var rev = false
+//     // var is = false
+//     // // var listCont = 0
+//     // var listTot = 0
+//     // var aCont = 0
+//     // $("tbody tr").each(function(){
+//     //     trnum++
+//     //     var listCont = 0
+//     //     band2 = false
+//     //     band3 = false
 
-        $(this).find("a").each(function(){
+//     //     $(this).find("a").each(function(){
 
-            if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                aCont++
-                for(var i=0; i<listado.length; i++){
-                    if($(this).text()==listado[i]){
-                        listCont++
-                        // alert("listado: "+$(this).text())
-                    }
-                    // else{
-                    //     is = false
-                    // }
-                }
-            }
+//     //         if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+//     //             aCont++
+//     //             for(var i=0; i<listado.length; i++){
+//     //                 if($(this).text()==listado[i]){
+//     //                     listCont++
+//     //                     // alert("listado: "+$(this).text())
+//     //                 }
+//     //                 // else{
+//     //                 //     is = false
+//     //                 // }
+//     //             }
+//     //         }
 
-            if(compCategories.length>0){
-                if($(this).parent().index()==$("#category").index()){
-                    for(var i=0; i<compCategories.length; i++){
-                        if((compCategories[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                            // alert("category: "+$(this).text())
-                            band2 = true
-                        }
-                    }
-                }
-            }
-            if(compVendors.length>0){
-                if($(this).parent().parent().index()==$("#vendor").index()){
-                    for(var i=0; i<compVendors.length; i++){
-                        if((compVendors[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                            // alert("vendor: "+$(this).text())
-                            band3 = true
-                        }
-                    }
-                }
-            }
+//     //         if(compCategories.length>0){
+//     //             if($(this).parent().index()==$("#category").index()){
+//     //                 for(var i=0; i<compCategories.length; i++){
+//     //                     if((compCategories[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//     //                         // alert("category: "+$(this).text())
+//     //                         band2 = true
+//     //                     }
+//     //                 }
+//     //             }
+//     //         }
+//     //         if(compVendors.length>0){
+//     //             if($(this).parent().parent().index()==$("#vendor").index()){
+//     //                 for(var i=0; i<compVendors.length; i++){
+//     //                     if((compVendors[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//     //                         // alert("vendor: "+$(this).text())
+//     //                         band3 = true
+//     //                     }
+//     //                 }
+//     //             }
+//     //         }
 
-        })// Fin a
-        if((listCont == listadoAll) && (listCont>0)){   // Consigue todos los atributos y dimensiones
-            if(compCategories.length>0){    // Si hay checks de categories
-                if(compVendors.length>0){   // Si hay checks de vendores
-                    if(band2==true && band3==true){ // Consiguieron el vendor y la categoria
-                        listTot++
-                        is = true
-                    }
-                }
-                else{   // No hay checks de vendores
-                    if(band2==true){    // Si consiguió la categoria
-                        // alert("is es true")
-                        listTot++
-                        is = true
-                    }
-                }
-            }
-            else{   // No hay checks de categories
-                if(compVendors.length>0){   // Si hay checks de vendores
-                    if(band3==true){ // Consiguieron el vendor
-                        listTot++
-                        is = true
-                    }
-                }
-                else{   // No hay checks de vendores ni de categorias
-                    listTot++
-                    is = true
-                }
-            }
+//     //     })// Fin a
+//     //     if((listCont == listadoAll) && (listCont>0)){   // Consigue todos los atributos y dimensiones
+//     //         if(compCategories.length>0){    // Si hay checks de categories
+//     //             if(compVendors.length>0){   // Si hay checks de vendores
+//     //                 if(band2==true && band3==true){ // Consiguieron el vendor y la categoria
+//     //                     listTot++
+//     //                     is = true
+//     //                 }
+//     //             }
+//     //             else{   // No hay checks de vendores
+//     //                 if(band2==true){    // Si consiguió la categoria
+//     //                     // alert("is es true")
+//     //                     listTot++
+//     //                     is = true
+//     //                 }
+//     //             }
+//     //         }
+//     //         else{   // No hay checks de categories
+//     //             if(compVendors.length>0){   // Si hay checks de vendores
+//     //                 if(band3==true){ // Consiguieron el vendor
+//     //                     listTot++
+//     //                     is = true
+//     //                 }
+//     //             }
+//     //             else{   // No hay checks de vendores ni de categorias
+//     //                 listTot++
+//     //                 is = true
+//     //             }
+//     //         }
             
-        }else{
-            is = false
-        }
+//     //     }else{
+//     //         is = false
+//     //     }
 
-        if(is == true){
-            rev = true
-            if(trnum > maxRows){
-                $(this).hide()
-            }
-            if(trnum <= maxRows){
-                $(this).show()
-            }
-        }
+//     //     if(is == true){
+//     //         rev = true
+//     //         if(trnum > maxRows){
+//     //             $(this).hide()
+//     //         }
+//     //         if(trnum <= maxRows){
+//     //             $(this).show()
+//     //         }
+//     //     }
 
-        if(rev===false){
-            trnum--
-        }else{
-            rev = false
-        }
-        is = false
-        listCont = 0
-        // alert("Hola")
-    });
-    totalRows = listTot
-    // Antes de ésto es que debe filtrar las categorias checkeadas
-    if(totalRows > maxRows){
-        // Guardo la cantidad de paginas que se necesitan
-        var pagenum = Math.ceil(totalRows/maxRows)
-        for(var i=1;i<=pagenum;){
-            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-        }
-    }
-    $(".pagination li:first-child").addClass("active")
-    $(".pagination li").on("click",function(){
-        var pageNum = $(this).attr("data-page")
-        var trIndex = 0;
-        var rev = false
-        $(".pagination li").removeClass("active")
-        $(this).addClass("active")
-        // Recorre tolas las filas de la tabla
-        $(table+" tr:gt(0)").each(function(){
-            trIndex++
-            $(this).find("a").each(function(){
-                for(var i=0; i<listado.length; i++){
+//     //     if(rev===false){
+//     //         trnum--
+//     //     }else{
+//     //         rev = false
+//     //     }
+//     //     is = false
+//     //     listCont = 0
+//     //     // alert("Hola")
+//     // });
+//     // totalRows = listTot
+//     // // Antes de ésto es que debe filtrar las categorias checkeadas
+//     // if(totalRows > maxRows){
+//     //     // Guardo la cantidad de paginas que se necesitan
+//     //     var pagenum = Math.ceil(totalRows/maxRows)
+//     //     for(var i=1;i<=pagenum;){
+//     //         $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+//     //     }
+//     // }
+//     // $(".pagination li:first-child").addClass("active")
+//     // $(".pagination li").on("click",function(){
+//     //     var pageNum = $(this).attr("data-page")
+//     //     var trIndex = 0;
+//     //     var rev = false
+//     //     $(".pagination li").removeClass("active")
+//     //     $(this).addClass("active")
+//     //     // Recorre tolas las filas de la tabla
+//     //     $(table+" tr:gt(0)").each(function(){
+//     //         trIndex++
+//     //         $(this).find("a").each(function(){
+//     //             for(var i=0; i<listado.length; i++){
 
-                    if($(this).text()===listado[i]){
-                        rev = true
+//     //                 if($(this).text()===listado[i]){
+//     //                     rev = true
 
-                        if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                            $(this).parent().parent().parent().hide()
-                        }else{
-                            $(this).parent().parent().parent().show()
-                        }
-                    }
-                }
-            })
-            if(rev===false){
-                trIndex--
-            }else{
-                rev = false
-            }
+//     //                     if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+//     //                         $(this).parent().parent().parent().hide()
+//     //                     }else{
+//     //                         $(this).parent().parent().parent().show()
+//     //                     }
+//     //                 }
+//     //             }
+//     //         })
+//     //         if(rev===false){
+//     //             trIndex--
+//     //         }else{
+//     //             rev = false
+//     //         }
 
-        })
-    })
-    // Fin paginado
-// listadoPasar = listado.slice()
-for(var x = 0;x < listado.length; x++){
-    listadoPasar.push(listado[x])
-}
-}
+//     //     })
+//     // })
+//     // // Fin paginado
+//     // // listadoPasar = listado.slice()
+//     // for(var x = 0;x < listado.length; x++){
+//     //     listadoPasar.push(listado[x])
+//     // }
+// }
 
-$(function(){
+// $(function(){
 
-    $(".dimMin").keyup(function (e) {
-        if (e.keyCode === 13) {
-            measureFilter()
-        }
-     })
+//     $(".dimMin").keyup(function (e) {
+//         if (e.keyCode === 13) {
+//             measureFilter()
+//         }
+//      })
 
-     $(".dimMax").keyup(function (e) {
-        if (e.keyCode === 13) {
-            measureFilter()
-        }
-     })
+//      $(".dimMax").keyup(function (e) {
+//         if (e.keyCode === 13) {
+//             measureFilter()
+//         }
+//      })
 
-     $(".atrUnique").keyup(function (e) {
-        if (e.keyCode === 13) {
-            measureFilter()
-        }
-     })
-})
+//      $(".atrUnique").keyup(function (e) {
+//         if (e.keyCode === 13) {
+//             measureFilter()
+//         }
+//      })
+// })
 
 // Funcion resetear valores del filtro de medidas ---------------------------------------------------
 function measureReset(){
@@ -398,46 +424,46 @@ function measureReset(){
 }
 
 // Generar PDF desde HTML ----------------------------------------------------------------------------------------
-function generatePDF(){
-    var oldCss = {
-        "background-size": "80px 80px",
-        "width": "80px",
-        "height": "80px"
-    }
-    $("#myTable tr").each(function(){
-        $(this).find(".photo").each(function(){
-            $(this).css(oldCss);
-        })
-    })
-    $('#invoice tr:first th').each(function() {
-        var value = $(this).css("position", "static");
-      });
-    const element = document.getElementById("invoice");
-    $("#check").hide();
-    $("table td:nth-child("+($("#check").index() + 1)+")").hide();
+// function generatePDF(){
+//     var oldCss = {
+//         "background-size": "80px 80px",
+//         "width": "80px",
+//         "height": "80px"
+//     }
+//     $("#myTable tr").each(function(){
+//         $(this).find(".photo").each(function(){
+//             $(this).css(oldCss);
+//         })
+//     })
+//     $('#invoice tr:first th').each(function() {
+//         var value = $(this).css("position", "static");
+//       });
+//     const element = document.getElementById("invoice");
+//     $("#check").hide();
+//     $("table td:nth-child("+($("#check").index() + 1)+")").hide();
     
-    var opt = {
-        margin:       1,
-        filename:     'report.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        enableLinks:  false,
-        pagebreak:    {mode: "avoid-all"},
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
-      };
-    html2pdf()
-    .set(opt)
-    .from(element)
-    .save();
-    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-        $('#invoice tr:first th').each(function() {
-            var value = $(this).css("position", "sticky");
-            $("#check").show();
-            $("table td:nth-child("+($("#check").index() + 1)+")").show();
-            $("input:checkbox[name=check]").prop("checked",true);
-          });
-      });
-}
+//     var opt = {
+//         margin:       1,
+//         filename:     'report.pdf',
+//         image:        { type: 'jpeg', quality: 0.98 },
+//         html2canvas:  { scale: 2 },
+//         enableLinks:  false,
+//         pagebreak:    {mode: "avoid-all"},
+//         jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+//       };
+//     html2pdf()
+//     .set(opt)
+//     .from(element)
+//     .save();
+//     html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+//         $('#invoice tr:first th').each(function() {
+//             var value = $(this).css("position", "sticky");
+//             $("#check").show();
+//             $("table td:nth-child("+($("#check").index() + 1)+")").show();
+//             $("input:checkbox[name=check]").prop("checked",true);
+//           });
+//       });
+// }
 
 // Visualizar para imprimir --------------------------------------------------------------------------------------
 function viewPDF(){
@@ -621,18 +647,18 @@ $("#enginecodPasar option").each(function(){
     }
 })
 // Para filtrar por categoria
-jQuery(document).ready(function($){
-    $(document).ready(function() {
-        $('#catSelect').select2();
-    });
-});
+// jQuery(document).ready(function($){
+//     $(document).ready(function() {
+//         $('#catSelect').select2();
+//     });
+// });
 
 // Para filtrar por car
-jQuery(document).ready(function($){
-    $(document).ready(function() {
-        $('#carSelect').select2();
-    });
-});
+// jQuery(document).ready(function($){
+//     $(document).ready(function() {
+//         $('#carSelect').select2();
+//     });
+// });
 // Pasar de un lado a otro los spares references ---------------------------------------------
 function pasar(){
     $("#codPasar option:selected").each(function(){ // Recorre lista sin pasar
@@ -1037,6 +1063,7 @@ document.getElementById("default").addEventListener("click",function(){
     $("input:checkbox[name=priceD]").prop("checked",false);
     $("input:checkbox[name=check]").prop("checked",true);
     $("input:checkbox[name=referenceC]").prop("checked",true);
+    $("input:checkbox[name=editSpare]").prop("checked",true);
     $("input:checkbox[name=engine]").prop("checked",true);
     $("input:checkbox[name=ecode]").prop("checked",true);
 
@@ -1079,6 +1106,8 @@ document.getElementById("default").addEventListener("click",function(){
     $("table td:nth-child("+($("#atributes").index() + 1)+")").show();
     $("#referenceC").show();
     $("table td:nth-child("+($("#referenceC").index() + 1)+")").show();
+    $("#editSpare").show();
+    $("table td:nth-child("+($("#editSpare").index() + 1)+")").show();
     $("#engine").show();
     $("table td:nth-child("+($("#engine").index() + 1)+")").show();
     $("#category").show();
@@ -1162,6 +1191,7 @@ $("input:checkbox[name=shape]").prop("checked",false);
 $("input:checkbox[name=dimensions]").prop("checked",false);
 $("input:checkbox[name=atributes]").prop("checked",true);
 $("input:checkbox[name=referenceC]").prop("checked",true);
+$("input:checkbox[name=editSpare]").prop("checked",true);
 $("input:checkbox[name=engine]").prop("checked",true);
 $("input:checkbox[name=priceM]").prop("checked",false);
 $("input:checkbox[name=priceD]").prop("checked",false);
@@ -1184,6 +1214,7 @@ $List.change(function(){
     let priceDi = $("#priceD").index();
     let priceMi = $("#priceM").index();
     let referencei = $("#referenceC").index();
+    let editSparei = $("#editSpare").index();
     let enginei = $("#engine").index();
     let checki = $("#check").index();
     let ecodei = $("#ecode").index();
@@ -1294,6 +1325,14 @@ $List.change(function(){
         $("table td:nth-child("+(referencei + 1)+")").hide();
     }
 
+    if ($("input:checkbox[name=editSpare]:checked").val()){
+        $("#editSpare").show();
+        $("table td:nth-child("+(editSparei + 1)+")").show();
+    }else{
+        $("#editSpare").hide();
+        $("table td:nth-child("+(editSparei + 1)+")").hide();
+    }
+
     if ($("input:checkbox[name=engine]:checked").val()){
         $("#engine").show();
         $("table td:nth-child("+(enginei + 1)+")").show();
@@ -1339,7 +1378,6 @@ $("#headerList2").each(function(){
 const $List3 = $("#headerList3");
 $("#headerList3").each(function(){
     $(this).find("input").each(function(){
-        var comp = $(this).attr("name")
         $(this).prop("checked",false);
     })
 })
@@ -1347,7 +1385,7 @@ $("#headerList3").each(function(){
 const $List5 = $("#headerList5");       // Categories
 $("#headerList5").each(function(){
     $(this).find("input").each(function(){
-        var comp = $(this).attr("name")
+        // var comp = $(this).attr("name")
         $(this).prop("checked",false);
     })
 })
@@ -1360,612 +1398,79 @@ $("#headerList6").each(function(){
     })
 })
 
-$List2.change(function(){           // Activar filtro de dimensiones
+// $List2.change(function(){           // Activar filtro de dimensiones
 
-    var bo = false
-    // alert($(this).find("input").attr("name"))                    checkDiameter
+//     var bo = false
+//     // alert($(this).find("input").attr("name"))                    checkDiameter
 
-    $(this).find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]
-        // alert("Aux: "+aux)
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            $("#"+aux+"Filter").show();
-            // alert($("#"+aux+"Min").val())
-            $("#"+aux+"Min").val(1)
-        }else{
-            $("#"+aux+"Filter").hide();
-            // alert($("#"+aux+"Filter").text())
-            $("#"+aux+"Min").val(null)
-            $("#"+aux+"Max").val(null)
-        }
-    })
+//     $(this).find("input").each(function(){
+//         var aux = $(this).attr("name").split("check")[1]
+//         // alert("Aux: "+aux)
+//         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+//             $("#"+aux+"Filter").show();
+//             // alert($("#"+aux+"Min").val())
+//             $("#"+aux+"Min").val(1)
+//         }else{
+//             $("#"+aux+"Filter").hide();
+//             // alert($("#"+aux+"Filter").text())
+//             $("#"+aux+"Min").val(null)
+//             $("#"+aux+"Max").val(null)
+//         }
+//     })
 
-    $(this).find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            bo = true
-        }
-    })
+//     $(this).find("input").each(function(){
+//         var aux = $(this).attr("name").split("check")[1]
+//         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+//             bo = true
+//         }
+//     })
 
-    $List3.find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            bo = true
-        }
-    })
+//     $List3.find("input").each(function(){
+//         var aux = $(this).attr("name").split("check")[1]
+//         if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
+//             bo = true
+//         }
+//     })
 
-    if (bo == true){
-        $("#ButtonFilter").show();
-    }else{
-        $("#ButtonFilter").hide();
-    }
-})
+//     if (bo == true){
+//         $("#ButtonFilter").show();
+//     }else{
+//         $("#ButtonFilter").hide();
+//     }
+// })
 
 $List3.change(function(){           // Activar filtro de atributos
 
-    var bo = false
-    var atrName = []
-    var atrVal = []
-    var uniqName = []
-    var uniqVal = []
-    var atrContent = []
-    var allVal = []
-    allAtr = []
-    var onlyAtr = []
-
-    $("table tr").find("td").each(function(){
-
-        if($(this).index()==$("#atributes").index()){
-            $(this).find("a").each(function(){
-                // alert($(this).text())
-                $(this).find("#AtrVal").each(function(){
-                    // alert($(this).text())
-                    allVal.push($(this).text())         // on - FOAM - off
-                })
-
-                $(this).find("#AtrName").each(function(){
-                    // alert($(this).text())
-                    allAtr.push($(this).text().replace(' ',''))         // Atr1 - Uno Dos
-                    onlyAtr.push($(this).text().replace(' ',''))         // Atr1 - Uno Dos
-                })
-
-                atrContent.push($(this).text())
-                // alert(atrContent)        // Atron - Atr2off
-            })
-        }
-    })
-    // alert(allAtr)
-    // alert(atrContent)
-    
-    // alert(allAtr)       // El Atr,Atr,material
-    // alert(allVal)    // on,off,FOAM
-    for(var i = onlyAtr.length -1; i >=0; i--){
-        if(onlyAtr.indexOf(onlyAtr[i]) !== i) onlyAtr.splice(i,1);
-    }
-    // alert(allAtr)
-    // alert(onlyAtr)
-    // .replace('remplazar','reemplazado')
-    var atrValues = []
-    var spl
-    $(this).find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
-        // alert("Aux: "+aux)      // Atr - Atr2
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            $("#"+aux+"Filter").show();
-        }else{
-            $("#"+aux+"Filter").hide();
-            $("#"+aux).val(null)
-        }
-        
-    })
-
-
-    for (var i=0; i<onlyAtr.length; i++){
-        // alert(onlyAtr[i])
-        for(var j=0;j<allAtr.length;j++){
-            // alert(allAtr[j])
-            if(onlyAtr[i].toLowerCase() == allAtr[j].toLowerCase()){     // Si los atributos se llaman igual
-                atrValues.push(allVal[j])
-            }
-            
-        }
-        // alert(atrValues)
-        // alert(atrValues.length)
-        for(var k = atrValues.length -1; k >=0; k--){
-            if(atrValues.indexOf(atrValues[k]) !== k)
-                atrValues.splice(k,1);
-        }
-        $("#"+onlyAtr[i]+"Filter button").attr("data-bs-content",atrValues)
-        atrValues = []
-    }
-
-    $(this).find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            bo = true
-        }
-    })
-
-    $List2.find("input").each(function(){
-        var aux = $(this).attr("name").split("check")[1]
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            bo = true
-        }
-    })
-
-    if (bo === true){
-        $("#ButtonFilter").show();
-    }else{
-        $("#ButtonFilter").hide();
-    }
-})
-// compCategories = []                 // Lista de categorias seleccionadas
-$List5.change(function(){           // Activar filtro de Categories
-
-    contTotalTable = []
-    // alert("compVendors: "+compVendors)
-    for(var i = listadoPasar.length -1; i >=0; i--){
-        if(listadoPasar.indexOf(listadoPasar[i]) !== i) listadoPasar.splice(i,1);
-    }
-    compCategories = []
-    contCategory = []
-    contVendor = []
-
-    var catVal = []
-    prueba = 5
-    var trnum = 0
-    // Guarda la cantidad de filas seleccionadas
-    var maxRows = parseInt($("#maxRows").val())
-    var semiTotalRows = $(table+" tbody tr").length
-    totalRows = listadoPasar.length
-    var rev = false
-    var is = false
-    var listCont = 0
-    var aCont = 0
-
-    $("tbody tr").each(function(){
+    $(".filterAtr").each(function(){
         $(this).hide()
     })
 
-    $("table td a").each(function(){
-        if ($(this).attr("id") == "categoryInfo"){
-            catVal.push($(this).text())
-        }
-    })
-    for(var i = catVal.length -1; i >=0; i--){
-        if(catVal.indexOf(catVal[i]) !== i) catVal.splice(i,1);
-    }
-    // var tamCat = []
-    var cont = 0
-    inputTotal = 0
-    // Cuento los checks activos de Categoria
+    auxAtr = []
 
-    $(this).find("input").each(function(){  // compCategories son todos los check activos
-        inputTotal = inputTotal + 1
-        var aux = $(this).attr("name").split("check")[1]        // Todos los atributos de la base
-        if ($("input:checkbox[name="+$(this).attr("name")+"]:checked").val()){
-            comp = $(this).attr("name").split("check")[1]
-            // alert(comp)
-            compCategories.push(comp)
-
-        }
-        else{
-            cont = cont +1
-        }
-    })
-    // Aqui empieza el filtro ---------------------------------------------------
-    var contAtrFind = 0
-    $("tbody tr").each(function(){      // Recorro por filas
-        trnum++//paginado
-        var bandShow = false
-        var bandShow2 = false
-        $(this).find("a").each(function(){      // Recorro por a
-
-            if(compCategories.length>0){
-                if ($(this).attr("id") == "categoryInfo"){      // Si la columna es Category
-                    for(var k=0;k<compCategories.length;k++){ 
-                        if(compCategories[k].toLowerCase() == $(this).text().split(" ").join("").toLowerCase()){    //.split(" ").join("") elimina todos los espacios en blanco de la cadena
-                            bandShow = true
-                            contCategory.push($(this).text())
-                        }
-                    }
-                }
-            }
-
-            if(listadoPasar.length>0){  // Si se trae valores de Dimension o atributos
-                if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                    for(var i=0; i<listadoPasar.length; i++){
-                        if((listadoPasar[i].split(" ").join("").toLowerCase() == $(this).text().split(" ").join("").toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                        // if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                            contAtrFind = contAtrFind + 1
-                            bandDimAtr = true
-                        }
-                    }
-                }
-            }
-            if ($(this).attr("id") == "vendorInfo"){      // Si la columna es Vendor
-                for(var k=0;k<compVendors.length;k++){ 
-                    if(compVendors[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
-                        bandShow2 = true
-                        contVendor.push($(this).text())
-                    }
-                }
-            }
-
-        }) // termina a
-        if(listadoPasar.length>0){ // Si trae filtro de dimensiones y atributos
-
-            if(compVendors.length>0){
-                if ((listadoAll == contAtrFind) && (bandShow == true && bandShow2 == true)){
-                    is = true
-                    contTotalTable.push($(this).text())
-                }
-                else{
-                    is = false
-                }
-            }
-            else{
-                if ((listadoAll == contAtrFind) && (bandShow == true)){
-                    is = true
-                    contTotalTable.push($(this).text())
-                }
-                else{
-                    is = false
-                }
-            }
-            
-            if(is == true){
-                rev = true
-                if(trnum > maxRows){
-                    $(this).hide()
-                }
-                if(trnum <= maxRows){
-                    $(this).show()
-                }
-            }
-            if(rev===false){
-                trnum--
-            }else{
-                rev = false
-            }
-            is = true
-        }
-        else{  // Muestro cuando no trae filtro de dimensiones ni atributos
-            if(compCategories.length>0 && compVendors.length>0){
-                if((bandShow == true) && (bandShow2 == true)){
-                    is = true
-                    contTotalTable.push($(this).text())
-                }
-                else{
-                    is = false
-                }
-            }
-            else{
-                if(compVendors.length<1){
-                    if(bandShow == true){
-                        is = true
-                        contTotalTable.push($(this).text())
-                        // alert("Tambien: "+$(this).text())
-                    }
-                    else{
-                        is = false
-                    }
-                }
-            }
-            if(is == true){
-                rev = true
-                if(trnum > maxRows){
-                    $(this).hide()
-                }
-                if(trnum <= maxRows){
-                    $(this).show()
-                }
-            }
-            if(rev===false){
-                trnum--
-            }else{
-                rev = false
-            }
-            is = true
-            // contAtrFind = 0
-        }
-
-        contAtrFind = 0
-
-        // contAtrFind = 0
-    }) // fin del tr
-    // Si checkbox está vacío ------------------------------------------------------
-    if (inputTotal == cont){        // Si el checkbox category está vacío    
-        contVendor = []
-        if(listadoPasar.length>0){      // Si se ha filtrado antes por dimension o atributos
-            trnum = 0
-            is = false
-            $("tbody tr").each(function(){
-                bandShow2 = false
-                trnum++
-                contAtrFind = 0
-                $($(this).find("a")).each(function(){
-
-                    if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                        for(var i=0; i<listadoPasar.length; i++){
-                            if((listadoPasar[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                                // listadoCategory.push($(this).parent().parent().text())
-                                contAtrFind = contAtrFind + 1
-                            }
-                        }
-                    }
-
-                    if(compVendors.length>0){
-                        if ($(this).attr("id") == "vendorInfo"){      // Si la columna es Category
-                            for(var k=0;k<compVendors.length;k++){ 
-                                // if((compCategories[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()) && ($(this).text() != "") && ($(this).text())){
-                                if(compVendors[k].toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
-                                    bandShow2 = true
-                                    contVendor.push($(this).text())
-                                    // contCategory.push($(this).text())
-                                }
-                            }
-                        }
-                    }
-                })
-                if(compVendors.length>0){
-                    if ((listadoAll == contAtrFind) && (bandShow2 == true)){
-                        is = true
-                        contTotalTable.push($(this).text())
-                        listadoCategory.push($(this).text())
-                    }
-                    else{ // desde aqui es paginacion
-                        is = false
-                    }
-                }
-                else{
-                    if ((listadoAll == contAtrFind)){
-                        is = true
-                        contTotalTable.push($(this).text())
-                        listadoCategory.push($(this).text())
-                    }
-                    else{ // desde aqui es paginacion
-                        is = false
-                    }
-                }
-                
-                if(is == true){
-                    rev = true
-                    if(trnum > maxRows){
-                        $(this).hide()
-                    }
-                    if(trnum <= maxRows){
-                        $(this).show()
-                    }
-                }
-                if(rev===false){
-                    trnum--
-                }else{
-                    rev = false
-                }
-                is = true // hasta aqui
-            })
-        }
-        else{           // Si no se ha filtrado por atributos o dimensiones
-
-            trnum = 0
-            $("tbody tr").each(function(){
-                trnum++
-                var bandShow = false
-                $(this).find("a").each(function(){      // Recorro por a
-                    if(compVendors.length>0){    // Si hay Vendors
-                        if ($(this).attr("id") == "vendorInfo"){
-                            for(var k=0;k<compVendors.length;k++){
-                                if(compVendors[k].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase()){
-                                    bandShow = true
-                                    contVendor.push($(this).text())
-                                }
-                            }
-                        }
-                    }
-                    else{   // Si no hay Vendors
-                        if ($(this).attr("id") == "categoryInfo"){
-                            bandShow = true
-                            contCategory.push($(this).text())
-                        }
-                    }
-                    
-                })
-                if(bandShow == true){
-                    is = true
-                }else{
-                    is = false
-                }
-                if(is == true){
-                    rev = true
-                    if(trnum > maxRows){
-                        $(this).hide()
-                    }
-                    if(trnum <= maxRows){
-                        $(this).show()
-                    }
-                }
-                else{
-                    $(this).hide()
-                }
-                if(rev===false){
-                    trnum--
-                }else{
-                    rev = false
-                }
-                is = true
-                contAtrFind = 0
-            })
-
-        }
-    }
-    $(".pagination").html("")
-
-    if(contTotalTable.length>0){
-        totalRows = contTotalTable.length
-    }
-    else{
-        if(compVendors.length>0){
-            totalRows = contVendor.length
-        }
-        else{
-            totalRows = contCategory.length
-        }
-    }
-    // totalRows = contTotalTable.length
-    if(totalRows > maxRows){    // Mostrar paginación
-        var pagenum = Math.ceil(totalRows/maxRows)
-        for(var i=1;i<=pagenum;){
-            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-        }
-    }
-
-    $(".pagination li:first-child").addClass("active")
-    for(var i = contCategory.length -1; i >=0; i--){
-        if(contCategory.indexOf(contCategory[i]) !== i) contCategory.splice(i,1);
-    }
-
-    $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
-        var pageNum = $(this).attr("data-page")
-        var trIndex = 0;
-        var rev = false
-        $(".pagination li").removeClass("active")
-        $(this).addClass("active")
-        $(table+" tr:gt(0)").each(function(){
-            trIndex++
-            band1 = false
-            band2 = false
-            band3 = false
-            if(listadoPasar.length>0){  // Si trae desde atributos y dimensiones
-                if(contCategory.length>0){
-                    for(var i=0; i<contCategory.length; i++){
-                        $(this).find("a").each(function(){
-                            if ($(this).attr("id") == "categoryInfo"){
-                                if($(this).text().replace(' ','').toLowerCase()==contCategory[i].replace(' ','').toLowerCase()){
-                                    // alert("Entra Category: "+$(this).text())
-                                    // rev = true
-                                    band1 = true
-                                }
-                            }
-                        })
-                    }
-                }
-                if(contVendor.length>0){
-                    for(var i=0; i<contVendor.length; i++){
-                        $(this).find("a").each(function(){
-                            if ($(this).attr("id") == "vendorInfo"){
-                                if($(this).text().replace(' ','').toLowerCase()==contVendor[i].replace(' ','').toLowerCase()){
-                                    // rev = true
-                                    band2 = true
-                                }
-                            }
-                        })
-                    }
-                }
-                for(var i=0; i<listadoPasar.length; i++){
-                    $(this).find("a").each(function(){
-                        if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                            if($(this).text()==listadoPasar[i]){
-                                // rev = true
-                                band3 = true
-                            }
-                        }
-                    })
-                }
-                if(band3 == true){
-                    if(contCategory.length>0){ // Si hay categorys activos
-                        if(contVendor.length>0){    // Si hay vendors activos
-                            if((band1 == true) && (band2 == true)){ // Consigue category y vendor
-                                rev = true
-                            }
-                            else{
-                                rev = false
-                            }
-                        }
-                        else{   // No hay vendor activos
-                            if(band1 == true){  // Si consigue category
-                                rev = true
-                            }
-                            else{
-                                rev = false
-                            }
-                        }
-                    }
-                    else{   // No hay category activos
-                        if(contVendor.length>0){    // Si hay vendors activos
-                            if((band2 == true)){    // Si consigue vendor
-                                rev = true
-                            }
-                            else{
-                                rev = false
-                            }
-                        }
-                        else{   // No hay vendor ni categoria
-                            rev = true
-                        }
-                    }
-                }
-                else{
-                    rev = false
-                }
-                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                    $(this).hide()
-                }else{
-                    // if((band1 == true) || (band2 == true)){
-                    if(rev == true){
-                        $(this).show()
-                    }
-                    // }
-                }
-
-            }
-            else{   // Si no trae nada desde atributos y dimensiones
-                var band1 = false
-                var band2 = false
-                for(var i=0; i<contCategory.length; i++){
-                    $(this).find("a").each(function(){
-                        if ($(this).attr("id") == "categoryInfo"){  // Si la columna es Category
-                            if($(this).text()==contCategory[i]){
-                                // alert("Consigue: "+$(this).text())
-                                rev = true
-                                band1 = true
-                            }
-                        }
-                    })
-                }
-                if(contVendor.length>0){
-                    for(var i=0; i<contVendor.length; i++){
-                        $(this).find("a").each(function(){
-                            if ($(this).attr("id") == "vendorInfo"){  // Si la columna es Vendor
-                                if($(this).text()==contVendor[i]){
-                                    rev = true
-                                    band2 = true
-                                }
-                            }
-                        })
-                    }
-                }
-
-                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                    $(this).hide()
-                }else{
-                    if((band1 == true) || (band2 == true)){
-                        $(this).show()
-                    }
-                }
-            }
-            if(rev===false){
-                trIndex--
-            }else{
-                rev = false
+    $(this).find("input:checked").each(function(){
+        auxAtr = []
+        var aux = $(this).parent().find("label").text()
+        $("#myTable td").find("#AtrName").each(function(){
+            if($(this).text()==aux+":"){
+                auxAtr.push($(this).parent().find("#AtrVal").text())
             }
         })
+        auxAtr = new Set(auxAtr)
+        auxAtr = [...auxAtr].sort();
+        $(".filterAtr input[placeholder='"+$(this).parent().find("label").text()+"']").parent().parent().show()
+        $(".filterAtr input[placeholder='"+$(this).parent().find("label").text()+"']").parent().find("button").attr("data-bs-content",auxAtr)
+        $("#ButtonFilter").show();
     })
-    // listadoAll = inputTotal-cont
-    for(var x = 0;x < listadoCategory.length; x++){
-        pasarCategory.push(listadoCategory[x])
+
+    if($(this).find("input:checked").length<1){
+        $("#ButtonFilter").hide();
     }
-    listadoCategory = []
+    
+})
+
+$List5.change(function(){           // Activar filtro de Categories
+
+    measureFilter()
 
 })
 
@@ -2443,34 +1948,34 @@ $List6.change(function(){           // Activar filtro de Vendors
 
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
-$('th').not("#check").click(function(){
-    var table = $(this).parents('table').eq(0)
-    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-    this.asc = !this.asc
-    if (!this.asc){rows = rows.reverse()}
-    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+// $('th').not("#check").click(function(){
+//     var table = $(this).parents('table').eq(0)
+//     var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+//     this.asc = !this.asc
+//     if (!this.asc){rows = rows.reverse()}
+//     for (var i = 0; i < rows.length; i++){table.append(rows[i])}
 
-    var i = 1;
-    $("tbody tr").each(function(){
-        $(this).find("td").each(function(){
-            if($(this).index()==$("#detail-id").index()){
-                if($(this).parent().is(":visible")){
-                    $(this).text(i)
-                    i=i+1;
-                }
-            }
+//     var i = 1;
+//     $("tbody tr").each(function(){
+//         $(this).find("td").each(function(){
+//             if($(this).index()==$("#detail-id").index()){
+//                 if($(this).parent().is(":visible")){
+//                     $(this).text(i)
+//                     i=i+1;
+//                 }
+//             }
             
-        })
-    });
+//         })
+//     });
 
-})
-function comparer(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-    }
-}
-function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
+// })
+// function comparer(index) {
+//     return function(a, b) {
+//         var valA = getCellValue(a, index), valB = getCellValue(b, index)
+//         return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+//     }
+// }
+// function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
 
 // Enumerar tabla de carrito --------------------------------------------------------------------------------------
 

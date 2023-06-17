@@ -35,6 +35,17 @@ import locale
 # locale.setlocale(locale.LC_ALL, 'es_CR.UTF-8')
 from django.db.models import Q
 
+def sortMain(request):
+
+    aux = spare.objects.all().order_by("spare_code","id","spare_category")
+    for a in request.GET.getlist("atributes[]"):
+        if(a.split(":")[1]):
+            aux = aux & spare.objects.filter(atribute__atributeName=a.split(":")[0],atribute__atributeVal__icontains=a.split(":")[1]).order_by("spare_code","id")
+    for a in request.GET.getlist("categories[]"):
+        aux = aux & spare.objects.filter(spare_category__category=a).order_by("spare_code","id")
+    spareDetail = list(aux.values())
+    return JsonResponse({"spare":spareDetail})
+
 def contLogin(request):
 
     if request.method == "POST":
@@ -225,7 +236,7 @@ def home(request):
     dim2=dimension.objects.all()
     atr=atribute.objects.values("atributeName").distinct()
     atr2=atribute.objects.all()
-    allSparesall=spare.objects.all()
+    allSparesall=spare.objects.all().order_by("spare_code","id","spare_category")
     allCategories=category.objects.all().order_by("category")
     allEngines=engine.objects.all()
     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
@@ -312,7 +323,7 @@ def home(request):
             # alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             # from typing import List
             # alls = list(spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct())
-            alls = [x for x in spare.objects.all().order_by("spare_name","spare_code").distinct()]
+            alls = [x for x in spare.objects.all().order_by("spare_code","id","spare_category").distinct()]
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:
@@ -13615,12 +13626,23 @@ def searchTable(request):
 
     balanceFacMerc = 0
 
+    busqueda = ""
+
+    tod = datetime.now().date()
+    dayFrom = datetime.now().date()
+    dayTo = datetime.now().date()
+
+    allCustomers = persona.objects.all().order_by("nombre")
+    balanceTotal = 0
+    balance = {}
+    factureName = ""
+
     if request.method == "POST":
 
         balanceFacMerc = 0
 
         tod = datetime.now().date()
-        print("Entra a searchTable POST")
+        # print("Entra a searchTable POST")
         searchMetodo = "all"
 
         allCustomers = persona.objects.all().order_by("nombre")
@@ -18234,5 +18256,4 @@ def totalAccountStat(request):
                 acumTotal = acumTotal - abs(fac.total)
 
     return JsonResponse({"acumTotal":acumTotal})
-
 
