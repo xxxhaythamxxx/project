@@ -46,6 +46,155 @@ def sortMain(request):
     spareDetail = list(aux.values())
     return JsonResponse({"spare":spareDetail})
 
+def sortToPay(request):
+
+    searchAll = request.GET.get("all")
+    a = request.GET.get("a")
+    b = request.GET.get("b")
+    rango = request.GET.get("rango")
+    dateFrom = request.GET.get("dateFrom")
+    dateTo = request.GET.get("dateTo")
+
+    if searchAll == "checked":
+        allFacturesPay = factura.objects.values("id","num","refPersona__nombre","refCategory__nombre","note","fechaCreado","monto","iva","total").filter(pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("id")
+    else:
+        allFacturesPay = factura.objects.values("id","num","refPersona__nombre","refCategory__nombre","note","fechaCreado","monto","iva","total").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__egreso=True).order_by("id")
+
+    if request.GET.get("checkeado") == "true":
+        allFacturesPay = allFacturesPay.filter(nc=True)
+
+    if a=="0":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("num")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-num")
+    elif a=="1":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("refPersona__nombre")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-refPersona__nombre")
+    elif a=="2":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("refCategory__nombre")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-refCategory__nombre")
+    elif a=="3":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("note")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-note")
+    elif a=="4":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("fechaCreado")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-fechaCreado")
+    elif a=="5":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("fechaCreado")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-fechaCreado")
+    elif a=="6":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("monto")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-monto")
+    elif a=="7":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("iva")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-iva")
+    elif a== "8":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("total")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-total")
+
+    deadlineDic = {}
+    deadline = ""
+
+    for all in allFacturesPay:
+
+        deadline = datetime.now().date() - all["fechaCreado"].date()
+        deadline = deadline.days
+        deadlineDic[str(all["id"])] = deadline
+
+    allFacturesPay = list(allFacturesPay)
+
+    return JsonResponse({"allFacturesPay":allFacturesPay,"deadlineDic":deadlineDic})
+
+def sortToCollect(request):
+
+    searchAll = request.GET.get("all")
+    a = request.GET.get("a")
+    b = request.GET.get("b")
+    rango = request.GET.get("rango")
+    dateFrom = request.GET.get("dateFrom")
+    dateTo = request.GET.get("dateTo")
+
+    if searchAll == "checked":
+        allFacturesPay = factura.objects.values("id","num","refPersona__nombre","refCategory__nombre","note","fechaCreado","monto","iva","total").filter(pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("id")
+    else:
+        allFacturesPay = factura.objects.values("id","num","refPersona__nombre","refCategory__nombre","note","fechaCreado","monto","iva","total").filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,pendiente=True,refCategory__limite=True,refCategory__ingreso=True).order_by("id")
+
+    if a=="0":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("num")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-num")
+    elif a=="1":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("refPersona__nombre")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-refPersona__nombre")
+    elif a=="2":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("refCategory__nombre")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-refCategory__nombre")
+    elif a=="3":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("note")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-note")
+    elif a=="4":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("fechaCreado")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-fechaCreado")
+    elif a=="5":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("fechaCreado")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-fechaCreado")
+    elif a=="6":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("monto")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-monto")
+    elif a=="7":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("iva")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-iva")
+    elif a== "8":
+        if b=="asc":
+            allFacturesPay = allFacturesPay.order_by("total")
+        else:
+            allFacturesPay = allFacturesPay.order_by("-total")
+
+    deadlineDic = {}
+    deadline = ""
+
+    for all in allFacturesPay:
+
+        deadline = datetime.now().date() - all["fechaCreado"].date()
+        deadline = deadline.days
+        deadlineDic[str(all["id"])] = deadline
+
+    allFacturesPay = list(allFacturesPay)
+
+    return JsonResponse({"allFacturesPay":allFacturesPay,"deadlineDic":deadlineDic})
+
 def contLogin(request):
 
     if request.method == "POST":

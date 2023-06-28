@@ -26,8 +26,6 @@
     <div class="my-2">
         <input value="all" class="form-check-input" id="search1" type="radio" name="search" {% if searchMetodo == 'all' %} checked {$ else %} '' {% endif %}>
         <label class="form-check-label" for="search1">Todos</label>
-        <!-- <input value="month" class="form-check-input" id="search2" type="radio" name="search" {% if searchMetodo == 'month' %} checked {$ else %} '' {% endif %}>
-        <label class="form-check-label" for="search2">Éste mes</label> -->
         <input value="range" class="form-check-input" id="search4" type="radio" name="search" {% if searchMetodo == 'range' %} checked {$ else %} '' {% endif %}>
         <label class="form-check-label" for="search4">Rango</label>
         <input value="{{filtro}}" type="text" name="cod2" id="cod2" hidden>
@@ -77,15 +75,15 @@
     <table id="invoice" style="font-size: small;" class="table-bordered invoice draggable table-sortable">
         <thead>
             <tr style="background-color: #7C8FEC;position: sticky;top: 70;" class="">
-                <th class="p-2"># Factura</th>
-                <th class="p-2">Nombre</th>
-                <th class="p-2">Categoría</th>
-                <th class="p-2">Nota</th>
-                <th class="p-2">Fecha de registro</th>
-                <th class="p-2">Límite</th>
-                <th id="facMonto" class="p-2">Monto</th>
-                <th class="p-2">ITBM</th>
-                <th id="facTotal" class="p-2">Total</th>
+                <th id="factura" class="p-2"><i onclick="sort(0,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('factura')"># Factura</span></th>
+                <th id="nombre" class="p-2"><i onclick="sort(1,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('nombre')">Nombre</span></th>
+                <th id="categoria" class="p-2"><i onclick="sort(2,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('categoria')">Categoría</span></th>
+                <th id="nota" class="p-2"><i onclick="sort(3,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('nota')">Nota</span></th>
+                <th id="fecha" class="p-2"><i onclick="sort(4,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('fecha')">Fecha de registro</span></th>
+                <th id="limite" class="p-2"><i onclick="sort(5,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('limite')">Límite</span></th>
+                <th id="facMonto" class="p-2"><i onclick="sort(6,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('facMonto')">Monto</span></th>
+                <th id="itbm" class="p-2"><i onclick="sort(7,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('itbm')">ITBM</span></th>
+                <th id="facTotal" class="p-2"><i onclick="sort(8,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('facTotal')">Total</span></th>
                 <th id="check" class="p-2 exclude">Acción</th>
             </tr>
         </thead>
@@ -93,8 +91,8 @@
         <tbody id="myTable">
             {% for facture in allFacturesPay %}
             <tr class="bodyM">
-                <td class="p-2">{{facture.num}}</td>
-                <td class="p-2"><a href="{% url 'contIndividual' facture.refPersona.id %}">{{facture.refPersona}}</a></td>
+                <td class="p-2">{% if facture.num %}{{facture.num}}{% endif %}</td>
+                <td class="p-2">{{facture.refPersona}}</td>
                 <td class="p-2">{{facture.refCategory}}</td>
                 <td class="p-2">{{facture.note}}</td>
                 <td class="p-2">{{facture.fechaCreado|date:"M d, Y"}}</td>
@@ -181,6 +179,52 @@
 <script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
 
 <script type="text/javascript">
+
+function sort(a,b){
+    var table, rows, switching, i, x, y, shouldSwitch, change;
+    table = document.getElementById("myTable").getElementsByClassName("bodyM")
+    if(b == 'desc'){
+        $("#invoice th:not(.exclude)")[a].innerHTML = '<i onclick="sort('+a+',\'asc\')" class="bi bi-arrow-up-short"></i><span onclick="'+$("#invoice th")[a].getAttribute("id")+'">'+$("#invoice th")[a].getElementsByTagName("span")[0].innerHTML+'</span>'
+    }else{
+        $("#invoice th:not(.exclude)")[a].innerHTML = '<i onclick="sort('+a+',\'desc\')" class="bi bi-arrow-down-short"></i><span onclick="'+$("#invoice th")[a].getAttribute("id")+'">'+$("#invoice th")[a].getElementsByTagName("span")[0].innerHTML+'</span>'
+    }
+    if ($("#entrySpending").is(':checked')){
+        checkeado = true;
+    }else{
+        checkeado = false;
+    }
+    var all = $("#search1").attr('checked')
+    var rango = $("#search4").attr('checked')
+    var from = $("#searchDateFrom").val()
+    var to = $("#searchDateTo").val()
+    var dateFrom = $("#dateFrom").val()
+    var dateTo = $("#dateTo").val()
+    var numero = ""
+    var fecha = ""
+    var today = ""
+    var limite
+    const month = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    $.ajax({
+        method: 'GET',
+        url: "/sortToPay",
+        // type: "get",
+        data: {"dateTo":dateTo,"dateFrom":dateFrom,"checkeado":checkeado,"all":all,"rango":rango,"a":a,"b":b},
+        success: function (data){
+            $("#myTable .bodyM").remove()
+            for(var i=0;i<data.allFacturesPay.length;i++){
+                if(data.allFacturesPay[i].num){
+                    numero = data.allFacturesPay[i].num
+                }else{
+                    numero = ""
+                }
+                fecha = new Date(data.allFacturesPay[i].fechaCreado)
+                pos = data.allFacturesPay[i].id
+                fecha = month[fecha.getMonth()]+" "+String(fecha.getDate()).padStart(2, "0")+", "+fecha.getFullYear()
+                $("#myTable").prepend('<tr class="bodyM"><td class="p-2">'+numero+'</td><td class="p-2">'+data.allFacturesPay[i].refPersona__nombre+'</td><td class="p-2">'+data.allFacturesPay[i].refCategory__nombre+'</td><td class="p-2">'+data.allFacturesPay[i].note+'</td><td class="p-2">'+fecha+'</td><td class="p-2">'+data.deadlineDic[data.allFacturesPay[i].id]+' days</td><td class="p-2">$'+data.allFacturesPay[i].monto.toFixed(2)+'</td><td class="p-2">$'+data.allFacturesPay[i].iva.toFixed(2)+'</td><td class="p-2">$'+data.allFacturesPay[i].total.toFixed(2)+'</td><td class="p-2 exclude"><a style="color: white;font-size: small;" class="btn btn-secondary" href="/editeFact/'+data.allFacturesPay[i].id+'/contToPay">Editar</a> <a data-bs-toggle="modal" type="button" data-bs-target="#modalPagar'+data.allFacturesPay[i].id+'" style="font-size: small;color: aliceblue;" id="modalPagar'+data.allFacturesPay[i].id+'Id" class="btn btn-danger" href="javascript:void(0);">Pagar</a></td></tr>')
+            }
+        }
+    });
+}
 
 $("input:radio[name=search]").change(function(){
     var checkeado = false;
@@ -337,7 +381,7 @@ $("#downloadexcela").click(function(){
 })
 </script>
 
-<script>
+<!-- <script>
 // Arreglar por click a cabecera ----------------------------------------------------------------------------------
 // Se debe agregar CSS th { cursor: pointer; }
 $('th').not("#check").click(function(){
@@ -357,7 +401,7 @@ function comparer(index) {
     }
 }
 function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
-</script>
+</script> -->
 
 <script>
 $("#cod").on("keyup",function(){                                // Cuando se teclea algo
@@ -504,7 +548,7 @@ pdfMake.createPdf(docDefinition).download("MercanciaPagar");
 
 }
 
-$("#invoice").dragtable()
+// $("#invoice").dragtable()
 
 </script>
 
