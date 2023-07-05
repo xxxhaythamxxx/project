@@ -23,7 +23,7 @@ from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Max
 # import numpy as np
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -194,6 +194,173 @@ def sortToCollect(request):
     allFacturesPay = list(allFacturesPay)
 
     return JsonResponse({"allFacturesPay":allFacturesPay,"deadlineDic":deadlineDic})
+
+def sortMain2(request):
+
+    print("Entra------------------------------------------------------------------------------------")
+
+    print(request.GET)
+
+    a = request.GET.get("a")
+    b = request.GET.get("b")
+    referenceAux = reference.objects.values("referenceSpare__spare_code","referenceCode","referenceNote").order_by("referenceCode")
+    spareAux = spare.objects.all().order_by("spare_code")
+    carAux = car.objects.values("spare","car_manufacturer__manufacturer","car_model","carfrom","transmission","chasis").all().order_by("car_manufacturer__manufacturer")
+    # vendorAux = vendor.objects.all().order_by("vendorName")
+    vendorAux = vendor.objects.values("spare","vendorName").all().order_by("vendorName")
+    engineAux = engine.objects.values("spare","engine_manufacturer","engine_l","engine_ide","engine_type","engine_cylinder","engine_pistons").all()
+    categoryAux = category.objects.all()
+    atributesAux = atribute.objects.values("atributeSpare","atributeName","atributeVal").all().order_by("atributeName")
+    dimensionsAux = dimension.objects.values("dimensionSpare","atributeName","atributeVal").all().order_by("atributeName")
+
+    if a=="0":
+        print("code")
+        if b=="asc":
+            spareAux = spare.objects.all().order_by("-spare_code")
+        else:
+            spareAux = spare.objects.all().order_by("spare_code")
+    elif a=="1":
+        print("edit")
+        if b=="asc":
+            spareAux = spare.objects.all().order_by("-spare_code")
+        else:
+            spareAux = spare.objects.all().order_by("spare_code")
+    elif a=="2":
+        print("ref code")
+        if b=="asc":
+            spareAux = spare.objects.annotate(max_weight=Max('reference')).order_by("-max_weight")
+        else:
+            spareAux = spare.objects.annotate(max_weight=Max('reference')).order_by("max_weight")
+    elif a=="3":
+        print("car")
+        if b=="asc":
+            spareAux = spare.objects.annotate(max_weight=Max('car_info__car_manufacturer__manufacturer')).order_by("-max_weight")
+        else:
+            spareAux = spare.objects.annotate(max_weight=Max('car_info__car_manufacturer__manufacturer')).order_by("max_weight")
+    elif a=="4":
+        print("engine")
+        if b=="asc":
+            spareAux = spare.objects.annotate(max_weight=Max('engine_info__engine_l')).order_by("-max_weight")
+        else:
+            spareAux = spare.objects.annotate(max_weight=Max('engine_info__engine_l')).order_by("max_weight")
+    elif a=="5":
+        print("brand")
+        pass
+    elif a=="6":
+        print("category")
+        if b=="asc":
+            spareAux = spare.objects.all().order_by("-spare_category")
+        else:
+            spareAux = spare.objects.all().order_by("spare_category")
+    elif a=="7":
+        print("description")
+        if b=="asc":
+            spareAux = spare.objects.all().order_by("-spare_name")
+        else:
+            spareAux = spare.objects.all().order_by("spare_name")
+    elif a=="8":
+        print("atributes")
+        if b=="asc":
+            spareAux = spare.objects.annotate(max_weight=Max('atribute')).order_by("-max_weight")
+        else:
+            spareAux = spare.objects.annotate(max_weight=Max('atribute')).order_by("max_weight")
+    elif a=="9":
+        print("dimensions")
+        pass
+    elif a=="10":
+        print("priceM")
+        if b=="asc":
+            spareAux = spare.objects.all().order_by("-price_m")
+        else:
+            spareAux = spare.objects.all().order_by("price_m")
+    elif a=="11":
+        print("priceD")
+        if b=="asc":
+            spareAux = spare.objects.all().order_by("-price_d")
+        else:
+            spareAux = spare.objects.all().order_by("price_d")
+    elif a=="12":
+        print("photo")
+        pass
+    elif a=="13":
+        print("ecode")
+        pass
+    elif a=="14":
+        print("vendor")
+        pass
+
+    print(len(spareAux))
+
+    for a in request.GET.getlist("atributes[]"):
+        if(a.split(":")[1]):
+            spareAux = spareAux & spare.objects.filter(atribute__atributeName=a.split(":")[0],atribute__atributeVal__icontains=a.split(":")[1])
+    for a in request.GET.getlist("categories[]"):
+        spareAux = spareAux & spare.objects.filter(spare_category__category=a)
+
+    print(len(spareAux))
+
+    i = 0
+    for a in request.GET.getlist("inputsId[]"):
+        if a=="inputcode":
+            print("Entra en inputcode")
+            spareAux = spareAux.distinct() & spare.objects.filter(spare_code__icontains=request.GET.getlist("inputs[]")[i]).distinct()
+        if a=="inputeditSpare":
+            print("Entra en inputeditSpare")
+            spareAux = spareAux.distinct() & spare.objects.filter(spare_code__icontains=request.GET.getlist("inputs[]")[i]).distinct()
+        if a=="inputreferenceC":
+            print("Entra en inputreferenceC")
+            spareAux = spareAux.distinct() & (spare.objects.filter(reference__referenceCode__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(reference__referenceNote__icontains=request.GET.getlist("inputs[]")[i]).distinct())
+        if a=="inputcar":
+            print("Entra en inputcar")
+            spareAux = spareAux.distinct() & (spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(car_info__car_model__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(car_info__chasis__icontains=request.GET.getlist("inputs[]")[i]).distinct())
+        if a=="inputengine":
+            print("Entra en inputengine")
+            spareAux = spareAux.distinct() & (spare.objects.filter(engine_info__engine_l__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(engine_info__engine_ide__icontains=request.GET.getlist("inputs[]")[i]).distinct())
+        # if a=="inputbrand":
+        if a=="inputcategory":
+            print("Entra en inputcategory")
+            spareAux = spareAux.distinct() & spare.objects.filter(spare_category__category__icontains=request.GET.getlist("inputs[]")[i]).distinct()
+        if a=="inputtype":
+            print("Entra en inputtype")
+            spareAux = spareAux.distinct() & spare.objects.filter(spare_name__icontains=request.GET.getlist("inputs[]")[i]).distinct()
+        if a=="inputatributes":
+            print("Entra en inputatributes")
+            spareAux = spareAux.distinct() & (spare.objects.filter(atribute__atributeName__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(atribute__atributeVal__icontains=request.GET.getlist("inputs[]")[i]).distinct())
+        if a=="inputdimensions":
+            print("Entra en inputdimensions")
+            spareAux = spareAux.distinct() & (spare.objects.filter(dimension__atributeName__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(dimension__atributeVal__icontains=request.GET.getlist("inputs[]")[i]).distinct())
+        if a=="inputpriceM":
+            print("Entra en inputpriceM")
+            spareAux = spareAux.distinct() & spare.objects.filter(price_m__icontains=request.GET.getlist("inputs[]")[i]).distinct()
+        if a=="inputpriceD":
+            print("Entra en inputpriceD")
+            spareAux = spareAux.distinct() & spare.objects.filter(price_d__icontains=request.GET.getlist("inputs[]")[i]).distinct()
+        # if a=="inputecode":
+        # if a=="inputvendor":
+
+        i = i + 1
+
+    print(len(spareAux))
+    spareAux = list(spareAux.values())
+    print(len(spareAux))
+    categoryAux = list(categoryAux.values())
+    referenceAux = list(referenceAux)
+    carAux = list(carAux)
+    vendorAux = list(vendorAux)
+    atributesAux = list(atributesAux)
+    dimensionsAux = list(dimensionsAux)
+    engineAux = list(engineAux)
+
+    # for a in spareAux:
+    #     print(a)
+    # for b in carAux:
+    #     print(b)
+
+    # for a in spareAux:
+    #     print(a)
+
+    return JsonResponse({"spare":spareAux,"reference":referenceAux,"car":carAux,"engine":engineAux,"category":categoryAux,"atributes":atributesAux,"dimensions":dimensionsAux,"vendor":vendorAux})
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contLogin(request):
 
@@ -472,7 +639,7 @@ def home(request):
             # alls = spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct() 
             # from typing import List
             # alls = list(spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct())
-            alls = [x for x in spare.objects.all().order_by("spare_code","id","spare_category").distinct()]
+            alls = [x for x in spare.objects.all().order_by("spare_code","id").distinct()]
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:

@@ -112,6 +112,7 @@ urlpatterns = [
     path("sortMain",views.sortMain,name="sortMain"),
     path("sortToPay",views.sortToPay,name="sortToPay"),
     path("sortToCollect",views.sortToCollect,name="sortToCollect"),
+    path("sortMain2",views.sortMain2,name="sortMain2"),
     path("contListByType/<str:val>",views.contListByType,name="contListByType"),
     path("contListByTypeZero",views.contListByTypeZero,name="contListByTypeZero"),
     re_path("contListByCategory/(?P<val>.*)$",views.contListByCategory,name="contListByCategory"),
