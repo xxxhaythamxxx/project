@@ -92,7 +92,7 @@
 
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if allDimensions %}
-                <td style="max-width: 120px;display: none;" class="">
+                <td style="max-width: 120px;display: none;" class="pr-0">
                     {% for dim in allDimensions|dictsort:"atributeName" %}
                         {% if br.spare_code == dim.dimensionSpare.spare_code %}
                         <div class=""><div id="{{dim.atributeName|cut:' '}}Value"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">{{dim.atributeName}}</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">{{dim.atributeVal|floatformat:2}} mm</div></div></div></div></div>
