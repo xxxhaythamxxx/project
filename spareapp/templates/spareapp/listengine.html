@@ -68,8 +68,8 @@
                 {% if br.id == a.engine__id %}
                 <div id="fila2{{br.id}}" style="font-size: small;display: none;" class="row p-0 m-0 bg-white carEngine" data-bs-toggle="fila{{br.id}}">
                     <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
-                    {% if a.car_manufacturer %}
-                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_manufacturer}}</a></div>
+                    {% if a.car_manufacturer__manufacturer %}
+                    <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#">{{a.car_manufacturer__manufacturer}}</a></div>
                     {% else %}
                     <div class="col py-2 d-flex align-items-center justify-content-center"><a class="text-dark" style="text-decoration: none;" href="#"></a></div>
                     {% endif %}

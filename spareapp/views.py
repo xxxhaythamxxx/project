@@ -201,6 +201,7 @@ def sortMain2(request):
 
     print(request.GET)
 
+    mig = request.GET.get("mig")
     a = request.GET.get("a")
     b = request.GET.get("b")
     referenceAux = reference.objects.values("referenceSpare__spare_code","referenceCode","referenceNote").order_by("referenceCode")
@@ -213,83 +214,112 @@ def sortMain2(request):
     atributesAux = atribute.objects.values("atributeSpare","atributeName","atributeVal").all().order_by("atributeName")
     dimensionsAux = dimension.objects.values("dimensionSpare","atributeName","atributeVal").all().order_by("atributeName")
 
+    sp = spare.objects.all().order_by("spare_code")
+    sp2 = spare.objects.all().order_by("spare_code")
+    spAux = spare.objects.none()
+    spExclude = spare.objects.none()
+    bandMenos = False
+    if mig:
+        valor=mig
+        bandMenos = False
+        if valor:
+            if valor=="":
+                pass
+            else:
+                vec = valor.split(" ")
+                sp = spare.objects.all().order_by("spare_code")
+                sp2 = spare.objects.all().order_by("spare_code")
+                for x in vec:
+                    if x[0]=="-":
+                        bandMenos = True
+                        x=x.split("-")[1]
+                        spExclude = spExclude | spare.objects.filter(spare_code__icontains=x) | spare.objects.filter(spare_brand__brand__icontains=x) | spare.objects.filter(spare_name__icontains=x) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=x) | spare.objects.filter(car_info__car_model__icontains=x) | spare.objects.filter(car_info__chasis__icontains=x) | spare.objects.filter(engine_info__engine_l__icontains=x) | spare.objects.filter(engine_info__engine_ide__icontains=x) | spare.objects.filter(spare_category__category__icontains=x)
+                        sp2 = sp2.distinct() & spExclude.distinct()
+                    else:
+                        spAux = spAux | spare.objects.filter(spare_code__icontains=x) | spare.objects.filter(spare_brand__brand__icontains=x) | spare.objects.filter(spare_name__icontains=x) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=x) | spare.objects.filter(car_info__car_model__icontains=x) | spare.objects.filter(car_info__chasis__icontains=x) | spare.objects.filter(engine_info__engine_l__icontains=x) | spare.objects.filter(engine_info__engine_ide__icontains=x) | spare.objects.filter(spare_category__category__icontains=x)
+                        sp = sp.distinct() & spAux.distinct()
+                    spAux = spare.objects.none()
+                    spExclude = spare.objects.none()
+                if bandMenos:
+                    sp = sp.difference(sp2)
+
     if a=="0":
-        print("code")
+        # print("code")
         if b=="asc":
             spareAux = spare.objects.all().order_by("-spare_code")
         else:
             spareAux = spare.objects.all().order_by("spare_code")
     elif a=="1":
-        print("edit")
+        # print("edit")
         if b=="asc":
             spareAux = spare.objects.all().order_by("-spare_code")
         else:
             spareAux = spare.objects.all().order_by("spare_code")
     elif a=="2":
-        print("ref code")
+        # print("ref code")
         if b=="asc":
             spareAux = spare.objects.annotate(max_weight=Max('reference')).order_by("-max_weight")
         else:
             spareAux = spare.objects.annotate(max_weight=Max('reference')).order_by("max_weight")
     elif a=="3":
-        print("car")
+        # print("car")
         if b=="asc":
             spareAux = spare.objects.annotate(max_weight=Max('car_info__car_manufacturer__manufacturer')).order_by("-max_weight")
         else:
             spareAux = spare.objects.annotate(max_weight=Max('car_info__car_manufacturer__manufacturer')).order_by("max_weight")
     elif a=="4":
-        print("engine")
+        # print("engine")
         if b=="asc":
             spareAux = spare.objects.annotate(max_weight=Max('engine_info__engine_l')).order_by("-max_weight")
         else:
             spareAux = spare.objects.annotate(max_weight=Max('engine_info__engine_l')).order_by("max_weight")
     elif a=="5":
-        print("brand")
+        # print("brand")
         pass
     elif a=="6":
-        print("category")
+        # print("category")
         if b=="asc":
             spareAux = spare.objects.all().order_by("-spare_category")
         else:
             spareAux = spare.objects.all().order_by("spare_category")
     elif a=="7":
-        print("description")
+        # print("description")
         if b=="asc":
             spareAux = spare.objects.all().order_by("-spare_name")
         else:
             spareAux = spare.objects.all().order_by("spare_name")
     elif a=="8":
-        print("atributes")
+        # print("atributes")
         if b=="asc":
             spareAux = spare.objects.annotate(max_weight=Max('atribute')).order_by("-max_weight")
         else:
             spareAux = spare.objects.annotate(max_weight=Max('atribute')).order_by("max_weight")
     elif a=="9":
-        print("dimensions")
+        # print("dimensions")
         pass
     elif a=="10":
-        print("priceM")
+        # print("priceM")
         if b=="asc":
             spareAux = spare.objects.all().order_by("-price_m")
         else:
             spareAux = spare.objects.all().order_by("price_m")
     elif a=="11":
-        print("priceD")
+        # print("priceD")
         if b=="asc":
             spareAux = spare.objects.all().order_by("-price_d")
         else:
             spareAux = spare.objects.all().order_by("price_d")
     elif a=="12":
-        print("photo")
+        # print("photo")
         pass
     elif a=="13":
-        print("ecode")
+        # print("ecode")
         pass
     elif a=="14":
-        print("vendor")
+        # print("vendor")
         pass
 
-    print(len(spareAux))
+    # print(len(spareAux))
 
     for a in request.GET.getlist("atributes[]"):
         if(a.split(":")[1]):
@@ -297,52 +327,57 @@ def sortMain2(request):
     for a in request.GET.getlist("categories[]"):
         spareAux = spareAux & spare.objects.filter(spare_category__category=a)
 
-    print(len(spareAux))
+    # print(len(spareAux))
 
     i = 0
     for a in request.GET.getlist("inputsId[]"):
         if a=="inputcode":
-            print("Entra en inputcode")
+            # print("Entra en inputcode")
             spareAux = spareAux.distinct() & spare.objects.filter(spare_code__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         if a=="inputeditSpare":
-            print("Entra en inputeditSpare")
+            # print("Entra en inputeditSpare")
             spareAux = spareAux.distinct() & spare.objects.filter(spare_code__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         if a=="inputreferenceC":
-            print("Entra en inputreferenceC")
+            # print("Entra en inputreferenceC")
             spareAux = spareAux.distinct() & (spare.objects.filter(reference__referenceCode__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(reference__referenceNote__icontains=request.GET.getlist("inputs[]")[i]).distinct())
         if a=="inputcar":
-            print("Entra en inputcar")
+            # print("Entra en inputcar")
             spareAux = spareAux.distinct() & (spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(car_info__car_model__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(car_info__chasis__icontains=request.GET.getlist("inputs[]")[i]).distinct())
         if a=="inputengine":
-            print("Entra en inputengine")
+            # print("Entra en inputengine")
             spareAux = spareAux.distinct() & (spare.objects.filter(engine_info__engine_l__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(engine_info__engine_ide__icontains=request.GET.getlist("inputs[]")[i]).distinct())
         # if a=="inputbrand":
         if a=="inputcategory":
-            print("Entra en inputcategory")
+            # print("Entra en inputcategory")
             spareAux = spareAux.distinct() & spare.objects.filter(spare_category__category__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         if a=="inputtype":
-            print("Entra en inputtype")
+            # print("Entra en inputtype")
             spareAux = spareAux.distinct() & spare.objects.filter(spare_name__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         if a=="inputatributes":
-            print("Entra en inputatributes")
+            # print("Entra en inputatributes")
             spareAux = spareAux.distinct() & (spare.objects.filter(atribute__atributeName__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(atribute__atributeVal__icontains=request.GET.getlist("inputs[]")[i]).distinct())
         if a=="inputdimensions":
-            print("Entra en inputdimensions")
+            # print("Entra en inputdimensions")
             spareAux = spareAux.distinct() & (spare.objects.filter(dimension__atributeName__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(dimension__atributeVal__icontains=request.GET.getlist("inputs[]")[i]).distinct())
         if a=="inputpriceM":
-            print("Entra en inputpriceM")
+            # print("Entra en inputpriceM")
             spareAux = spareAux.distinct() & spare.objects.filter(price_m__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         if a=="inputpriceD":
-            print("Entra en inputpriceD")
+            # print("Entra en inputpriceD")
             spareAux = spareAux.distinct() & spare.objects.filter(price_d__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         # if a=="inputecode":
         # if a=="inputvendor":
 
         i = i + 1
 
-    print(len(spareAux))
+    if bandMenos:
+        spareAux =  sp & spareAux.distinct()
+    else:
+        spareAux =  sp.distinct() & spareAux.distinct()
+    # spareAux = spareAux.distinct() & sp.distinct()
+    # print(len(spareAux))
     spareAux = list(spareAux.values())
-    print(len(spareAux))
+    # print(len(spareAux))
     categoryAux = list(categoryAux.values())
     referenceAux = list(referenceAux)
     carAux = list(carAux)
@@ -395,6 +430,32 @@ def selectf(request):
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
+    sp = spare.objects.all().order_by("spare_code")
+    sp2 = spare.objects.all().order_by("spare_code")
+    spCode = spare.objects.none()
+    spBrand = spare.objects.none()
+    spName = spare.objects.none()
+    spCar = spare.objects.none()
+    spEngine = spare.objects.none()
+    spCat = spare.objects.none()
+    spVendor = spare.objects.none()
+    spPrinceM = spare.objects.none()
+    spPrinceD = spare.objects.none()
+    spAux = spare.objects.none()
+    spExclude = spare.objects.none()
+    bandMenos = False
+
+    # spCode = spare.objects.all().order_by("spare_code")
+    # spBrand = spare.objects.all().order_by("spare_code")
+    # spName = spare.objects.all().order_by("spare_code")
+    # spCar = spare.objects.all().order_by("spare_code")
+    # spEngine = spare.objects.all().order_by("spare_code")
+    # spCat = spare.objects.all().order_by("spare_code")
+    # spVendor = spare.objects.all().order_by("spare_code")
+    # spPrinceM = spare.objects.all().order_by("spare_code")
+    # spPrinceD = spare.objects.all().order_by("spare_code")
+    cont = 0
+
     dic={"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
@@ -430,117 +491,29 @@ def selectf(request):
         # Si se usa el buscador por código de repuesto
         else:   
             valor=request.GET.get("search")
+            bandMenos = False
             bol = False
             if valor:
                 if valor=="":
                     return render(request,"spareapp/home.html",dic)
                 else:
-                    # Compara el codigoRepuesto con valor
-                    b=[]
                     vec = valor.split(" ")
-                    # comp=spare.objects.filter(spare_code__icontains=vec).order_by("spare_code","spare_brand","spare_name").distinct() 
-                    todos=spare.objects.all()
-                    ref=reference.objects.all()
-                    cars=car.objects.all()
-                    engines=engine.objects.all()
-                    contVar = 0
-                    for t in todos:
-                        s=t.spare_code
-                        # br=t.spare_brand
-                        n=t.spare_name
-                        ch=t.car_info
-                        for v in vec:
-                            if s:
-                                out = s.translate(str.maketrans('', '', '.''-'))
-                                if valor.upper() in out.upper():
-                                    bol = True
-                                if v.upper() in out.upper():
-                                    bol = True
-                                if v.upper() in s.upper():
-                                    bol = True
-                            if n:
-                                out = n.split(" ")
-                                for o in out:
-                                    if o.upper().startswith(v.upper()):
-                                        bol = True
-                            for r in ref:
-                                sr=r.referenceCode
-                                if sr:
-                                    out = sr.translate(str.maketrans('', '', '.''-'))
-                                    if valor.upper() in out.upper():
-                                        if s == r.referenceSpare.spare_code:
-                                            bol = True
-                                    if v.upper() in out.upper():
-                                        if s == r.referenceSpare.spare_code:
-                                            bol = True
-                            for r in cars:
-                                sr=r.transmission
-                                man=r.car_manufacturer
-                                if sr:
-                                    out = sr.translate(str.maketrans('', '', '.''-'))
-                                    if valor.upper() in out.upper():
-                                        for to in t.car_info.all():
-                                            if to.transmission in r.transmission:
-                                                bol = True
-                                    if v.upper() in out.upper():
-                                        for to in t.car_info.all():
-                                            if to.transmission in r.transmission:
-                                                bol = True
-                                if man:
-                                    out = man.translate(str.maketrans('', '', '.''-'))
-                                    if out.upper().startswith(valor.upper()):
-                                        for to in t.car_info.all():
-                                            if to.car_manufacturer in r.car_manufacturer:
-                                                bol = True
-                                    if out.upper().startswith(v.upper()):
-                                        for to in t.car_info.all():
-                                            if to.car_manufacturer in r.car_manufacturer:
-                                                bol = True
-                            
-                            if bol == True:
-                                contVar=contVar+1
-                            bol = False
-                            
-                            # -----------------------------------------------------
-
-                            for r in engines:
-                                # transmission
-                                sr=r.engine_ide
-                                # car_manufacturer
-                                # man=r.car_manufacturer
-                                if sr:
-                                    out = sr.translate(str.maketrans('', '', '.''-'))
-                                    if valor.upper() in out.upper():
-                                        for to in t.engine_info.all():
-                                            if to.engine_ide in r.engine_ide:
-                                                bol = True
-                                    if v.upper() in out.upper():
-                                        for to in t.engine_info.all():
-                                            if to.engine_ide in r.engine_ide:
-                                                bol = True
-                                # if man:
-                                #     out = man.translate(str.maketrans('', '', '.''-'))
-                                #     if out.upper().startswith(valor.upper()):
-                                #         for to in t.car_info.all():
-                                #             if to.car_manufacturer in r.car_manufacturer:
-                                #                 bol = True
-                                #     if out.upper().startswith(v.upper()):
-                                #         for to in t.car_info.all():
-                                #             if to.car_manufacturer in r.car_manufacturer:
-                                #                 bol = True
-                            
-                            if bol == True:
-                                contVar=contVar+1
-                            bol = False
-
-                            # --------------------------------------------------------------
-                        
-                        if contVar == len(vec):
-                            b.append(t)
-                        contVar = 0
-                            
-                    b = (set(b))
-                    dic.update({"spare":b,"mig":valor,"parameter":"Parameters"})
+                    sp = spare.objects.all().order_by("spare_code")
+                    sp2 = spare.objects.all().order_by("spare_code")
+                    for a in vec:
+                        if a[0]=="-":
+                            bandMenos = True
+                            a=a.split("-")[1]
+                            spExclude = spExclude | spare.objects.filter(spare_code__icontains=a) | spare.objects.filter(spare_brand__brand__icontains=a) | spare.objects.filter(spare_name__icontains=a) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=a) | spare.objects.filter(car_info__car_model__icontains=a) | spare.objects.filter(car_info__chasis__icontains=a) | spare.objects.filter(engine_info__engine_l__icontains=a) | spare.objects.filter(engine_info__engine_ide__icontains=a) | spare.objects.filter(spare_category__category__icontains=a)
+                            sp2 = sp2.distinct() & spExclude.distinct()
+                        else:
+                            spAux = spAux | spare.objects.filter(spare_code__icontains=a) | spare.objects.filter(spare_brand__brand__icontains=a) | spare.objects.filter(spare_name__icontains=a) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=a) | spare.objects.filter(car_info__car_model__icontains=a) | spare.objects.filter(car_info__chasis__icontains=a) | spare.objects.filter(engine_info__engine_l__icontains=a) | spare.objects.filter(engine_info__engine_ide__icontains=a) | spare.objects.filter(spare_category__category__icontains=a)
+                            sp = sp.distinct() & spAux.distinct()
+                        spAux = spare.objects.none()
+                        spExclude = spare.objects.none()
+                    if bandMenos:
+                        sp = sp.difference(sp2)
+                    dic.update({"spare":sp,"mig":valor,"parameter":"Parameters"})
                     return render(request,"spareapp/find.html",dic)
             else:
                 return False
@@ -2926,7 +2899,7 @@ def listList(request):
 
 def listengine(request):
     allEngines=engine.objects.all().order_by("engine_manufacturer__manufacturer","engine_ide","engine_l")
-    allCarsEngines=car.objects.all().values("id","engine__id","car_manufacturer","car_model","chasis","carfrom","carto").order_by("car_manufacturer")
+    allCarsEngines=car.objects.all().values("id","engine__id","car_manufacturer__manufacturer","car_model","chasis","carfrom","carto").order_by("car_manufacturer__manufacturer")
     allTrans=transmission.objects.all().values("trans","car__id")
     dic={"allEngines":allEngines,"allCarsEngines":allCarsEngines,"allTrans":allTrans}
 
