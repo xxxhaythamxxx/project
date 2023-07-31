@@ -386,40 +386,40 @@ function measureReset(){
 
     listado = []
     // Paginacion
-    $(".pagination").html("")
-    var trnum = 0
-    var maxRows = parseInt($("#maxRows").val())
-    var totalRows = $(table+" tbody tr").length
-    $(table+' tr:gt(0)').each(function(){
-        trnum++
-        if(trnum > maxRows){
-            $(this).hide()
-        }
-        if(trnum <= maxRows){
-            $(this).show()
-        }
-    })
-    if(totalRows > maxRows){
-        var pagenum = Math.ceil(totalRows/maxRows)
-        for(var i=1;i<=pagenum;){
-            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-        }
-    }
-    $(".pagination li:first-child").addClass("active")
-    $(".pagination li").on("click",function(){
-        var pageNum = $(this).attr("data-page")
-        var trIndex = 0;
-        $(".pagination li").removeClass("active")
-        $(this).addClass("active")
-        $(table+" tr:gt(0)").each(function(){
-            trIndex++
-            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                $(this).hide()
-            }else{
-                $(this).show()
-            }
-        })
-    })
+    // $(".pagination").html("")
+    // var trnum = 0
+    // var maxRows = parseInt($("#maxRows").val())
+    // var totalRows = $(table+" tbody tr").length
+    // $(table+' tr:gt(0)').each(function(){
+    //     trnum++
+    //     if(trnum > maxRows){
+    //         $(this).hide()
+    //     }
+    //     if(trnum <= maxRows){
+    //         $(this).show()
+    //     }
+    // })
+    // if(totalRows > maxRows){
+    //     var pagenum = Math.ceil(totalRows/maxRows)
+    //     for(var i=1;i<=pagenum;){
+    //         $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+    //     }
+    // }
+    // $(".pagination li:first-child").addClass("active")
+    // $(".pagination li").on("click",function(){
+    //     var pageNum = $(this).attr("data-page")
+    //     var trIndex = 0;
+    //     $(".pagination li").removeClass("active")
+    //     $(this).addClass("active")
+    //     $(table+" tr:gt(0)").each(function(){
+    //         trIndex++
+    //         if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+    //             $(this).hide()
+    //         }else{
+    //             $(this).show()
+    //         }
+    //     })
+    // })
     // fin paginacion
 }
 
@@ -1779,165 +1779,165 @@ $List6.change(function(){           // Activar filtro de Vendors
             })
         }
     }
-    $(".pagination").html("")
-    if(contTotalTable.length>0){
-        totalRows = contTotalTable.length
-    }
-    else{
-        if(compCategories.length>0){
-            totalRows = contCategory.length
-        }
-        else{
-            totalRows = contVendor.length
-        }
-    }
-    // totalRows = contTotalTable.length
-    if(totalRows > maxRows){    // Mostrar paginación
-        var pagenum = Math.ceil(totalRows/maxRows)
-        for(var i=1;i<=pagenum;){
-            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-        }
-    }
-    $(".pagination li:first-child").addClass("active")
-    // for(var i = contVendor.length -1; i >=0; i--){
-    //     if(contVendor.indexOf(contVendor[i]) !== i) contVendor.splice(i,1);
+    // $(".pagination").html("")
+    // if(contTotalTable.length>0){
+    //     totalRows = contTotalTable.length
     // }
-    $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
-        var pageNum = $(this).attr("data-page")
-        var trIndex = 0;
-        var rev = false
-        $(".pagination li").removeClass("active")
-        $(this).addClass("active")
-        $(table+" tr:gt(0)").each(function(){
-            // alert($(this).text())
-            trIndex++
-            band1 = false
-            band2 = false
-            band3 = false
-            if(listadoPasar.length>0){  // Si trae desde atributos y dimensiones
-                if(contCategory.length>0){
-                    for(var i=0; i<contCategory.length; i++){
-                        $(this).find("a").each(function(){
-                            if ($(this).attr("id") == "categoryInfo"){
-                                if($(this).text().replace(' ','').toLowerCase()==contCategory[i].replace(' ','').toLowerCase()){
-                                    // rev = true
-                                    band1 = true
-                                }
-                            }
-                        })
-                    }
-                }
-                if(contVendor.length>0){
-                    for(var i=0; i<contVendor.length; i++){
-                        $(this).find("a").each(function(){
-                            if ($(this).attr("id") == "vendorInfo"){
-                                if($(this).text().replace(' ','').toLowerCase()==contVendor[i].replace(' ','').toLowerCase()){
-                                    // alert("Entra Vendor: "+$(this).text())
-                                    // rev = true
-                                    band2 = true
-                                }
-                            }
-                        })
-                    }
-                }
-                for(var i=0; i<listadoPasar.length; i++){
-                    $(this).find("a").each(function(){
-                        if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                            if($(this).text()==listadoPasar[i]){
-                                // alert("Entra listado: "+$(this).text())
-                                // rev = true
-                                band3 = true
-                            }
-                        }
-                    })
-                }
-                if(band3 == true){
-                    if(contCategory.length>0){ // Si hay categorys activos
-                        if(contVendor.length>0){    // Si hay vendors activos
-                            if((band1 == true) && (band2 == true)){ // Consigue category y vendor
-                                rev = true
-                            }
-                            else{
-                                rev = false
-                            }
-                        }
-                        else{   // No hay vendor activos
-                            if(band1 == true){  // Si consigue category
-                                rev = true
-                            }
-                            else{
-                                rev = false
-                            }
-                        }
-                    }
-                    else{   // No hay category activos
-                        if(contVendor.length>0){    // Si hay vendors activos
-                            if((band2 == true)){    // Si consigue vendor
-                                rev = true
-                            }
-                            else{
-                                rev = false
-                            }
-                        }
-                        else{   // No hay vendor ni categoria
-                            rev = true
-                        }
-                    }
-                }
-                else{
-                    rev = false
-                }
-                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                    $(this).hide()
-                }else{
-                    // if((band1 == true) || (band2 == true)){
-                    if(rev == true){
-                        $(this).show()
-                    }
-                    // }
-                }
+    // else{
+    //     if(compCategories.length>0){
+    //         totalRows = contCategory.length
+    //     }
+    //     else{
+    //         totalRows = contVendor.length
+    //     }
+    // }
+    // // totalRows = contTotalTable.length
+    // if(totalRows > maxRows){    // Mostrar paginación
+    //     var pagenum = Math.ceil(totalRows/maxRows)
+    //     for(var i=1;i<=pagenum;){
+    //         $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+    //     }
+    // }
+    // $(".pagination li:first-child").addClass("active")
+    // // for(var i = contVendor.length -1; i >=0; i--){
+    // //     if(contVendor.indexOf(contVendor[i]) !== i) contVendor.splice(i,1);
+    // // }
+    // $(".pagination li").on("click",function(){ // Cuando clickeo la numeración
+    //     var pageNum = $(this).attr("data-page")
+    //     var trIndex = 0;
+    //     var rev = false
+    //     $(".pagination li").removeClass("active")
+    //     $(this).addClass("active")
+    //     $(table+" tr:gt(0)").each(function(){
+    //         // alert($(this).text())
+    //         trIndex++
+    //         band1 = false
+    //         band2 = false
+    //         band3 = false
+    //         if(listadoPasar.length>0){  // Si trae desde atributos y dimensiones
+    //             if(contCategory.length>0){
+    //                 for(var i=0; i<contCategory.length; i++){
+    //                     $(this).find("a").each(function(){
+    //                         if ($(this).attr("id") == "categoryInfo"){
+    //                             if($(this).text().replace(' ','').toLowerCase()==contCategory[i].replace(' ','').toLowerCase()){
+    //                                 // rev = true
+    //                                 band1 = true
+    //                             }
+    //                         }
+    //                     })
+    //                 }
+    //             }
+    //             if(contVendor.length>0){
+    //                 for(var i=0; i<contVendor.length; i++){
+    //                     $(this).find("a").each(function(){
+    //                         if ($(this).attr("id") == "vendorInfo"){
+    //                             if($(this).text().replace(' ','').toLowerCase()==contVendor[i].replace(' ','').toLowerCase()){
+    //                                 // alert("Entra Vendor: "+$(this).text())
+    //                                 // rev = true
+    //                                 band2 = true
+    //                             }
+    //                         }
+    //                     })
+    //                 }
+    //             }
+    //             for(var i=0; i<listadoPasar.length; i++){
+    //                 $(this).find("a").each(function(){
+    //                     if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+    //                         if($(this).text()==listadoPasar[i]){
+    //                             // alert("Entra listado: "+$(this).text())
+    //                             // rev = true
+    //                             band3 = true
+    //                         }
+    //                     }
+    //                 })
+    //             }
+    //             if(band3 == true){
+    //                 if(contCategory.length>0){ // Si hay categorys activos
+    //                     if(contVendor.length>0){    // Si hay vendors activos
+    //                         if((band1 == true) && (band2 == true)){ // Consigue category y vendor
+    //                             rev = true
+    //                         }
+    //                         else{
+    //                             rev = false
+    //                         }
+    //                     }
+    //                     else{   // No hay vendor activos
+    //                         if(band1 == true){  // Si consigue category
+    //                             rev = true
+    //                         }
+    //                         else{
+    //                             rev = false
+    //                         }
+    //                     }
+    //                 }
+    //                 else{   // No hay category activos
+    //                     if(contVendor.length>0){    // Si hay vendors activos
+    //                         if((band2 == true)){    // Si consigue vendor
+    //                             rev = true
+    //                         }
+    //                         else{
+    //                             rev = false
+    //                         }
+    //                     }
+    //                     else{   // No hay vendor ni categoria
+    //                         rev = true
+    //                     }
+    //                 }
+    //             }
+    //             else{
+    //                 rev = false
+    //             }
+    //             if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+    //                 $(this).hide()
+    //             }else{
+    //                 // if((band1 == true) || (band2 == true)){
+    //                 if(rev == true){
+    //                     $(this).show()
+    //                 }
+    //                 // }
+    //             }
 
-            }
-            else{   // Si no trae nada desde atributos y dimensiones
-                var band1 = false
-                var band2 = false
-                for(var i=0; i<contVendor.length; i++){
-                    $(this).find("a").each(function(){
-                        if ($(this).attr("id") == "vendorInfo"){  // Si la columna es Vendor
-                            if($(this).text()==contVendor[i]){
-                                rev = true
-                                band1 = true
-                            }
-                        }
-                    })
-                }
-                if(contCategory.length>0){
-                    for(var i=0; i<contCategory.length; i++){
-                        $(this).find("a").each(function(){
-                            if ($(this).attr("id") == "categoryInfo"){  // Si la columna es Category
-                                if($(this).text()==contCategory[i]){
-                                    rev = true
-                                    band2 = true
-                                }
-                            }
-                        })
-                    }
-                }
-                if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                    $(this).hide()
-                }else{
-                    if((band1 == true) || (band2 == true)){
-                        $(this).show()
-                    }
-                }
-            }
-            if(rev===false){
-                trIndex--
-            }else{
-                rev = false
-            }
-        })
-    })
+    //         }
+    //         else{   // Si no trae nada desde atributos y dimensiones
+    //             var band1 = false
+    //             var band2 = false
+    //             for(var i=0; i<contVendor.length; i++){
+    //                 $(this).find("a").each(function(){
+    //                     if ($(this).attr("id") == "vendorInfo"){  // Si la columna es Vendor
+    //                         if($(this).text()==contVendor[i]){
+    //                             rev = true
+    //                             band1 = true
+    //                         }
+    //                     }
+    //                 })
+    //             }
+    //             if(contCategory.length>0){
+    //                 for(var i=0; i<contCategory.length; i++){
+    //                     $(this).find("a").each(function(){
+    //                         if ($(this).attr("id") == "categoryInfo"){  // Si la columna es Category
+    //                             if($(this).text()==contCategory[i]){
+    //                                 rev = true
+    //                                 band2 = true
+    //                             }
+    //                         }
+    //                     })
+    //                 }
+    //             }
+    //             if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+    //                 $(this).hide()
+    //             }else{
+    //                 if((band1 == true) || (band2 == true)){
+    //                     $(this).show()
+    //                 }
+    //             }
+    //         }
+    //         if(rev===false){
+    //             trIndex--
+    //         }else{
+    //             rev = false
+    //         }
+    //     })
+    // })
     // listadoAll = inputTotal-cont
     for(var x = 0;x < listadoCategory.length; x++){
         pasarCategory.push(listadoCategory[x])
@@ -2027,262 +2027,267 @@ $(".photo").click(function(a){
 
 // Paginacion -------------------------------------------------------------------------------------
 
-$("#maxRows").on("change",function(){
-    // alert("Entra")
-    var contRows = 0
-    is = false
-    trnum = 0
-    rev = false
-    var maxRows = parseInt($("#maxRows").val())
-    $(".pagination").html("")
-    $("tbody tr").each(function(){
-        band1 = false
-        band2 = false
-        band3 = false
-        trnum++
-        var contAtrDim = 0
-        $(this).find("a").each(function(){
-            if(listado.length > 0){        // Si tiene algo desde Atributos o Dimensiones
-                if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                    for(var i=0;i<listado.length;i++){
-                        if((listado[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                            contAtrDim = contAtrDim + 1
-                            band1 = true
-                        }
-                    }
-                }
-            }
-            if(compCategories.length > 0){    // Si tiene check alguna categoría
-                if($(this).parent().index()==$("#category").index()){
-                    for(var i=0;i<compCategories.length;i++){
-                        if((compCategories[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                            band2 = true
-                        }
-                    }
-                }
-            }
-            if(compVendors.length > 0){       // Si tiene check algún vendor
-                if($(this).parent().parent().index()==$("#vendor").index()){
-                    for(var i=0;i<compVendors.length;i++){
-                        if((compVendors[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                            band3 = true
-                        }
-                    }
-                }
-            }
-        }) // fin a
-        if(listado.length>0){
-            if(listadoAll == contAtrDim){   // Si se consigue todos los atributos o dimensiones
-                if(compCategories.length>0){
-                    if(compVendors.length>0){
-                        if(band2 == true && band3 == true){
-                            is = true
-                            contRows++
-                        }
-                    }
-                    else{
-                        if(band2 == true){
-                            is = true
-                            contRows++
-                        }
-                    }
+// $("#maxRows").on("change",function(){
+
+// })
+
+// $("#maxRows").on("change",function(){
+//     // alert("Entra")
+//     var contRows = 0
+//     is = false
+//     trnum = 0
+//     rev = false
+//     var maxRows = parseInt($("#maxRows").val())
+//     $(".pagination").html("")
+//     $("tbody tr").each(function(){
+//         band1 = false
+//         band2 = false
+//         band3 = false
+//         trnum++
+//         var contAtrDim = 0
+//         $(this).find("a").each(function(){
+//             if(listado.length > 0){        // Si tiene algo desde Atributos o Dimensiones
+//                 if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+//                     for(var i=0;i<listado.length;i++){
+//                         if((listado[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//                             contAtrDim = contAtrDim + 1
+//                             band1 = true
+//                         }
+//                     }
+//                 }
+//             }
+//             if(compCategories.length > 0){    // Si tiene check alguna categoría
+//                 if($(this).parent().index()==$("#category").index()){
+//                     for(var i=0;i<compCategories.length;i++){
+//                         if((compCategories[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//                             band2 = true
+//                         }
+//                     }
+//                 }
+//             }
+//             if(compVendors.length > 0){       // Si tiene check algún vendor
+//                 if($(this).parent().parent().index()==$("#vendor").index()){
+//                     for(var i=0;i<compVendors.length;i++){
+//                         if((compVendors[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//                             band3 = true
+//                         }
+//                     }
+//                 }
+//             }
+//         }) // fin a
+//         if(listado.length>0){
+//             if(listadoAll == contAtrDim){   // Si se consigue todos los atributos o dimensiones
+//                 if(compCategories.length>0){
+//                     if(compVendors.length>0){
+//                         if(band2 == true && band3 == true){
+//                             is = true
+//                             contRows++
+//                         }
+//                     }
+//                     else{
+//                         if(band2 == true){
+//                             is = true
+//                             contRows++
+//                         }
+//                     }
                     
-                }
-                else{
-                    if(compVendors.length>0){
-                        if(band3 == true){
-                            is = true
-                            contRows++
-                        }
-                    }
-                    else{
-                        is = true
-                        contRows++
-                    }
-                }
-            }
-            // else{
-            //     is = false
-            // }
-        }
-        else{
-            if(compCategories.length>0){
-                if(compVendors.length>0){
-                    if(band2 == true && band3 == true){
-                        is = true
-                        contRows++
-                    }
-                }
-                else{
-                    if(band2 == true){
-                        is = true
-                        contRows++
-                    }
-                }
+//                 }
+//                 else{
+//                     if(compVendors.length>0){
+//                         if(band3 == true){
+//                             is = true
+//                             contRows++
+//                         }
+//                     }
+//                     else{
+//                         is = true
+//                         contRows++
+//                     }
+//                 }
+//             }
+//             // else{
+//             //     is = false
+//             // }
+//         }
+//         else{
+//             if(compCategories.length>0){
+//                 if(compVendors.length>0){
+//                     if(band2 == true && band3 == true){
+//                         is = true
+//                         contRows++
+//                     }
+//                 }
+//                 else{
+//                     if(band2 == true){
+//                         is = true
+//                         contRows++
+//                     }
+//                 }
                 
-            }
-            else{
-                if(compVendors.length>0){
-                    if(band3 == true){
-                        is = true
-                        contRows++
-                    }
-                }
-                else{
-                    is = true
-                    contRows++
-                }
-            }
-            // else{
-            //     is = true
-            //     contRows++
-            // }
-        }
-        if(is == true){
-            rev = true
-            if(trnum > maxRows){
-                $(this).hide()
-            }
-            if(trnum <= maxRows){
-                $(this).show()
-            }
-        }
-        if(rev===false){
-            trnum--
-        }else{
-            rev = false
-        }
-        is = false
-    })
-    totalRows = contRows
-    // alert(totalRows)
+//             }
+//             else{
+//                 if(compVendors.length>0){
+//                     if(band3 == true){
+//                         is = true
+//                         contRows++
+//                     }
+//                 }
+//                 else{
+//                     is = true
+//                     contRows++
+//                 }
+//             }
+//             // else{
+//             //     is = true
+//             //     contRows++
+//             // }
+//         }
+//         if(is == true){
+//             rev = true
+//             if(trnum > maxRows){
+//                 $(this).hide()
+//             }
+//             if(trnum <= maxRows){
+//                 $(this).show()
+//             }
+//         }
+//         if(rev===false){
+//             trnum--
+//         }else{
+//             rev = false
+//         }
+//         is = false
+//     })
+//     totalRows = contRows
+//     // alert(totalRows)
         
-    if(totalRows > maxRows){
-        var pagenum = Math.ceil(totalRows/maxRows)
-        for(var i=1;i<=pagenum;){
-            $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
-        }
-    }
-    $(".pagination li:first-child").addClass("active")
+//     if(totalRows > maxRows){
+//         var pagenum = Math.ceil(totalRows/maxRows)
+//         for(var i=1;i<=pagenum;){
+//             $(".pagination").append('<li class="page-item" data-page="'+i+'"><a class="page-link" href="#"><span>'+ i++ +'<span class="sr-only">(current)</span></span></a></li>').show()
+//         }
+//     }
+//     $(".pagination li:first-child").addClass("active")
 
-    $(".pagination li").on("click",function(){
+//     $(".pagination li").on("click",function(){
 
-        var pageNum = $(this).attr("data-page")
-        var trIndex = 0;
-        var rev = false
-        $(".pagination li").removeClass("active")
-        $(this).addClass("active")
-        listadoTam = 0
-        listadoTotal = 0
+//         var pageNum = $(this).attr("data-page")
+//         var trIndex = 0;
+//         var rev = false
+//         $(".pagination li").removeClass("active")
+//         $(this).addClass("active")
+//         listadoTam = 0
+//         listadoTotal = 0
 
-        $(table+" tr:gt(0)").each(function(){
-            // alert($(this).text())
-            band1 = false
-            band2 = false
-            band3 = false
-            trIndex++
-            var contAtrDim = 0
-            $(this).find("a").each(function(){
-                if(listado.length > 0){        // Si tiene algo desde Atributos o Dimensiones
-                    if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
-                        for(var i=0;i<listado.length;i++){
-                            if((listado[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                                contAtrDim = contAtrDim + 1
-                                band1 = true
-                            }
-                        }
-                    }
-                }
-                if(compCategories.length > 0){    // Si tiene check alguna categoría
-                    if($(this).parent().index()==$("#category").index()){
-                        for(var i=0;i<compCategories.length;i++){
-                            if((compCategories[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                                band2 = true
-                            }
-                        }
-                    }
-                }
-                if(compVendors.length > 0){       // Si tiene check algún vendor
-                    if($(this).parent().parent().index()==$("#vendor").index()){
-                        for(var i=0;i<compVendors.length;i++){
-                            if((compVendors[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
-                                band3 = true
-                            }
-                        }
-                    }
-                }
-            }) // fin a
-            if(listado.length>0){
-                if(listadoAll == contAtrDim){   // Si se consigue todos los atributos o dimensiones
-                    if(compCategories.length>0){
-                        if(compVendors.length>0){
-                            if(band2 == true && band3 == true){
-                                rev = true
-                            }
-                        }
-                        else{
-                            if(band2 == true){
-                                rev = true
-                            }
-                        }
-                    }
-                    else{
-                        if(compVendors.length>0){
-                            if(band3 == true){
-                                rev = true
-                            }
-                        }
-                        else{
-                            rev = true
-                        }
-                    }
-                }
-                // else{
-                //     is = false
-                // }
-            }
-            else{
-                if(compCategories.length>0){
-                    if(compVendors.length>0){
-                        if(band2 == true && band3 == true){
-                            rev = true
-                        }
-                    }
-                    else{
-                        if(band2 == true){
-                            rev = true
-                        }
-                    }
-                }
-                else{
-                    if(compVendors.length>0){
-                        if(band3 == true){
-                            rev = true
-                        }
-                    }
-                    else{
-                        rev = true
-                    }
-                }
+//         $(table+" tr:gt(0)").each(function(){
+//             // alert($(this).text())
+//             band1 = false
+//             band2 = false
+//             band3 = false
+//             trIndex++
+//             var contAtrDim = 0
+//             $(this).find("a").each(function(){
+//                 if(listado.length > 0){        // Si tiene algo desde Atributos o Dimensiones
+//                     if($(this).parent().parent().index()==$("#dimensions").index() || $(this).parent().parent().index()==$("#atributes").index()){
+//                         for(var i=0;i<listado.length;i++){
+//                             if((listado[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//                                 contAtrDim = contAtrDim + 1
+//                                 band1 = true
+//                             }
+//                         }
+//                     }
+//                 }
+//                 if(compCategories.length > 0){    // Si tiene check alguna categoría
+//                     if($(this).parent().index()==$("#category").index()){
+//                         for(var i=0;i<compCategories.length;i++){
+//                             if((compCategories[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//                                 band2 = true
+//                             }
+//                         }
+//                     }
+//                 }
+//                 if(compVendors.length > 0){       // Si tiene check algún vendor
+//                     if($(this).parent().parent().index()==$("#vendor").index()){
+//                         for(var i=0;i<compVendors.length;i++){
+//                             if((compVendors[i].replace(' ','').toLowerCase() == $(this).text().replace(' ','').toLowerCase())){
+//                                 band3 = true
+//                             }
+//                         }
+//                     }
+//                 }
+//             }) // fin a
+//             if(listado.length>0){
+//                 if(listadoAll == contAtrDim){   // Si se consigue todos los atributos o dimensiones
+//                     if(compCategories.length>0){
+//                         if(compVendors.length>0){
+//                             if(band2 == true && band3 == true){
+//                                 rev = true
+//                             }
+//                         }
+//                         else{
+//                             if(band2 == true){
+//                                 rev = true
+//                             }
+//                         }
+//                     }
+//                     else{
+//                         if(compVendors.length>0){
+//                             if(band3 == true){
+//                                 rev = true
+//                             }
+//                         }
+//                         else{
+//                             rev = true
+//                         }
+//                     }
+//                 }
+//                 // else{
+//                 //     is = false
+//                 // }
+//             }
+//             else{
+//                 if(compCategories.length>0){
+//                     if(compVendors.length>0){
+//                         if(band2 == true && band3 == true){
+//                             rev = true
+//                         }
+//                     }
+//                     else{
+//                         if(band2 == true){
+//                             rev = true
+//                         }
+//                     }
+//                 }
+//                 else{
+//                     if(compVendors.length>0){
+//                         if(band3 == true){
+//                             rev = true
+//                         }
+//                     }
+//                     else{
+//                         rev = true
+//                     }
+//                 }
                 
-            }
-            if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
-                $(this).hide()
-            }else{
-                if(rev == true){
-                    $(this).show()
-                }
-            }
+//             }
+//             if(trIndex > (maxRows*pageNum) || trIndex <= ((maxRows*pageNum)-maxRows)){
+//                 $(this).hide()
+//             }else{
+//                 if(rev == true){
+//                     $(this).show()
+//                 }
+//             }
 
-            if(rev===false){
-                trIndex--
-            }else{
-                rev = false
-            }
-            // contAtrFind = 0
-        })
-    })
-})
+//             if(rev===false){
+//                 trIndex--
+//             }else{
+//                 rev = false
+//             }
+//             // contAtrFind = 0
+//         })
+//     })
+// })
+// Fin de la paginaciòn
 
 // $(document).ready(function(){
 //     $('[data-toggle="popover"]').popover()
