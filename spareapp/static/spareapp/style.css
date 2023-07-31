@@ -2,6 +2,34 @@
     background-color: rgb(140, 140, 140);
 }
 
+.page-a {
+    padding: 8px 18px;
+    background: white;
+}
+
+.pagination .active {
+    padding: 8px 18px;
+    background: rgb(136,12,12);
+    background: linear-gradient(0deg, rgba(136,12,12,1) 0%, rgba(196,18,18,1) 83%);
+    
+}
+
+.page-l {
+    text-decoration: none;
+    color:#3d0303;
+}
+
+.page-l:hover {
+    text-decoration: none;
+    color:#3d0303;
+}
+
+.pagination .active .page-l {
+    text-decoration: none;
+    color: white;
+}
+
+
 .invoice tr {
     background-color: rgb(180, 180, 180)
 }

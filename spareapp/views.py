@@ -24,6 +24,7 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max
+import math
 # import numpy as np
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -374,6 +375,28 @@ def sortMain2(request):
         spareAux =  sp & spareAux.distinct()
     else:
         spareAux =  sp.distinct() & spareAux.distinct()
+
+    pages = request.GET.get("pages")
+
+    print(type(spareAux))
+    # print(count(spareAux))
+    print(len(spareAux.values()))
+    
+    numeros = []
+
+    cantPages = len(spareAux.values()) / int(pages)
+    cantPages = math.ceil(cantPages)
+    numero_actual = 1
+
+    while numero_actual <= cantPages:
+        numeros.append(numero_actual)
+        numero_actual += 1
+
+    actual = 1
+    print(numeros)
+    
+    spareAux = spareAux[:int(pages)]
+
     # spareAux = spareAux.distinct() & sp.distinct()
     # print(len(spareAux))
     spareAux = list(spareAux.values())
@@ -394,7 +417,7 @@ def sortMain2(request):
     # for a in spareAux:
     #     print(a)
 
-    return JsonResponse({"spare":spareAux,"reference":referenceAux,"car":carAux,"engine":engineAux,"category":categoryAux,"atributes":atributesAux,"dimensions":dimensionsAux,"vendor":vendorAux})
+    return JsonResponse({"numeros":numeros,"actual":actual,"spare":spareAux,"reference":referenceAux,"car":carAux,"engine":engineAux,"category":categoryAux,"atributes":atributesAux,"dimensions":dimensionsAux,"vendor":vendorAux})
     # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def contLogin(request):
@@ -533,11 +556,24 @@ def home(request):
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
+    pages = 50
+    numeros = []
+
+    numPages = len(allSparesall.values())
+    cantPages = len(allSparesall.values()) / pages
+    cantPages = math.ceil(cantPages)
+    numero_actual = 1
+
+    while numero_actual <= cantPages:
+        numeros.append(numero_actual)
+        numero_actual += 1
+
+    actual = 1
     
     spCart = spareCart.objects.filter(nameUser=request.user.get_username()).values("spareId","nameUser").distinct().order_by("spareId")
     if request.user.get_username() == "":
         spCart = spareCart.objects.filter(nameUser="AnonymousUser").values("spareId","nameUser").distinct()
-    dic={"spCart":spCart,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"actual":actual,"numeros":numeros,"cantPages":cantPages,"pages":pages,"spCart":spCart,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
 
     if request.method=="POST":
@@ -613,6 +649,7 @@ def home(request):
             # from typing import List
             # alls = list(spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct())
             alls = [x for x in spare.objects.all().order_by("spare_code","id").distinct()]
+            alls = alls[:50]
             dic.update({"spare":alls})
             return render(request,"spareapp/home.html",dic)
         else:

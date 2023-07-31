@@ -7,7 +7,19 @@
             <div class="col-auto text-center">  
                 <div class="pagination-container">
                     <nav>
-                        <ul class="pagination"></ul>
+                        <ul class="pagination">
+                            {% for n in numeros %}
+                            {% if n == actual %}
+                            <li class="page-a active"><a class="page-l" href=""><span class="sr-only">{{n}}</span></a></li>
+                            <!-- <li class="page-item active" data-page="1"><a class="page-link" href=""><span class="sr-only">1</span></a></li>
+                            <li class="page-item" data-page="2"><a class="page-link" href=""><span class="sr-only">2</span></a></li>
+                            <li class="page-item" data-page="3"><a class="page-link" href=""><span class="sr-only">3</span></a></li>
+                            <li class="page-item" data-page="4"><a class="page-link" href=""><span class="sr-only">4</span></a></li> -->
+                            {% else %}
+                            <li class="page-a"><a class="page-l" href=""><span class="sr-only">{{n}}</span></a></li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
                     </nav>
                 </div>
             </div>
