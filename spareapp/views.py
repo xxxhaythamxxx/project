@@ -202,6 +202,8 @@ def sortMain2(request):
 
     print(request.GET)
 
+    pageGo = request.GET.get("pageGo")
+
     mig = request.GET.get("mig")
     a = request.GET.get("a")
     b = request.GET.get("b")
@@ -378,9 +380,9 @@ def sortMain2(request):
 
     pages = request.GET.get("pages")
 
-    print(type(spareAux))
+    # print(type(spareAux))
     # print(count(spareAux))
-    print(len(spareAux.values()))
+    # print(len(spareAux.values()))
     
     numeros = []
 
@@ -393,9 +395,24 @@ def sortMain2(request):
         numero_actual += 1
 
     actual = 1
-    print(numeros)
+
+    if request.GET.get("pageGo"):
+        # print("Entra a pageGo")
+        actual = pageGo
+    # print(numeros)
+    # print(actual)
+    # print(int(pages))
+
+    # print("Numero actual: "+str(numero_actual-1))
+
+    # inicio = (1*int(actual))-1
+    inicio = int(int(actual)-1)*int(pages)
+    fin = (int(int(actual)-1)*int(pages))+int(pages)
+    # print("Inicio: "+str(inicio))
+    # print("Fin: "+str(fin))
     
-    spareAux = spareAux[:int(pages)]
+    spareAux = spareAux[inicio:fin]
+    # spareAux = spareAux[:int(pages)]
 
     # spareAux = spareAux.distinct() & sp.distinct()
     # print(len(spareAux))

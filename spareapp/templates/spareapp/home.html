@@ -36,6 +36,329 @@
 </div>
 
 <script>
+
+// $(".pagination li a").click(function(f){
+//     f.preventDefault();
+// }
+
+$(document).on("click","span",function(){
+
+    var pages = $("#maxRows").val()
+    var textoSpan = $(this).text();
+    // var textoSpan = $(this).find("span").text();
+    // alert($(this).find("span").text())
+    console.log(textoSpan)
+
+    atributes = []
+    categories = []
+    inputs = []
+    inputsId = []
+    $(".filterAtr:visible").each(function(){
+        atributes.push($(this).find(".atrUnique").attr("id")+":"+$(this).find(".atrUnique").val())
+    })
+    $(".filterDim:visible").each(function(){
+        atributes.push($(this).find(".atrUnique").attr("id")+":"+$(this).find(".atrUnique").val())
+    })
+    $("#headerList5 li input:checked").each(function(){
+        categories.push($(this).parent().find("label").text())
+    })
+    $("#hMain th input:not(.check)").each(function(){
+        inputsId.push($(this).attr("id"))
+        inputs.push($(this).val().toLowerCase())
+    })
+
+    var requestVentas = $("#requestVentas").val()
+    var superuser = $("#superuser").val()
+    var requestBodega = $("#requestBodega").val()
+    var requestMayorista = $("#requestMayorista").val()
+    var autenticado = $("#autenticado").val()
+    var spare_code = null
+    var spare_category = null    
+    var pageGo = textoSpan
+
+    console.log("Antes de entrar a ajax")
+    $.ajax({
+        method: 'GET',
+        url: "/sortMain2",
+        data: {"pageGo":pageGo,"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
+        success: function (data){
+            $("#myTable").empty()
+            if(data.spare.length>0){
+                for(var i=0;i<data.spare.length;i++){
+                    $("#myTable").append('<tr class="dnd-moved"><tr>')
+                    if(data.spare[i].spare_code){
+                        $("#myTable .dnd-moved").last().append('<td style="display: none;" class="pr-0"><a id="spareCode" href="/sparedetails/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
+                    }else{
+                        $("#myTable .dnd-moved").last().append('<td style="display: none;" class="pr-0"><a id="spareCode" href="#"></a></td>')
+                    }
+
+                    $("#myTable .dnd-moved").last().append('<td class="pr-0"><a style="color:rgb(136,12,12);" id="spareEdit" href="/editspare/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
+
+                    $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    for(var j=0;j<data.reference.length;j++){
+                        if(data.spare[i].spare_code == data.reference[j].referenceSpare__spare_code){
+                            $("#myTable .dnd-moved td").last().append('<div id="spareCodeInfo">'+data.reference[j].referenceCode+' '+data.reference[j].referenceNote.substr(0, 3)+'</div>')
+                        }
+                    }
+                    $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    for(var z=0;z<data.car.length;z++){
+                        if(data.spare[i].id == data.car[z].spare){
+                            $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
+                        }
+                    }
+                    $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    for(var y=0;y<data.engine.length;y++){
+                        if(data.spare[i].id == data.engine[y].spare){
+                            $("#myTable .dnd-moved td").last().append('<div id="spareEngine">'+data.engine[y].engine_l+' '+data.engine[y].engine_ide+'</div>')
+                        }
+                    }
+                    if(data.spare[i].spare_brand){
+                        $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"><div><div id="brand"></div></div></td>')
+                    }else{
+                        $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"><div><div id="brand"></div></div></td>')
+                    }
+                    $("#myTable .dnd-moved").last().append('<td style="max-width: 120px;" class="pr-0"></td>')
+                    for(var m=0;m<data.category.length;m++){
+                        if(data.category[m].id == data.spare[i].spare_category_id){
+                            $("#myTable .dnd-moved td").last().append('<div id="categoryInfo">'+data.category[m].category+'</div>')
+                        }
+                    }
+                    if(data.spare[i].spare_name){
+                        $("#myTable .dnd-moved").last().append('<td style="max-width: 120px;display: none;" class="pr-0"><div>'+data.spare[i].spare_name+'</div></td>')
+                    }else{
+                        $("#myTable .dnd-moved").last().append('<td style="max-width: 120px;display: none;" class="pr-0"><div></div></td>')
+                    }
+                    if(requestVentas=="True" || superuser=="True" || requestBodega=="True"){
+                        $("#myTable .dnd-moved").last().append('<td style="max-width: 120px;" class="pr-0"></td>')
+                        if(data.atributes.length>0){
+                            for(n=0;n<data.atributes.length;n++){
+                                if(data.spare[i].id == data.atributes[n].atributeSpare){
+                                    $("#myTable .dnd-moved td").last().append('<div class=""><div id="'+data.atributes[n].atributeName.trim()+'Value"><div style="overflow:hidden" class=""><div class="row"><div id="AtrName" class="col-lg-6 col-md-6 text-end px-0">'+data.atributes[n].atributeName+':</div><div id="AtrVal" class="col-lg-6 col-md-6 text-start px-1">'+data.atributes[n].atributeVal+'</div></div></div></div></div>')
+                                }
+                            }
+                        }
+                    }
+                    // Aqui van las dimensiones
+                    if(requestVentas=="True" || superuser=="True" || requestBodega=="True"){
+                        $("#myTable .dnd-moved").last().append('<td style="max-width: 120px;display: none;" class="pr-0">')
+                        if(data.dimensions.length>0){
+                            for(n=0;n<data.dimensions.length;n++){
+                                if(data.spare[i].id == data.dimensions[n].dimensionSpare){
+                                    $("#myTable .dnd-moved td").last().append('<div class=""><div id="'+data.dimensions[n].atributeName.trim()+'Value"><div class="cantainer"><div class="row"><div id="AtrName" style="position: static;" class="col-lg-6">'+data.dimensions[n].atributeName+'</div><div id="AtrVal" style="position: static;" class="col-lg-6 ms-auto">'+data.dimensions[n].atributeVal+' mm</div></div></div></div></div>')
+                                }
+                            }
+                        }
+                    }
+                    if(superuser=="True"){
+                        if(data.spare[i].price_m){
+                            $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"><div>$ '+data.spare[i].price_m+'</div></td>')
+                        }else{
+                            $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"><div></div></td>')
+                        }
+                    }
+                    if(superuser=="True"){
+                        if(data.spare[i].price_d){
+                            $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"><div>$ '+data.spare[i].price_d+'</div></td>')
+                        }else{
+                            $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"><div></div></td>')
+                        }
+                    }
+                    if(data.spare[i].spare_photo){
+                        $("#myTable .dnd-moved").last().append('<td class="pr-0"><div><div id="mainPhoto" style="background-image: url(\'/media/'+data.spare[i].spare_photo+'\');" class="photo"></div></a></div></td>')
+                    }else{
+                        $("#myTable .dnd-moved").last().append('<td class="pr-0"><div></div></td>')
+                    }
+                    if(requestVentas=="True" || superuser=="True" || requestBodega=="True"){
+                        $("#myTable .dnd-moved").last().append('<td class="pr-0" style="display: none;"></td>')
+                        for(var n=0;n<data.vendor.length;n++){
+                            if(data.spare[i].id == data.vendor[n].spare){
+                                $("#myTable .dnd-moved td").last().append('<div><div id="vendorInfo">'+data.vendor[n].vendorName+'</div></div>')
+                            }
+                        }
+                    }
+                    if(autenticado=="True"){
+                        $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
+                    }
+                }
+            }
+
+            let detailidi = $("#detail-id").index();
+            let photoi = $("#photo").index();
+            let codei = $("#code").index();
+            let brandi = $("#brand").index();
+            let typei = $("#type").index();
+            let cari = $("#car").index();
+            let shapei = $("#shape").index();
+            let dimensionsi = $("#dimensions").index();
+            let atributesi = $("#atributes").index();
+            let priceDi = $("#priceD").index();
+            let priceMi = $("#priceM").index();
+            let referencei = $("#referenceC").index();
+            let editSparei = $("#editSpare").index();
+            let enginei = $("#engine").index();
+            let checki = $("#check").index();
+            let ecodei = $("#ecode").index();
+            let categoryi = $("#category").index();
+            let vendori = $("#vendor").index();
+
+            if ($("input:checkbox[name=detail-id]:checked").val()){
+                $("#detail-id").show();
+                $("table td:nth-child("+(detailidi + 1)+")").show();
+            }else{
+                $("#detail-id").hide();
+                $("table td:nth-child("+(detailidi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=priceM]:checked").val()){
+                $("#priceM").show();
+                $("table td:nth-child("+(priceMi + 1)+")").show();
+            }else{
+                $("#priceM").hide();
+                $("table td:nth-child("+(priceMi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=priceD]:checked").val()){
+                $("#priceD").show();
+                $("table td:nth-child("+(priceDi + 1)+")").show();
+            }else{
+                $("#priceD").hide();
+                $("table td:nth-child("+(priceDi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=photo]:checked").val()){
+                $("#photo").show();
+                $("table td:nth-child("+(photoi + 1)+")").show();
+            }else{
+                $("#photo").hide();
+                $("table td:nth-child("+(photoi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=code]:checked").val()){
+                $("#code").show();
+                $("table td:nth-child("+(codei + 1)+")").show();
+            }else{
+                $("#code").hide();
+                $("table td:nth-child("+(codei + 1)+")").hide();
+            }
+            
+            if ($("input:checkbox[name=brand]:checked").val()){
+                $("#brand").show();
+                $("table td:nth-child("+(brandi + 1)+")").show();
+            }else{
+                $("#brand").hide();
+                $("table td:nth-child("+(brandi + 1)+")").hide();
+            }
+            
+            if ($("input:checkbox[name=type]:checked").val()){
+                $("#type").show();
+                $("table td:nth-child("+(typei + 1)+")").show();
+            }else{
+                $("#type").hide();
+                $("table td:nth-child("+(typei + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=car]:checked").val()){
+                $("#car").show();
+                $("table td:nth-child("+(cari + 1)+")").show();
+            }else{
+                $("#car").hide();
+                $("table td:nth-child("+(cari + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=shape]:checked").val()){
+                $("#shape").show();
+                $("table td:nth-child("+(shapei + 1)+")").show();
+            }else{
+                $("#shape").hide();
+                $("table td:nth-child("+(shapei + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=dimensions]:checked").val()){
+                $("#dimensions").show();
+                $("table td:nth-child("+(dimensionsi + 1)+")").show();
+            }else{
+                $("#dimensions").hide();
+                $("table td:nth-child("+(dimensionsi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=atributes]:checked").val()){
+                $("#atributes").show();
+                $("table td:nth-child("+(atributesi + 1)+")").show();
+            }else{
+                $("#atributes").hide();
+                $("table td:nth-child("+(atributesi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=check]:checked").val()){
+                $("#check").show();
+                $("table td:nth-child("+(checki + 1)+")").show();
+            }else{
+                $("#check").hide();
+                $("table td:nth-child("+(checki + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=referenceC]:checked").val()){
+                $("#referenceC").show();
+                $("table td:nth-child("+(referencei + 1)+")").show();
+            }else{
+                $("#referenceC").hide();
+                $("table td:nth-child("+(referencei + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=editSpare]:checked").val()){
+                $("#editSpare").show();
+                $("table td:nth-child("+(editSparei + 1)+")").show();
+            }else{
+                $("#editSpare").hide();
+                $("table td:nth-child("+(editSparei + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=engine]:checked").val()){
+                $("#engine").show();
+                $("table td:nth-child("+(enginei + 1)+")").show();
+            }else{
+                $("#engine").hide();
+                $("table td:nth-child("+(enginei + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=ecode]:checked").val()){
+                $("#ecode").show();
+                $("table td:nth-child("+(ecodei + 1)+")").show();
+            }else{
+                $("#ecode").hide();
+                $("table td:nth-child("+(ecodei + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=category]:checked").val()){
+                $("#category").show();
+                $("table td:nth-child("+(categoryi + 1)+")").show();
+            }else{
+                $("#category").hide();
+                $("table td:nth-child("+(categoryi + 1)+")").hide();
+            }
+
+            if ($("input:checkbox[name=vendor]:checked").val()){
+                $("#vendor").show();
+                $("table td:nth-child("+(vendori + 1)+")").show();
+            }else{
+                $("#vendor").hide();
+                $("table td:nth-child("+(vendori + 1)+")").hide();
+            }
+
+            // Paginacion
+            $(".pagination").empty()
+            for(i=1;i<=data.numeros.length;i++){
+                if(data.actual == i){
+                    $(".pagination").append('<li class="page-a active"><span class="sr-only">'+i+'</span></li>')
+                }else{
+                    $(".pagination").append('<li class="page-a"><span class="sr-only">'+i+'</span></li>')
+                }
+            }
+        }
+    })
+
+})
+
 $("#reference").hide();
 $("table td:nth-child("+($("#reference").index() + 1)+")").hide();
 
@@ -351,9 +674,9 @@ function filtrar(a){
                 $(".pagination").empty()
                 for(i=1;i<=data.numeros.length;i++){
                     if(data.actual == i){
-                        $(".pagination").append('<li class="page-a active"><a class="page-l" href=""><span class="sr-only">'+i+'</span></a></li>')
+                        $(".pagination").append('<li class="page-a active"><span class="sr-only">'+i+'</span></li>')
                     }else{
-                        $(".pagination").append('<li class="page-a"><a class="page-l" href=""><span class="sr-only">'+i+'</span></a></li>')
+                        $(".pagination").append('<li class="page-a"><span class="sr-only">'+i+'</span></li>')
                     }
                 }
             }
@@ -803,9 +1126,9 @@ $("#maxRows").on("change",function(){
             $(".pagination").empty()
             for(i=1;i<=data.numeros.length;i++){
                 if(data.actual == i){
-                    $(".pagination").append('<li class="page-a active"><a class="page-l" href=""><span class="sr-only">'+i+'</span></a></li>')
+                    $(".pagination").append('<li class="page-a active"><span class="sr-only">'+i+'</span></li>')
                 }else{
-                    $(".pagination").append('<li class="page-a"><a class="page-l" href=""><span class="sr-only">'+i+'</span></a></li>')
+                    $(".pagination").append('<li class="page-a"><span class="sr-only">'+i+'</span></li>')
                 }
             }
 
@@ -1140,9 +1463,9 @@ function sort(a,b){
             $(".pagination").empty()
             for(i=1;i<=data.numeros.length;i++){
                 if(data.actual == i){
-                    $(".pagination").append('<li class="page-a active"><a class="page-l" href=""><span class="sr-only">'+i+'</span></a></li>')
+                    $(".pagination").append('<li class="page-a active"><span class="sr-only">'+i+'</span></li>')
                 }else{
-                    $(".pagination").append('<li class="page-a"><a class="page-l" href=""><span class="sr-only">'+i+'</span></a></li>')
+                    $(".pagination").append('<li class="page-a"><span class="sr-only">'+i+'</span></li>')
                 }
             }
         }
