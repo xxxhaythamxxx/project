@@ -9,6 +9,7 @@
 <input id="requestBodega" value="{{request.user.profile.bodega}}" type="text" hidden>
 <input id="requestMayorista" value="{{request.user.profile.mayorista}}" type="text" hidden>
 <input id="autenticado" value="{{request.user.is_authenticated}}" type="text" hidden>
+<input id="mig" value="{{mig}}" type="text" hidden>
 
 {% if messages %}
     {% for message in messages %}
@@ -21,6 +22,9 @@
 {% endif %}
 
 <div class="resultadoBusqueda">
+{% if mig %}
+<div class="migajas color-soft color-hard p-2">{{parameter}}: {{mig}} </div>
+{% endif %}
 
     {% include "spareapp/superior.html" %}
 
@@ -47,7 +51,7 @@ $(document).on("click","span",function(){
     var textoSpan = $(this).text();
     // var textoSpan = $(this).find("span").text();
     // alert($(this).find("span").text())
-    console.log(textoSpan)
+    // console.log(textoSpan)
 
     atributes = []
     categories = []

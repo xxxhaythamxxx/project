@@ -39,13 +39,44 @@ from django.db.models import Q
 def sortMain(request):
 
     aux = spare.objects.all().order_by("spare_code","id","spare_category")
+    aux2 = spare.objects.none()
     for a in request.GET.getlist("atributes[]"):
         if(a.split(":")[1]):
             aux = aux & spare.objects.filter(atribute__atributeName=a.split(":")[0],atribute__atributeVal__icontains=a.split(":")[1]).order_by("spare_code","id")
     for a in request.GET.getlist("categories[]"):
-        aux = aux & spare.objects.filter(spare_category__category=a).order_by("spare_code","id")
+        aux2 = aux2 | spare.objects.filter(spare_category__category=a).order_by("spare_code","id")
+    aux2 = aux2.distinct()
+    aux = aux.distinct() & aux2.distinct()
+    print(aux)
+    if aux:
+        pass
+    else:
+        aux = spare.objects.all().order_by("spare_code","id","spare_category")
+    print(len(aux.values()))
     spareDetail = list(aux.values())
-    return JsonResponse({"spare":spareDetail})
+
+    pages = request.GET.get("pages")
+    print("pages: "+str(pages))
+
+    # print(type(spareAux))
+    # print(count(spareAux))
+    # print(len(spareAux.values()))
+    
+    numeros = []
+
+    cantPages = len(aux.values()) / int(pages)
+    cantPages = math.ceil(cantPages)
+    numero_actual = 1
+
+    while numero_actual <= cantPages:
+        numeros.append(numero_actual)
+        numero_actual += 1
+    
+    print("Numeros: "+str(numeros))
+
+    actual = 1
+
+    return JsonResponse({"numeros":numeros,"actual":actual,"spare":spareDetail})
 
 def sortToPay(request):
 
@@ -327,8 +358,33 @@ def sortMain2(request):
     for a in request.GET.getlist("atributes[]"):
         if(a.split(":")[1]):
             spareAux = spareAux & spare.objects.filter(atribute__atributeName=a.split(":")[0],atribute__atributeVal__icontains=a.split(":")[1])
+
+    spareAux2 = spare.objects.none()
+
     for a in request.GET.getlist("categories[]"):
-        spareAux = spareAux & spare.objects.filter(spare_category__category=a)
+        spareAux2 = spareAux2 | spare.objects.filter(spare_category__category=a)
+        # spareAux = spareAux & spare.objects.filter(spare_category__category=a)
+
+    spareAux2 = spareAux2.distinct()
+
+    if spareAux2:
+        spareAux = spareAux.distinct() & spareAux2.distinct()
+    else:
+        spareAux = spareAux
+    
+    # print("spareAux")
+    # print(spareAux)
+    # print("spareAux2")
+    # print(spareAux2)
+
+    # if spareAux2:
+    #     pass
+    # else:
+    #     if spareAux:
+    #         pass
+    #     else:
+    #         spareAux = 
+        
 
     # print(len(spareAux))
 
@@ -540,6 +596,7 @@ def selectf(request):
                     vec = valor.split(" ")
                     sp = spare.objects.all().order_by("spare_code")
                     sp2 = spare.objects.all().order_by("spare_code")
+                    spExclude = spare.objects.none()
                     for a in vec:
                         if a[0]=="-":
                             bandMenos = True
@@ -550,11 +607,25 @@ def selectf(request):
                             spAux = spAux | spare.objects.filter(spare_code__icontains=a) | spare.objects.filter(spare_brand__brand__icontains=a) | spare.objects.filter(spare_name__icontains=a) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=a) | spare.objects.filter(car_info__car_model__icontains=a) | spare.objects.filter(car_info__chasis__icontains=a) | spare.objects.filter(engine_info__engine_l__icontains=a) | spare.objects.filter(engine_info__engine_ide__icontains=a) | spare.objects.filter(spare_category__category__icontains=a)
                             sp = sp.distinct() & spAux.distinct()
                         spAux = spare.objects.none()
-                        spExclude = spare.objects.none()
+                    sp2 = spExclude.distinct()
                     if bandMenos:
                         sp = sp.difference(sp2)
-                    dic.update({"spare":sp,"mig":valor,"parameter":"Parameters"})
-                    return render(request,"spareapp/find.html",dic)
+
+                    numeros = []
+                    pages = 50
+
+                    cantPages = len(sp.values()) / int(pages)
+                    cantPages = math.ceil(cantPages)
+                    numero_actual = 1
+
+                    while numero_actual <= cantPages:
+                        numeros.append(numero_actual)
+                        numero_actual += 1
+
+                    actual = 1
+                    
+                    dic.update({"numeros":numeros,"actual":actual,"spare":sp,"mig":valor,"parameter":"Parameters"})
+                    return render(request,"spareapp/home.html",dic)
             else:
                 return False
 
@@ -15501,7 +15572,7 @@ def contCargarDb(request):
         facturasDelete = factura.objects.all()
         factTypeDelete = factType.objects.all()
         factCategoryDelete = factCategory.objects.all()
-        spareDelete = spare.objects.all()        
+        spareDelete = spare.objects.all()
 
         if request.FILES.get("cargar"):
 
