@@ -15562,19 +15562,28 @@ def cargarDb(request):
     return render(request,"spareapp/contAdmin.html")
 
 import json
+from django.contrib.auth.models import Permission
 
 def contCargarDb(request):
 
     facAuxAllCat = ""
+    # permission = Permission.objects.filter(id=125)
+    # print("Muestro permiso 125")
+    # print(permission)
 
     if request.method == "POST":
 
+        permisos = Permission.objects.all()
         facturasDelete = factura.objects.all()
         factTypeDelete = factType.objects.all()
         factCategoryDelete = factCategory.objects.all()
         spareDelete = spare.objects.all()
 
         if request.FILES.get("cargar"):
+
+            for fac in permisos:
+
+                fac.delete()
 
             for fac in facturasDelete:
 

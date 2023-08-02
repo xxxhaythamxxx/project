@@ -7,7 +7,6 @@
 {% load static %}
 
 <div class="resultadoBusqueda">
-
     
     <div class="options my-2">
         <form name="cartForm" method="POST" action="">
@@ -71,35 +70,39 @@
     <table style="font-size: small;" id="invoice" class="invoice draggable forget-ordering table-bordered">
         <thead>
             <tr class="color text-white dnd-moved">
-                <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th>
+                <!-- <th id="detail-id" class="trsup color" style="position: sticky;top: 70;">ID</th> -->
                 <th id="code" class="trsup color" style="position: sticky;top: 70;">Code</th>
-                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
+                <th id="type" class="trsup color" style="position: sticky;top: 70;">Description</th>
+                <!-- {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
                 <th id="reference" class="trsup color" style="position: sticky;top: 70;">Ref. Code</th>
-                {% endif %}
-                <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th>
-                <th id="engine" class="trsup color" style="position: sticky;top: 70;">Engine</th>
+                {% endif %} -->
+                <!-- <th id="car" class="trsup color" style="position: sticky;top: 70;">Car</th> -->
+                <!-- <th id="engine" class="trsup color" style="position: sticky;top: 70;">Engine</th> -->
                 <th id="brand" class="trsup color" style="position: sticky;top: 70;display: none;">Brand</th>
                 <th id="category" class="trsup color" style="position: sticky;top: 70;">Category</th>
                 <!-- <th id="subcategory" class="trsup color" style="position: sticky;top: 70;">Sub-Category</th> -->
-                <th id="type" class="trsup color" style="position: sticky;top: 70;display: none;">Description</th>
-                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
+                <!-- {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="atributes" class="trsup color" style="position: sticky;top: 70;">Atributes</th>
-                {% endif %}
-                {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
+                {% endif %} -->
+                <!-- {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                 <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;">Dimensions</th>
-                {% endif %}
-                {% if request.user.is_superuser %}
+                {% endif %} -->
+                <!-- {% if request.user.is_superuser %}
                 <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;">Price Major</th>
                 <th id="priceD" class="trsup color" style="position: sticky;top: 70;display: none;">Price Det.</th>
-                {% endif %}
-                <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
-                {% if parameter == 'Engine code' %}
+                {% endif %} -->
+                <!-- <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th> -->
+                <!-- {% if parameter == 'Engine code' %}
                 <th id="ecode" class="trsup color" style="position: sticky;top: 70;">Eng. code</th>
-                {% endif %}
+                {% endif %} -->
                 {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-                <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;">Vendor</th>
+                <th id="vendor" class="trsup color" style="position: sticky;top: 70;">Vendor</th>
                 {% endif %}
-                {% if request.user.is_authenticated %}
+
+                <th class="trsup color" style="position: sticky;top: 70;">Price</th>
+                <th class="trsup color" style="position: sticky;top: 70;">Quantity</th>
+                <th class="trsup color" style="position: sticky;top: 70;">Available</th>
+                <!-- {% if request.user.is_authenticated %} -->
                 <!-- <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
                 {% endif %} -->
                 <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toDel')"/></th>
@@ -110,23 +113,29 @@
         {% for br in spare %}
         {% if car.spareCode|add:"0" == br.id|add:"0" %}
         <tr class="dnd-moved">
-            <td class="pr-0"><a href="#"></a></div></td>
+            <!-- <td class="pr-0"><a href="#"></a></div></td> -->
 
             {% if br.spare_code %}
-            <td class="pr-0"><a id="spareCodeInfo" href="{% url 'sparedetails' br.id %}">{{br.spare_code}}</a></td>
+            <td class="pr-0 py-2"><a id="spareCodeInfo" href="{% url 'sparedetails' br.id %}">{{br.spare_code}}</a></td>
             {% else %}
-            <td class="pr-0"><a href="#"></a></td>
+            <td class="pr-0 py-2"><a href="#"></a></td>
+            {% endif %}
+            
+            {% if br.spare_name %}
+            <td style="max-width: 120px;" class="pr-0"><a href="{% url 'sparedetails' br.id %}">{{br.spare_name}}</a></td>
+            {% else %}
+            <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
 
-            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
+            <!-- {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
             {% if reference %}
             <td style="max-width: 120px;" class="pr-0">
-                {% for dim in reference %}
+                {% for dim in reference %} -->
                 <!-- {% with name=1 %}  -->
                 <!-- <div>{{name}}</div> -->
                 <!-- {% endwith %} -->
                 <!-- |slice:":5" -->
-                    {% if br.spare_code == dim.referenceSpare.spare_code %}
+                    <!-- {% if br.spare_code == dim.referenceSpare.spare_code %}
                     <div><a id="spareCodeInfo" href="#">{{dim.referenceCode}} {{dim.referenceNote}}</a></div>
                     {% endif %}
                 {% endfor %}
@@ -134,9 +143,9 @@
             {% else %}
                 <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
-            {% endif %}
+            {% endif %} -->
 
-            {% if br.car_info.all %}
+            <!-- {% if br.car_info.all %}
                 <td style="min-width: 80px;max-width: 90px;" class="pr-0">
                     {% for a in br.car_info.all %}
                     <a style="display: block;" id="spareCar" href="#">{{a}}</a>
@@ -144,9 +153,9 @@
                 </td>
             {% else %}
             <td style="min-width: 80px;max-width: 90px;" class="pr-0"><a href="#"></a></td>
-            {% endif %}
+            {% endif %} -->
 
-            {% if br.engine_info.all %}
+            <!-- {% if br.engine_info.all %}
                 <td style="min-width: 80px;max-width: 90px;" class="pr-0">
                     {% for a in br.engine_info.all %}
                     <div id="spareEngine">{{a.engine_l}} {{a.engine_ide}}</div>
@@ -154,7 +163,7 @@
                 </td>
             {% else %}
             <td style="min-width: 80px;max-width: 90px;" class="pr-0"><div></div></td>
-            {% endif %}
+            {% endif %} -->
 
             {% if br.spare_category %}
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="{% url 'sparedetails' br.id %}">{{br.spare_category}}</a></td>
@@ -162,13 +171,9 @@
             <td style="max-width: 120px;" class="pr-0"><a id="categoryInfo" href="#"></a></td>
             {% endif %}
 
-            {% if br.spare_name %}
-            <td style="max-width: 120px;display: none;" class="pr-0"><a href="{% url 'sparedetails' br.id %}">{{br.spare_name}}</a></td>
-            {% else %}
-            <td style="max-width: 120px;display: none;" class="pr-0"><a href="#"></a></td>
-            {% endif %}
+            
 
-            {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
+            <!-- {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if allAtributes %}
                 <td style="max-width: 120px;" class="pr-0">
                     {% for dim in allAtributes|dictsort:"atributeName" %}
@@ -189,8 +194,8 @@
             {% else %}
                 <td style="max-width: 120px;" class="pr-0"><a href="#"></a></td>
             {% endif %}
-            {% endif %}
-
+            {% endif %} -->
+<!-- 
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if allDimensions %}
                 <td style="max-width: 120px;display: none;" class="">
@@ -203,9 +208,9 @@
             {% else %}
                 <td style="max-width: 120px;display: none;" class="pr-0"><a href="#"></a></td>
             {% endif %}
-            {% endif %}
+            {% endif %} -->
             
-            {% if request.user.is_superuser %}
+            <!-- {% if request.user.is_superuser %}
             {% if br.price_m %}
             <td class="pr-0" style="display: none;"><a href="#">$ {{br.price_m|floatformat:2}}</a></td>
             {% else %}
@@ -217,9 +222,9 @@
             {% else %}
             <td class="pr-0" style="display: none;"><a href="#"></a></td>
             {% endif %}
-            {% endif %}
+            {% endif %} -->
 
-            {% if br.spare_photo %}
+            <!-- {% if br.spare_photo %}
             <td class="pr-0"><a href="#"><div id="mainPhoto" style="background-image: url('/media/{{br.spare_photo}}');" class="photo"></div></a></div></td>
             {% else %}
             <td class="pr-0"><a href="#"></a></td>
@@ -227,11 +232,11 @@
             
             {% if parameter == 'Engine code' %}
             <td class="pr-0"><a href="#">{{mig}}</a></td>
-            {% endif %}
+            {% endif %} -->
 
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
             {% if br.spare_vendor.all %}
-            <td class="pr-0" style="display: none;">
+            <td class="pr-0">
                 {% for dim in allVendors %}
                     {% for sp in br.spare_vendor.all %}
 
@@ -243,9 +248,13 @@
                 {% endfor %}
             </td>
             {% else %}
-            <td class="pr-0" style="display: none;"><div><a id="vendorInfo" href="#"></a></div></td>
+            <td class="pr-0"><div><a id="vendorInfo" href="#"></a></div></td>
             {% endif %}
             {% endif %}
+
+            <td><a href="#">0.00$</a></td>
+            <td><a href="#">Quantity</a></td>
+            <td><a href="#">50</a></td>
 
             <td class="pr-0"><input class="check" type="checkbox" name="toDel" value="{{br.id}}"></td>
         </tr>

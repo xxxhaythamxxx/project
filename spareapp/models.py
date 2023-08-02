@@ -27,7 +27,8 @@ class manufacturer(models.Model):
 
 class branddb(models.Model):
     brand=models.CharField(max_length=100, verbose_name="Brand",blank=True,null=True)
-    brandPrice=models.IntegerField(verbose_name="Price", blank=True,null=True)
+    brandPrice=models.FloatField(verbose_name="Price", blank=True,null=True)
+    cantidad = models.IntegerField(verbose_name="Quantity", blank=True,null=True)
 
     class Meta:
         verbose_name_plural = "Brands"
