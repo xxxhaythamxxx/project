@@ -195,7 +195,7 @@ table {
   } */
 /* Fin de Table sorteable   */
 
-th {
+thead tr th {
     cursor: pointer;
 }
 .expand-off:hover {

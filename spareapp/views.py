@@ -601,10 +601,10 @@ def selectf(request):
                         if a[0]=="-":
                             bandMenos = True
                             a=a.split("-")[1]
-                            spExclude = spExclude | spare.objects.filter(spare_code__icontains=a) | spare.objects.filter(spare_brand__brand__icontains=a) | spare.objects.filter(spare_name__icontains=a) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=a) | spare.objects.filter(car_info__car_model__icontains=a) | spare.objects.filter(car_info__chasis__icontains=a) | spare.objects.filter(engine_info__engine_l__icontains=a) | spare.objects.filter(engine_info__engine_ide__icontains=a) | spare.objects.filter(spare_category__category__icontains=a)
+                            spExclude = spExclude | spare.objects.filter(Q(spare_code__icontains=a) | Q(spare_brand__brand__icontains=a) | Q(spare_name__icontains=a) | Q(car_info__car_manufacturer__manufacturer__icontains=a)  | Q(car_info__carfrom__icontains=a) | Q(car_info__car_model__icontains=a) | Q(car_info__chasis__icontains=a) | Q(engine_info__engine_l__icontains=a) | Q(engine_info__engine_ide__icontains=a) | Q(spare_category__category__icontains=a) | Q(reference__referenceCode__icontains=a))
                             sp2 = sp2.distinct() & spExclude.distinct()
                         else:
-                            spAux = spAux | spare.objects.filter(spare_code__icontains=a) | spare.objects.filter(spare_brand__brand__icontains=a) | spare.objects.filter(spare_name__icontains=a) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=a) | spare.objects.filter(car_info__car_model__icontains=a) | spare.objects.filter(car_info__chasis__icontains=a) | spare.objects.filter(engine_info__engine_l__icontains=a) | spare.objects.filter(engine_info__engine_ide__icontains=a) | spare.objects.filter(spare_category__category__icontains=a)
+                            spAux = spAux | spare.objects.filter(Q(spare_code__icontains=a) | Q(spare_brand__brand__icontains=a) | Q(spare_name__icontains=a) | Q(car_info__car_manufacturer__manufacturer__icontains=a)  | Q(car_info__carfrom__icontains=a) | Q(car_info__car_model__icontains=a) | Q(car_info__chasis__icontains=a) | Q(engine_info__engine_l__icontains=a) | Q(engine_info__engine_ide__icontains=a) | Q(spare_category__category__icontains=a) | Q(reference__referenceCode__icontains=a))
                             sp = sp.distinct() & spAux.distinct()
                         spAux = spare.objects.none()
                     sp2 = spExclude.distinct()
