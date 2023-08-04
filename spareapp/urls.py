@@ -63,6 +63,7 @@ urlpatterns = [
     path("importCar",views.importCar,name="importCar"),
     path("importEngine",views.importEngine,name="importEngine"),
     path("importSpare",views.importSpare,name="importSpare"),
+    path("importCategory",views.importCategory,name="importCategory"),
     path("register",views.register,name="register"),
     path("login/",LoginView.as_view(template_name="spareapp/login.html"),name="login"),
     # path("contLogin/",LoginView.as_view(template_name="spareapp/contLogin.html"),name="contLogin"),

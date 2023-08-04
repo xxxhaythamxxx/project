@@ -3325,6 +3325,55 @@ def importCar(request):
 
     return render(request,"spareapp/fillspare.html",dic)
 
+def importCategory(request):
+
+    allCategories = category.objects.all().order_by("category")
+
+    if "phot" in request.FILES:
+        checkear = 0
+
+        FILE_PATH = request.FILES['phot']
+        workbook = load_workbook(FILE_PATH)
+        sheet = workbook.active
+
+        maxCol = []
+
+        for col in sheet.iter_rows():
+            maxCol.append(col)
+        
+        i=0
+        cont = 0
+        for fil in maxCol:
+            j=0
+            for col in fil:
+                if col.value == "CATEGORY":
+                    poscategory = j
+                j=j+1
+            i=i+1
+
+        i=0
+        for fil in maxCol:
+            j=0
+            for col in fil:
+                if i>0:
+                    if j == poscategory:
+                        if col.value:
+                            # print("Entra en category")
+                            if category.objects.filter(category__icontains=col.value):
+                                print("Ya existe")
+                                print(col.value)
+                            else:
+                                aux = category()
+                                aux.category = col.value
+                                aux.save()
+                j=j+1
+            i=i+1
+
+    dic = {"cont":cont}
+    # dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+
+    return render(request,"spareapp/fillspare.html",dic)
+
 # def importCar(request):
     
 #     dim=dimension.objects.values("atributeName").distinct()

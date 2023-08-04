@@ -35,6 +35,7 @@
             <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#carImportModal" id="carImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import car</a>
             <!-- <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#engineImportModal" id="engineImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import engine</a> -->
             <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#spareImportModal" id="spareImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import spare</a>
+            <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#categoryImportModal" id="categoryImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import categories</a>
             <!-- <a class="btn btn-danger" href="{% url 'importEngine' %}">Import engine</a> -->
             <!-- <a class="btn btn-danger" href="{% url 'importSpare' %}">Import spare</a> -->
         </div>
@@ -122,6 +123,32 @@
                             <div>category</div>
                             <div>vendor</div>
                             <div class="mb-3">note</div>
+                            <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
+                        </div>
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button id="spareInputSubmit" type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div tabindex="-1" id="categoryImportModal" class="modal fade modal-dialog-scrollable" aria-labelledby="categoryInputLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryInputLabel">Import categories from Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aqui el modal -->
+                    <div class="container mt-3 col-lg-12">
+                        <form action="{% url 'importCategory' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="phot" class="form-label">Parameters:</label>
+                            <div>category</div>
                             <input title=" " value="" type="file" class="form-control" name="phot" id="phot" aria-describedby="photoHelp">
                         </div>
                         <div class="mt-4">
