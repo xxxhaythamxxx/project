@@ -18,6 +18,7 @@
             <a style="font-size: small;" href="{% url 'fillengine' %}" class="btn btn-success">Register engine</a>
             <a style="font-size: small;" href="{% url 'fillspare' %}" class="btn btn-success">Register spare</a>
             <a style="font-size: small;" href="{% url 'fillcategoryadmin' %}" class="btn btn-success">Register category</a>
+            <a style="font-size: small;" href="{% url 'fillbrand' %}" class="btn btn-success">Register brand</a>
             <!-- <a style="font-size: small;" href="{% url 'fillsubcategory' %}" class="btn btn-success">Register sub category</a> -->
             
         </div>
@@ -36,6 +37,7 @@
             <!-- <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#engineImportModal" id="engineImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import engine</a> -->
             <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#spareImportModal" id="spareImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import spare</a>
             <a style="font-size: small;" data-bs-toggle="modal" data-bs-target="#categoryImportModal" id="categoryImportModalButton" class="btn btn-danger" href="javascript:void(0);">Import categories</a>
+            <a style="font-size: small;" id="exportCategoriesButton" href="#" class="btn btn-danger">Export categories</a>
             <!-- <a class="btn btn-danger" href="{% url 'importEngine' %}">Import engine</a> -->
             <!-- <a class="btn btn-danger" href="{% url 'importSpare' %}">Import spare</a> -->
         </div>
@@ -160,7 +162,52 @@
             </div>
         </div>
     </div>
-
+    <table id="exportCategories"></table>
 </html>
 
+<script>
+// boton para exportar a Excel -------------------------------------------------------------------------------------
+document.getElementById("exportCategoriesButton").addEventListener("click",function(){
+
+    var val = "exportCategories"
+
+    $.ajax({
+        method: 'GET',
+        url: '/exportCategories',
+        data: {'val': val},
+        success:function(data){
+            
+            // Obtén una referencia a la tabla
+            var tabla = $('#exportCategories');
+        
+            // Crea una fila de encabezado
+            var encabezado = $('<tr></tr>');
+            encabezado.append('<th>CATEGORY</th>');
+            encabezado.append('<th>ATRIBUTES</th>');
+            tabla.append(encabezado);
+        
+            // Crea filas de datos
+            for(var i = 0; i < data.allCategories.length; i++){
+                var fila1 = $('<tr></tr>');
+                fila1.append('<td>'+data.allCategories[i].category+'</td>');
+                var col2 = $('<td></td>');
+                for(var j = 0; j < data.allAtributes.length; j++){
+                    if(data.allCategories[i].id == data.allAtributes[j].atributeSpare__spare_category__id){
+                        var div = $('<div></div>')
+                        div.append(''+data.allAtributes[j].atributeName+'\n')
+                        col2.append(div)
+                    }
+                }
+                fila1.append(col2)
+                tabla.append(fila1)
+            }
+            $("#exportCategories td").css("white-space", "pre-wrap");
+            console.log(tabla)
+            var table2excel = new Table2Excel();
+            table2excel.export(document.querySelectorAll("#exportCategories"));
+            tabla.remove()
+        }
+    })
+})
+</script>
 

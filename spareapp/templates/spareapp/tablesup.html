@@ -1,35 +1,36 @@
 <html>
     <thead id="hMain" class="">
         <tr class="color text-white dnd-moved">
-            <th id="code" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(0,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('code')">Code</span></th>
-            <th id="editSpare" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(1,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('editSpare')">Edit</span></th>
-            <th id="referenceC" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(2,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('referenceC')">Ref. Code</span></th>
-            <th id="car" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(3,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('car')">Car</span></th>
-            <th id="engine" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(4,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('engine')">Engine</span></th>
-            <th id="brand" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(5,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('brand')">Brand</span></th>
-            <th id="category" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(6,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('category')">Category</span></th>
+            <th id="check" class="trsup color" style="position: sticky;top: 70;"></th>
+            <th id="code" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(1,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('code')">Code</span></th>
+            <th id="editSpare" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(2,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('editSpare')">Edit</span></th>
+            <th id="referenceC" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(3,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('referenceC')">Code</span></th>
+            <th id="car" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(4,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('car')">Car : Engine</span></th>
+            <th id="engine" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(5,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('engine')">Engine</span></th>
+            <th id="brand" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(6,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('brand')">Brand</span></th>
+            <th id="category" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(7,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('category')">Category</span></th>
             <!-- <th id="subcategory" class="trsup color" style="position: sticky;top: 70;">Sub-Category</th> -->
-            <th id="type" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(7,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('type')">Description</span></th>
+            <th id="type" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(8,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('type')">Description</span></th>
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-            <th id="atributes" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(8,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('atributes')">Atributes</span></th>
+            <th id="atributes" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(9,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('atributes')">Atributes</span></th>
             {% endif %}
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-            <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(9,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('dimensions')">Dimensions</span></th>
+            <th id="dimensions" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(10,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('dimensions')">Dimensions</span></th>
             {% endif %}
             {% if request.user.is_superuser %}
-            <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(10,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('priceM')">Price Major</span></th>
-            <th id="priceD" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(11,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('priceD')">Price Det.</span></th>
+            <th id="priceM" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(11,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('priceM')">Price Major</span></th>
+            <th id="priceD" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(12,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('priceD')">Price Det.</span></th>
             {% endif %}
             <th id="photo" class="trsup color" style="position: sticky;top: 70;">Photo</th>
             {% if parameter == 'Engine code' %}
-            <th id="ecode" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(13,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('ecode')">Eng. code</span></th>
+            <th id="ecode" class="trsup color" style="position: sticky;top: 70;"><i onclick="sort(14,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('ecode')">Eng. code</span></th>
             {% endif %}
             {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
-            <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(14,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('vendor')">Vendor</span></th>
+            <th id="vendor" class="trsup color" style="position: sticky;top: 70;display: none;"><i onclick="sort(15,'asc')" class="bi bi-arrow-up-short"></i><span onclick="filtrar('vendor')">Vendor</span></th>
             {% endif %}
-            {% if request.user.is_authenticated %}
+            <!-- {% if request.user.is_authenticated %}
             <th id="check" class="trsup color" style="position: sticky;top: 70;"><input class="check" type="checkbox" onClick="toggle(this,'toAdd')"/></th>
-            {% endif %}
+            {% endif %} -->
         </tr>
     </thead>
 </html>

@@ -63,9 +63,165 @@
             {% endif %}
         </div> -->
 
+        <!--------------------------------- Car Engine -------------------------------------->
+
+        <div class="mb-3" id="carEngineTittle">
+            <!-- <label for="atribut" class="form-label">Atributes</label> -->
+            <div id="carEngine-content" class="row">
+                <div class="col-lg-11 row">
+                    <div class="col-lg-6">
+                        <label for="carSelect" class="form-label">Car info</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="engSelect" class="form-label">Engine info</label>
+                    </div>
+                </div>
+                {% if sparelist %}
+                    {% for clave, valor in sparelist.items %}
+                        {% if valor %}
+                            {% for b in valor %}
+                            <div id="ref-val" class="ref-val row">
+                                <div class="col-lg-11">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <select name="carSelect" id="carSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                                                <option value="" selected>Select car</option>
+                                                {% for sp in allCars %}
+                                                    {% if sp.id == clave %}
+                                                    <option value="{{sp.id}}" selected>{{sp.car_manufacturer}} {{sp.car_model}} {% if sp.carfrom %} {{sp.carfrom}} {% endif %} {% if sp.chasis %} {{sp.chasis}} {% endif %}</option>
+                                                    {% else %}
+                                                    <option value="{{sp.id}}">{{sp.car_manufacturer}} {{sp.car_model}} {% if sp.carfrom %} {{sp.carfrom}} {% endif %} {% if sp.chasis %} {{sp.chasis}} {% endif %}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select name="engSelect" id="engSelect" class="form-select form-select-md" aria-label=".form-select-sm example1">
+                                                <option value="" selected>Select engine</option>
+                                                {% for sp in allEngines %}
+                                                    {% if sp.id == b %}
+                                                    <option value="{{sp.id}}" selected>{{sp.engine_ide}} {% if sp.engine_l %} {{sp.engine_l}} {% endif %}</option>
+                                                    {% else %}
+                                                    <option value="{{sp.id}}">{{sp.engine_ide}} {% if sp.engine_l %} {{sp.engine_l}} {% endif %}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                    {% if forloop.parentloop.first and forloop.first %}
+                                    <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                        <div>
+                                            <a style="text-decoration: none;color: rgb(136,12,12);" id="carEngineaddRef" class="p-2" href="javascript:void(0);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                        <div>
+                                            <a style="text-decoration: none;color: rgb(136,12,12);" id="carEngineDeleteRef" class="p-2" href="javascript:void(0);">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                            </div>
+
+                            {% endfor %}
+                        {% else %}
+                        <div id="ref-val" class="ref-val row">
+                            <div class="col-lg-11">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <select name="carSelect" id="carSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                                            <option value="" selected>Select car</option>
+                                            {% for sp in allCars %}
+                                                {% if sp.id == clave %}
+                                                <option value="{{sp.id}}" selected>{{sp.car_manufacturer}} {{sp.car_model}} {% if sp.carfrom %} {{sp.carfrom}} {% endif %} {% if sp.chasis %} {{sp.chasis}} {% endif %}</option>
+                                                {% else %}
+                                                <option value="{{sp.id}}">{{sp.car_manufacturer}} {{sp.car_model}} {% if sp.carfrom %} {{sp.carfrom}} {% endif %} {% if sp.chasis %} {{sp.chasis}} {% endif %}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <select name="engSelect" id="engSelect" class="form-select form-select-md" aria-label=".form-select-sm example1">
+                                            <option value="" selected>Select engine</option>
+                                            {% for sp in allEngines %}
+                                                <option value="{{sp.id}}">{{sp.engine_ide}} {% if sp.engine_l %} {{sp.engine_l}} {% endif %}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if forloop.first %}
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <a style="text-decoration: none;color: rgb(136,12,12);" id="carEngineaddRef" class="p-2" href="javascript:void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <a style="text-decoration: none;color: rgb(136,12,12);" id="carEngineDeleteRef" class="p-2" href="javascript:void(0);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <div id="ref-val" class="ref-val row">
+                    <div class="col-lg-11">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <select name="carSelect" id="carSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                                    <option value="" selected>Select car</option>
+                                    {% for sp in allCars %}
+                                        <option value="{{sp.id}}">{{sp.car_manufacturer}} {{sp.car_model}} {% if sp.carfrom %} {{sp.carfrom}} {% endif %} {% if sp.chasis %} {{sp.chasis}} {% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-lg-6">
+                                <select name="engSelect" id="engSelect" class="form-select form-select-md" aria-label=".form-select-sm example1">
+                                    <option value="" selected>Select engine</option>
+                                    {% for sp in allEngines %}
+                                        <option value="{{sp.id}}">{{sp.engine_ide}} {% if sp.engine_l %} {{sp.engine_l}} {% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                        <div>
+                            <a style="text-decoration: none;color: rgb(136,12,12);" id="carEngineaddRef" class="p-2" href="javascript:void(0);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
         <!------------------------------- Car info ---------------------------------------------->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="referenc" class="form-label">Car info</label>
             <input placeholder="Search by manufacturer or model" type="text" class="form-control" name="carinf" id="carinf" aria-describedby="carinfHelp">
             <div class="row">
@@ -117,11 +273,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- ----------------------------- Engine info -------------------------------------------- -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="enginf" class="form-label">Engine info</label>
             <input placeholder="Search by engine model" type="text" class="form-control" name="enginf" id="enginf" aria-describedby="enginfHelp">
             <div class="row">
@@ -173,7 +329,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         
 
@@ -515,6 +671,104 @@
             </div>
         </div>
 
+        <!--------------------------------- Brand -------------------------------------->
+
+        <div class="mb-3" id="brandTittle">
+            <div class="row">
+                <div class="col-lg-4">
+                    <label for="brandSelect" class="form-label">Brand</label>
+                </div>
+                <div class="col-lg-3">
+                    <label for="vendorSelect" class="form-label">Vendor</label>
+                </div>
+                <div class="col-lg-2">
+                    <label for="priceSelect" class="form-label">Price</label>
+                </div>
+                <div class="col-lg-2">
+                    <label for="selectQuantity" class="form-label">Quantity</label>
+                </div>
+            </div>
+            {% if brandSpare %}
+                {% for a in brandSpare %}
+                <div id="brandInt" class="ref-val row">
+                    <div class="col-lg-4">
+                        <select name="brandSelect" id="brandSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                            <option value="" selected>Select brand</option>
+                            {% for sp in allBrands %}
+                                {% if sp.id == a.brand.id %}
+                                <option value="{{sp.id}}" selected>{{sp}}</option>
+                                {% else %}
+                                <option value="{{sp.id}}">{{sp}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <select name="vendorSelect" id="vendorSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                            <option value="" selected>Select vendor</option>
+                            {% for sp in allVendors %}
+                                {% if sp.id == a.vendor.id %}
+                                <option value="{{sp.id}}" selected>{{sp}}</option>
+                                {% else %}
+                                <option value="{{sp.id}}">{{sp}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <input value="{{a.brandPrice}}" min="0" step="0.01" class="form-control" name="priceSelect" id="priceSelect" type="number">
+                    </div>
+                    <div class="col-lg-2">
+                        <input value="{{a.cantidad}}" name="cantidadSelect" min="0" step="1" class="form-control" type="number">
+                    </div>
+                    {% if forloop.first %}
+                    <div class="col-lg-1" style="cursor: pointer;color: rgb(136,12,12);" onclick="selectBrand('plus')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                        </svg>
+                    </div>
+                    {% else %}
+                    <div id="deleteBrandVendor" class="col-lg-1" style="cursor: pointer;color: rgb(136,12,12);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                        </svg>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+            <div id="brandInt" class="ref-val row">
+                <div class="col-lg-4">
+                    <select name="brandSelect" id="brandSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select brand</option>
+                        {% for sp in allBrands %}
+                        <option value="{{sp.id}}">{{sp}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <select name="vendorSelect" id="vendorSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select vendor</option>
+                        {% for sp in allVendors %}
+                        <option value="{{sp.id}}">{{sp}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <input min="0" step="0.01" class="form-control" name="priceSelect" id="priceSelect" type="number">
+                </div>
+                <div class="col-lg-2">
+                    <input name="cantidadSelect" min="0" step="1" class="form-control" type="number">
+                </div>
+                <div class="col-lg-1" style="cursor: pointer;color: rgb(136,12,12);" onclick="selectBrand('plus')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                    </svg>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
         <div class="mb-3">
             <label for="vin" class="form-label">VIN</label>
             <textarea value="{{sparefind.0.note}}" type="textarea" class="form-control" name="vin" id="vin" aria-describedby="vinHelp">{% if sparefind.0.note != none %}{{sparefind.0.note}}{% endif %}</textarea>
@@ -844,26 +1098,214 @@
 
 <script>
 
-// Linkear categorias con subcategorias ------------------------------------------------
-if($("#catSelect").find("option:selected").val()){
-    val = $("#catSelect").find("option:selected").text()
+
+function selectBrand(a){
+
+    principal = $("#brandTittle")
+
+    var val = a
+
     $.ajax({
         method: 'GET',
-        url: '/subCategoria',
+        url: '/vendorSpareAjax',
         data: {'val': val},
         success:function(data){
 
-            if(data.bandera == true){
-                $("#subcatSelect").prop('disabled', false);
+            // alert(a)
+
+            if(a == "plus"){
+
+                tittle = $('<div id="brandInt" class="ref-val row"></div>')
+                div1 = $('<div class="col-lg-4"><div>')
+                div2 = $('<div class="col-lg-3"><div>')
+                div3 = $('<div class="col-lg-2"><input min="0" step="0.01" class="form-control" name="priceSelect" id="priceSelect" type="number"></div>')
+                div4 = $('<div class="col-lg-2"><input name="cantidadSelect" min="0" step="1" class="form-control" type="number"></div>')
+                div5 = $('<div id="deleteBrandVendor" class="col-lg-1" style="cursor: pointer;color: rgb(136,12,12);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></div>')
+                select1 = $('<select name="brandSelect" id="brandSelect" class="form-select form-select-md" aria-label=".form-select-sm example"></select>')
+                select1.append('<option value="" selected>Select brand</option>')
+                for(var i = 0;i < data.allBrands.length;i++){
+                    select1.append('<option value="'+data.allBrands[i].id+'">'+data.allBrands[i].brand+'</option>')
+                }
+                div1.append(select1)
+
+                select2 = $('<select name="vendorSelect" id="vendorSelect" class="form-select form-select-md" aria-label=".form-select-sm example"></select>')
+                select2.append('<option value="" selected>Select vendor</option>')
+                for(var i = 0;i < data.allVendors.length;i++){
+                    select2.append('<option value="'+data.allVendors[i].id+'">'+data.allVendors[i].vendorName+'</option>')
+                }
+                div2.append(select2)
+                tittle.append(div1)
+                tittle.append(div2)
+                tittle.append(div3)
+                tittle.append(div4)
+                tittle.append(div5)
+                principal.append(tittle)
+
+            }
+        }
+    })
+}
+
+// Eliminar deleteBrandVendor
+$(document).on("click","#deleteBrandVendor",function(a){
+    // alert("ENtra")
+    a.preventDefault()
+    $(this).parent().remove()
+    // atrtam--
+})
+
+// Agregar Car Engine
+// $("#carEngineaddRef").on('click', function() {
+    $(document).on("click","#carEngineaddRef",function(){
+
+    var val = "carEngine"
+
+    $.ajax({
+        method: 'GET',
+        url: '/carEnginePlus',
+        data: {'val': val},
+        success:function(data){
+
+            var divSup = $('<div class="ref-val row"></div>')
+            var divMed = $('<div class="col-lg-11"></div>')
+            var row = $('<div class="row"></div>')
+            var col1 = $('<div class="col-lg-6"></div>')
+            var col2 = $('<div class="col-lg-6"></div>')
+            var select1 = $('<select name="carSelect" id="carSelect" class="form-select form-select-md"></select>')
+            var select2 = $('<select name="engSelect" id="engSelect" class="form-select form-select-md"></select>')
+            var option1 = $('<option value="">Select car</option>')
+            
+            var option3 = $('<option value="">Select engine</option>')
+            var minus = $('<div class="col-lg-1 d-flex justify-content-center align-items-center"><div><a style="text-decoration: none;color: rgb(136,12,12);" id="carEngineDeleteRef" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div></div>')
+        
+            $("#carEngine-content").append(divSup)
+            divSup.append(divMed)
+            divSup.append(minus)
+            divMed.append(row)
+            row.append(col1)
+            row.append(col2)
+            col1.append(select1)
+            
+            select1.append(option1)
+            for(var i=0;i<data.allCars.length;i++){
+                var anio = (data.allCars[i].carfrom) ? (data.allCars[i].carfrom) : ""
+                var chas = (data.allCars[i].chasis) ? (data.allCars[i].chasis) : ""
+                var option2 = $('<option value="'+data.allCars[i].id+'">'+data.allCars[i].car_manufacturer__manufacturer+' '+data.allCars[i].car_model+' '+anio+' '+chas+'</option>')
+                select1.append(option2)
+            }
+            col2.append(select2)
+            select2.append(option3)
+            for(var i=0;i<data.allEngines.length;i++){
+                var litres = (data.allEngines[i].engine_l) ? (data.allEngines[i].engine_l) : ""
+                var option4 = $('<option value="'+data.allEngines[i].id+'">'+data.allEngines[i].engine_ide+' '+litres+'</option>')
+                select2.append(option4)
+            }
+            // select1.select2();
+            // select2.select2();
+        }
+    })
+})
+
+// Eliminar car engines
+$("#carEngine-content").on("click","#carEngineDeleteRef",function(a){
+    a.preventDefault()
+    $(this).parent().parent().parent().remove()
+})
+
+// Valores de atributos por default dependiendo de la categoría
+$("#catSelect").change(function(){
+    val = $(this).find("option:selected").text()
+    $.ajax({
+        method: 'GET',
+        url: '/spareCat',
+        data: {'val': val},
+        success:function(data){
+
+            if(data.atributesSpare){
+                $("#atribute-content").empty()
+                for(let i = 0; i < data.atributesSpare.length; i++){
+                    if(i==0){
+                    
+                        $("#atribute-content").append('\
+                        <div id="ref-val" class="ref-val row">\
+                            <div class="col-lg-11">\
+                                <div class="row">\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atributeName+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                    </div>\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">\
+                                <div>\
+                                    <a style="text-decoration: none;color: rgb(136,12,12);" id="atributaddRef" class="p-2" href="javascript:void(0);">\
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">\
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>\
+                                        </svg>\
+                                    </a>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        ')
+
+                    }else{
+
+                        $("#atribute-content").append('\
+                        <div id="ref-val" class="ref-val row">\
+                            <div class="col-lg-11">\
+                                <div class="row">\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atributeName+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                    </div>\
+                                    <div class="col-lg-6">\
+                                        <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">\
+                                <div>\
+                                    <a style="text-decoration: none;color: rgb(136,12,12);" id="atributdeleteRef" class="p-2" href="javascript:void(0);">\
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">\
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>\
+                                </svg>\
+                            </a>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        ')
+
+                    }
+                }
             }else{
-                $("#subcatSelect").prop('disabled', true);
+                console.log("No tiene atributos")
             }
 
         }
     })
-}else{
-    $("#subcatSelect").prop('disabled', true);
-}
+})
+
+// // Linkear categorias con subcategorias ------------------------------------------------
+// if($("#catSelect").find("option:selected").val()){
+//     val = $("#catSelect").find("option:selected").text()
+//     $.ajax({
+//         method: 'GET',
+//         url: '/subCategoria',
+//         data: {'val': val},
+//         success:function(data){
+
+//             if(data.bandera == true){
+//                 $("#subcatSelect").prop('disabled', false);
+//             }else{
+//                 $("#subcatSelect").prop('disabled', true);
+//             }
+
+//         }
+//     })
+// }else{
+//     $("#subcatSelect").prop('disabled', true);
+// }
 
 // $("#catSelect").change(function(){
 //     val = $(this).find("option:selected").text()
@@ -890,65 +1332,65 @@ if($("#catSelect").find("option:selected").val()){
 //     })
 // })
 
-// Mostrar a ambos lados los car info que se tienen -------------------------------------
-$("#carcodPasar option").each(function(){
-    var aux = $(this).text()
-    var band = false
-    $("#carcodPasado option").each(function(){
-        if($(this).text() == aux){
-            band = true
-        }
-    })
-    if (band == true){
-        $(this).remove()
-        // $(this).hide()
-    }
-})
+// // Mostrar a ambos lados los car info que se tienen -------------------------------------
+// $("#carcodPasar option").each(function(){
+//     var aux = $(this).text()
+//     var band = false
+//     $("#carcodPasado option").each(function(){
+//         if($(this).text() == aux){
+//             band = true
+//         }
+//     })
+//     if (band == true){
+//         $(this).remove()
+//         // $(this).hide()
+//     }
+// })
 
-// Mostrar a ambos lados los vendors que se tienen -------------------------------------
-$("#vendorPasar option").each(function(){
-    var aux = $(this).text()
-    var band = false
-    $("#vendorPasado option").each(function(){
-        if($(this).text() == aux){
-            band = true
-        }
-    })
-    if (band == true){
-        $(this).remove()
-        // $(this).hide()
-    }
-})
+// // Mostrar a ambos lados los vendors que se tienen -------------------------------------
+// $("#vendorPasar option").each(function(){
+//     var aux = $(this).text()
+//     var band = false
+//     $("#vendorPasado option").each(function(){
+//         if($(this).text() == aux){
+//             band = true
+//         }
+//     })
+//     if (band == true){
+//         $(this).remove()
+//         // $(this).hide()
+//     }
+// })
 
-// Mostrar a ambos lados los engine info que se tienen -------------------------------------
-$("#enginecodPasar option").each(function(){
-    var aux = $(this).text()
-    var band = false
-    $("#enginecodPasado option").each(function(){
-        if($(this).text() == aux){
-            band = true
-        }
-    })
-    if (band == true){
-        $(this).remove()
-        // $(this).hide()
-    }
-})
+// // Mostrar a ambos lados los engine info que se tienen -------------------------------------
+// $("#enginecodPasar option").each(function(){
+//     var aux = $(this).text()
+//     var band = false
+//     $("#enginecodPasado option").each(function(){
+//         if($(this).text() == aux){
+//             band = true
+//         }
+//     })
+//     if (band == true){
+//         $(this).remove()
+//         // $(this).hide()
+//     }
+// })
 
-// prueba de mostrar ambos lados desde el otro punto
-$("#enginecodPasado option").each(function(){
-    var aux = $(this).text()
-    var band = false
-    $("#enginecodPasar option").each(function(){
-        if($(this).text() == aux){
-            band = true
-        }
-    })
-    if (band == true){
-        $(this).remove()
-        // $(this).hide()
-    }
-})
+// // prueba de mostrar ambos lados desde el otro punto
+// $("#enginecodPasado option").each(function(){
+//     var aux = $(this).text()
+//     var band = false
+//     $("#enginecodPasar option").each(function(){
+//         if($(this).text() == aux){
+//             band = true
+//         }
+//     })
+//     if (band == true){
+//         $(this).remove()
+//         // $(this).hide()
+//     }
+// })
 
 // Para filtrar por categoria
 jQuery(document).ready(function($){
@@ -958,60 +1400,60 @@ jQuery(document).ready(function($){
 });
 
 // Para filtrar por car
-jQuery(document).ready(function($){
-    $(document).ready(function() {
-        $('#carSelect').select2();
-    });
-});
+// jQuery(document).ready(function($){
+//     $(document).ready(function() {
+//         $('#carSelect').select2();
+//     });
+// });
 
 
-// Pasar de un lado a otro los vendors  ---------------------------------------------
-function vendorpasar(){
-    $("#vendorPasar option:selected").each(function(){ // Recorre lista sin pasar
-        band = false
-        var aux = $(this).text()
-        $("#vendorPasado option").each(function(){ // Recorre lista pasada
-            if(aux == $(this).text()){
-            }
-            else{
-                band = true
-                aux2 = aux
-            }
+// // Pasar de un lado a otro los vendors  ---------------------------------------------
+// function vendorpasar(){
+//     $("#vendorPasar option:selected").each(function(){ // Recorre lista sin pasar
+//         band = false
+//         var aux = $(this).text()
+//         $("#vendorPasado option").each(function(){ // Recorre lista pasada
+//             if(aux == $(this).text()){
+//             }
+//             else{
+//                 band = true
+//                 aux2 = aux
+//             }
             
-        })
-        if($("#vendorPasado option:selected").length<1){
-            band = true
-            aux2 = aux
-        }
-        $(this).remove()
-        if(band == true){
-            $("#vendorPasado").prepend("<option class='p-1'>"+aux2+"</option>")
-        }
-    })
-}
-function vendorregresar(){
-    $("#vendorPasado option:selected").each(function(){ // Recorre lista pasada
-        band = false
-        var aux = $(this).text()
-        $("#vendorPasar option").each(function(){ // Recorre lista sin pasar
-            if(aux == $(this).text()){
-            }
-            else{
-                band = true
-                aux2 = aux
-            }
-        })
-        if($("#vendorPasar option:selected").length<1){
-            band = true
-            aux2 = aux
-        }
-        $(this).remove()
-        if(band == true){
-            $("#vendorPasar").prepend("<option class='p-1'>"+aux2+"</option>")
-        }
-    })
+//         })
+//         if($("#vendorPasado option:selected").length<1){
+//             band = true
+//             aux2 = aux
+//         }
+//         $(this).remove()
+//         if(band == true){
+//             $("#vendorPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+//         }
+//     })
+// }
+// function vendorregresar(){
+//     $("#vendorPasado option:selected").each(function(){ // Recorre lista pasada
+//         band = false
+//         var aux = $(this).text()
+//         $("#vendorPasar option").each(function(){ // Recorre lista sin pasar
+//             if(aux == $(this).text()){
+//             }
+//             else{
+//                 band = true
+//                 aux2 = aux
+//             }
+//         })
+//         if($("#vendorPasar option:selected").length<1){
+//             band = true
+//             aux2 = aux
+//         }
+//         $(this).remove()
+//         if(band == true){
+//             $("#vendorPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+//         }
+//     })
     
-}
+// }
 
 // Pasar de un lado a otro los spares references ---------------------------------------------
 function pasar(){
@@ -1061,101 +1503,101 @@ function regresar(){
     
 }
 
-// Pasar de un lado a otro los car info  --------------------------------------------------
-function carpasar(){
-    $("#carcodPasar option:selected").each(function(){ // Recorre lista sin pasar
-        band = false
-        var aux = $(this).text()
-        $("#carcodPasado option").each(function(){ // Recorre lista pasada
-            if(aux == $(this).text()){
-            }
-            else{
-                band = true
-                aux2 = aux
-            }
+// // Pasar de un lado a otro los car info  --------------------------------------------------
+// function carpasar(){
+//     $("#carcodPasar option:selected").each(function(){ // Recorre lista sin pasar
+//         band = false
+//         var aux = $(this).text()
+//         $("#carcodPasado option").each(function(){ // Recorre lista pasada
+//             if(aux == $(this).text()){
+//             }
+//             else{
+//                 band = true
+//                 aux2 = aux
+//             }
             
-        })
-        if($("#carcodPasado option:selected").length<1){
-            band = true
-            aux2 = aux
-        }
-        $(this).remove()
-        if(band == true){
-            $("#carcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
-        }
-    })
-}
-function carregresar(){
-    $("#carcodPasado option:selected").each(function(){ // Recorre lista pasada
-        band = false
-        var aux = $(this).text()
-        $("#carcodPasar option").each(function(){ // Recorre lista sin pasar
-            if(aux == $(this).text()){
-            }
-            else{
-                band = true
-                aux2 = aux
-            }
-        })
-        if($("#carcodPasar option:selected").length<1){
-            band = true
-            aux2 = aux
-        }
-        $(this).remove()
-        if(band == true){
-            $("#carcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
-        }
-    })
-}
+//         })
+//         if($("#carcodPasado option:selected").length<1){
+//             band = true
+//             aux2 = aux
+//         }
+//         $(this).remove()
+//         if(band == true){
+//             $("#carcodPasado").prepend("<option class='p-1'>"+aux2+"</option>")
+//         }
+//     })
+// }
+// function carregresar(){
+//     $("#carcodPasado option:selected").each(function(){ // Recorre lista pasada
+//         band = false
+//         var aux = $(this).text()
+//         $("#carcodPasar option").each(function(){ // Recorre lista sin pasar
+//             if(aux == $(this).text()){
+//             }
+//             else{
+//                 band = true
+//                 aux2 = aux
+//             }
+//         })
+//         if($("#carcodPasar option:selected").length<1){
+//             band = true
+//             aux2 = aux
+//         }
+//         $(this).remove()
+//         if(band == true){
+//             $("#carcodPasar").prepend("<option class='p-1'>"+aux2+"</option>")
+//         }
+//     })
+// }
 
-// Pasar de un lado a otro los engine info  --------------------------------------------------
-function enginepasar(){
-    $("#enginecodPasar option:selected").each(function(){ // Recorre lista sin pasar
-        band = false
-        var aux = $(this).text()
-        $("#enginecodPasado option").each(function(){ // Recorre lista pasada
-            if(aux == $(this).text()){
-            }
-            else{
-                band = true
-                aux2 = aux
-            }
+// // Pasar de un lado a otro los engine info  --------------------------------------------------
+// function enginepasar(){
+//     $("#enginecodPasar option:selected").each(function(){ // Recorre lista sin pasar
+//         band = false
+//         var aux = $(this).text()
+//         $("#enginecodPasado option").each(function(){ // Recorre lista pasada
+//             if(aux == $(this).text()){
+//             }
+//             else{
+//                 band = true
+//                 aux2 = aux
+//             }
             
-        })
-        if($("#enginecodPasado option:selected").length<1){
-            band = true
-            aux2 = aux
-        }
-        $(this).remove()
-        if(band == true){
-            $("#enginecodPasado").prepend("<option class='p-1' >"+aux2+"</option>")
-        }
-    })
+//         })
+//         if($("#enginecodPasado option:selected").length<1){
+//             band = true
+//             aux2 = aux
+//         }
+//         $(this).remove()
+//         if(band == true){
+//             $("#enginecodPasado").prepend("<option class='p-1' >"+aux2+"</option>")
+//         }
+//     })
 
-}
-function engineregresar(){
-    $("#enginecodPasado option:selected").each(function(){ // Recorre lista pasada
-        band = false
-        var aux = $(this).text()
-        $("#enginecodPasar option").each(function(){ // Recorre lista sin pasar
-            if(aux == $(this).text()){
-            }
-            else{
-                band = true
-                aux2 = aux
-            }
-        })
-        if($("#enginecodPasar option:selected").length<1){
-            band = true
-            aux2 = aux
-        }
-        $(this).remove()
-        if(band == true){
-            $("#enginecodPasar").prepend("<option class='p-1' >"+aux2+"</option>")
-        }
-    })
+// }
+// function engineregresar(){
+//     $("#enginecodPasado option:selected").each(function(){ // Recorre lista pasada
+//         band = false
+//         var aux = $(this).text()
+//         $("#enginecodPasar option").each(function(){ // Recorre lista sin pasar
+//             if(aux == $(this).text()){
+//             }
+//             else{
+//                 band = true
+//                 aux2 = aux
+//             }
+//         })
+//         if($("#enginecodPasar option:selected").length<1){
+//             band = true
+//             aux2 = aux
+//         }
+//         $(this).remove()
+//         if(band == true){
+//             $("#enginecodPasar").prepend("<option class='p-1' >"+aux2+"</option>")
+//         }
+//     })
 
-}
+// }
 
 
 // Arreglar los valores que se pasarán ------------------------------------------------

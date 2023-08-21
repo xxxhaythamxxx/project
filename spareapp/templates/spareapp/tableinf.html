@@ -3,6 +3,14 @@
         {% for br in spare %}
         <tr class="dnd-moved ">
 
+            <td class="check justify-content-center">
+                <div data-parametro="+" id="openS" style="cursor: pointer;color: rgb(136,12,12);" onclick="openCart(this,{{br.id}})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                    </svg>
+                </div>
+            </td>
+
             {% if br.spare_code %}
             <td style="display: none;" class="pr-0"><a id="spareCode" href="{% url 'sparedetails' br.id %}">{{br.spare_code}}</a></td>
             {% else %}
@@ -13,6 +21,7 @@
 
             {% if reference %}
             <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                <div id="spareCodeInfo" style="font-weight: bold;">{{br.spare_code}}</div>
                 {% for dim in reference %}
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
                     <div id="spareCodeInfo">{{dim.referenceCode}} {{dim.referenceNote|slice:"0:3"}}</div>
@@ -20,27 +29,45 @@
                 {% endfor %}
             </td>
             {% else %}
-                <td style="min-width: 80px;max-width: 90px;" class="pr-0"><div></div></td>
+                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                    <div id="spareCodeInfo">{{br.spare_code}}</div>
+                </td>
             {% endif %}
 
             {% if br.car_info.all %}
-                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                <td style="min-width: 100px;max-width: 180px;" class="pr-0">
                     {% for a in br.car_info.all %}
-                    <div id="spareCar">{{a.car_manufacturer|slugify|upper|slice:"0:3"}} {% if a.car_model %}{{a.car_model}}{% endif %} {% if a.carfrom %}{{a.carfrom}}{% endif %} {% if a.chasis %}{{a.chasis}}{% endif %}</div>
+                        {% for clave, valor in enginelist.items %}
+                            {% if a.id == clave.id %}
+                                {% if valor %}
+                                    <div class="row">
+                                    {% for c in valor %}
+                                        <div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">{{a.car_manufacturer|slugify|upper|slice:"0:3"}} {% if a.car_model %}{{a.car_model}}{% endif %} {% if a.carfrom %}{{a.carfrom}}{% endif %} {% if a.chasis %}{{a.chasis}}{% endif %}:</div>
+                                        <div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">{{c.engine_ide}} {{c.engine_l}}</div>
+                                    {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">{{a.car_manufacturer|slugify|upper|slice:"0:3"}} {% if a.car_model %}{{a.car_model}}{% endif %} {% if a.carfrom %}{{a.carfrom}}{% endif %} {% if a.chasis %}{{a.chasis}}{% endif %}:</div>
+                                        <div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">No engines</div>
+                                    </div>
+                                    {% endif %}
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 </td>
             {% else %}
-            <td style="min-width: 80px;max-width: 90px;" class="pr-0"><div></div></td>
+            <td style="min-width: 100px;max-width: 180px;" class="pr-0"><div></div></td>
             {% endif %}
 
             {% if br.engine_info.all %}
-                <td style="min-width: 80px;max-width: 90px;" class="pr-0">
+                <td style="min-width: 80px;max-width: 90px;display: none;" class="pr-0">
                     {% for a in br.engine_info.all %}
                     <div id="spareEngine">{{a.engine_l}} {{a.engine_ide}}</div>
                     {% endfor %}
                 </td>
             {% else %}
-            <td style="min-width: 80px;max-width: 90px;" class="pr-0"><div></div></td>
+            <td style="min-width: 80px;max-width: 90px;display: none;" class="pr-0"><div></div></td>
             {% endif %}
 
             {% if br.spare_brand %}
@@ -146,9 +173,9 @@
             {% endif %}
             {% endif %}
             
-            {% if request.user.is_authenticated %}
+            <!-- {% if request.user.is_authenticated %}
             <td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="{{br.id}}"></td>
-            {% endif %}
+            {% endif %} -->
         </tr>
         {% endfor %}
     </tbody>

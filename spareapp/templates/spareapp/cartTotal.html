@@ -1,0 +1,74 @@
+{% extends "spareapp/base.html" %}
+
+{% block title %} Auto Repuestos Interamericana {% endblock %}
+
+{% block content %}
+
+<div class="options my-2 container invoicecont">
+    <div id="filterContent" class="row d-flex justify-content-center align-items-center">
+
+        <div class="mt-1">
+            <div class="d-flex justify-content-end">
+
+                {% if request.user.is_superuser %}
+                <div style="display: inline-block;" class="mr-1">
+                    <a style="font-size: small;" class="btn btn-success mx-1" id="adminButton" href="{% url 'filldb' %}">Admin</a>
+                </div>
+                {% endif %}
+
+                <!-- <div style="display: inline-block;" class="">
+                    <a style="font-size: small;" class="dropdown-toggle btn btn-secondary" aria-expanded="false" data-bs-toggle="dropdown" id="dLabel4" data-toggle="dropdown" href="#">Options</a>
+                    <ul style="font-size: small;" id="headerList4" class="color-soft dropdown-menu checkbox-menu allow-focus" role="menu" aria-labelledby="dLabel4">            
+                        <li><a class="dropdown-item" href="#" onClick="viewPDF()">View</a></li>
+                        <li><a class="dropdown-item" href="#" onClick="generatePDF2()">PDF</a></li>
+                        <li><a class="dropdown-item" href="#" id="downloadexcel">Excel</a></li>
+                    </ul>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- <button onclick="defecto();" id="default" class="btn btn-secondary" style="font-size: small;">Default</button> -->
+
+        <div id="cabeza" class="row text-white invoice mt-2 p-0 m-0">
+            
+            <!-- <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Make"  class="trsup color col py-2 th"><div onclick="sort(0,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Make')">Make</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Model" class="trsup color col py-2 th"><div onclick="sort(1,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Model')">Model</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Year" class="trsup color col py-2 th"><div onclick="sort(2,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Year')">Year</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="Chasis" class="trsup color col py-2 th"><div onclick="sort(3,'asc')" style="display: inline-block;" class=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/></svg></div><div style="display: inline-block" class="" onclick="filtrar('Chasis')">Chasis</div></div> -->
+
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="spare"  class="trsup color col py-2 th"><div style="display: inline-block" class="" >Spare</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="brand" class="trsup color col py-2 th"><div style="display: inline-block" class="" >Brand</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="price" class="trsup color col py-2 th"><div style="display: inline-block" class="" >Price</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="quantity" class="trsup color col py-2 th"><div style="display: inline-block" class="" >Quantity</div></div>
+            <div style="font-size: small; font-weight: bold;position: sticky;top: 70;" id="subtotal" class="trsup color col py-2 th"><div style="display: inline-block" class="" >Sub Total</div></div>
+            
+
+        </div>
+        <div id="cuerpo" style="font-size: small;background-color: rgb(180, 180, 180)" class="invoice p-0 m-0">
+            {% for br in cart %}
+            <div class="unique">
+                <div id="fila{{br.id}}" style="font-size: small;" class="row p-0 m-0 headEngine td">
+                    <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"> {{br.product.spare.spare_code}} </a></div>
+                    <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"> {{br.product.brand.brand}} </a></div>
+                    <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"> ${{br.product.brandPrice|stringformat:'.2f'}} </a></div>
+                    <div class="col d-flex align-items-center justify-content-center py-2"> <input min="0" step="1" style="max-width: 70px;" class="" type="number" value="{{br.quantity|stringformat:'.0f'}}"></div>
+                    <div class="col d-flex align-items-center justify-content-center py-2"><a class="text-dark" style="text-decoration: none;" href="#"> ${{br.Total|stringformat:'.2f'}} </a></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+</div>
+<div class="options my-2 container invoicecont d-flex justify-content-center">
+    <div style="font-size: small;" id="total" class="row invoice d-flex p-0 m-0">
+        <div class="col d-flex align-items-center justify-content-center py-2"></div>
+        <div class="col d-flex align-items-center justify-content-center py-2"></div>
+        <div class="col d-flex align-items-center justify-content-center py-2"></div>
+        <div class="col d-flex align-items-center justify-content-center py-2 trsup color" style="color:aliceblue;font-weight: bold;" >Total</div>
+        <div style="font-size: small;background-color: rgb(180, 180, 180)" class="col d-flex align-items-center justify-content-center py-2">${{totalTotal|stringformat:'.2f'}}</div>
+    </div>
+</div>
+
+{% endblock %}

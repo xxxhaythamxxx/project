@@ -10,6 +10,13 @@ from django.contrib.auth.models import User
 # from flask_sqlalchemy import SQLAlchemy
 
 # Create your models here.
+
+class vendor(models.Model):
+    vendorName=models.CharField(max_length=40, verbose_name="Vendor name",blank=True,null=True)
+
+    def __str__(self):
+        return '%s' %(self.vendorName)
+    
 class transmission(models.Model):
     trans=models.CharField(max_length=20, verbose_name="Transmission", blank=True,null=True)
 
@@ -27,8 +34,9 @@ class manufacturer(models.Model):
 
 class branddb(models.Model):
     brand=models.CharField(max_length=100, verbose_name="Brand",blank=True,null=True)
-    brandPrice=models.FloatField(verbose_name="Price", blank=True,null=True)
-    cantidad = models.IntegerField(verbose_name="Quantity", blank=True,null=True)
+    # brandPrice=models.FloatField(verbose_name="Price", blank=True,null=True)
+    # cantidad = models.IntegerField(verbose_name="Quantity", blank=True,null=True)
+    # vendor = models.ForeignKey(vendor,on_delete=CASCADE,verbose_name="Vendor",blank=True,null=True)
 
     class Meta:
         verbose_name_plural = "Brands"
@@ -82,12 +90,6 @@ class subcategory(models.Model):
     def __str__(self):
         return '%s' %(self.subcategory)
 
-class vendor(models.Model):
-    vendorName=models.CharField(max_length=40, verbose_name="Vendor name",blank=True,null=True)
-
-    def __str__(self):
-        return '%s' %(self.vendorName)
-
 class spare(models.Model):
     spare_code=models.CharField(max_length=40, verbose_name="Code", unique=True,blank=True,null=True)          #Ejemplo: 50013073
     spare_brand=models.ManyToManyField(branddb,blank=True,null=True)         #Ejemplo: KOLBENSCMIDT
@@ -112,6 +114,17 @@ class spare(models.Model):
 
     def __str__(self):
         return '%s %s' %(self.spare_code, self.spare_name)
+    
+class vendorSpare(models.Model):
+
+    spare = models.ForeignKey(spare,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
+    vendor = models.ForeignKey(vendor,on_delete=CASCADE,blank=True,null=True,verbose_name="Spare")
+    brand = models.ForeignKey(branddb,on_delete=CASCADE,blank=True,null=True,verbose_name="Brand")
+    brandPrice=models.FloatField(verbose_name="Price", blank=True,null=True)
+    cantidad = models.IntegerField(verbose_name="Quantity", blank=True,null=True)
+
+    def __str__(self):
+        return '%s %s' %(self.spare, self.vendor)
 
 class dimension(models.Model):
     
@@ -311,3 +324,13 @@ class tableOperacionAuxCat(models.Model):
 
     def __str__(self):
         return '%s' %(self.tabNombre)
+    
+class shopCart(models.Model):
+
+    product = models.ForeignKey(vendorSpare,on_delete=CASCADE,blank=True,null=True,verbose_name="Product")
+    quantity = models.FloatField(verbose_name="Quantity", blank=True,null=True)
+    SubTotal = models.FloatField(verbose_name="SubTotal", blank=True,null=True)
+    Total = models.FloatField(verbose_name="Total", blank=True,null=True)
+
+    def __str__(self):
+        return '%s' %(self.Total)

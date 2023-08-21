@@ -41,17 +41,107 @@
 
 <script>
 
+$(document).on("click",".shopCart",function(){
+    div = $(this)
+    val = $(this).attr("data-spare")
+    quantity = $(this).parent().parent().find("input").val()
+
+    $.ajax({
+        method: 'GET',
+        url: "/shopCartFunction",
+        data: {"val":val,"quantity":quantity},
+        success: function (data){
+
+            if(data.save){
+                div.parent().html('<div style="font-size: small;color: white;" class="btn btn-danger">Ya está en carrito</div>')
+            }
+        }
+    })
+})
+
 // $(".pagination li a").click(function(f){
 //     f.preventDefault();
 // }
 
-$(document).on("click","span",function(){
+// $(document).on("click","#openS",function(){
+function openCart(elemento,a){
+
+    const parametro = elemento.getAttribute("data-parametro")
+    const lista = $('#headerList');
+    const checkboxesMarcados = lista.find('input[type="checkbox"]').filter(':checked');
+    const cantidadMarcados = checkboxesMarcados.length;
+
+    $.ajax({
+        method: 'GET',
+        url: "/openCar",
+        data: {"parametro":parametro,"spare_id":a},
+        success: function (data){
+            
+            if(parametro == '+'){
+                elemento.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg>'
+                tabla = $("#myTable")
+                referencia = elemento.parentNode.parentNode
+                
+                
+                if(data.spareBrand.length>0){
+
+                    fila = document.createElement('td')
+                    fila.style.display = 'none';
+                    fila.style.backgroundColor = '#D2D1D0';
+                    fila.setAttribute('id',a);
+                    fila.colSpan = 7;
+
+                    for(var i=0;i<data.spareBrand.length;i++){
+
+                        div = document.createElement('div')
+                        
+                        div.classList.add('align-items-center');
+                        div.classList.add('py-3');
+                        div.classList.add('row');
+                        col1 = document.createElement('div')
+                        col1.classList.add('col-5')
+                        col1.innerHTML = data.spareBrand[i].brand__brand
+
+                        col2 = document.createElement('div')
+                        col2.classList.add('col-2')
+                        col2.innerHTML = '$ '+ data.spareBrand[i].brandPrice.toFixed(2)
+
+                        col3 = document.createElement('div')
+                        col3.classList.add('col-2')
+                        col3.innerHTML = '<input value="0" min="0" step="1" style="max-width: 70px;" class="" type="number">'
+
+                        col4 = document.createElement('div')
+                        col4.classList.add('col-3')
+                        if(data.cart[data.spareBrand[i].id]){
+                            col4.innerHTML = '<div style="font-size: small;color: white;" class="btn btn-danger">Ya está en carrito</div>'
+                        }else{
+                            col4.innerHTML = '<div data-spare="'+data.spareBrand[i].id+'" style="font-size: small;color: white;" class="btn btn-success shopCart">Añadir al carrito</div>'
+                        }
+                        
+                        div.append(col1)
+                        div.append(col2)
+                        div.append(col3)
+                        div.append(col4)
+                        fila.append(div)
+                    }
+                    referencia.insertAdjacentElement("afterend", fila);
+                    $(fila).toggle(500);
+                }
+
+            }else{
+                elemento.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg>'
+                $("#"+a).remove()
+            }
+            elemento.setAttribute("data-parametro", (parametro === "+") ? "-" : "+");
+        }
+    })
+
+}
+
+$(document).on("click","li span",function(){
 
     var pages = $("#maxRows").val()
     var textoSpan = $(this).text();
-    // var textoSpan = $(this).find("span").text();
-    // alert($(this).find("span").text())
-    // console.log(textoSpan)
 
     atributes = []
     categories = []
@@ -89,7 +179,12 @@ $(document).on("click","span",function(){
             $("#myTable").empty()
             if(data.spare.length>0){
                 for(var i=0;i<data.spare.length;i++){
+                    // alert(data.sparelist[data.spare[i].id])
                     $("#myTable").append('<tr class="dnd-moved"><tr>')
+
+                    $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><div data-parametro="+" id="openS" style="cursor: pointer;color: rgb(136,12,12);" onclick="openCart(this,'+data.spare[i].id+')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></div></td>')
+                    // $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><div data-parametro="+" id="openS" style="cursor: pointer;color: rgb(136,12,12);" onclick="'+openCart(this,data.spare[i].id)+'"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></div></td>')
+
                     if(data.spare[i].spare_code){
                         $("#myTable .dnd-moved").last().append('<td style="display: none;" class="pr-0"><a id="spareCode" href="/sparedetails/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
                     }else{
@@ -99,17 +194,33 @@ $(document).on("click","span",function(){
                     $("#myTable .dnd-moved").last().append('<td class="pr-0"><a style="color:rgb(136,12,12);" id="spareEdit" href="/editspare/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
 
                     $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    $("#myTable .dnd-moved td").last().append('<div style="font-weight: bold;" id="spareCodeInfo">'+data.spare[i].spare_code+'</div>')
                     for(var j=0;j<data.reference.length;j++){
                         if(data.spare[i].spare_code == data.reference[j].referenceSpare__spare_code){
                             $("#myTable .dnd-moved td").last().append('<div id="spareCodeInfo">'+data.reference[j].referenceCode+' '+data.reference[j].referenceNote.substr(0, 3)+'</div>')
                         }
                     }
-                    $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
-                    for(var z=0;z<data.car.length;z++){
-                        if(data.spare[i].id == data.car[z].spare){
-                            $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
-                        }
+
+                    $("#myTable .dnd-moved").last().append('<td style="min-width: 100px;max-width: 180px;" class="pr-0"></td>')
+                    if(data.sparelist[data.spare[i].id]){
+                        data.sparelist[data.spare[i].id].forEach(function(b) {
+                            if(data.enginelist[b.id].length>0){
+                                console.log(data.enginelist[b.id])
+                                $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                data.enginelist[b.id].forEach(function(c) {
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">'+c.engine_ide+' '+c.engine_l+'</div>')
+                                })
+                                
+                            }
+                            else{
+                                $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">No engines</div>')
+                            }
+                        });
                     }
+                    
                     $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
                     for(var y=0;y<data.engine.length;y++){
                         if(data.spare[i].id == data.engine[y].spare){
@@ -180,9 +291,9 @@ $(document).on("click","span",function(){
                             }
                         }
                     }
-                    if(autenticado=="True"){
-                        $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
-                    }
+                    // if(autenticado=="True"){
+                    //     $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
+                    // }
                 }
             }
 
@@ -415,6 +526,9 @@ function filtrar(a){
                 if(data.spare.length>0){
                     for(var i=0;i<data.spare.length;i++){
                         $("#myTable").append('<tr class="dnd-moved"><tr>')
+
+                        $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><div data-parametro="+" id="openS" style="cursor: pointer;color: rgb(136,12,12);" onclick="openCart(this,'+data.spare[i].id+')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></div></td>')
+
                         if(data.spare[i].spare_code){
                             $("#myTable .dnd-moved").last().append('<td style="display: none;" class="pr-0"><a id="spareCode" href="/sparedetails/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
                         }else{
@@ -424,17 +538,37 @@ function filtrar(a){
                         $("#myTable .dnd-moved").last().append('<td class="pr-0"><a style="color:rgb(136,12,12);" id="spareEdit" href="/editspare/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
 
                         $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                        $("#myTable .dnd-moved td").last().append('<div style="font-weight: bold;" id="spareCodeInfo">'+data.spare[i].spare_code+'</div>')
                         for(var j=0;j<data.reference.length;j++){
                             if(data.spare[i].spare_code == data.reference[j].referenceSpare__spare_code){
                                 $("#myTable .dnd-moved td").last().append('<div id="spareCodeInfo">'+data.reference[j].referenceCode+' '+data.reference[j].referenceNote.substr(0, 3)+'</div>')
                             }
                         }
-                        $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
-                        for(var z=0;z<data.car.length;z++){
-                            if(data.spare[i].id == data.car[z].spare){
-                                $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
-                            }
+                        $("#myTable .dnd-moved").last().append('<td style="min-width: 100px;max-width: 180px;" class="pr-0"></td>')
+                        if(data.sparelist[data.spare[i].id]){
+                            data.sparelist[data.spare[i].id].forEach(function(b) {
+                                if(data.enginelist[b.id].length>0){
+                                    console.log(data.enginelist[b.id])
+                                    $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                    data.enginelist[b.id].forEach(function(c) {
+                                        $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                        $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">'+c.engine_ide+' '+c.engine_l+'</div>')
+                                    })
+                                    
+                                }
+                                else{
+                                    $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">No engines</div>')
+                                }
+                            });
                         }
+                        // $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                        // for(var z=0;z<data.car.length;z++){
+                        //     if(data.spare[i].id == data.car[z].spare){
+                        //         $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
+                        //     }
+                        // }
                         $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
                         for(var y=0;y<data.engine.length;y++){
                             if(data.spare[i].id == data.engine[y].spare){
@@ -505,9 +639,9 @@ function filtrar(a){
                                 }
                             }
                         }
-                        if(autenticado=="True"){
-                            $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
-                        }
+                        // if(autenticado=="True"){
+                        //     $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
+                        // }
                     }
                 }
 
@@ -867,6 +1001,9 @@ $("#maxRows").on("change",function(){
             if(data.spare.length>0){
                 for(var i=0;i<data.spare.length;i++){
                     $("#myTable").append('<tr class="dnd-moved"><tr>')
+
+                    $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><div data-parametro="+" id="openS" style="cursor: pointer;color: rgb(136,12,12);" onclick="openCart(this,'+data.spare[i].id+')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></div></td>')
+
                     if(data.spare[i].spare_code){
                         $("#myTable .dnd-moved").last().append('<td style="display: none;" class="pr-0"><a id="spareCode" href="/sparedetails/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
                     }else{
@@ -876,17 +1013,37 @@ $("#maxRows").on("change",function(){
                     $("#myTable .dnd-moved").last().append('<td class="pr-0"><a style="color:rgb(136,12,12);" id="spareEdit" href="/editspare/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
 
                     $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    $("#myTable .dnd-moved td").last().append('<div style="font-weight: bold;" id="spareCodeInfo">'+data.spare[i].spare_code+'</div>')
                     for(var j=0;j<data.reference.length;j++){
                         if(data.spare[i].spare_code == data.reference[j].referenceSpare__spare_code){
                             $("#myTable .dnd-moved td").last().append('<div id="spareCodeInfo">'+data.reference[j].referenceCode+' '+data.reference[j].referenceNote.substr(0, 3)+'</div>')
                         }
                     }
-                    $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
-                    for(var z=0;z<data.car.length;z++){
-                        if(data.spare[i].id == data.car[z].spare){
-                            $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
-                        }
+                    $("#myTable .dnd-moved").last().append('<td style="min-width: 100px;max-width: 180px;" class="pr-0"></td>')
+                    if(data.sparelist[data.spare[i].id]){
+                        data.sparelist[data.spare[i].id].forEach(function(b) {
+                            if(data.enginelist[b.id].length>0){
+                                console.log(data.enginelist[b.id])
+                                $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                data.enginelist[b.id].forEach(function(c) {
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">'+c.engine_ide+' '+c.engine_l+'</div>')
+                                })
+                                
+                            }
+                            else{
+                                $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">No engines</div>')
+                            }
+                        });
                     }
+                    // $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    // for(var z=0;z<data.car.length;z++){
+                    //     if(data.spare[i].id == data.car[z].spare){
+                    //         $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
+                    //     }
+                    // }
                     $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
                     for(var y=0;y<data.engine.length;y++){
                         if(data.spare[i].id == data.engine[y].spare){
@@ -957,9 +1114,9 @@ $("#maxRows").on("change",function(){
                             }
                         }
                     }
-                    if(autenticado=="True"){
-                        $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
-                    }
+                    // if(autenticado=="True"){
+                    //     $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
+                    // }
                 }
             }
 
@@ -1191,6 +1348,9 @@ function sort(a,b){
             if(data.spare.length>0){
                 for(var i=0;i<data.spare.length;i++){
                     $("#myTable").append('<tr class="dnd-moved"><tr>')
+
+                    $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><div data-parametro="+" id="openS" style="cursor: pointer;color: rgb(136,12,12);" onclick="openCart(this,'+data.spare[i].id+')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg></div></td>')
+
                     if(data.spare[i].spare_code){
                         $("#myTable .dnd-moved").last().append('<td style="display: none;" class="pr-0"><a id="spareCode" href="/sparedetails/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
                     }else{
@@ -1200,17 +1360,37 @@ function sort(a,b){
                     $("#myTable .dnd-moved").last().append('<td class="pr-0"><a style="color:rgb(136,12,12);" id="spareEdit" href="/editspare/'+data.spare[i].id+'">'+data.spare[i].spare_code+'</a></td>')
 
                     $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    $("#myTable .dnd-moved td").last().append('<div style="font-weight: bold;" id="spareCodeInfo">'+data.spare[i].spare_code+'</div>')
                     for(var j=0;j<data.reference.length;j++){
                         if(data.spare[i].spare_code == data.reference[j].referenceSpare__spare_code){
                             $("#myTable .dnd-moved td").last().append('<div id="spareCodeInfo">'+data.reference[j].referenceCode+' '+data.reference[j].referenceNote.substr(0, 3)+'</div>')
                         }
                     }
-                    $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
-                    for(var z=0;z<data.car.length;z++){
-                        if(data.spare[i].id == data.car[z].spare){
-                            $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
-                        }
+                    $("#myTable .dnd-moved").last().append('<td style="min-width: 100px;max-width: 180px;" class="pr-0"></td>')
+                    if(data.sparelist[data.spare[i].id]){
+                        data.sparelist[data.spare[i].id].forEach(function(b) {
+                            if(data.enginelist[b.id].length>0){
+                                console.log(data.enginelist[b.id])
+                                $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                data.enginelist[b.id].forEach(function(c) {
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                    $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">'+c.engine_ide+' '+c.engine_l+'</div>')
+                                })
+                                
+                            }
+                            else{
+                                $("#myTable .dnd-moved td").last().append('<div class="row"></div>')
+                                $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-end px-0" id="spareCar">'+data.carName[b.id].substr(0, 3)+' '+b.car_model+' '+b.carfrom+' '+b.chasis+':</div>')
+                                $("#myTable .dnd-moved td div.row").last().append('<div class="col-lg-6 col-md-6 text-start px-1" id="spareEngine">No engines</div>')
+                            }
+                        });
                     }
+                    // $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
+                    // for(var z=0;z<data.car.length;z++){
+                    //     if(data.spare[i].id == data.car[z].spare){
+                    //         $("#myTable .dnd-moved td").last().append('<div id="spareCar">'+data.car[z].car_manufacturer__manufacturer.substr(0, 3)+' '+data.car[z].car_model+' '+data.car[z].carfrom+' '+data.car[z].chasis+'</div>')
+                    //     }
+                    // }
                     $("#myTable .dnd-moved").last().append('<td style="min-width: 80px;max-width: 90px;" class="pr-0"></td>')
                     for(var y=0;y<data.engine.length;y++){
                         if(data.spare[i].id == data.engine[y].spare){
@@ -1281,9 +1461,9 @@ function sort(a,b){
                             }
                         }
                     }
-                    if(autenticado=="True"){
-                        $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
-                    }
+                    // if(autenticado=="True"){
+                    //     $("#myTable .dnd-moved").last().append('<td class="check justify-content-center"><input class="check" type="checkbox" name="toAdd" value="'+data.spare[i].id+'"></td>')
+                    // }
                 }
             }
 

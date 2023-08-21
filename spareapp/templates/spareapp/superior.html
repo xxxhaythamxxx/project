@@ -19,18 +19,19 @@
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="brand" class="ml-2" type="checkbox"><label class="mx-1">Brand</label></li>
                         {% endif %}
-                        <li style="margin:auto;" class=""><input name="car" class="ml-2" type="checkbox"><label class="mx-1">Car</label></li>
+                        <li style="margin:auto;" class=""><input name="car" class="ml-2" type="checkbox"><label class="mx-1">Car/Engine</label></li>
+                        <li style="margin:auto;" class=""><input name="referenceC" class="ml-2" type="checkbox"><label class="mx-1">Code</label></li>
                         <li style="margin:auto;" class=""><input name="category" class="ml-2" type="checkbox"><label class="mx-1">Category</label></li>
                         {% if request.user.is_authenticated %}
                         <li style="margin:auto;" class=""><input name="check" class="ml-2" type="checkbox"><label class="mx-1">Check</label></li>
                         {% endif %}
-                        <li style="margin:auto;" class=""><input name="code" class="ml-2" type="checkbox"><label class="mx-1">Code</label></li>
+                        <!-- <li style="margin:auto;" class=""><input name="code" class="ml-2" type="checkbox"><label class="mx-1">Code</label></li> -->
                         <li style="margin:auto;" class=""><input name="type" class="ml-2" type="checkbox"><label class="mx-1">Description</label></li>
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="dimensions" class="ml-2" type="checkbox"><label class="mx-1">Dimensions</label></li>
                         {% endif %}
                         <li style="margin:auto;" class=""><input name="editSpare" class="ml-2" type="checkbox"><label class="mx-1">Edite</label></li>
-                        <li style="margin:auto;" class=""><input name="engine" class="ml-2" type="checkbox"><label class="mx-1">Engine</label></li>
+                        <!-- <li style="margin:auto;" class=""><input name="engine" class="ml-2" type="checkbox"><label class="mx-1">Engine</label></li> -->
                         {% if request.user.is_superuser %}
                         <li style="margin:auto;" class=""><input name="priceM" class="ml-2" type="checkbox"><label class="mx-1">Price Major</label></li>
                         <li style="margin:auto;" class=""><input name="priceD" class="ml-2" type="checkbox"><label class="mx-1">Price Detail</label></li>
@@ -39,9 +40,7 @@
                         <li style="margin:auto;" class=""><input name="ecode" class="ml-2" type="checkbox"><label class="mx-1">Engine code</label></li>
                         {% endif %}
                         <li style="margin:auto;" class=""><input name="photo" class="ml-2" type="checkbox"><label class="mx-1">Photo</label></li>
-                        {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega or request.user.profile.mayorista %}
-                        <li style="margin:auto;" class=""><input name="referenceC" class="ml-2" type="checkbox"><label class="mx-1">Reference Code</label></li>
-                        {% endif %}
+                        
                         <!-- <li style="margin:auto;text-align:center;" class=""><label class="">Shape<input name="shape" class="mx-2" type="checkbox"></label></li> -->
                         {% if request.user.profile.ventas or request.user.is_superuser or request.user.profile.bodega %}
                         <li style="margin:auto;" class=""><input name="vendor" class="ml-2" type="checkbox"><label class="mx-1">Vendor</label></li>
@@ -245,24 +244,32 @@ function generatePDF2(){
     $("#myTable tr:not([style*='display: none'])").each(function(){
         if ($(this).is(":visible")){
             $(this).find("td:not([style*='display: none']):not([class='check justify-content-center'])").each(function(){
-                if($(this).index()==1){
+                if($(this).index()==2){
                     fila.push($(this).find("a").text())
                 }else{
-                    if($(this).index()==8){
+                    if($(this).index()==9){
                         $(this).find(".row").each(function(){
                             linea.push($(this).find("#AtrName").text()+" "+$(this).find("#AtrVal").text())
                         })
                         fila.push(linea)
                         linea = []
                     }else{
-                        if($(this).index()==2 || $(this).index()==3){
+                        if($(this).index()==3){
                             $(this).find("div").each(function(){
                                 linea.push($(this).text())
                             })
                             fila.push(linea)
                             linea = []
                         }else{
-                            fila.push($(this).find("div").text())
+                            if($(this).index()==4){
+                                $(this).find(".row").each(function(){
+                                    linea.push($(this).find("#spareCar").text()+" "+$(this).find("#spareEngine").text())
+                                })
+                                fila.push(linea)
+                                linea = []
+                            }else{
+                                fila.push($(this).find("div").text())
+                            }
                         }
                     }
                 }
@@ -276,12 +283,31 @@ function generatePDF2(){
         }
     })
 
+    // var porc = 100/(tableHeaderText.length);
+    // alert(porc)
+
+    // var colum = tableHeaderText.length;
+    // var widthsArray = new
+    // Array(colum).fill('auto'); 
+
+    var colum = tableHeaderText.length; // Cantidad de columnas, puedes asignar el valor que necesites
+
+    var widthsArray = [];
+
+    var columnWidth = 100 / colum; // Calcula el ancho de cada columna en porcentaje
+
+    for (var i = 0; i < colum; i++) {
+        widthsArray.push(columnWidth + '%'); // Agrega el ancho de cada columna al array en porcentaje
+    }
+
     var docDefinition = {
         content: [
             {
             layout: 'lightHorizontalLines', // optional
             style: 'tableExample',
             table: {
+                widths: widthsArray,
+                // widths: ['33.33%', '33.33%', '33.33%'],
                 headerRows: 1,
                 body: [
                 tableHeaderText,
