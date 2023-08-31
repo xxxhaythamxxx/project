@@ -12,7 +12,7 @@
         {% csrf_token %}
         <div class="mb-3">
             <label for="cod" class="form-label">Code</label>
-            <input value="" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp" maxlength="15" required>
+            <input value="" type="text" class="form-control" name="cod" id="cod" aria-describedby="codeHelp" maxlength="15" required readonly>
         </div>
         
         <!------------------------------------ Category ------------------------------------------>
@@ -83,6 +83,38 @@
             </div>
         </div>
 
+        <!------------------------------------ Make group ------------------------------------------>
+
+        <!-- <div class="mb-3">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Make group</label>
+                    <select name="makeGroupSelect" id="makeGroupSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select make group</option>
+                        {% for sp in allMakes %}
+                        <option value="{{sp.id}}">{{sp}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div> -->
+
+        <!------------------------------------ Model group ------------------------------------------>
+
+        <!-- <div class="mb-3">
+            <div class="row">
+                <div class="col-lg-11">
+                    <label for="" class="form-label">Model group</label>
+                    <select name="modelGroupSelect" id="modelGroupSelect" class="form-select form-select-md" aria-label=".form-select-sm example">
+                        <option value="" selected>Select model group</option>
+                        {% for sp in allModels %}
+                        <option value="{{sp.car_model}}">{{sp.car_model}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div> -->
+
         <!--------------------------------- Reference Codes -------------------------------------->
 
         <div class="mb-3" id="refCodesTittle">
@@ -94,12 +126,16 @@
                             <div class="col-lg-6">
                                 <input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
+                            </div>
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                <input type="checkbox">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                        
                         <div>
                             <a style="text-decoration: none;color: rgb(136,12,12);" id="addRef" class="p-2" href="javascript:void(0);">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -324,6 +360,47 @@
 
 <script>
 
+$("#formMain").on("submit",function(a){
+
+    if($('#refCodesTittle input[type="checkbox"]:checked').length > 0 && $("#cod").val() != ""){
+        console.log("Pasa")
+    }else{
+        a.preventDefault()
+    }
+
+})
+
+$(document).ready(function(){
+    $("#refCodesTittle").on("change", "input[type='checkbox']",function(){
+        // console.log($(this).prev())
+
+        $('#refCodesTittle input:checkbox').not(this).prop('checked', false);
+
+        if ($(this).is(':checked')){
+            console.log($(this).parent().parent().find("#refcodes").val())
+            $("#cod").val($(this).parent().parent().find("#refcodes").val())
+            // alert($(this).prev())
+        }else{
+            $("#cod").val("")
+        }
+    })
+})
+
+// $(document).ready(function(){
+//     $("#refCodesTittle input:checkbox").each(function(){
+//         $(this).change(function(){
+//             alert("Cambia")
+//         })
+//     })
+// })
+
+
+// $("#refCodesTittle input:checkbox").each(function(){
+//     $(this).change(function(){
+//         alert("Cambia")
+//     })
+// })
+
 function selectBrand(a){
 
     principal = $("#brandTittle")
@@ -545,6 +622,21 @@ jQuery(document).ready(function($){
         $('#catSelect').select2();
     });
 });
+
+// Para filtrar por make group
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#makeGroupSelect').select2();
+    });
+});
+
+// Para filtrar por model group
+jQuery(document).ready(function($){
+    $(document).ready(function() {
+        $('#modelGroupSelect').select2();
+    });
+});
+
 
 // Para filtrar por brand
 // jQuery(document).ready(function($){

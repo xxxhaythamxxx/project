@@ -429,9 +429,18 @@
                             <div class="col-lg-6">
                                 <input placeholder="Add the reference code" value="{{ref.referenceCode}}" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <input placeholder="Add a note" value="{{ref.referenceNote}}" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">
                             </div>
+                            {% if ref.referenceCode == sparefind.0.spare_code %}
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                <input type="checkbox" checked>
+                            </div>
+                            {% else %}
+                            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                                <input type="checkbox">
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-lg-1 d-flex justify-content-center align-items-center">
@@ -1097,7 +1106,32 @@
 
 
 <script>
+    
+$("#formMain").on("submit",function(a){
 
+    if($('#refCodesTittle input[type="checkbox"]:checked').length > 0 && $("#cod").val() != ""){
+        console.log("Pasa")
+    }else{
+        a.preventDefault()
+    }
+
+})
+
+$(document).ready(function(){
+    $("#refCodesTittle").on("change", "input[type='checkbox']",function(){
+        // console.log($(this).prev())
+
+        $('#refCodesTittle input:checkbox').not(this).prop('checked', false);
+
+        if ($(this).is(':checked')){
+            console.log($(this).parent().parent().find("#refcodes").val())
+            $("#cod").val($(this).parent().parent().find("#refcodes").val())
+            // alert($(this).prev())
+        }else{
+            $("#cod").val("")
+        }
+    })
+})
 
 function selectBrand(a){
 

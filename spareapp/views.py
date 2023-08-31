@@ -818,7 +818,7 @@ def home(request):
     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
     allVendors=vendor.objects.all()
     ref=reference.objects.all().order_by("referenceSpare")
-    pages = 50
+    pages = 10
     numeros = []
 
     numPages = len(allSparesall.values())
@@ -924,7 +924,7 @@ def home(request):
             # from typing import List
             # alls = list(spare.objects.all().order_by("spare_name","spare_code","spare_brand").distinct())
             alls = [x for x in spare.objects.all().order_by("spare_code","id").distinct()]
-            alls = alls[:50]
+            alls = alls[:10]
 
             enginelist = {}
             for a in alls:
@@ -2022,11 +2022,13 @@ def fillspare(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
     allBrands=branddb.objects.all().order_by("brand")
+    allMakes=manufacturer.objects.all().order_by("manufacturer")
+    allModels=car.objects.values("car_model").order_by("car_model").distinct()
     cartoreg = ""
     cartopass = ""
 
     spare1 = spare()
-    dic={"allBrands":allBrands,"allSubCategories":allSubCategories,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"allModels":allModels,"allMakes":allMakes,"allBrands":allBrands,"allSubCategories":allSubCategories,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
 
@@ -2107,6 +2109,11 @@ def fillspare(request):
             for a in engList:
                 aux = engine.objects.get(id=a)
                 spare1.engine_info.add(aux)
+
+# Groups ------------------------------------------------------
+
+        print("Entra a groups")
+        print(request.POST.get)
 
 # Spare targets -----------------------------------------------
         for sp in sparrr:

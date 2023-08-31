@@ -521,8 +521,11 @@ $("#addRef").click(function(){
                 <div class="col-lg-6">\
                     <input placeholder="Add the reference code" value="" type="text" class="form-control" name="refcodes" id="refcodes" aria-describedby="refcodesHelp" maxlength="80">\
                 </div>\
-                <div class="col-lg-6">\
+                <div class="col-lg-5">\
                     <input placeholder="Add a note" value="" type="text" class="form-control" name="refcodesnote" id="refcodesnote" aria-describedby="refcodesnoteHelp" maxlength="80">\
+                </div>\
+                <div class="col-lg-1 d-flex justify-content-center align-items-center">\
+                    <input type="checkbox">\
                 </div>\
             </div>\
         </div>\
