@@ -85,7 +85,7 @@
 
         <!------------------------------------ Make group ------------------------------------------>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
             <div class="row">
                 <div class="col-lg-11">
                     <label for="" class="form-label">Make group</label>
@@ -97,11 +97,11 @@
                     </select>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!------------------------------------ Model group ------------------------------------------>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
             <div class="row">
                 <div class="col-lg-11">
                     <label for="" class="form-label">Model group</label>
@@ -113,7 +113,7 @@
                     </select>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!--------------------------------- Reference Codes -------------------------------------->
 
@@ -551,6 +551,34 @@ $("#catSelect").change(function(){
         data: {'val': val},
         success:function(data){
 
+            $("#atribute-content").empty()
+            $("#atribute-content").append('\
+            <div class="" id="refCodesTittle">\
+                <div id="atribute-content" class="row">\
+                    <div id="ref-val" class="ref-val row">\
+                        <div class="col-lg-11">\
+                            <div class="row">\
+                                <div class="col-lg-6">\
+                                    <input placeholder="Add the atribute name" value="" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                </div>\
+                                <div class="col-lg-6">\
+                                    <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\
+                                </div>\
+                            </div>\
+                        </div>\
+                        <div class="col-lg-1 d-flex justify-content-center align-items-center">\
+                            <div>\
+                                <a style="text-decoration: none;color: rgb(136,12,12);" id="atributaddRef" class="p-2" href="javascript:void(0);">\
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">\
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>\
+                                    </svg>\
+                                </a>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+            ')
             if(data.atributesSpare){
                 $("#atribute-content").empty()
                 for(let i = 0; i < data.atributesSpare.length; i++){
@@ -561,7 +589,7 @@ $("#catSelect").change(function(){
                             <div class="col-lg-11">\
                                 <div class="row">\
                                     <div class="col-lg-6">\
-                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atributeName+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atribute+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
                                     </div>\
                                     <div class="col-lg-6">\
                                         <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\
@@ -587,7 +615,7 @@ $("#catSelect").change(function(){
                             <div class="col-lg-11">\
                                 <div class="row">\
                                     <div class="col-lg-6">\
-                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atributeName+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
+                                        <input placeholder="Add the atribute name" value="'+data.atributesSpare[i].atribute+'" type="text" class="form-control" name="atributName" id="atributName" aria-describedby="atributNameHelp" maxlength="80">\
                                     </div>\
                                     <div class="col-lg-6">\
                                         <input placeholder="Add the atribute value" value="" type="text" class="form-control" name="atributVal" id="atributVal" aria-describedby="atributValHelp" maxlength="80">\

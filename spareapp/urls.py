@@ -34,6 +34,7 @@ urlpatterns = [
     path("openCar",views.openCar,name="openCar"),
     path("shopCartFunction",views.shopCartFunction,name="shopCartFunction"),
     path("cartTotal/<str:val>",views.cartTotal,name="cartTotal"),
+    path("deleteCart/<str:val>",views.deleteCart,name="deleteCart"),
     path("fillcar",views.fillcar,name="fillcar"),
     path("fillengine",views.fillengine,name="fillengine"),
     path("fillspare",views.fillspare,name="fillspare"),
@@ -180,6 +181,7 @@ urlpatterns = [
     path("subCategoria",views.subCategoria,name="subCategoria"),
     path("spareCat",views.spareCat,name="spareCat"),
     path("filltrans",views.filltrans,name="filltrans"),
+    path("updateAll",views.updateAll,name="updateAll"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

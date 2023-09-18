@@ -26,10 +26,11 @@
 <div class="migajas color-soft color-hard p-2">{{parameter}}: {{mig}} </div>
 {% endif %}
 
-    {% include "spareapp/superior.html" %}
+{% include "spareapp/superior.html" %}
 
 <form class="" method="POST" action="">
     {% include "spareapp/add.html" %}
+    {% include "spareapp/numPagesDown.html" %}
     {% csrf_token %}
 <table style="font-size: small;" id="invoice" class="invoice table-sortable draggable table-bordered">
     {% include "spareapp/tablesup.html" %}
@@ -166,6 +167,7 @@ $(document).on("click","li span",function(){
     var requestBodega = $("#requestBodega").val()
     var requestMayorista = $("#requestMayorista").val()
     var autenticado = $("#autenticado").val()
+    var search = $("#mig").val()
     var spare_code = null
     var spare_category = null    
     var pageGo = textoSpan
@@ -174,7 +176,7 @@ $(document).on("click","li span",function(){
     $.ajax({
         method: 'GET',
         url: "/sortMain2",
-        data: {"pageGo":pageGo,"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
+        data: {"search":search,"pageGo":pageGo,"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
         success: function (data){
             $("#myTable").empty()
             if(data.spare.length>0){
@@ -512,6 +514,7 @@ function filtrar(a){
         var requestBodega = $("#requestBodega").val()
         var requestMayorista = $("#requestMayorista").val()
         var autenticado = $("#autenticado").val()
+        var search = $("#mig").val()
         var spare_code = null
         var spare_category = null
         var pages = $("#maxRows").val()
@@ -519,7 +522,7 @@ function filtrar(a){
         $.ajax({
             method: 'GET',
             url: "/sortMain2",
-            data: {"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
+            data: {"search":search,"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
             success: function (data){
                 $("#myTable").empty()
                 // alert(data.spare.length)
@@ -986,6 +989,7 @@ $("#maxRows").on("change",function(){
 
     var requestVentas = $("#requestVentas").val()
     var superuser = $("#superuser").val()
+    var search = $("#mig").val()
     var requestBodega = $("#requestBodega").val()
     var requestMayorista = $("#requestMayorista").val()
     var autenticado = $("#autenticado").val()
@@ -995,7 +999,7 @@ $("#maxRows").on("change",function(){
     $.ajax({
         method: 'GET',
         url: "/sortMain2",
-        data: {"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
+        data: {"search":search,"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories},
         success: function (data){
             $("#myTable").empty()
             if(data.spare.length>0){
@@ -1335,13 +1339,14 @@ function sort(a,b){
     var requestBodega = $("#requestBodega").val()
     var requestMayorista = $("#requestMayorista").val()
     var autenticado = $("#autenticado").val()
+    var search = $("#mig").val()
     var spare_code = null
     var spare_category = null
     var pages = $("#maxRows").val()
     $.ajax({
         method: 'GET',
         url: "/sortMain2",
-        data: {"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories,"a":a,"b":b},
+        data: {"search":search,"pages":pages,"inputsId[]":inputsId,"inputs[]":inputs,"atributes[]": atributes, "categories[]":categories,"a":a,"b":b},
         success: function (data){
             $("#myTable").empty()
             // alert(data.spare.length)

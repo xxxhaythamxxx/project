@@ -14,9 +14,41 @@
             <label for="category" class="form-label">Category</label>
             <input value="{{category}}" type="text" class="form-control" name="category" id="category" aria-describedby="categoryHelp" required>
         </div>
+
+        {% if atributes %}
+        <label id="atributesTittle" for="atributes" class="form-label">Atributes</label>
+        {% endif %}
+        <div id="atributes" class="mb-3">
+            {% for a in atributes %}
+            <div style="display: flex;">
+                <input name="attr" value="{{a.atribute}}" type="text" class="form-control">
+                <a {% if forloop.first %} id="addAttr" {% else %} id="deleteAttr" {% endif %} style="text-decoration: none;color: rgb(136,12,12);" class="p-2" href="javascript:void(0);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        {% if forloop.first %}
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                        {% else %}
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                        {% endif %}
+                    </svg>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
         
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>
+
+<script>
+
+$(document).on("click","#atributes a",function(){
+    if($(this).attr("id")=="deleteAttr"){
+        $(this).parent().remove()
+    }else{
+        $("#atributes").append('<div style="display: flex;"><input name="attr" type="text" class="form-control"><a id="deleteAttr" style="text-decoration: none;color: rgb(136,12,12);" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/></svg></a></div>')
+    }
+})
+
+</script>
 
 {% endblock %}

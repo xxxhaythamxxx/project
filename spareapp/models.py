@@ -96,10 +96,8 @@ class spare(models.Model):
     spare_name=models.CharField(max_length=400, verbose_name="Description",blank=True,null=True)          #Ejemplo: Oil filter
     car_info=models.ManyToManyField(car,blank=True,null=True)
     engine_info=models.ManyToManyField(engine,blank=True,null=True)
-    # ChainedManyToManyField(
-    #     engine,
-    #     chained_field="car_info",
-    #     chained_model_field="car_engine_info",blank=True,null=True)
+    make_group=models.CharField(max_length=100, verbose_name="Make group", blank=True,null=True)
+    model_group=models.CharField(max_length=100, verbose_name="Model group", blank=True,null=True)
     spare_category = models.ForeignKey(category,on_delete=CASCADE,verbose_name="Category",blank=True,null=True)
     spare_subcategory = models.ForeignKey(subcategory,on_delete=CASCADE,verbose_name="Sub Category",blank=True,null=True)
     spare_vendor = models.ManyToManyField(vendor,verbose_name="Vendor",blank=True,null=True)
@@ -143,6 +141,14 @@ class atribute(models.Model):
 
     def __str__(self):
         return '%s %s' %(self.atributeName, self.atributeVal)
+    
+class categoryAtribute(models.Model):
+
+    category = models.ForeignKey(category,on_delete=CASCADE,blank=True,null=True,verbose_name="Category")
+    atribute = models.CharField(max_length=100,verbose_name="Atribute",blank=True,null=True)
+
+    def __str__(self):
+        return '%s %s' %(self.category,self.atribute)
 
 class reference(models.Model):
 

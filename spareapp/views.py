@@ -36,19 +36,68 @@ import locale
 # locale.setlocale(locale.LC_ALL, 'es_CR.UTF-8')
 from django.db.models import Q
 
+def updateInner():
+
+    allAtributes = atribute.objects.values("atributeSpare__spare_category__category","atributeName").order_by("atributeName").distinct()
+
+    for a in allAtributes:
+
+        if categoryAtribute.objects.filter(category__category=a["atributeSpare__spare_category__category"],atribute=a["atributeName"]):
+            pass
+        else:
+            aux = categoryAtribute()
+            aux.category=category.objects.get(category=a["atributeSpare__spare_category__category"])
+            aux.atribute=a["atributeName"]
+            aux.save()
+
+def updateAll(request):
+
+    allAtributes = atribute.objects.values("atributeSpare__spare_category__category","atributeName").order_by("atributeName").distinct()
+
+    for a in allAtributes:
+
+        if categoryAtribute.objects.filter(category__category=a["atributeSpare__spare_category__category"],atribute=a["atributeName"]):
+            pass
+        else:
+            aux = categoryAtribute()
+            aux.category=category.objects.get(category=a["atributeSpare__spare_category__category"])
+            aux.atribute=a["atributeName"]
+            aux.save()
+
+    return render(request,"spareapp/filldb.html")
+
 def cartTotal(request,val):
 
     print(val)
     cart = shopCart.objects.all().order_by("product")
     totalTotal = 0
+    allReferences = reference.objects.all().order_by("referenceCode")
 
     # print(cart)
 
     for a in cart:
-        print(a.product)
         totalTotal = float(totalTotal) + float(a.Total)
 
-    dic = {"cart":cart,"totalTotal":totalTotal}
+    dic = {"allReferences":allReferences,"cart":cart,"totalTotal":totalTotal}
+
+    return render(request,"spareapp/cartTotal.html",dic)
+
+def deleteCart(request,val):
+
+    print(val)
+
+    if shopCart.objects.filter(id=val):
+        aux = shopCart.objects.get(id=val)
+        aux.delete()
+
+    cart = shopCart.objects.all().order_by("product")
+    totalTotal = 0
+    allReferences = reference.objects.all().order_by("referenceCode")
+
+    for a in cart:
+        totalTotal = float(totalTotal) + float(a.Total)
+
+    dic = {"allReferences":allReferences,"cart":cart,"totalTotal":totalTotal}
 
     return render(request,"spareapp/cartTotal.html",dic)
 
@@ -380,7 +429,53 @@ def sortMain2(request):
 
     pageGo = request.GET.get("pageGo")
 
-    mig = request.GET.get("mig")
+    asp = spare.objects.all().order_by("spare_code")
+    asp2 = spare.objects.all().order_by("spare_code")
+    aspAux = spare.objects.none()
+    aspExclude = spare.objects.none()
+    abandMenos = False
+    valor=request.GET.get("search")
+    abandMenos = False
+    bol = False
+    if valor:
+        # if valor=="":
+        #     return render(request,"spareapp/home.html",dic)
+        # else:
+        vec = valor.split(" ")
+        asp = spare.objects.all().order_by("spare_code")
+        asp2 = spare.objects.all().order_by("spare_code")
+        aspExclude = spare.objects.none()
+        for a in vec:
+            if a[0]=="-":
+                abandMenos = True
+                a=a.split("-")[1]
+                aspExclude = aspExclude | spare.objects.filter(Q(spare_code__icontains=a) | Q(spare_brand__brand__icontains=a) | Q(spare_name__icontains=a) | Q(car_info__car_manufacturer__manufacturer__icontains=a)  | Q(car_info__carfrom__icontains=a) | Q(car_info__car_model__icontains=a) | Q(car_info__chasis__icontains=a) | Q(engine_info__engine_l__icontains=a) | Q(engine_info__engine_ide__icontains=a) | Q(spare_category__category__icontains=a) | Q(reference__referenceCode__icontains=a))
+                asp2 = asp2.distinct() & aspExclude.distinct()
+            else:
+                aspAux = aspAux | spare.objects.filter(Q(spare_code__icontains=a) | Q(spare_brand__brand__icontains=a) | Q(spare_name__icontains=a) | Q(car_info__car_manufacturer__manufacturer__icontains=a)  | Q(car_info__carfrom__icontains=a) | Q(car_info__car_model__icontains=a) | Q(car_info__chasis__icontains=a) | Q(engine_info__engine_l__icontains=a) | Q(engine_info__engine_ide__icontains=a) | Q(spare_category__category__icontains=a) | Q(reference__referenceCode__icontains=a))
+                asp = asp.distinct() & aspAux.distinct()
+            aspAux = spare.objects.none()
+        asp2 = aspExclude.distinct()
+        if abandMenos:
+            asp = asp.difference(asp2)
+        # print("asp")
+        # print(asp)
+
+        # numeros = []
+        # pages = 10
+
+        # cantPages = len(sp.values()) / int(pages)
+        # cantPages = math.ceil(cantPages)
+        # numero_actual = 1
+
+        # while numero_actual <= cantPages:
+        #     numeros.append(numero_actual)
+        #     numero_actual += 1
+
+        # actual = 1
+
+            # sp = sp[:10]
+
     a = request.GET.get("a")
     b = request.GET.get("b")
     referenceAux = reference.objects.values("referenceSpare__spare_code","referenceCode","referenceNote").order_by("referenceCode")
@@ -392,35 +487,36 @@ def sortMain2(request):
     atributesAux = atribute.objects.values("atributeSpare","atributeName","atributeVal").all().order_by("atributeName")
     dimensionsAux = dimension.objects.values("dimensionSpare","atributeName","atributeVal").all().order_by("atributeName")
 
-    sp = spare.objects.all().order_by("spare_code")
-    sp2 = spare.objects.all().order_by("spare_code")
-    spAux = spare.objects.none()
-    spExclude = spare.objects.none()
-    bandMenos = False
+    # sp = spare.objects.all().order_by("spare_code")
+    # sp2 = spare.objects.all().order_by("spare_code")
+    # spAux = spare.objects.none()
+    # spExclude = spare.objects.none()
+    # bandMenos = False
 
-    if mig:
-        valor=mig
-        bandMenos = False
-        if valor:
-            if valor=="":
-                pass
-            else:
-                vec = valor.split(" ")
-                sp = spare.objects.all().order_by("spare_code")
-                sp2 = spare.objects.all().order_by("spare_code")
-                for x in vec:
-                    if x[0]=="-":
-                        bandMenos = True
-                        x=x.split("-")[1]
-                        spExclude = spExclude | spare.objects.filter(spare_code__icontains=x) | spare.objects.filter(spare_brand__brand__icontains=x) | spare.objects.filter(spare_name__icontains=x) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=x) | spare.objects.filter(car_info__car_model__icontains=x) | spare.objects.filter(car_info__chasis__icontains=x) | spare.objects.filter(engine_info__engine_l__icontains=x) | spare.objects.filter(engine_info__engine_ide__icontains=x) | spare.objects.filter(spare_category__category__icontains=x)
-                        sp2 = sp2.distinct() & spExclude.distinct()
-                    else:
-                        spAux = spAux | spare.objects.filter(spare_code__icontains=x) | spare.objects.filter(spare_brand__brand__icontains=x) | spare.objects.filter(spare_name__icontains=x) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=x) | spare.objects.filter(car_info__car_model__icontains=x) | spare.objects.filter(car_info__chasis__icontains=x) | spare.objects.filter(engine_info__engine_l__icontains=x) | spare.objects.filter(engine_info__engine_ide__icontains=x) | spare.objects.filter(spare_category__category__icontains=x)
-                        sp = sp.distinct() & spAux.distinct()
-                    spAux = spare.objects.none()
-                    spExclude = spare.objects.none()
-                if bandMenos:
-                    sp = sp.difference(sp2)
+    # mig = request.GET.get("mig")
+    # if mig:
+    #     valor=mig
+    #     bandMenos = False
+    #     if valor:
+    #         if valor=="":
+    #             pass
+    #         else:
+    #             vec = valor.split(" ")
+    #             sp = spare.objects.all().order_by("spare_code")
+    #             sp2 = spare.objects.all().order_by("spare_code")
+    #             for x in vec:
+    #                 if x[0]=="-":
+    #                     bandMenos = True
+    #                     x=x.split("-")[1]
+    #                     spExclude = spExclude | spare.objects.filter(spare_code__icontains=x) | spare.objects.filter(spare_brand__brand__icontains=x) | spare.objects.filter(spare_name__icontains=x) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=x) | spare.objects.filter(car_info__car_model__icontains=x) | spare.objects.filter(car_info__chasis__icontains=x) | spare.objects.filter(engine_info__engine_l__icontains=x) | spare.objects.filter(engine_info__engine_ide__icontains=x) | spare.objects.filter(spare_category__category__icontains=x)
+    #                     sp2 = sp2.distinct() & spExclude.distinct()
+    #                 else:
+    #                     spAux = spAux | spare.objects.filter(spare_code__icontains=x) | spare.objects.filter(spare_brand__brand__icontains=x) | spare.objects.filter(spare_name__icontains=x) | spare.objects.filter(car_info__car_manufacturer__manufacturer__icontains=x) | spare.objects.filter(car_info__car_model__icontains=x) | spare.objects.filter(car_info__chasis__icontains=x) | spare.objects.filter(engine_info__engine_l__icontains=x) | spare.objects.filter(engine_info__engine_ide__icontains=x) | spare.objects.filter(spare_category__category__icontains=x)
+    #                     sp = sp.distinct() & spAux.distinct()
+    #                 spAux = spare.objects.none()
+    #                 spExclude = spare.objects.none()
+    #             if bandMenos:
+    #                 sp = sp.difference(sp2)
 
     if a=="1":
         # print("code")
@@ -567,10 +663,18 @@ def sortMain2(request):
 
     print("Despues de revisar los inputs de cada cabecera")
 
-    if bandMenos:
-        spareAux =  sp & spareAux.distinct()
-    else:
-        spareAux =  sp.distinct() & spareAux.distinct()
+    print("Despues de revisar si hay search")
+
+    if request.GET.get("search"):
+        if abandMenos:
+            spareAux = asp & spareAux
+        else:
+            spareAux = asp & spareAux.distinct()
+
+    # if bandMenos:
+    #     spareAux =  sp & spareAux.distinct()
+    # else:
+    #     spareAux =  sp.distinct() & spareAux.distinct()
 
     pages = request.GET.get("pages")
 
@@ -786,7 +890,7 @@ def selectf(request):
                         sp = sp.difference(sp2)
 
                     numeros = []
-                    pages = 50
+                    pages = 10
 
                     cantPages = len(sp.values()) / int(pages)
                     cantPages = math.ceil(cantPages)
@@ -797,8 +901,19 @@ def selectf(request):
                         numero_actual += 1
 
                     actual = 1
+
+                    sp = sp[:10]
+
+                    enginelist = {}
+                    for a in sp:
+                        for b in a.car_info.all():
+                            enginelist[b] = []
+                            aux = engine.objects.filter(car_engine_info__id=b.id)
+                            if aux:
+                                for c in aux:
+                                    enginelist[b].append(c)
                     
-                    dic.update({"numeros":numeros,"actual":actual,"spare":sp,"mig":valor,"parameter":"Parameters"})
+                    dic.update({"enginelist":enginelist,"numeros":numeros,"actual":actual,"spare":sp,"mig":valor,"parameter":"Parameters"})
                     return render(request,"spareapp/home.html",dic)
             else:
                 return False
@@ -1649,6 +1764,24 @@ def fillcar(request):
 
             car1.save()
 
+            make_groupAux = spare.objects.filter(make_group=car1.car_manufacturer)
+            finalAux = None
+
+            if make_groupAux:
+                if make_groupAux.filter(model_group=car1.car_model):
+                    make_groupAux.filter(model_group=car1.car_model)
+                    finalAux = spare.objects.filter(make_group=car1.car_manufacturer,model_group=car1.car_model).distinct()
+                    for a in finalAux:
+                        cada = spare.objects.get(id=a.id)
+                        if cada:
+                            cada.car_info.add(car1)
+                else:
+                    finalAux = spare.objects.filter(make_group=car1.car_manufacturer,model_group=None).distinct()
+                    for a in finalAux:
+                        cada = spare.objects.get(id=a.id)
+                        if cada:
+                            cada.car_info.add(car1)
+
         if request.POST.get("id") == "secondForm":
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
@@ -1725,6 +1858,24 @@ def editcar(request,val):
                 car1.chasis=""
         
         car1.save()
+
+        make_groupAux = spare.objects.filter(make_group=car1.car_manufacturer)
+        finalAux = None
+
+        if make_groupAux:
+            if make_groupAux.filter(model_group=car1.car_model):
+                make_groupAux.filter(model_group=car1.car_model)
+                finalAux = spare.objects.filter(make_group=car1.car_manufacturer,model_group=car1.car_model).distinct()
+                for a in finalAux:
+                    cada = spare.objects.get(id=a.id)
+                    if cada:
+                        cada.car_info.add(car1)
+            else:
+                finalAux = spare.objects.filter(make_group=car1.car_manufacturer,model_group=None).distinct()
+                for a in finalAux:
+                    cada = spare.objects.get(id=a.id)
+                    if cada:
+                        cada.car_info.add(car1)
 
         # spAux = car.objects.filter(id=val)
 
@@ -2065,7 +2216,48 @@ def fillspare(request):
         else:
             spare1.spare_category = None
 
+        # Groups ------------------------------------------------------
+
+        spare1.make_group = None
+        if request.POST.get("makeGroupSelect"):
+            makeGroupAux = manufacturer.objects.get(id=request.POST.get("makeGroupSelect"))
+            spare1.make_group = makeGroupAux.manufacturer
+
+        spare1.model_group = None
+        if request.POST.get("modelGroupSelect"):
+            spare1.model_group = request.POST.get("modelGroupSelect")
+
         spare1.save()
+
+# Agregar makeGroup y modelGroup -----------------------------------
+
+        if request.POST.get("makeGroupSelect"):
+
+            if request.POST.get("modelGroupSelect"):
+
+                groupAux = car.objects.filter(car_manufacturer__id=request.POST.get("makeGroupSelect"),car_model=request.POST.get("modelGroupSelect"))
+                if groupAux:
+                    for aux in groupAux:
+                        auxCar = car.objects.get(id=aux.id)
+                        spare1.car_info.add(auxCar)
+
+            else:
+
+                groupAux = car.objects.filter(car_manufacturer__id=request.POST.get("makeGroupSelect"))
+                if groupAux:
+                    for aux in groupAux:
+                        auxCar = car.objects.get(id=aux.id)
+                        spare1.car_info.add(auxCar)
+
+        # print("Prueba")
+        # print(spare1.car_info)
+
+        # if request.POST.get("makeGroupSelect"):
+        #     makeGroupAux = manufacturer.objects.get(id=request.POST.get("makeGroupSelect"))
+        #     makeCarAux = car.objects.filter(car_manufacturer=makeGroupAux)
+        #     if makeCarAux:
+        #         for make in makeCarAux:
+        #             carAdd = car.objects.get(id=make.id)
 
 # Car info ----------------------------------------------------
 
@@ -2109,11 +2301,6 @@ def fillspare(request):
             for a in engList:
                 aux = engine.objects.get(id=a)
                 spare1.engine_info.add(aux)
-
-# Groups ------------------------------------------------------
-
-        print("Entra a groups")
-        print(request.POST.get)
 
 # Spare targets -----------------------------------------------
         for sp in sparrr:
@@ -2164,6 +2351,8 @@ def fillspare(request):
                 atribute1.save()
             i = i + 1
 
+        updateInner()
+
 # Dimensions ------------------------------------------------------
 
         dimName = request.POST.getlist("dimensName")
@@ -2182,6 +2371,12 @@ def fillspare(request):
                 dimension1.atributeVal = dimVal[i]
                 dimension1.save()
             i = i + 1
+
+# Add makegroups and modelgroups ---------------------------------
+
+        # if request.POST.get("makeGroupSelect"):
+
+        # if request.POST.get("modelGroupSelect")
 
 # Brands ---------------------------------------------------------
 
@@ -2258,28 +2453,13 @@ def spareCat(request):
     atributesSpare = None
 
     val = request.GET.get("val")
-    # print(val)
-    atAux = atribute.objects.values("atributeName").filter(atributeSpare__spare_category__category=val).distinct()
-    print(atAux)
-    # print(atAux)
-    # catAux = subcategory.objects.filter(category__category=val)
+
+    atAux = categoryAtribute.objects.filter(category__category=val).order_by("category","atribute")
+
     if atAux:
-        print("Hay atributos")
-        atributesSpare = list(atAux)
-        # atributesSpare = list(atAux.values())
+        atributesSpare = list(atAux.values())
     else:
         print("No hay nada")
-
-    print(atributesSpare)
-
-    # if request.GET.get("fecha") == "change":
-
-    #     creado = request.GET.get("creado")
-    #     creadoAux = datetime.strptime(creado,"%Y-%m-%d")
-    #     deadlineDefault=(creadoAux+timedelta(days=30)).date()
-    #     actualAux=str(deadlineDefault.year)+"-"+str('%02d' % deadlineDefault.month)+"-"+str('%02d' % deadlineDefault.day)
-
-    #     actual = actualAux
 
     return JsonResponse({'cat':val,'atributesSpare':atributesSpare})
 
@@ -2301,6 +2481,18 @@ def fillcategoryadmin(request):
             cat = category()
             cat.category = catAux
             cat.save()
+
+        attr = request.POST.getlist("attr")
+        aux = categoryAtribute.objects.filter(category__category=request.POST.get("category")).order_by("category","atribute")
+        if aux:
+            for a in aux:
+                a.delete()
+        for a in attr:
+            if a.strip() != "":
+                aux=categoryAtribute()
+                aux.category = category.objects.get(category=request.POST.get("category"))
+                aux.atribute = a
+                aux.save()
 
         for ty in allCategories:
 
@@ -2383,14 +2575,27 @@ def editecategory(request,val):
 
     catAux = category.objects.get(id=val)
     allCategories = category.objects.all().order_by("category")
+    auxAtributes = categoryAtribute.objects.filter(category__id=val).order_by("atribute")
+
     deleteAux = {}
-    dic = {"category":catAux}
+    dic = {"category":catAux,"atributes":auxAtributes}
 
     if request.method == "POST":
 
         cat = request.POST.get("category")
         catAux.category = cat
         catAux.save()
+        attr = request.POST.getlist("attr")
+        aux = categoryAtribute.objects.filter(category__category=cat).order_by("category","atribute")
+        if aux:
+            for a in aux:
+                a.delete()
+        for a in attr:
+            if a.strip() != "":
+                aux=categoryAtribute()
+                aux.category = category.objects.get(category=request.POST.get("category"))
+                aux.atribute = a
+                aux.save()
 
         for ty in allCategories:
 
@@ -2654,6 +2859,8 @@ def editspare(request,val):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
     brandSpare=vendorSpare.objects.filter(spare__id=val)
+    allMakes=manufacturer.objects.all().order_by("manufacturer")
+    allModels=car.objects.values("car_model").order_by("car_model").distinct()
 
     refAux = reference.objects.filter(referenceSpare__id=val)
 
@@ -2677,7 +2884,7 @@ def editspare(request,val):
     auxAtributes = atribute.objects.filter(atributeSpare__id = val)
     auxDimensions = dimension.objects.filter(dimensionSpare__id = val)
 
-    dic={"brandSpare":brandSpare,"allBrands":allBrands,"sparelist":sparelist,"allSubCategories":allSubCategories,"auxDimensions":auxDimensions,"auxAtributes":auxAtributes,"auxVendor":auxVendor,"auxEnegine":auxEnegine,"auxCar":auxCar,"refAux":refAux,"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+    dic={"allModels":allModels,"allMakes":allMakes,"brandSpare":brandSpare,"allBrands":allBrands,"sparelist":sparelist,"allSubCategories":allSubCategories,"auxDimensions":auxDimensions,"auxAtributes":auxAtributes,"auxVendor":auxVendor,"auxEnegine":auxEnegine,"auxCar":auxCar,"refAux":refAux,"val":val,"sparefind":sparefind,"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
     if request.method == "POST":
         
@@ -2722,6 +2929,17 @@ def editspare(request,val):
             spare1.spare_category = manuAux
         else:
             spare1.spare_category = None
+
+        # Groups ------------------------------------------------------
+
+        spare1.make_group = None
+        if request.POST.get("makeGroupSelect"):
+            makeGroupAux = manufacturer.objects.get(id=request.POST.get("makeGroupSelect"))
+            spare1.make_group = makeGroupAux.manufacturer
+
+        spare1.model_group = None
+        if request.POST.get("modelGroupSelect"):
+            spare1.model_group = request.POST.get("modelGroupSelect")
 
         # Prices ------------------------------------------------------
 
@@ -2780,6 +2998,29 @@ def editspare(request,val):
             for a in engList:
                 aux = engine.objects.get(id=a)
                 spare1.engine_info.add(aux)
+
+        # Agregar makeGroup y modelGroup -----------------------------------
+
+        if request.POST.get("makeGroupSelect"):
+
+            if request.POST.get("modelGroupSelect"):
+
+                groupAux = car.objects.filter(car_manufacturer__id=request.POST.get("makeGroupSelect"),car_model=request.POST.get("modelGroupSelect"))
+                if groupAux:
+                    for aux in groupAux:
+                        auxCar = car.objects.get(id=aux.id)
+                        spare1.car_info.add(auxCar)
+
+            else:
+
+                groupAux = car.objects.filter(car_manufacturer__id=request.POST.get("makeGroupSelect"))
+                if groupAux:
+                    for aux in groupAux:
+                        auxCar = car.objects.get(id=aux.id)
+                        if spare.objects.filter(car_info=auxCar):
+                            pass
+                        else:
+                            spare1.car_info.add(auxCar)
 
         # Spare targets -----------------------------------------------
 
@@ -2863,6 +3104,8 @@ def editspare(request,val):
                 atribute1.atributeVal = atrtVal[i]
                 atribute1.save()
             i = i + 1
+
+        updateInner()
 
         # Dimensions ------------------------------------------------------
 
@@ -3093,10 +3336,7 @@ def fillcategory(request):
     ref=reference.objects.all().order_by("referenceSpare")
     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    # print(request.POST)
     category1 = category()
-    # print("categor")
-    # print(request.POST.get("categor"))
     category1.category = request.POST.get("categor")
     category1.save()
 
