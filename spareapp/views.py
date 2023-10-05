@@ -632,6 +632,19 @@ def sortMain2(request):
             spareAux = spareAux.distinct() & spare.objects.filter(spare_code__icontains=request.GET.getlist("inputs[]")[i]).distinct()
         if a=="inputreferenceC":
             # print("Entra en inputreferenceC")
+
+            # palabras = request.GET.getlist("inputs[]")[i].split()  # Separar la frase en palabras
+    
+            # # # Construir una lista de objetos Q para cada palabra en la frase
+            # queries = [Q(reference__referenceCode__icontains=palabra) | Q(reference__referenceNote__icontains=palabra) | Q(spare_code__icontains=palabra) for palabra in palabras]
+            
+            # # # Combinar las consultas utilizando el operador OR
+            # query_completa = queries.pop()
+            # for query in queries:
+            #     query_completa &= query
+            
+            # # # Realizar la consulta a la base de datos
+            # spareAux = spare.objects.filter(query_completa)
             spareAux = spareAux.distinct() & (spare.objects.filter(reference__referenceCode__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(reference__referenceNote__icontains=request.GET.getlist("inputs[]")[i]).distinct() | spare.objects.filter(spare_code__icontains=request.GET.getlist("inputs[]")[i]).distinct())
         if a=="inputcar":
             # print("Entra en inputcar")
@@ -1790,6 +1803,84 @@ def fillcar(request):
     else:
         return render(request,"spareapp/fillcar.html",dic)
 
+def fillmake(request):
+
+    allMake = manufacturer.objects.all().order_by("manufacturer")
+    deleteAux = {}
+
+    if request.method == "POST":
+
+        catAux = request.POST.get("category")
+
+        if manufacturer.objects.filter(manufacturer=catAux):
+
+            pass
+
+        else:
+
+            cat = manufacturer()
+            cat.manufacturer = catAux
+            cat.save()
+
+        for ty in allMake:
+
+            catAux = car.objects.filter(car_manufacturer=ty)
+            if catAux:
+                deleteAux[ty.id] = "on"
+            else:
+                deleteAux[ty.id] = "off"
+
+        dic = {"deleteAux":deleteAux,"allMake":allMake}
+
+        if request.POST.get("otro"):
+
+            return render(request,"spareapp/fillmake.html")
+
+        else:
+
+            return render(request,"spareapp/listmake.html",dic)
+    
+    return render(request,"spareapp/fillmake.html")
+
+def fillvendor(request):
+
+    allVendor = vendor.objects.all().order_by("vendorName")
+    deleteAux = {}
+
+    if request.method == "POST":
+
+        catAux = request.POST.get("category")
+
+        if vendor.objects.filter(vendorName=catAux):
+
+            pass
+
+        else:
+
+            cat = vendor()
+            cat.vendorName = catAux
+            cat.save()
+
+        for ty in allVendor:
+
+            catAux = vendorSpare.objects.filter(vendor=ty)
+            if catAux:
+                deleteAux[ty.id] = "on"
+            else:
+                deleteAux[ty.id] = "off"
+
+        dic = {"deleteAux":deleteAux,"allVendor":allVendor}
+
+        if request.POST.get("otro"):
+
+            return render(request,"spareapp/fillvendor.html")
+
+        else:
+
+            return render(request,"spareapp/listvendor.html",dic)
+    
+    return render(request,"spareapp/fillvendor.html")
+
 def editcar(request,val):
     
     allCars=car.objects.all().order_by("car_manufacturer")
@@ -2571,6 +2662,24 @@ def listmake(request):
 
     return render(request,"spareapp/listmake.html",dic)
 
+def listvendor(request):
+
+    allVendor = vendor.objects.all().order_by("vendorName")
+
+    deleteAux = {}
+
+    for ty in allVendor:
+
+        catAux = vendorSpare.objects.filter(vendor=ty)
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"deleteAux":deleteAux,"allVendor":allVendor}
+
+    return render(request,"spareapp/listvendor.html",dic)
+
 def editecategory(request,val):
 
     catAux = category.objects.get(id=val)
@@ -2700,9 +2809,28 @@ def deletemake(request,val):
         else:
             deleteAux[ty.id] = "off"
 
-    dic = {"deleteAux":deleteAux,"allMakes":allMakes}
+    dic = {"deleteAux":deleteAux,"allMake":allMakes}
 
     return render(request,"spareapp/listmake.html",dic)
+
+def deletevendor(request,val):
+
+    delete = vendor.objects.get(id=val)
+    delete.delete()
+    allVendor = vendor.objects.all().order_by("vendorName")
+    deleteAux = {}
+
+    for ty in allVendor:
+
+        catAux = vendorSpare.objects.filter(vendor=ty)
+        if catAux:
+            deleteAux[ty.id] = "on"
+        else:
+            deleteAux[ty.id] = "off"
+
+    dic = {"deleteAux":deleteAux,"allVendor":allVendor}
+
+    return render(request,"spareapp/listvendor.html",dic)
 
 # REVISAR
 def deletebrand(request,val):
@@ -3344,33 +3472,33 @@ def fillcategory(request):
 
     return render(request,"spareapp/fillspare.html",dic)
 
-def fillvendor(request):
+# def fillvendor(request):
 
-    dim=dimension.objects.values("atributeName").distinct()
-    dim2=dimension.objects.all()
-    atr=atribute.objects.values("atributeName").distinct()
-    atr2=atribute.objects.all()
-    allSparesall=spare.objects.all()
-    allCategories=category.objects.all().order_by("category")
-    allEngines=engine.objects.all()
-    onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
-    allCars=car.objects.all()
-    allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
-    allVendors=vendor.objects.all()
-    ref=reference.objects.all().order_by("referenceSpare")
-    ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
+#     dim=dimension.objects.values("atributeName").distinct()
+#     dim2=dimension.objects.all()
+#     atr=atribute.objects.values("atributeName").distinct()
+#     atr2=atribute.objects.all()
+#     allSparesall=spare.objects.all()
+#     allCategories=category.objects.all().order_by("category")
+#     allEngines=engine.objects.all()
+#     onlyManufCars=car.objects.all().values("car_manufacturer").order_by("car_manufacturer").distinct()
+#     allCars=car.objects.all()
+#     allSpares=spare.objects.values("spare_name","spare_category").order_by("spare_name").distinct()
+#     allVendors=vendor.objects.all()
+#     ref=reference.objects.all().order_by("referenceSpare")
+#     ref2=reference.objects.values("referenceSpare").order_by("referenceSpare").distinct()
 
-    # print(request.POST.get("vendo"))
-    vendor1 = vendor()    
-    vendor1.vendorName = request.POST.get("vendo")
-    vendor1.save()
-    # category1 = category()
-    # category1.category = request.POST.get("categor")
-    # category1.save()
+#     # print(request.POST.get("vendo"))
+#     vendor1 = vendor()    
+#     vendor1.vendorName = request.POST.get("vendo")
+#     vendor1.save()
+#     # category1 = category()
+#     # category1.category = request.POST.get("categor")
+#     # category1.save()
 
-    dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
+#     dic={"refSpare":ref2,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
-    return render(request,"spareapp/fillspare.html",dic)
+#     return render(request,"spareapp/fillvendor.html",dic)
 
 def importCar(request):
     
@@ -15818,6 +15946,7 @@ def cargarDb(request):
 
 import json
 from django.contrib.auth.models import Permission
+from django.contrib.auth.models import ContentType
 
 def contCargarDb(request):
 
@@ -15828,6 +15957,8 @@ def contCargarDb(request):
 
     if request.method == "POST":
 
+        # vendorspareDelete = vendorSpare.objects.all()
+        contentTypeDelete = ContentType.objects.all()
         permisos = Permission.objects.all()
         facturasDelete = factura.objects.all()
         factTypeDelete = factType.objects.all()
@@ -15835,6 +15966,10 @@ def contCargarDb(request):
         spareDelete = spare.objects.all()
 
         if request.FILES.get("cargar"):
+
+            for fac in contentTypeDelete:
+
+                fac.delete()
 
             for fac in permisos:
 

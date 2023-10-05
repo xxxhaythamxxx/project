@@ -21,16 +21,16 @@
 
             {% if reference %}
             <td style="min-width: 80px;max-width: 90px;" class="pr-0">
-                <div id="spareCodeInfo" style="font-weight: bold;">{{br.spare_code}}</div>
+                <div class="spareCodeInfo" id="spareCodeInfo" style="font-weight: bold;">{{br.spare_code}}</div>
                 {% for dim in reference %}
                     {% if br.spare_code == dim.referenceSpare.spare_code %}
-                    <div id="spareCodeInfo">{{dim.referenceCode}} {{dim.referenceNote|slice:"0:3"}}</div>
+                    <div class="spareCodeInfo" id="spareCodeInfo">{{dim.referenceCode}} {{dim.referenceNote|slice:"0:3"}}</div>
                     {% endif %}
                 {% endfor %}
             </td>
             {% else %}
                 <td style="min-width: 80px;max-width: 90px;" class="pr-0">
-                    <div id="spareCodeInfo">{{br.spare_code}}</div>
+                    <div class="spareCodeInfo" id="spareCodeInfo">{{br.spare_code}}</div>
                 </td>
             {% endif %}
 

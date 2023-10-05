@@ -676,6 +676,7 @@ document.getElementById("default").addEventListener("click",function(){
 })
 // boton para exportar a Excel -------------------------------------------------------------------------------------
 document.getElementById("downloadexcel").addEventListener("click",function(){
+    alert("Exporta")
     $("#check").hide();
     $("table td:nth-child("+($("#check").index() + 1)+")").hide();
     $("#photo").hide();
