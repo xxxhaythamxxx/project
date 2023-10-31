@@ -5835,9 +5835,17 @@ def contToCollect(request):
 
     for fac in allFacturesPay:
 
-        acum = acum + fac.monto
-        acum2 = acum2 + fac.total
-        iva = iva + fac.iva
+        if fac.nc == False:
+
+            acum = acum + fac.monto
+            acum2 = acum2 + fac.total
+            iva = iva + fac.iva
+
+        else:
+
+            acum = acum - fac.monto
+            acum2 = acum2 - fac.total
+            iva = iva + fac.iva
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True).order_by("fechaCreado","id")
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True).order_by("fechaCreado","id")
@@ -16842,9 +16850,17 @@ def filterToCollect(request):
         deadlineDic.append(deadline.days)
         dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
 
-        acum = acum + fac.monto
-        acum2 = acum2 + fac.total
-        acumIva = acumIva + fac.iva
+        if fac.nc == False:
+
+            acum = acum + fac.monto
+            acum2 = acum2 + fac.total
+            acumIva = acumIva + fac.iva
+
+        else:
+
+            acum = acum - fac.monto
+            acum2 = acum2 - fac.total
+            acumIva = acumIva + fac.iva
 
     return JsonResponse({'dayFromQuery':dayFromQuery,'dayToQuery':dayToQuery,'dayFrom':dayFrom,"dayTo":dayTo,'acumIva':acumIva,'dateDic':dateDic,'deadlineDic':deadlineDic,'allFacturesQuery':allFacturesQuery,'allPersonasQuery':allPersonasQuery,'allCategorysQuery':allCategorysQuery,"acum":acum,"acum2":acum2})
 
