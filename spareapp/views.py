@@ -7661,6 +7661,7 @@ def contByRange(request):
             custAcum = abs(custAcum)
 
             lista = tableOperacion.objects.all().values("tabNombre","suma","resta").distinct()
+            
             for nom in lista:
 
                 prob = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],tabTipo__nombre=ty,suma=nom["suma"],resta=nom["resta"])
@@ -7687,26 +7688,18 @@ def contByRange(request):
         # ------- Termina recorrido largo -----------------
            
         cantAuxOp = tableOperacion.objects.all().values("tabNombre","principal","suma").order_by("tabNombre").distinct()
-
         realAcum = 0
 
         for nom in cantAuxOp:
-
-            aux1 = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date__gte=dateFrom,fecha__date__lte=dateTo).all()
-            print(aux1)
-            print("...")
-            # print(aux1[0])
+            aux1 = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date__gte=dateFrom,fecha__date__lte=dateTo)
             for a in aux1:
                 print("Tipo: "+str(a.tabTipo)+" Total: "+str(a.tabTotal))
-            # print(aux1["tabNombre"])
             totalcito = aux1.aggregate(Sum("tabTotal"))
-            print("Total: "+str(totalcito["tabTotal__sum"]))
-            print(totalcito["tabTotal__sum"])
-            if nom["suma"]:
-                totalParcialOp[nom["tabNombre"]] = totalcito["tabTotal__sum"]
-            else:
-                totalParcialOp[nom["tabNombre"]] = totalcito["tabTotal__sum"]*(-1)
-            print("-------------------------------------------")
+            if aux1:
+                if nom["suma"]:
+                    totalParcialOp[nom["tabNombre"]] = totalcito["tabTotal__sum"]
+                else:
+                    totalParcialOp[nom["tabNombre"]] = totalcito["tabTotal__sum"]*(-1)
 
         cantAuxOp = tableOperacionAux.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
         tableAuxOp = tableOperacionAux.objects.all().order_by("tabTipo__nombre")
@@ -7763,8 +7756,6 @@ def contByRange(request):
 
             aux1 = tableOperacionCat.objects.filter(tabNombre=nom["tabNombre"],fecha__date__gte=dateFrom,fecha__date__lte=dateTo).all().distinct()
             totalcito = aux1.aggregate(Sum("tabTotal"))
-            print("Tabla: "+nom["tabNombre"])
-            print(aux1)
             for a in aux1:
                 print(a.tabNombre)
                 print(a.tabCat)
@@ -7773,10 +7764,11 @@ def contByRange(request):
                 # print("Total: "+str(aux1.suma))
             print("..")
             print("totalcito: "+str(totalcito))
-            if nom["suma"]:
-                totalParcialOpCat[nom["tabNombre"]] = totalcito["tabTotal__sum"]
-            else:
-                totalParcialOpCat[nom["tabNombre"]] = totalcito["tabTotal__sum"]*(-1)
+            if aux1:
+                if nom["suma"]:
+                    totalParcialOpCat[nom["tabNombre"]] = totalcito["tabTotal__sum"]
+                else:
+                    totalParcialOpCat[nom["tabNombre"]] = totalcito["tabTotal__sum"]*(-1)
 
         # for nom in cantAuxOpCat:
 
@@ -12570,13 +12562,27 @@ def accountDay(request):
 
         if (fac.refType.ingreso == True and fac.refType.facCobrar == False) or fac.refType.mercPagar == True:
 
-            cont = cont + float(str(fac.total).replace(",","."))
-            cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
+            if fac.nc == True:
+
+                cont = cont - float(str(fac.total).replace(",","."))
+                cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
+
+            else:
+
+                cont = cont + float(str(fac.total).replace(",","."))
+                cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
 
         else:
 
-            cont = cont - float(str(fac.total).replace(",","."))
-            cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
+            if fac.nc == True:
+
+                cont = cont + float(str(fac.total).replace(",","."))
+                cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
+
+            else:
+
+                cont = cont - float(str(fac.total).replace(",","."))
+                cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
         
         balance[fac.id] = cont
 
@@ -12646,13 +12652,27 @@ def filterAccountDay(request):
 
         if (fac.refType.ingreso == True and fac.refType.facCobrar == False) or fac.refType.mercPagar == True:
 
-            cont = cont + float(str(fac.total).replace(",","."))
-            cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
+            if fac.nc == True:
+
+                cont = cont - float(str(fac.total).replace(",","."))
+                cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
+
+            else:
+
+                cont = cont + float(str(fac.total).replace(",","."))
+                cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
 
         else:
 
-            cont = cont - float(str(fac.total).replace(",","."))
-            cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
+            if fac.nc == True:
+
+                cont = cont + float(str(fac.total).replace(",","."))
+                cont2 = cont2 + abs(float(str(fac.total).replace(",",".")))
+
+            else:
+
+                cont = cont - float(str(fac.total).replace(",","."))
+                cont2 = cont2 - abs(float(str(fac.total).replace(",",".")))
         
         balance[fac.id] = cont
 
