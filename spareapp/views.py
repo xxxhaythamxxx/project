@@ -967,14 +967,15 @@ def home(request):
     sparelist = {}
 
     # Creamos un diccionario con los car y engine
-    for a in allSparesall[0].car_info.all():
-        sparelist[a.id] = []
-        findSpare = False
-        for b in allEngines:
-            for c in b.car_engine_info.all():
-                if a.id == c.id:
-                    findSpare = True
-                    sparelist[a.id].append(b.id)
+    if allSparesall:
+        for a in allSparesall[0].car_info.all():
+            sparelist[a.id] = []
+            findSpare = False
+            for b in allEngines:
+                for c in b.car_engine_info.all():
+                    if a.id == c.id:
+                        findSpare = True
+                        sparelist[a.id].append(b.id)
     
     dic={"sparelist":sparelist,"actual":actual,"numeros":numeros,"cantPages":cantPages,"pages":pages,"spCart":spCart,"reference":ref,"allVendors":allVendors,"allAtributes":atr2,"atribute":atr,"allDimensions":dim2,"dimension":dim,"allSparesall":allSparesall,"allCategories":allCategories,"allCars":allCars,"onlyManufCars":onlyManufCars,"allEngines":allEngines,"allSpares":allSpares}
 
