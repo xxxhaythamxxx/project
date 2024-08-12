@@ -4389,8 +4389,6 @@ def contBase(request):
 
     return render(request,"spareapp/contBase.html")
 
-# @login_required
-# @login_required(redirect_field_name='contLogin')
 def contDay(request):
 
     # if not request.user.is_authenticated:
