@@ -4389,7 +4389,7 @@ def contBase(request):
 
     return render(request,"spareapp/contBase.html")
 
-@login_required
+# @login_required
 # @login_required(redirect_field_name='contLogin')
 def contDay(request):
 
@@ -15987,6 +15987,7 @@ def contCargarDb(request):
     if request.method == "POST":
 
         # vendorspareDelete = vendorSpare.objects.all()
+        userDelete = User.objects.all()
         contentTypeDelete = ContentType.objects.all()
         permisos = Permission.objects.all()
         facturasDelete = factura.objects.all()
@@ -15995,6 +15996,10 @@ def contCargarDb(request):
         spareDelete = spare.objects.all()
 
         if request.FILES.get("cargar"):
+
+            for us in userDelete:
+
+                us.delete()
 
             for fac in contentTypeDelete:
 
