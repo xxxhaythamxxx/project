@@ -21,8 +21,8 @@ from datetime import datetime, timezone
 from datetime import timedelta
 from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
-# from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max
 import math
 # import numpy as np
@@ -784,20 +784,20 @@ def carEnginePlus(request):
 
     return JsonResponse({"allEngines":allEngines,"allCars":allCars})
 
-# def contLogin(request):
+def contLogin(request):
 
-#     if request.method == "POST":
+    if request.method == "POST":
 
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect("contDay")
-#         else:
-#             return redirect("contLogin")
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("contDay")
+        else:
+            return redirect("contLogin")
 
-#     return render(request,"spareapp/contLogin.html")
+    return render(request,"spareapp/contLogin.html")
 
 def contLogout(request):
     logout(request)
