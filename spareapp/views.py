@@ -12,6 +12,10 @@ from openpyxl.utils import get_column_letter
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm
+
+import pandas as pd
+from .forms import UploadExcelForm
+
 from random import seed
 from random import random
 import random
@@ -21,8 +25,8 @@ from datetime import datetime, timezone
 from datetime import timedelta
 from django.contrib.auth.models import User, Permission
 from django.http import JsonResponse
-# from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max
 import math
 # import numpy as np
@@ -784,20 +788,20 @@ def carEnginePlus(request):
 
     return JsonResponse({"allEngines":allEngines,"allCars":allCars})
 
-# def contLogin(request):
+def contLogin(request):
 
-#     if request.method == "POST":
+    if request.method == "POST":
 
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect("contDay")
-#         else:
-#             return redirect("contLogin")
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("contDay")
+        else:
+            return redirect("contLogin")
 
-#     return render(request,"spareapp/contLogin.html")
+    return render(request,"spareapp/contLogin.html")
 
 def contLogout(request):
     logout(request)
@@ -5034,6 +5038,132 @@ def contEntry(request):
         dic = {"banderaNumero":banderaNumero,"banderaRepetido":banderaRepetido,"contPagadoCobrado":contPagadoCobrado,"noIncludeTotal":noIncludeTotal,"noIncludeTotalGasto":noIncludeTotalGasto,"actualDay":actualDay,"actual":actual,"allCustomers":allCustomers,"tod":tod,"allTypes":allTypes,"allCategories":allCategories}
     
     return render(request,"spareapp/contEntry.html",dic)
+
+def facExcel(request):
+
+    """
+    Base de datos   verbose_name                    Front                       Ejemplo
+    
+    num             Número de factura               Número de factura
+    refPersona      Persona (persona)               Cliente
+    refType         Tipo (factType)                 Tipo de pago                GASTOS ACH, GASTOS CASH, GASTOS CHEQUE, GASTOS TARJETA VISA
+    refCategory     Category (factCategory)         Categoría                   GASTO OPERACION, GASTO PERSONAL, NERCANCIA CONTADO, MERCANCIA CREDITO, PERDIDA, SALARIO
+    fechaCreado     Fecha                           Fecha
+    fechaTope       Fecha tope
+    fechaCobrado    Fecha cobrado
+    iva             Impuesto                        ITBM
+    monto           Monto                           Sub total
+    total           Total                           Total
+    pendiente       Pendiente (BooleanField)
+    nc              Nota de crédito (BooleanField)  Nota de crédito
+    note            Nota                            Nota
+    """
+
+    if request.method == "POST":
+        form = UploadExcelForm(request.POST, request.FILES)
+        if form.is_valid():
+            archivo = request.FILES["archivo"]
+
+            # Leer el Excel con pandas
+            try:
+                df = pd.read_excel(archivo)
+
+                # Esperamos que tenga columnas: fecha, numero, descripcion, monto
+                for index, row in df.iterrows():
+
+                    factAux = factura()
+                    
+                    print("Row fila: ", index+1)
+
+                    factAux.num=row.get("Numero de factura", "")
+                    print("Numero: ", factAux.num)
+
+                    factAux.fechaCreado=row["Fecha"]
+                    print("Fecha: ", factAux.fechaCreado)
+
+                    if str(row.get("Monto", 0)).lower() != "nan":
+                        factAux.monto=row.get("Monto", 0)
+                    else:
+                        factAux.monto=0
+                    print("Monto: ", factAux.monto)
+
+                    if str(row.get("ITBM", 0)).lower() != "nan":
+                        factAux.iva=row.get("ITBM", 0)
+                    else:
+                        factAux.iva=0                    
+                    print("ITBM: ", factAux.iva)
+
+                    if str(row.get("Total", 0)).lower() != "nan":
+                        factAux.total=row.get("Total", 0)
+                    else:
+                        factAux.total=factAux.monto
+                    print("Total: ", factAux.total)
+
+                    factAux.note=row.get("Nota","")
+                    print("Nota: ", factAux.note)
+
+                    # ----------- Cliente -------------------
+
+                    cliente = row.get("Cliente","").lower()
+                    #print("Buscamos cliente:", cliente)
+                    if persona.objects.filter(nombre__iexact=cliente):
+                        auxCliente = persona.objects.filter(nombre__iexact=cliente).first()
+                        print(f"EL cliente", str(auxCliente).title() ,"existe")
+                        factAux.refPersona=auxCliente
+                    else:
+                        print("El cliente", cliente.title() , "no existe")   
+                        persona.objects.update_or_create(nombre=cliente.upper())
+
+                    # ----------- Categoria -------------------
+
+                    categoria = row.get("Categoria","").lower()
+                    if factCategory.objects.filter(nombre__iexact=categoria):
+                        auxCategoria = factCategory.objects.filter(nombre__iexact=categoria).first()
+                        factAux.refCategory=auxCategoria
+                        print(f"La categoria", factAux.refCategory ,"existe")
+                    else:
+                        print(f"La categoria", categoria.title() ,"no existe")
+                        continue
+
+                    # ----------- Tipo -------------------
+
+                    tipo = row.get("Tipo","").lower()
+                    if factType.objects.filter(nombre__iexact=tipo):
+                        auxTipo = factType.objects.filter(nombre__iexact=tipo).first()
+                        factAux.refType=auxTipo
+                        print(f"El tipo", factAux.refType ,"existe")
+                    else:
+                        print(f"El tipo", tipo.title() ,"no existe")
+                        continue
+
+                    # ----------- NC -------------------
+
+                    if str(row.get("NC","")).lower() == "yes":
+                        factAux.nc=True
+
+                    """factura.objects.update_or_create(
+                        num=row["Número de factura"],
+                        defaults={
+                            "fechaCreado": row["Fecha"],
+                            "descripcion": row.get("Nota", ""),
+                            "monto": row.get("Monto", 0),
+                        },
+                    )"""
+
+                    print("Antes de guardar")
+                    factAux.save()
+                    print("Después de guardar")
+
+                messages.success(request, "Facturas importadas correctamente.")
+                return redirect("importar_facturas")
+            except Exception as e:
+                messages.error(request, f"Error al procesar el archivo: {e}")
+    else:
+        form = UploadExcelForm()
+
+    dic = {"form": form}
+
+    return render(request,"spareapp/facExcel.html",dic)
 
 def contType(request,val,val2):
 
@@ -10808,12 +10938,15 @@ def accountStat(request):
     balanceFacMerc = 0
     acumTotal = 0
     auxNombre = ""
-    searchMetodo = "all"
+    searchMetodo = "month"
 
     allCars=car.objects.all().order_by("car_manufacturer__manufacturer","car_model","carfrom","chasis")
     allEnginesCars=engine.objects.all().values("id","car_engine_info__id","engine_ide","engine_l","engine_type","engine_pistons").order_by("engine_ide")
 
     if request.method == "POST":
+
+        print("Entra accountStat en POST")
+        print(request.POST)
 
         auxNombre = request.POST.get("contNombre")
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
@@ -10822,48 +10955,6 @@ def accountStat(request):
             dayTo = factureName[len(factureName)-1].fechaCreado.date()
         cont = 0
         
-        # for fac in factureName:
-
-        #     if fac.refCategory.ingreso:
-
-        #         cont = cont
-
-        #         if fac.refType.facCobrar==True:
-
-        #             cont = cont + fac.total
-        #             if fac.pendiente == True:
-        #                 balanceFacMerc = balanceFacMerc + fac.total
-                
-        #         if fac.refCategory.nombre=="Factura cobrada":
-
-        #             cont = cont - fac.total
-            
-        #     else:
-
-        #         cont = cont
-
-        #         if fac.refType.mercPagar==True:
-
-        #             cont = cont - fac.total
-        #             if fac.pendiente == True:
-        #                 balanceFacMerc = balanceFacMerc - fac.total
-                
-        #         if fac.refCategory.nombre=="Mercancia credito pagada":
-
-        #             cont = cont + fac.total
-
-        #     # if fac.pendiente == True and fac.refType.gasto == True:
-        #     #     balance[fac.id] = [cont,fac.total*(-1)]
-        #     # else:
-        #     balance[fac.id] = [cont,fac.total]
-
-
-
-        
-
-
-
-
         balanceTotal = cont
 
         factureName = factura.objects.filter(refPersona__id=auxNombre).order_by("fechaCreado","id")
@@ -10898,7 +10989,7 @@ def accountStat(request):
 
         if request.POST.get("search") == "month":
 
-            searchMetodo = "month"
+            searchMetodo = "month"            
 
             mes = datetime.now().date().month
             date_today = datetime.now()
@@ -10929,113 +11020,12 @@ def accountStat(request):
             if dateFrom and dateTo:
                 
                 factureName = factura.objects.filter(fechaCreado__date__gte=dateFrom,fechaCreado__date__lte=dateTo,refPersona__id=auxNombre).order_by("fechaCreado")
+
+        if request.POST.get("search") == "all":
+
+            searchMetodo = "all"
     
         cont = 0
-
-        # if factureName:
-
-        #     # for fac in factureName:
-
-        #     #     # print(fac)
-        #     #     # print(cont)
-        #     #     # print(fac.total)
-
-        #     #     if fac.refCategory.ingreso:
-
-        #     #         cont = cont
-
-        #     #         if fac.refType.facCobrar==True:
-
-        #     #             cont = cont + fac.total
-        #     #             if fac.pendiente == True:
-        #     #                 balanceFacMerc = balanceFacMerc + fac.total
-                    
-        #     #         if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
-
-        #     #             cont = cont - fac.total
-                
-        #     #     else:
-
-        #     #         cont = cont
-
-        #     #         if fac.nc == True:
-
-        #     #             if fac.refType.mercPagar==True:
-
-        #     #                 cont = cont + fac.total
-        #     #                 if fac.pendiente == True:
-        #     #                     balanceFacMerc = balanceFacMerc - fac.total
-                    
-        #     #             if fac.refCategory.nombre=="Mercancia credito pagada":
-
-        #     #                 cont = cont - fac.total
-
-        #     #         else:
-
-        #     #             if fac.refType.mercPagar==True:
-
-        #     #                 cont = cont - fac.total
-        #     #                 if fac.pendiente == True:
-        #     #                     balanceFacMerc = balanceFacMerc - fac.total
-                        
-        #     #             if fac.refCategory.nombre=="Mercancia credito pagada":
-
-        #     #                 cont = cont + fac.total
-
-        #     #     # if fac.pendiente == True and fac.refType.gasto == True:
-        #     #     #     balance[fac.id] = [cont,fac.total*(-1)]
-        #     #     # else:
-        #     #     balance[fac.id] = [cont,fac.total]
-
-        #     for fac in factureName:
-
-        #         # deadline = datetime.now().date() - fac.fechaCreado.date()
-        #         # deadlineDic.append(deadline.days)
-        #         # dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
-
-        #         if fac.refCategory.ingreso:
-
-        #             cont = cont
-
-        #             if fac.refType.facCobrar==True:
-
-        #                 cont = cont + fac.total
-        #                 if fac.pendiente == True:
-        #                     balanceFacMerc = balanceFacMerc + fac.total
-
-        #             if fac.refCategory.nombre=="Factura cobrada" or fac.refCategory.nombre=="Factura cobrada (Mayorista)":
-
-        #                 cont = cont - fac.total
-                
-        #         else:
-
-        #             cont = cont
-
-        #             if fac.refType.mercPagar==True:
-
-        #                 if fac.nc == True:
-        #                     cont = cont + fac.total
-        #                 else:
-        #                     cont = cont - fac.total
-
-        #                 # cont = cont - fac.total
-        #                 if fac.pendiente == True:
-        #                     balanceFacMerc = balanceFacMerc - fac.total
-                    
-        #             if fac.refCategory.nombre=="Mercancia credito pagada":
-
-        #                 if fac.nc == False:
-        #                     cont = cont + fac.total
-        #                 else:
-        #                     cont = cont - fac.total
-
-        #                 # cont = cont + fac.total
-
-        #         balance[fac.id] = [cont,fac.total]
-
-        #         acumTotal = cont
-
-        # balanceTotal = cont
 
         # ---------------------------------------
         acumTotal = 0
@@ -11043,10 +11033,6 @@ def accountStat(request):
         if factureName:
 
             for fac in factureName:
-
-                # deadline = datetime.now().date() - fac.fechaCreado.date()
-                # deadlineDic.append(deadline.days)
-                # dateDic.append(fac.fechaCreado.date().strftime("%b %d, %Y"))
 
                 if fac.refCategory.ingreso:
 
@@ -11096,43 +11082,6 @@ def accountStat(request):
 
                 balance[fac.id] = [cont,fac.total]
 
-        # print("Valor de acumtotal: "+str(acumTotal))
-        # ---------------------------------------
-
-        # acumTotal = 0
-
-        # for facT in factureName:
-
-        #     if facT.refType.ingreso == True:
-        #         if (facT.refType.facCobrar == False):
-
-        #             acumTotal = acumTotal + abs(facT.total)
-
-        #         else:
-
-        #             acumTotal = acumTotal - abs(facT.total)        
-            
-        #     else:
-
-        #         if facT.nc == False:
-
-        #             if facT.refType.mercPagar == True:
-
-        #                 acumTotal = acumTotal + abs(facT.total)
-
-        #             else:
-
-        #                 acumTotal = acumTotal - abs(facT.total)
-
-        #         else:
-
-        #             if facT.refType.mercPagar == True:
-
-        #                 acumTotal = acumTotal - abs(facT.total)
-
-        #             else:
-
-        #                 acumTotal = acumTotal + abs(facT.total)
 
     allFacturesToPay = factura.objects.filter(pendiente=True,refCategory__egreso=True,refCategory__limite=True)
     allFacturesToCollect = factura.objects.filter(pendiente=True,refCategory__ingreso=True,refCategory__limite=True)

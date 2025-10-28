@@ -1,0 +1,94 @@
+{% extends "spareapp/contBase.html" %}
+
+{% block title %} Entry {% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 col-lg-12 d-flex justify-content-center">
+    <label for=""><span style="font-weight: bold;color: rgb(136,12,12);">Nueva factura</span></label>
+</div>
+
+<div class="container mt-5 col-lg-12 justify-content-center">
+    <div>Las columnas que debe tener el archivo Excel son:</div>
+    <div>Numero de factura, Fecha, NC, ,Cliente, Categoria, Tipo, Monto, ITBM, Total y Nota</div>
+    <div>Los encabezados pueden estar en cualquier órden, pero deben respetar las mayúsculas y minúsculas</div>
+</div>
+
+<div class="container mt-3 col-lg-12 justify-content-center">
+    <div>Tabla de ejemplo:</div>
+    <table class="table-bordered mt-2">
+        <thead>
+            <tr>
+                <th class="p-2">Numero de factura</th>
+                <th class="p-2">Fecha</th>
+                <th class="p-2">NC</th>
+                <th class="p-2">Cliente</th>
+                <th class="p-2">Categoria</th>
+                <th class="p-2">Tipo</th>
+                <th class="p-2">Monto</th>
+                <th class="p-2">ITBM</th>
+                <th class="p-2">Total</th>
+                <th class="p-2">Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="p-2">5001</td>
+                <td class="p-2">28-10-2025</td>
+                <td class="p-2">yes</td>
+                <td class="p-2">JHON WAYNE</td>
+                <td class="p-2">GASTO OPERACION</td>
+                <td class="p-2">GASTOS ACH</td>
+                <td class="p-2">500</td>
+                <td class="p-2">0</td>
+                <td class="p-2">500</td>
+                <td class="p-2">Ejemplo 1</td>
+            </tr>
+            <tr>
+                <td class="p-2">5002</td>
+                <td class="p-2">28-10-2025</td>
+                <td class="p-2"></td>
+                <td class="p-2">MAX LOCKE</td>
+                <td class="p-2">Negocio</td>
+                <td class="p-2">VENTA CASH</td>
+                <td class="p-2">100</td>
+                <td class="p-2">10</td>
+                <td class="p-2">110</td>
+                <td class="p-2">Ejemplo 2</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="mt-2">No importa si los valores de la tabla están en mayuscula o minuscula. Lo que se debe respetar es la cabecera y sus títulos.</div>
+    <div class="mt-2">Si la categoría o el tipo de factura no existen, la factura no se crea. Ésto es para evitar conflictos con la base de datos.</div>
+</div>
+
+{% if banderaRepetido == True %}
+<div class="container mt-5 col-lg-4">
+    <div class="p-2" style="background-color: #E77C7C;font-size: small;">EL NUMERO DE FACTURA {{banderaNumero}} FUE REGISTRADO COMO REPETIDO</div>
+</div>
+{% endif %}
+
+<div class="d-flex justify-content-center">
+    <div class="container mt-3 col-lg-10">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary mx-1" type="submit">Importar</button>
+        </form>
+    </div>
+</div>
+
+<div tabindex="-1" id="contNombreModal" class="modal fade modal-dialog-scrollable" aria-labelledby="contNombreModalLabel" aria-hidden="true">
+    
+</div>  
+
+<div tabindex="-1" id="miModal" class="modal fade modal-dialog-scrollable" aria-labelledby="contNombreModalLabel" aria-hidden="true">
+    
+</div>
+
+<script>
+
+
+
+</script>
+{% endblock %}
