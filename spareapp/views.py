@@ -15619,40 +15619,54 @@ def contListCustomTablesCat(request):
 
     if request.method == "POST":
 
+        print("Entra en POST contListCustomTablesCat")
+        # print(request.POST)
+
+        tableOperacionCat.objects.update(principal=False)
+
+        # Luego, poner en True solo las seleccionadas
+        for val in request.POST:
+            if val.startswith("nombre"):
+                typeA = val.replace("nombre", "")
+                if request.POST.get("principal" + typeA):
+                    tableOperacionCat.objects.filter(tabNombre=typeA).update(principal=True)
+
         typeA = ""
 
-        for val in request.POST:
+        # typeA = ""
+
+        # for val in request.POST:
             
-            if val.find("nombre")>-1:
+        #     if val.find("nombre")>-1:
 
-                typeA = val.replace("nombre","")
+        #         typeA = val.replace("nombre","")
 
-                auxPrincipal = request.POST.get("principal"+typeA)
-                change = tableOperacionCat.objects.filter(tabNombre=typeA)
-                if auxPrincipal:
-                    for a in change:
-                        aux = tableOperacionCat.objects.get(id=a.id)
-                        aux.principal = True
-                        aux.save()
-                else:
-                    for a in change:
-                        aux = tableOperacionCat.objects.get(id=a.id)
-                        aux.principal = False
-                        aux.save()
+        #         auxPrincipal = request.POST.get("principal"+typeA)
+        #         change = tableOperacionCat.objects.filter(tabNombre=typeA)
+        #         if auxPrincipal:
+        #             for a in change:
+        #                 aux = tableOperacionCat.objects.get(id=a.id)
+        #                 aux.principal = True
+        #                 aux.save()
+        #         else:
+        #             for a in change:
+        #                 aux = tableOperacionCat.objects.get(id=a.id)
+        #                 aux.principal = False
+        #                 aux.save()
 
-                if typeA == request.POST.get(val):
+        #         if typeA == request.POST.get(val):
 
-                    print("Son iguales")
+        #             print("Son iguales")
                 
-                else:
+        #         else:
 
-                    auxChange = tableOperacionCat.objects.filter(tabNombre=typeA)
-                    for a in auxChange:
-                        aux = tableOperacionCat.objects.get(id=a.id)
-                        aux.tabNombre = request.POST.get(val)
-                        aux.save()
+        #             auxChange = tableOperacionCat.objects.filter(tabNombre=typeA)
+        #             for a in auxChange:
+        #                 aux = tableOperacionCat.objects.get(id=a.id)
+        #                 aux.tabNombre = request.POST.get(val)
+        #                 aux.save()
 
-            typeA = ""
+        #     typeA = ""
 
     dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
 
