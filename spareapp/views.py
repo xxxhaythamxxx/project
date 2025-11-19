@@ -15622,16 +15622,20 @@ def contListCustomTablesCat(request):
         print("Entra en POST contListCustomTablesCat")
         # print(request.POST)
 
-        tableOperacionCat.objects.update(principal=False)
+        # tableOperacionCat.objects.update(principal=False)
 
-        # Luego, poner en True solo las seleccionadas
-        for val in request.POST:
-            if val.startswith("nombre"):
-                typeA = val.replace("nombre", "")
-                if request.POST.get("principal" + typeA):
-                    tableOperacionCat.objects.filter(tabNombre=typeA).update(principal=True)
+        # # Luego, poner en True solo las seleccionadas
+        # for val in request.POST:
+        #     if val.startswith("nombre"):
+        #         typeA = val.replace("nombre", "")
+        #         if request.POST.get("principal" + typeA):
+        #             tableOperacionCat.objects.filter(tabNombre=typeA).update(principal=True)
 
-        typeA = ""
+        # typeA = ""
+
+
+
+
 
         # typeA = ""
 
