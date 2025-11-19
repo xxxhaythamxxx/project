@@ -4397,6 +4397,8 @@ def contBase(request):
 # @login_required(redirect_field_name='contLogin')
 def contDay(request):
 
+    print("Entra a contDay")
+
     # if not request.user.is_authenticated:
     #     return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -4477,6 +4479,9 @@ def contDay(request):
     totalParcialOp = {}
     cantAuxOp = tableOperacion.objects.all().values("tabNombre","principal").order_by("tabNombre").distinct()
 
+    print("cantAuxOp")
+    print(cantAuxOp)
+
     for nom in cantAuxOp:
 
         aux = tableOperacion.objects.filter(tabNombre=nom["tabNombre"],fecha__date=tod)
@@ -4500,6 +4505,9 @@ def contDay(request):
         acum = 0
 
     tableAuxOp = tableOperacion.objects.filter(fecha__date=tod).order_by("tabTipo__nombre")
+
+    print("tableAuxOp:")
+    print(tableAuxOp)
 
     tableAuxOpEmpty = tableOperacion.objects.all().values("tabNombre","tabTipo__nombre").distinct().order_by("tabTipo__nombre")
 
@@ -14895,40 +14903,58 @@ def contListCustomTablesOp(request):
 
     if request.method == "POST":
 
+        print("Entra en POST contListCustomTablesOp")
+        # print(request.POST)
+
+        tableOperacion.objects.update(principal=False)
+
+        # Luego, poner en True solo las seleccionadas
+        for val in request.POST:
+            if val.startswith("nombre"):
+                typeA = val.replace("nombre", "")
+                if request.POST.get("principal" + typeA):
+                    tableOperacion.objects.filter(tabNombre=typeA).update(principal=True)
+
         typeA = ""
 
-        for val in request.POST:
+        # for val in request.POST:
 
-            if val.find("nombre")>-1:
+        #     print("Valores")
 
-                typeA = val.replace("nombre","")
+        #     if val.find("nombre")>-1:
 
-                auxPrincipal = request.POST.get("principal"+typeA)
-                change = tableOperacion.objects.filter(tabNombre=typeA)
-                if auxPrincipal:
-                    for a in change:
-                        aux = tableOperacion.objects.get(id=a.id)
-                        aux.principal = True
-                        aux.save()
-                else:
-                    for a in change:
-                        aux = tableOperacion.objects.get(id=a.id)
-                        aux.principal = False
-                        aux.save()
+        #         # print(val)
+        #         typeA = val.replace("nombre","")
+        #         # print(typeA)
 
-                if typeA == request.POST.get(val):
+        #         auxPrincipal = request.POST.get("principal"+typeA)
+        #         print(auxPrincipal)
+        #         change = tableOperacion.objects.filter(tabNombre=typeA)
+                # print(change)
+            #     if auxPrincipal:
+            #         for a in change:
+            #             aux = tableOperacion.objects.get(id=a.id)
+            #             aux.principal = True
+            #             aux.save()
+            #     else:
+            #         for a in change:
+            #             aux = tableOperacion.objects.get(id=a.id)
+            #             aux.principal = False
+            #             aux.save()
 
-                    pass
+            #     if typeA == request.POST.get(val):
+
+            #         pass
                 
-                else:
+            #     else:
 
-                    auxChange = tableOperacion.objects.filter(tabNombre=typeA)
-                    for a in auxChange:
-                        aux = tableOperacion.objects.get(id=a.id)
-                        aux.tabNombre = request.POST.get(val)
-                        aux.save()
+            #         auxChange = tableOperacion.objects.filter(tabNombre=typeA)
+            #         for a in auxChange:
+            #             aux = tableOperacion.objects.get(id=a.id)
+            #             aux.tabNombre = request.POST.get(val)
+            #             aux.save()
 
-            typeA = ""
+            # typeA = ""
 
     dic = {"allTablesNombres":allTablesNombres,"allTables":allTables}
 
