@@ -29,6 +29,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max
 import math
+from django.db import transaction
 # import numpy as np
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -14903,7 +14904,6 @@ def contListCustomTablesOp(request):
 
     if request.method == "POST":
 
-        print("Entra en POST contListCustomTablesOp")
         # print(request.POST)
 
         tableOperacion.objects.update(principal=False)
@@ -14963,153 +14963,230 @@ def contListCustomTablesOp(request):
 def editeCustomTableOp(request,val):
 
     tod = datetime.now().date()
-    customNombre = val
+    # customNombre = val
+    # allTypes = factType.objects.all().order_by("nombre")
+    # customAux = tableOperacion.objects.filter(tabNombre=val)
+
     allTypes = factType.objects.all().order_by("nombre")
-    customAux = tableOperacion.objects.filter(tabNombre=val)
+    
+    # Obtenemos solo los IDs de los tipos que ya están marcados como suma o resta
+    # para ese nombre de tabla. Esto devuelve algo como [1, 5, 8...]
+    tipos_suma = tableOperacion.objects.filter(
+        tabNombre=val, suma=True
+    ).values_list('tabTipo_id', flat=True).distinct()
+    
+    tipos_resta = tableOperacion.objects.filter(
+        tabNombre=val, resta=True
+    ).values_list('tabTipo_id', flat=True).distinct()
+
+    # Para el checkbox de 'principal', solo necesitamos saber el estado de uno cualquiera
+    ejemplo_tabla = tableOperacion.objects.filter(tabNombre=val).first()
+    es_principal = ejemplo_tabla.principal if ejemplo_tabla else False
+
+    # if request.method == "POST":
+
+    #     allTypes = factType.objects.all()
+    #     bandOriginal = False
+    #     bandRevisar = False
+    #     sumas=request.POST.getlist("TsumaVal")
+    #     restas=request.POST.getlist("TrestaVal")
+    #     customAux = tableOperacion.objects.filter(tabNombre=val)
+
+    #     lista = tableOperacion.objects.values("tabTipo__nombre").filter(tabNombre=val).distinct()
+
+    #     for a in customAux:
+
+    #         b = tableOperacion.objects.get(id=a.id)
+
+    #         if request.POST.get("tabPrincipal"):
+
+    #             b.principal = True
+            
+    #         else:
+
+    #             b.principal = False
+
+    #         b.save()
+
+    #     if lista:
+
+    #         nombreTabla = val
+
+    #     else:
+
+    #         nombreTabla = request.POST.get("tabNombre")
+
+    #     for sum in sumas:
+
+    #         for li in lista:
+
+    #             if li["tabTipo__nombre"] == sum:
+
+    #                 bandOriginal = True
+
+    #         if bandOriginal == True:
+
+    #             print("Consigue")
+
+    #         else:
+
+    #             print("No consigue")
+    #             agregar = tableOperacion()
+    #             agregar.fecha = tod
+    #             agregar.tabNombre = nombreTabla
+    #             tableType = factType.objects.get(nombre=sum)
+    #             agregar.tabTipo = tableType
+    #             if request.POST.get("tabPrincipal"):
+    #                 agregar.principal = True
+    #             else:
+    #                 agregar.principal = False
+    #             agregar.suma = True
+    #             agregar.resta = False
+    #             agregar.tabTotal = 0
+    #             agregar.save()
+
+    #         bandOriginal = False
+
+    #     for res in restas:
+
+    #         for li in lista:
+
+    #             if li["tabTipo__nombre"] == res:
+
+    #                 bandOriginal = True
+
+    #         if bandOriginal == True:
+
+    #             print("Consigue")
+
+    #         else:
+
+    #             print("No consigue")
+    #             agregar = tableOperacion()
+    #             agregar.fecha = tod
+    #             agregar.tabNombre = nombreTabla
+    #             tableType = factType.objects.get(nombre=res)
+    #             agregar.tabTipo = tableType
+    #             if request.POST.get("tabPrincipal"):
+    #                 agregar.principal = True
+    #             else:
+    #                 agregar.principal = False
+    #             agregar.suma = False
+    #             agregar.resta = True
+    #             agregar.tabTotal = 0
+    #             agregar.save()
+
+    #         bandOriginal = False
+
+    #     bandRevisar == False
+    #     lista2 = tableOperacion.objects.all().filter(tabNombre=val)
+
+    #     for li in lista2:
+
+    #         for sum in sumas:
+
+    #             if li.tabTipo.nombre == sum and li.suma == True:
+
+    #                 bandRevisar = True
+
+    #         if bandRevisar == False:
+
+    #             eliminar = tableOperacion.objects.filter(tabNombre=val,tabTipo__nombre=li.tabTipo.nombre,suma=True)
+    #             if eliminar:
+    #                 eliminar.delete()
+
+    #         else:
+
+    #             print("Posee ese type en el form")
+
+    #         bandRevisar = False
+
+    #         for res in restas:
+
+    #             if li.tabTipo.nombre == res:
+
+    #                 bandRevisar = True
+
+    #         if bandRevisar == False:
+
+    #             eliminar = tableOperacion.objects.filter(tabNombre=val,tabTipo__nombre=li.tabTipo.nombre,resta=True)
+    #             if eliminar:
+    #                 eliminar.delete()
+
+    #         else:
+
+    #             print("Posee ese type en el form")
+
+    #         bandRevisar = False
+
+    #     allTables = tableOperacion.objects.all().order_by("tabNombre")
+    #     allTablesNombres = tableOperacion.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
+
+    #     dic = {"allTables":allTables,"allTablesNombres":allTablesNombres,"allTypes":allTypes}
+    #     return render(request,"spareapp/contListCustomTablesOp.html",dic)
 
     if request.method == "POST":
+        nuevo_nombre = request.POST.get("tabNombre")
+        es_principal = request.POST.get("tabPrincipal") == 'on'
+        sumas = request.POST.getlist("TsumaVal")
+        restas = request.POST.getlist("TrestaVal")
 
-        allTypes = factType.objects.all()
-        bandOriginal = False
-        bandRevisar = False
-        sumas=request.POST.getlist("TsumaVal")
-        restas=request.POST.getlist("TrestaVal")
-        customAux = tableOperacion.objects.filter(tabNombre=val)
+        with transaction.atomic():
+            # 1. Actualización masiva de metadatos (Nombre y Principal)
+            # Esto actualiza MILES de filas en una sola instrucción SQL
+            tableOperacion.objects.filter(tabNombre=val).update(
+                tabNombre=nuevo_nombre, 
+                principal=es_principal
+            )
 
-        lista = tableOperacion.objects.values("tabTipo__nombre").filter(tabNombre=val).distinct()
+            # 2. Identificar qué tipos han cambiado
+            # En lugar de borrar y crear todo, lo más sano es limpiar 
+            # la configuración del día actual y re-crearla
+            tableOperacion.objects.filter(tabNombre=nuevo_nombre, fecha__date=tod).delete()
 
-        for a in customAux:
-
-            b = tableOperacion.objects.get(id=a.id)
-
-            if request.POST.get("tabPrincipal"):
-
-                b.principal = True
+            # 3. Crear los nuevos registros de configuración para hoy
+            nuevos_registros = []
             
-            else:
+            # Procesar Sumas
+            for s in sumas:
+                tipo = factType.objects.get(nombre=s)
+                nuevos_registros.append(tableOperacion(
+                    fecha=datetime.now(),
+                    tabNombre=nuevo_nombre,
+                    tabTipo=tipo,
+                    principal=es_principal,
+                    suma=True,
+                    resta=False,
+                    tabTotal=0 # O el total que corresponda hoy
+                ))
 
-                b.principal = False
+            # Procesar Restas
+            for r in restas:
+                tipo = factType.objects.get(nombre=r)
+                nuevos_registros.append(tableOperacion(
+                    fecha=datetime.now(),
+                    tabNombre=nuevo_nombre,
+                    tabTipo=tipo,
+                    principal=es_principal,
+                    suma=False,
+                    resta=True,
+                    tabTotal=0
+                ))
 
-            b.save()
+            # Guardado masivo (una sola consulta a la base de datos)
+            if nuevos_registros:
+                tableOperacion.objects.bulk_create(nuevos_registros)
 
-        if lista:
+        # Redirección para evitar re-envío de formulario
+        return redirect('contListCustomTablesOp')
 
-            nombreTabla = val
-
-        else:
-
-            nombreTabla = request.POST.get("tabNombre")
-
-        for sum in sumas:
-
-            for li in lista:
-
-                if li["tabTipo__nombre"] == sum:
-
-                    bandOriginal = True
-
-            if bandOriginal == True:
-
-                print("Consigue")
-
-            else:
-
-                print("No consigue")
-                agregar = tableOperacion()
-                agregar.fecha = tod
-                agregar.tabNombre = nombreTabla
-                tableType = factType.objects.get(nombre=sum)
-                agregar.tabTipo = tableType
-                if request.POST.get("tabPrincipal"):
-                    agregar.principal = True
-                else:
-                    agregar.principal = False
-                agregar.suma = True
-                agregar.resta = False
-                agregar.tabTotal = 0
-                agregar.save()
-
-            bandOriginal = False
-
-        for res in restas:
-
-            for li in lista:
-
-                if li["tabTipo__nombre"] == res:
-
-                    bandOriginal = True
-
-            if bandOriginal == True:
-
-                print("Consigue")
-
-            else:
-
-                print("No consigue")
-                agregar = tableOperacion()
-                agregar.fecha = tod
-                agregar.tabNombre = nombreTabla
-                tableType = factType.objects.get(nombre=res)
-                agregar.tabTipo = tableType
-                if request.POST.get("tabPrincipal"):
-                    agregar.principal = True
-                else:
-                    agregar.principal = False
-                agregar.suma = False
-                agregar.resta = True
-                agregar.tabTotal = 0
-                agregar.save()
-
-            bandOriginal = False
-
-        bandRevisar == False
-        lista2 = tableOperacion.objects.all().filter(tabNombre=val)
-
-        for li in lista2:
-
-            for sum in sumas:
-
-                if li.tabTipo.nombre == sum and li.suma == True:
-
-                    bandRevisar = True
-
-            if bandRevisar == False:
-
-                eliminar = tableOperacion.objects.filter(tabNombre=val,tabTipo__nombre=li.tabTipo.nombre,suma=True)
-                if eliminar:
-                    eliminar.delete()
-
-            else:
-
-                print("Posee ese type en el form")
-
-            bandRevisar = False
-
-            for res in restas:
-
-                if li.tabTipo.nombre == res:
-
-                    bandRevisar = True
-
-            if bandRevisar == False:
-
-                eliminar = tableOperacion.objects.filter(tabNombre=val,tabTipo__nombre=li.tabTipo.nombre,resta=True)
-                if eliminar:
-                    eliminar.delete()
-
-            else:
-
-                print("Posee ese type en el form")
-
-            bandRevisar = False
-
-        allTables = tableOperacion.objects.all().order_by("tabNombre")
-        allTablesNombres = tableOperacion.objects.all().values("tabNombre","principal").distinct().order_by("tabNombre")
-
-        dic = {"allTables":allTables,"allTablesNombres":allTablesNombres,"allTypes":allTypes}
-        return render(request,"spareapp/contListCustomTablesOp.html",dic)
-
-    dic = {"customNombre":customNombre,"customAux":customAux,"allTypes":allTypes,"val":val}
+    dic = {
+        "customNombre": val,
+        "tipos_suma": tipos_suma,
+        "tipos_resta": tipos_resta,
+        "allTypes": allTypes,
+        "es_principal": es_principal,
+        }
 
     return render(request,"spareapp/editeCustomTableOp.html",dic)
 
@@ -15690,21 +15767,28 @@ def editeCustomTableCat(request,val):
         bandRevisar = False
         sumas=request.POST.getlist("TsumaVal")
         restas=request.POST.getlist("TrestaVal")
-        customAux = tableOperacionCat.objects.filter(tabNombre=val)
 
-        for a in customAux:
+        # tableOperacionCat.objects.update(principal=False)
+        # tableOperacionCat.objects.filter(tabNombre=typeA).update(principal=True)
 
-            b = tableOperacionCat.objects.get(id=a.id)
+        if request.POST.get("tabPrincipal"):
+            tableOperacionCat.objects.filter(tabNombre=val).update(principal=True)
+        else:
+            tableOperacionCat.objects.filter(tabNombre=val).update(principal=False)
 
-            if request.POST.get("tabPrincipal"):
+        # for a in customAux:
 
-                b.principal = True
+        #     b = tableOperacionCat.objects.get(id=a.id)
+
+        #     if request.POST.get("tabPrincipal"):
+
+        #         b.principal = True
             
-            else:
+        #     else:
 
-                b.principal = False
+        #         b.principal = False
 
-            b.save()
+        #     b.save()
 
         lista = tableOperacionCat.objects.values("tabCat__nombre").filter(tabNombre=val).distinct()
 
