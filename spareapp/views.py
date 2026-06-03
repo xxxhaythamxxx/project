@@ -5309,8 +5309,13 @@ def contTypeCat(request,val,val2):
     itbmTotal = 0
     totalTotal = 0
     val = str(factCategory.objects.get(id=val))
+    print("Probando")
+    print(val)
 
     allFacturesVal = factura.objects.filter(fechaCreado__date=tod,refCategory__nombre=val).exclude(pendiente=False,refType__facCobrar=True).exclude(pendiente=False,refType__facCobrar=True).order_by("fechaCreado","id")
+
+    print("allFACturesVal")
+    print(allFacturesVal)
 
     # if val2 != "today":
 
@@ -5473,7 +5478,11 @@ def contTypeRange(request,val,val2,val3):
 
     allTypes = factType.objects.all().order_by("nombre").exclude(facCobrada=True).exclude(facCobrar=True).exclude(mercPagada=True).exclude(mercPagar=True)
     tod = datetime.now().date()
+    print("VALor de val")
+    print(val)
+    print(factType.objects.all().values("id").distinct())
     typeAux = factType.objects.get(id=val)
+    print(typeAux)
 
     montoTotal = 0
     itbmTotal = 0
@@ -7671,6 +7680,7 @@ def contByDayCustom(request):
         tableAuxOpCat.append({
             'tabNombre': nombre,
             'tabCat': {'nombre': config['tabCat__nombre']},
+            'tabId': {'id': config['tabCat__id']},
             'tabTotal': monto,
             'suma': config['suma']
         })
@@ -7966,7 +7976,8 @@ def contByRangeCustom(request):
             'tabTipo': {
                 'nombre': config['tabTipo__nombre'],
                 'visa': config['tabTipo__visa'],
-                'clave': config['tabTipo__clave']
+                'clave': config['tabTipo__clave'],
+                'id': config['tabTipo__id'],
             },
             'tabTotal': monto,
             'suma': config['suma']
@@ -8006,7 +8017,11 @@ def contByRangeCustom(request):
 
         tableAuxOpCat.append({
             'tabNombre': nombre,
-            'tabCat': {'nombre': config['tabCat__nombre']},
+            'tabCat': {
+                'nombre': config['tabCat__nombre'],
+                'id': config['tabCat__id']
+                },
+            'tabId': {'id': config['tabCat__id']},
             'tabTotal': monto,
             'suma': config['suma']
         })
@@ -13857,7 +13872,7 @@ def contAddTable(request):
 
 from django.db.models import Sum, Q, F, Case, When, FloatField
 from datetime import datetime
-
+customTable
 def customTables(request, val):
     # 1. Preparación de fecha (val es el string de la fecha)
     tod_str = val
@@ -13943,6 +13958,7 @@ def customTables(request, val):
         tableAuxOpCat.append({
             'tabNombre': nombre,
             'tabCat': {'nombre': config['tabCat__nombre']},
+            'tabId': {'id': config['tabCat__id']},
             'tabTotal': monto,
             'suma': config['suma']
         })
@@ -14397,7 +14413,10 @@ def customTablesRange(request, val, val2):
 
         tableAuxOp.append({
             'tabNombre': nombre,
-            'tabTipo': {'nombre': config['tabTipo__nombre']},
+            'tabTipo': {
+                'nombre': config['tabTipo__nombre'],
+                'id': config['tabTipo__id']
+                },
             'tabTotal': monto,
             'suma': config['suma']
         })
@@ -14439,7 +14458,11 @@ def customTablesRange(request, val, val2):
 
         tableAuxOpCat.append({
             'tabNombre': nombre,
-            'tabCat': {'nombre': config['tabCat__nombre']},
+            'tabCat': {
+                'nombre': config['tabCat__nombre'],
+                'id': config['tabCat__id']
+                },
+            'tabId': {'id': config['tabCat__id']},
             'tabTotal': monto,
             'suma': config['suma']
         })

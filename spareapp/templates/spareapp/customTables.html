@@ -1,108 +1,217 @@
 {% extends "spareapp/contBase.html" %}
-{% block title %} Custom Tables Range {% endblock %}
+
+{% block title %} Day {% endblock %}
 
 {% block content %}
 {% include "spareapp/contSuperiorCustom.html" %}
 
 <div id="invoice2" class="mt-4">
-    {% for tab in cantAuxOp %}
-        {% if not tab.principal %}
-        <div class="container">
-            <table style="font-size: small;" class="table-bordered invoice mb-4 w-100">
-                <thead>
-                    <tr style="background-color: #F5F087">
-                        <th colspan="2" class="p-2">{{ tab.tabNombre }} | Desde: {{ dateFrom }} hasta: {{ dateTo }}</th>
-                    </tr>
-                    <tr style="background-color: #7C8FEC;">
-                        <th class="p-2">Tipo de Pago</th>
-                        <th style="width: 250px;" class="p-2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in tableAuxOp %}
-                        {% if row.tabNombre == tab.tabNombre %}
-                        <tr>
-                            <td class="p-2">
-                                <span style="color: {% if row.suma %}#1029b9{% else %}#a00a0a{% endif %};">
-                                    {{ row.tabTipo.nombre|upper }}
-                                </span>
-                            </td>
-                            <td class="p-2" style="color: {% if row.suma %}#1029b9{% else %}#a00a0a{% endif %};">
-                                ${{ row.tabTotal|stringformat:".2f" }}
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% endfor %}
 
-                    {# Buscamos el total en el diccionario totalParcialOp usando el nombre de la tabla #}
-                    {% for nombre_tabla, total_valor in totalParcialOp.items %}
-                        {% if nombre_tabla == tab.tabNombre %}
-                        <tr style="background-color: #E77C7C; font-weight: bold;">
-                            <td class="p-2">TOTAL</td>
-                            <td class="p-2" style="color: {% if total_valor < 0 %}#a00a0a{% else %}#1029b9{% endif %};">
-                                ${{ total_valor|stringformat:".2f" }}
-                            </td>
+    {% if tod %}
+        {% for tab in cantAuxOp %}
+            {% if not tab.principal %}
+            <div class="container">
+                <table style="font-size: small;" class="table-bordered invoice mb-4 w-100">
+                    <thead>
+                        <tr style="background-color: #F5F087">
+                            <th colspan="2" class="p-2">{{ tab.tabNombre }}  |  Día: {{ tod|date:"d F Y" }}</th>
                         </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-    {% endfor %}
-
-    <hr>
-
-    {% for tab in cantAuxOpCat %}
-        {% if not tab.principal %}
-        <div class="container">
-            <table style="font-size: small;" class="table-bordered invoice mb-4 w-100">
-                <thead>
-                    <tr style="background-color: #F5F087">
-                        <th colspan="2" class="p-2">{{ tab.tabNombre }} (Categoría)</th>
-                    </tr>
-                    <tr style="background-color: #7C8FEC;">
-                        <th class="p-2">Categoría</th>
-                        <th style="width: 250px;" class="p-2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in tableAuxOpCat %}
-                        {% if row.tabNombre == tab.tabNombre %}
-                        <tr>
-                            <td class="p-2">
-                                <span style="color: {% if row.suma %}#1029b9{% else %}#a00a0a{% endif %};">
-                                    {{ row.tabCat.nombre|upper }}
-                                </span>
-                            </td>
-                            <td class="p-2" style="color: {% if row.suma %}#1029b9{% else %}#a00a0a{% endif %};">
-                                ${{ row.tabTotal|stringformat:".2f" }}
-                            </td>
+                        <tr style="background-color: #7C8FEC;">
+                            <th class="p-2">Tipo de pago</th>
+                            <th style="width: 350px;" class="p-2">Total</th>
                         </tr>
-                        {% endif %}
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for table in tableAuxOp %}
+                            {% if table.tabNombre == tab.tabNombre %}
+                            <tr>
+                                <td class="p-2">
+                                    <a {% if table.suma %} style="color: #1029b9; text-decoration: none;" {% else %} style="color: #a00a0a; text-decoration: none;" {% endif %} 
+                                       {% if table.tabTipo.visa or table.tabTipo.clave %} href="{% url 'contTypeTarjeta' table.tabTipo.nombre|cut:'/' tod %}" {% else %} href="{% url 'contType' table.tabTipo.nombre|cut:'/' tod %}" {% endif %}>
+                                        {{ table.tabTipo.nombre|upper }}
+                                    </a>
+                                </td>
+                                <td class="p-2" {% if table.suma %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %}>
+                                    ${{ table.tabTotal|stringformat:".2f" }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
 
-                    {% for nombre_tabla, total_valor in totalParcialOpCat.items %}
-                        {% if nombre_tabla == tab.tabNombre %}
-                        <tr style="background-color: #E77C7C; font-weight: bold;">
-                            <td class="p-2">TOTAL</td>
-                            <td class="p-2" style="color: {% if total_valor < 0 %}#a00a0a{% else %}#1029b9{% endif %};">
-                                ${{ total_valor|stringformat:".2f" }}
-                            </td>
+                        {% for key, value in totalParcialOp.items %}
+                            {% if key == tab.tabNombre %}
+                            <tr {% if value == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C; color: #c90a0a;" {% else %} style="background-color: #E77C7C; color: #1029b9;" {% endif %} {% endif %}>
+                                <td colspan="2" class="p-2">TOTAL: ${{ value|stringformat:".2f" }}</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for tab in cantAuxOpCat %}
+            {% if not tab.principal %}
+            <div class="container">
+                <table style="font-size: small;" class="table-bordered invoice mb-4 w-100">
+                    <thead>
+                        <tr style="background-color: #F5F087">
+                            <th colspan="2" class="p-2">{{ tab.tabNombre }}  |  Día: {{ tod|date:"d F Y" }}</th>
                         </tr>
+                        <tr style="background-color: #7C8FEC;">
+                            <th class="p-2">Categoría</th>
+                            <th style="width: 350px;" class="p-2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if tableAuxOpCat %}
+                            {% for table in tableAuxOpCat %}
+                                {% if table.tabNombre == tab.tabNombre %}
+                                <tr>
+                                    <td class="p-2">
+                                        <a href="{% url 'contTypeCat' table.tabId.id tod %}" {% if table.suma %} style="color: #1029b9; text-decoration: none;" {% else %} style="color: #a00a0a; text-decoration: none;" {% endif %}>
+                                            {{ table.tabCat.nombre|upper }}
+                                        </a>
+                                    </td>
+                                    <td class="p-2" {% if table.suma %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %}>
+                                        ${{ table.tabTotal|stringformat:".2f" }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% for key, value in totalParcialOpCat.items %}
+                                {% if key == tab.tabNombre %}
+                                <tr {% if value == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C; color: #c90a0a;" {% else %} style="background-color: #E77C7C; color: #1029b9;" {% endif %} {% endif %}>
+                                    <td colspan="2" class="p-2">TOTAL: ${{ value|stringformat:".2f" }}</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for table in tableAuxOpEmptyCat %}
+                                {% if table.tabNombre == tab.tabNombre %}
+                                <tr>
+                                    <td class="p-2"><a style="text-decoration: none; color: gray;">{{ table.tabCat__nombre|upper }}</a></td>
+                                    <td class="p-2">$0.00</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr style="background-color: #E77C7C;">
+                                <td colspan="2" class="p-2">TOTAL: $0.00</td>
+                            </tr>
                         {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+    {% else %}
+        {% for tab in cantAuxOp %}
+            {% if not tab.principal %}
+            <div class="container">
+                <table style="font-size: small;" class="table-bordered invoice mb-4 w-100">
+                    <thead>
+                        <tr style="background-color: #F5F087">
+                            <th colspan="2" class="p-2">{{ tab.tabNombre }}  |  Desde: {{ dateFrom }}, hasta: {{ dateTo }}</th>
+                        </tr>
+                        <tr style="background-color: #7C8FEC;">
+                            <th class="p-2">Tipo de pago</th>
+                            <th style="width: 350px;" class="p-2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for table in tableAuxOp %}
+                            {% if table.tabNombre == tab.tabNombre %}
+                            <tr>
+                                <td class="p-2">
+                                    <a {% if table.suma %} style="color: #1029b9; text-decoration: none;" {% else %} style="color: #a00a0a; text-decoration: none;" {% endif %} 
+                                       {% if table.tabTipo.visa or table.tabTipo.clave %} href="{% url 'contTypeRangeTarjeta' table.tabTipo.nombre|cut:'/' dateFrom dateTo %}" {% else %} href="{% url 'contTypeRange' table.tabTipo.id dateFrom dateTo %}" {% endif %}>
+                                        {{ table.tabTipo.nombre|upper }}
+                                    </a>
+                                </td>
+                                <td class="p-2" {% if table.suma %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %}>
+                                    ${{ table.tabTotal|stringformat:".2f" }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for key, value in totalParcialOp.items %}
+                            {% if key == tab.tabNombre %}
+                            <tr {% if value == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C; color: #c90a0a;" {% else %} style="background-color: #E77C7C; color: #1029b9;" {% endif %} {% endif %}>
+                                <td colspan="2" class="p-2">TOTAL: ${{ value|stringformat:".2f" }}</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for tab in cantAuxOpCat %}
+            {% if not tab.principal %}
+            <div class="container">
+                <table style="font-size: small;" class="table-bordered invoice mb-4 w-100">
+                    <thead>
+                        <tr style="background-color: #F5F087">
+                            <th colspan="2" class="p-2">{{ tab.tabNombre }}  |  Desde: {{ dateFrom }}, hasta: {{ dateTo }}</th>
+                        </tr>
+                        <tr style="background-color: #7C8FEC;">
+                            <th class="p-2">Categoría</th>
+                            <th style="width: 350px;" class="p-2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if tableAuxOpCat %}
+                            {% for table in tableAuxOpCat %}
+                                {% if table.tabNombre == tab.tabNombre %}
+                                <tr>
+                                    <td class="p-2">
+                                        <a href="{% url 'contTypeRangeCat' table.tabCat.id dateFrom dateTo %}" {% if table.suma %} style="color: #1029b9; text-decoration: none;" {% else %} style="color: #a00a0a; text-decoration: none;" {% endif %}>
+                                            {{ table.tabCat.nombre|upper }}
+                                        </a>
+                                    </td>
+                                    <td class="p-2" {% if table.suma %} style="color: #1029b9;" {% else %} style="color: #a00a0a;" {% endif %}>
+                                        ${{ table.tabTotal|stringformat:".2f" }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% for key, value in totalParcialOpCat.items %}
+                                {% if key == tab.tabNombre %}
+                                <tr {% if value == 0 %} style="background-color: #E77C7C;" {% else %} {% if value < 0 %} style="background-color: #E77C7C; color: #c90a0a;" {% else %} style="background-color: #E77C7C; color: #1029b9;" {% endif %} {% endif %}>
+                                    <td colspan="2" class="p-2">TOTAL: ${{ value|stringformat:".2f" }}</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for table in tableAuxOpEmptyCat %}
+                                {% if table.tabNombre == tab.tabNombre %}
+                                <tr>
+                                    <td class="p-2"><a style="text-decoration: none; color: gray;">{{ table.tabCat__nombre|upper }}</a></td>
+                                    <td class="p-2">$0.00</td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr style="background-color: #E77C7C;">
+                                <td colspan="2" class="p-2">TOTAL: $0.00</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
 </div>
 
-
-
 <script>
-
 $("#simplificado").change(function(){
     if ($(this).is(':checked')){
         $("#tablaSimplificada").show();
@@ -112,7 +221,6 @@ $("#simplificado").change(function(){
 });
 
 function generatePDF2(){
-    
     $('#invoice2 tr:first th').each(function() {
         var value = $(this).css("position", "static");
       });
@@ -125,7 +233,7 @@ function generatePDF2(){
         filename:     'report.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
-        enableLinks:  false,
+        enableLinks:  false, // Recuerda: cambiar a true si quieres links clicleables en el PDF
         pagebreak:    {mode: "avoid-all"},
         jsPDF:        { unit: 'in', format: 'letter' }
       };
