@@ -7212,7 +7212,8 @@ def contByDay(request):
                 'id': config['tabTipo__id'], 
                 'nombre': config['tabTipo__nombre'],
                 'visa': config['tabTipo__visa'],
-                'clave': config['tabTipo__clave']
+                'clave': config['tabTipo__clave'],
+                'id': config['tabTipo__id'],
             },
             'tabTotal': monto,
             'suma': config['suma']
@@ -7640,7 +7641,8 @@ def contByDayCustom(request):
             'tabTipo': {
                 'nombre': config['tabTipo__nombre'],
                 'visa': config['tabTipo__visa'],
-                'clave': config['tabTipo__clave']
+                'clave': config['tabTipo__clave'],
+                'id': config['tabTipo__id'],
             },
             'tabTotal': monto,
             'suma': config['suma']
@@ -7679,7 +7681,10 @@ def contByDayCustom(request):
 
         tableAuxOpCat.append({
             'tabNombre': nombre,
-            'tabCat': {'nombre': config['tabCat__nombre']},
+            'tabCat': {
+                'nombre': config['tabCat__nombre'],
+                'id': config['tabCat__id']
+                },
             'tabId': {'id': config['tabCat__id']},
             'tabTotal': monto,
             'suma': config['suma']
