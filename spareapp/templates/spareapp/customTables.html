@@ -70,7 +70,7 @@
                                 {% if table.tabNombre == tab.tabNombre %}
                                 <tr>
                                     <td class="p-2">
-                                        <a href="{% url 'contTypeCat' table.tabId.id tod %}" {% if table.suma %} style="color: #1029b9; text-decoration: none;" {% else %} style="color: #a00a0a; text-decoration: none;" {% endif %}>
+                                        <a href="{% url 'contTypeCat' table.tabCat.id tod %}" {% if table.suma %} style="color: #1029b9; text-decoration: none;" {% else %} style="color: #a00a0a; text-decoration: none;" {% endif %}>
                                             {{ table.tabCat.nombre|upper }}
                                         </a>
                                     </td>

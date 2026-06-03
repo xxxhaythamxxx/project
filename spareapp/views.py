@@ -13926,7 +13926,10 @@ def customTables(request, val):
 
         tableAuxOp.append({
             'tabNombre': nombre,
-            'tabTipo': {'nombre': config['tabTipo__nombre']},
+            'tabTipo': {
+                'nombre': config['tabTipo__nombre'],
+                'id': config['tabTipo__id']
+                },
             'tabTotal': monto,
             'suma': config['suma']
         })
@@ -13962,7 +13965,10 @@ def customTables(request, val):
 
         tableAuxOpCat.append({
             'tabNombre': nombre,
-            'tabCat': {'nombre': config['tabCat__nombre']},
+            'tabCat': {
+                'nombre': config['tabCat__nombre'],
+                'id': config['tabCat__id']
+                },
             'tabId': {'id': config['tabCat__id']},
             'tabTotal': monto,
             'suma': config['suma']
